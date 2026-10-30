@@ -1,0 +1,479 @@
+schema_version: '1.0'
+pack_key: practice.it-ru.a1.unit24
+source_language: it
+target_language: ru
+unit_content_key: ru.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_карта
+    - w_картой
+    - w_наличными
+    - w_нужен
+    - w_нужны
+    - w_рубли
+    - w_только
+    - w_триста
+    - w_чек
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_картой
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужны
+  p4: &id004
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_наличными
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_рубли
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_нужен
+      - w_триста
+      - w_только
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужен
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_триста
+  p9: &id009
+    language_code: ru
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_только
+  p10: &id010
+    language_code: ru
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_триста
+      - w_только
+  p11: &id011
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+      - w_чек
+      - w_триста
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_чек
+templates:
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.choose.001
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными significa «in contanti» e картой «con la carta»; entrambi usano il caso strumentale.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.order.002
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: word_order
+  frame:
+    text: Можно {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно più la forma strumentale chiede se si può pagare in quel modo.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.fill.003
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Можно {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Dopo можно, карта diventa картой, «con la carta».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.fill.004
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Мне {item} рубли. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужны concorda con il sostantivo plurale рубли.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.translate.005
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: Posso pagare con la carta?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно più картой chiede se è possibile pagare con la carta.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.translate.006
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: Si può pagare in contanti.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно significa «è possibile».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.translate.007
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: Mi servono rubli.
+    language_code: it
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {a} {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужны concorda con il plurale рубли.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.choose.001
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Чек è maschile, quindi vuole нужен; con cose al plurale si direbbe нужны.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.order.002
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: word_order
+  frame:
+    text: Чек {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен concorda con il sostantivo maschile чек.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.fill.003
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: С вас {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Триста, «trecento», è seguito dal plurale рублей.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.fill.004
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Сегодня {item} наличными. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Только limita ciò che segue, come «solo».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.fill.005
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Чек {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужен è maschile e concorda con чек.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.translate.006
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: Serve uno scontrino?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен è maschile per concordare con чек.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.translate.007
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: Sono trecento rubli.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: С вас {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'С вас significa letteralmente «da Lei»: è il modo cortese in cui la cassiera dice il prezzo.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.translate.008
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: Oggi solo contanti.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} наличными.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Только sta prima di ciò che limita.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.translate.009
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sono parole di uso quotidiano alla cassa.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson02.match.010
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Нужны si usa con cose al plurale e нужен con una cosa al maschile singolare.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit24.lesson01.listen.008
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными significa «in contanti»; карта, рубли e чек sono i sostantivi semplici del pagamento.
+    language_code: it
+    direction: ltr
