@@ -1,0 +1,493 @@
+schema_version: '1.0'
+pack_key: practice.pl-it.a1.unit07
+source_language: pl
+target_language: it
+unit_content_key: it.a1.unit07.food_and_drink
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_basta
+    - w_conto
+    - w_cosa
+    - w_così
+    - w_desidera
+    - w_favore
+    - w_l'acqua
+    - w_menù
+    - w_panino
+    - w_un'acqua
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_desidera
+      - w_favore
+      - w_cosa
+  t_panino: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_panino
+  t_favore: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_favore
+  t_desidera: &id005
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_desidera
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_menù
+      - w_conto
+      - w_favore
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_conto
+      - w_menù
+      - w_favore
+  t_basta: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_basta
+  pool9: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_menù
+      - w_conto
+      - w_un'acqua
+      - w_panino
+  t_conto: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_conto
+  t_un_acqua: &id011
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_un'acqua
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+      - w_menù
+      - w_conto
+  pool13: &id013
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_menù
+      - w_conto
+      - w_favore
+      - w_un'acqua
+templates:
+- content_key: practice.pl-it.it.a1.unit07.lesson01.choose.001
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cosa desidera? to formalne pytanie, którym obsługa baru pyta, co podać.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson01.listen.002
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Per favore to grzeczna formuła dodawana do każdego zamówienia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson01.order.003
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: word_order
+  frame:
+    text: Vorrei un caffè e un {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Vorrei znaczy „chciałbym” i jest grzecznym sposobem zamawiania.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson01.fill.004
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: fill_in_blank
+  frame:
+    text: Vorrei un caffè, per {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per favore znaczy „proszę” i stoi na końcu prośby.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson01.translate.005
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: Poproszę kawę i rogalik.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un cornetto, per {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Un łączy się z rzeczownikami męskimi, takimi jak caffè i cornetto; per favore zamyka prośbę.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson01.translate.006
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: Co podać? (formalnie, Lei)
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cosa {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Desidera to formalna forma Lei, której używa obsługa, a nie nieformalna forma tu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.choose.001
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Basta così to utarte wyrażenie oznaczające „to wszystko, nic więcej”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.listen.002
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Così znaczy „tak” lub „w ten sposób”, a w basta così kończy zamówienie.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson02.fill.001
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: fill_in_blank
+  frame:
+    text: Grazie, {item} così. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Basta znaczy „wystarczy”; basta così mówi obsłudze, żeby przestała dodawać.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson02.translate.002
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: translation
+  frame:
+    text: To wszystko, dziękuję.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} così, grazie.'
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Basta così, grazie to grzeczny sposób zakończenia zamówienia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.choose.003
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Un'acqua zachowuje apostrof, ponieważ acqua jest rodzaju żeńskiego i zaczyna się od samogłoski.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.listen.004
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il menù i il conto są rodzaju męskiego, więc mają rodzajnik il.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.fill.005
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: fill_in_blank
+  frame:
+    text: Il {item}, per favore. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il conto, per favore to sposób, by poprosić o rachunek.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.order.006
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: word_order
+  frame:
+    text: Un panino e {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Un''acqua to forma żeńska: una zmienia się w un'' przed samogłoską.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.match.007
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Il panino i il conto są rodzaju męskiego; l'acqua jest rodzaju żeńskiego i ma elizję.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.translate.008
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: Poproszę kanapkę i wodę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Acqua jest rodzaju żeńskiego, więc „woda” to una acqua, z elizją un'acqua.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.translate.009
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: Poproszę rachunek.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Il conto to rachunek, o który prosisz na końcu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit07.lesson03.translate.010
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Włoskie rzeczowniki występują z rodzajnikiem: il panino, l''acqua, il menù, il conto.'
+    language_code: pl
+    direction: ltr
