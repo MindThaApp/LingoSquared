@@ -1,0 +1,554 @@
+schema_version: '1.0'
+pack_key: practice.nl-de.a1.unit05
+source_language: nl
+target_language: de
+unit_content_key: de.a1.unit05.uhrzeit
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-de by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_spät
+    - w_Uhr
+    - w_halb
+    - w_Viertel
+    - w_nach
+    - w_vor
+    - w_Mittag
+    - w_Nachmittag
+    - w_Mitternacht
+    - w_Laden
+    - w_um
+    - w_morgens
+    - w_schließt
+    - w_sie
+    - w_dann
+    - w_Öffnungszeiten
+slot_presets:
+  clock_words: &id001
+    language_code: de
+    part_of_speech:
+    - adjective
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_spät
+      - w_Uhr
+      - w_halb
+      - w_Viertel
+      - w_nach
+      - w_vor
+  daytime_words: &id002
+    language_code: de
+    part_of_speech:
+    - noun
+    - preposition
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_um
+      - w_morgens
+      - w_schließt
+  shop_words: &id003
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_sie
+      - w_dann
+      - w_Öffnungszeiten
+      - w_schließt
+      - w_Laden
+      - w_morgens
+  clock_listen: &id004
+    language_code: de
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_Uhr
+      - w_spät
+      - w_halb
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+  nach_vor: &id006
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_nach
+      - w_vor
+  halb: &id008
+    language_code: de
+    part_of_speech:
+    - adjective
+    agreement_tags:
+      semantic: w_halb
+  schliesst: &id009
+    language_code: de
+    part_of_speech:
+    - verb
+    agreement_tags:
+      semantic: w_schließt
+  um: &id010
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic: w_um
+  viertel: &id014
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Viertel
+  vor: &id015
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic: w_vor
+  uhr: &id012
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Uhr
+  laden: &id005
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Laden
+  spaet: &id013
+    language_code: de
+    part_of_speech:
+    - adjective
+    agreement_tags:
+      semantic: w_spät
+  shop_match: &id007
+    language_code: de
+    part_of_speech:
+    - noun
+    - adverb
+    - verb
+    - pronoun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_morgens
+      - w_schließt
+      - w_sie
+      - w_dann
+      - w_Öffnungszeiten
+      - w_um
+  shop_bare: &id011
+    language_code: de
+    part_of_speech:
+    - noun
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_morgens
+      - w_schließt
+      - w_dann
+      - w_Öffnungszeiten
+templates:
+- content_key: practice.nl-de.de.a1.unit05.lesson01.choose.001
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Uhr verandert nooit: es ist ein Uhr, zwei Uhr, drei Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.listen.001
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Um beantwoordt de vraag hoe laat: um neun Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson04.choose.001
+  lesson_content_key: de.a1.unit05.lesson04.im_gespraech_ueber_die_bibliothekszeiten
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dann betekent 'dan' en is handig om gebeurtenissen op volgorde te zetten.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson01.listen.002
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mittag, Nachmittag en Mitternacht zijn zelfstandige naamwoorden met hoofdletter; morgens is een bijwoord met kleine letter.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.order.002
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: word_order
+  frame:
+    text: Der {item} schließt um achtzehn Uhr.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Der {item} schließt um achtzehn Uhr.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: 'In een hoofdzin staat het werkwoord op de tweede plaats: Der Laden schließt um achtzehn Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson02.order.001
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: word_order
+  frame:
+    text: Es ist Viertel {item} drei.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist Viertel {item} drei.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Nach telt over het hele uur heen en vor telt naar het volgende uur toe.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson02.match.002
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Halb telt naar het volgende uur toe, dus halb vier is half vier (3:30).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.match.003
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+    fourth: *id007
+    fifth: *id007
+    sixth: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mittag, Nachmittag en Mitternacht zijn zelfstandige naamwoorden met hoofdletter; morgens is een bijwoord met kleine letter.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson01.fill.003
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: fill_in_blank
+  frame:
+    text: Es ist {item} vier. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Es ist halb vier betekent 3:30, omdat het Duits het halve uur naar het volgende uur toe telt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.fill.004
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: fill_in_blank
+  frame:
+    text: Der Laden {item} um achtzehn Uhr. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Het werkwoord staat op de tweede plaats: Der Laden schließt um achtzehn Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.fill.005
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: fill_in_blank
+  frame:
+    text: Der Laden öffnet {item} neun Uhr morgens. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Um leidt een kloktijd in: um neun Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson02.translate.003
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Viertel is een zelfstandig naamwoord en houdt daarom ook midden in een zin een hoofdletter.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson03.translate.006
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Öffnungszeiten komt van het werkwoord öffnen (openen) plus Zeiten (tijden).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson01.translate.004
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: Het is drie uur.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist drei {item}.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: 'Uhr verandert nooit: ein Uhr, zwei Uhr, drei Uhr.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson01.translate.005
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: 'Hoe laat is het? (letterlijk: hoe laat is het?)'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie {item} ist es?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Wie spät ist es? vraagt letterlijk hoe laat het is.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson01.translate.006
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: Het is half vier.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist {item} vier.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Halb vier is halverwege naar vier toe, dus 3:30.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson02.translate.004
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: Het is kwart over drie.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist {item} nach drei.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Viertel nach drei betekent 3:15 uur.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-de.de.a1.unit05.lesson02.translate.005
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: Het is kwart voor vier.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist Viertel {item} vier.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Viertel vor vier betekent 3:45 uur.
+    language_code: nl
+    direction: ltr
