@@ -1,0 +1,419 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a1.unit05
+source_language: de
+target_language: nl
+unit_content_key: nl.a1.unit05.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - family_member
+    - family_singular
+    - sibling
+    - extended_only
+    - extended_family_member
+    - possessive_pronoun
+    - possessive_flexible
+    - family_profile
+    - family_dialogue
+    - person_name
+    - place_name
+    - city_name
+    - country
+    register:
+    - informal
+    - polite
+slot_presets:
+  family_singular: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: family_singular
+  sibling: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sibling
+  extended_only: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: extended_only
+  possessive_flexible: &id004
+    language_code: nl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: possessive_flexible
+  person_name: &id005
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  place_name: &id006
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: place_name
+  city_name: &id007
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: city_name
+templates:
+- content_key: practice.de-nl.nl.a1.unit05.lesson01.choose.001
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Familienwort aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson01.order.002
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} vervollständigt den Satz „Ich habe …“ für dieses Geschwisterteil.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson01.translate.003
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: translation
+  frame:
+    text: 'Ich habe: {item}.'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Ich habe: {item}.'
+    slot_rendering:
+      item: english_gloss
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson02.listen.001
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort für das Familienmitglied, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson02.order.002
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} vervollständigt den Satz „Ich habe …“ für dieses Familienmitglied.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson02.match.003
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort für entferntere Verwandte seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson03.order.001
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: word_order
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} kann einleiten, wessen Bruder das ist.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson03.complete.002
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: fill_in_blank
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Vervollständigen Sie den niederländischen Satz.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} kann einleiten, wessen Bruder das ist.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson03.translate.003
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: translation
+  frame:
+    text: 'Übersetzen Sie mit {item}: Das ist ___ Bruder.'
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Dit is {item} broer verwendet die geforderte Possessivform.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson04.order.001
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: word_order
+  frame:
+    text: Dit is zijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is zijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zijn zeigt, dass das Familienmitglied zu einer männlichen Person gehört.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson04.translate.003
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: translation
+  frame:
+    text: 'Das ist ihr Familienmitglied: {item}.'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dat is haar {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Das ist ihr Familienmitglied: {item}.'
+    slot_rendering:
+      item: english_gloss
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson05.order.001
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: word_order
+  frame:
+    text: Ik heet {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist der genannte Name.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson05.translate.003
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: translation
+  frame:
+    text: Mein Name ist {item}.
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Mein Name ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson06.listen.001
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist der Ort, der im Dialog genannt wird.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson06.order.002
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: word_order
+  frame:
+    text: Mijn ouders wonen in {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ergänzt, wo die Eltern wohnen.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit05.lesson06.translate.003
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: translation
+  frame:
+    text: Meine Eltern wohnen in {item}.
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Meine Eltern wohnen in {item}.
+    slot_rendering:
+      item: english_gloss
+    language_code: de
+    direction: ltr
