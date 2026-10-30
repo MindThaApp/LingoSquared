@@ -1868,3 +1868,15 @@ def test_matching_pairs_warn_only_below_four_pairs():
 
     assert len(run(3)) == 1
     assert run(4) == [] and run(5) == []
+
+
+def test_word_count_lint_ignores_indefinite_articles():
+    f = load_content_compiler()._explicit_word_count
+    for phrase in ("Écris un mot.", "Scrivi a parole tue.", "Schreibe ein Wort.", "Schrijf één woord.",
+                   "Escribe una palabra.", "Write a word.", "Scrivi una parola."):
+        assert f(phrase) is None, phrase
+    assert f("Write one word.") == 1
+    assert f("Write 3 words.") == 3
+    assert f("Scrivi due parole.") == 2
+    assert f("Écris 2 mots.") == 2
+    assert f("Write at least 3 words.") is None
