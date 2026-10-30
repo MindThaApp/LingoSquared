@@ -1,0 +1,482 @@
+schema_version: '1.0'
+pack_key: practice.ro-ru.a1.unit08
+source_language: ro
+target_language: ru
+unit_content_key: ru.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_апельсины
+    - w_дайте
+    - w_двести
+    - w_капуста
+    - w_картофель
+    - w_килограмм
+    - w_магазин
+    - w_молоко
+    - w_огурцы
+    - w_полкило
+    - w_помидоров
+    - w_помидоры
+    - w_сто
+    - w_штук
+    - w_штука
+    - w_штуку
+    - w_яблок
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_магазин
+      - w_сто
+      - w_молоко
+      - w_двести
+      - w_килограмм
+      - w_полкило
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_молоко
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сто
+  p4: &id004
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_дайте
+      - w_килограмм
+      - w_полкило
+      - w_штука
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штуку
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штук
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_полкило
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+      - w_штука
+      - w_дайте
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_помидоры
+      - w_огурцы
+      - w_картофель
+      - w_капуста
+      - w_апельсины
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_яблок
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_помидоров
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_капуста
+templates:
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.choose.001
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Сто și двести sunt numerele 100 și 200; substantivul de după ele este la genitiv plural: сто рублей, двести рублей.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.order.002
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: word_order
+  frame:
+    text: Сколько стоит {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сколько стоит? întreabă prețul unui singur produs; молоко este un substantiv la singular.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.fill.003
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: fill_in_blank
+  frame:
+    text: Хлеб стоит {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'După сто, ca după orice număr de la cinci în sus, substantivul este la genitiv plural: рублей.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.match.004
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Полкило înseamnă jumătate de kilogram și se scrie într-un singur cuvânt.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.translate.005
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: Cât costă laptele?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Стоит se acordă cu un singur produs, молоко; pentru mai multe produse rusa folosește стоят.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson01.translate.006
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: Pâinea costă o sută de ruble.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хлеб стоит {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сто nu are nevoie de niciun cuvânt pentru „o”; substantivul de după el este рублей.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.choose.001
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Дайте este imperativul politicos cu вы, însemnând „dați-mi”; cu ты ar fi дай.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.order.002
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: word_order
+  frame:
+    text: Дайте {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Килограмм și полкило denumesc o cantitate de marfă și urmează direct după дайте.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.fill.003
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте одну {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: După дайте, substantivul feminin штука devine штуку, forma pentru lucrul cerut.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.fill.004
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте пять {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'După пять și numerele mai mari, substantivul este la genitiv plural: пять штук.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.translate.005
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: Vă rog, dați-mi jumătate de kilogram. (formal)
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Дайте полкило, пожалуйста este un mod politicos de a cere vânzătorului jumătate de kilogram.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.translate.006
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: Vă rog, dați-mi cinci bucăți. (formal)
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте пять {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Штука devine штук după numărul cinci.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson02.translate.007
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Штука numără obiectele unul câte unul, în timp ce килограмм și полкило măsoară după greutate.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson03.listen.001
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Помидоры, огурцы și апельсины sunt la plural; картофель și капуста sunt cuvinte la singular care înseamnă „cartofi” și „varză”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson03.order.002
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: word_order
+  frame:
+    text: У вас есть {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У вас есть ...? merge cu orice substantiv și este modul obișnuit de a întreba un vânzător dacă are ceva.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson03.fill.003
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: fill_in_blank
+  frame:
+    text: Сколько стоит кило {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: După un cuvânt de cantitate precum кило, produsul este la genitiv plural, deci яблоки devine яблок.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson03.translate.004
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: Vă rog, dați-mi un kilogram de roșii. (formal)
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте килограмм {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'După килограмм, produsul este la genitiv plural: помидоры devine помидоров.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit08.lesson03.translate.005
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: Aveți varză? (formal)
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Капуста este la singular în rusă și nu are articol.
+    language_code: ro
+    direction: ltr
