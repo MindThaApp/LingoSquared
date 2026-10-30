@@ -1,0 +1,278 @@
+schema_version: '1.0'
+pack_key: practice.it-ru.a1.unit64
+source_language: it
+target_language: ru
+unit_content_key: ru.a1.unit64.pet_store
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_велосипедов
+    - w_игрушка
+    - w_корзине
+    - w_поводок
+    - w_птичий
+    - w_спит
+templates:
+- content_key: practice.it-ru.ru.a1.unit64.lesson02.choose.001
+  lesson_content_key: ru.a1.unit64.lesson02.korm_i_povodok
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ru
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_поводок
+        - w_спит
+        - w_корзине
+        - w_птичий
+        - w_игрушка
+        - w_велосипедов
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione sul cibo e il guinzaglio.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson03.listen.001
+  lesson_content_key: ru.a1.unit64.lesson03.sotrudnik_i_korzina
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione sul commesso e il cestino.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson04.translate.001
+  lesson_content_key: ru.a1.unit64.lesson04.tseny_v_zoomagazine
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, tratta dalla lezione sui prezzi al negozio di animali.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson06.match.001
+  lesson_content_key: ru.a1.unit64.lesson06.nina_slyshit_o_zoomagazine
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Abbina ogni parola russa al suo significato in italiano; le parole provengono dalle lezioni di questa unità.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson02.choose.002
+  lesson_content_key: ru.a1.unit64.lesson02.korm_i_povodok
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione sul cibo e il guinzaglio.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson03.translate.002
+  lesson_content_key: ru.a1.unit64.lesson03.sotrudnik_i_korzina
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione sul commesso e il cestino.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson02.order.003
+  lesson_content_key: ru.a1.unit64.lesson02.korm_i_povodok
+  type: word_order
+  frame:
+    text: У собаки есть {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_поводок
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У собаки есть {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Il cane ha un guinzaglio. поводок significa guinzaglio.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson03.order.003
+  lesson_content_key: ru.a1.unit64.lesson03.sotrudnik_i_korzina
+  type: word_order
+  frame:
+    text: Собака {item} в корзине.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_спит
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Собака {item} в корзине.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Il cane dorme nel cestino. спит significa dorme.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson04.order.002
+  lesson_content_key: ru.a1.unit64.lesson04.tseny_v_zoomagazine
+  type: word_order
+  frame:
+    text: Сколько стоит {item} корм?
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_птичий
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item} корм?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Quanto costa il mangime per uccelli? птичий significa «di uccelli» (aggettivo); si usa nell'espressione per «mangime per uccelli».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson06.order.002
+  lesson_content_key: ru.a1.unit64.lesson06.nina_slyshit_o_zoomagazine
+  type: word_order
+  frame:
+    text: У Насти есть {item} для собаки.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_игрушка
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У Насти есть {item} для собаки.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Nastya ha un giocattolo per il cane. игрушка significa giocattolo.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ru.ru.a1.unit64.lesson06.fill.003
+  lesson_content_key: ru.a1.unit64.lesson06.nina_slyshit_o_zoomagazine
+  type: fill_in_blank
+  frame:
+    text: Давай на следующей неделе вместе сходим в магазин {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_велосипедов
+    hint:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_велосипедов
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Nina: Andiamo insieme al negozio di biciclette la prossima settimana? велосипедов significa «di biciclette», nell''espressione per «negozio di biciclette».'
+    language_code: it
+    direction: ltr
