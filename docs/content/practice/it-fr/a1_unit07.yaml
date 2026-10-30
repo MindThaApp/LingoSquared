@@ -1,0 +1,427 @@
+schema_version: '1.0'
+pack_key: practice.it-fr.a1.unit07
+source_language: it
+target_language: fr
+unit_content_key: fr.a1.unit07.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - fr_a1_u07_l01
+    - w_banque
+    - w_côté
+    - w_d'ici
+    - w_excusez-moi
+    - w_face
+    - w_gare
+    - w_loin
+    - w_minutes
+    - w_où
+    - w_pharmacie
+    - w_pied
+    - w_poste
+    - w_prie
+slot_presets:
+  n_l01: &id001
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: fr_a1_u07_l01
+  la: &id002
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_gare
+      - w_pharmacie
+      - w_banque
+      - w_poste
+  a_banque_noun: &id003
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_banque
+  a_gare_noun: &id004
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_gare
+  c2: &id005
+    language_code: fr
+    part_of_speech:
+    - adverb
+    - preposition
+    - particle
+    agreement_tags:
+      semantic:
+      - w_où
+      - w_face
+      - w_côté
+      - w_loin
+      - w_d'ici
+  a_cote_prep: &id006
+    language_code: fr
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_côté
+  a_face_prep: &id007
+    language_code: fr
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_face
+  a_loin_adve: &id008
+    language_code: fr
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_loin
+  c3: &id009
+    language_code: fr
+    part_of_speech:
+    - phrase
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_excusez-moi
+      - w_minutes
+      - w_pied
+      - w_prie
+      - w_loin
+  lis3: &id010
+    language_code: fr
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_excusez-moi
+      - w_minutes
+      - w_pied
+      - w_loin
+  m3: &id011
+    language_code: fr
+    part_of_speech:
+    - noun
+    - adverb
+    - phrase
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_gare
+      - w_pharmacie
+      - w_banque
+      - w_poste
+      - w_loin
+      - w_excusez-moi
+  a_minutes_noun: &id012
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_minutes
+  a_pied_noun: &id013
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pied
+templates:
+- content_key: practice.it-fr.fr.a1.unit07.lesson01.choose.001
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La gare, la pharmacie, la banque e la poste sono tutte femminili, quindi vogliono la; l'école usa l' davanti a vocale.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson01.listen.002
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La poste è l'ufficio postale; come gare, pharmacie e banque è un nome femminile.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson01.order.003
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: word_order
+  frame:
+    text: La {item} est grande.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Questi nomi sono femminili, quindi l'articolo è la e l'aggettivo grande prende la -e del femminile.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson01.fill.004
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: fill_in_blank
+  frame:
+    text: La {item} est fermée le dimanche. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Fermée termina in -e perché banque è femminile.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson01.translate.005
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: translation
+  frame:
+    text: La stazione è grande.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'La gare est grande: gare è femminile, quindi sia la sia grande concordano.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson02.choose.001
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Où serve a chiedere dove; en face de e à côté de sono espressioni di luogo che richiedono de davanti al nome.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson02.listen.002
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Loin d'ici significa lontano da qui; près d'ici è il contrario.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson02.order.003
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: word_order
+  frame:
+    text: La pharmacie est à {item} de la banque.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La pharmacie est à {item} de la banque.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: À côté de significa accanto a; de lo collega al nome che segue.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson02.fill.004
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: fill_in_blank
+  frame:
+    text: La banque est en {item} de la gare. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: En face de significa di fronte a e richiede de davanti al nome.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson02.translate.005
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: translation
+  frame:
+    text: L'ufficio postale è lontano da qui.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La poste est {item} d'ici.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Loin d'ici significa lontano da qui.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson03.choose.001
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Excusez-moi è il modo educato per attirare l'attenzione di uno sconosciuto prima di fargli una domanda.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson03.listen.002
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Excusez-moi è una forma di vous del verbo excuser, quindi si usa con gli sconosciuti.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson03.match.003
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: La gare, la pharmacie, la banque e la poste sono femminili; excusez-moi apre qualsiasi domanda rivolta a uno sconosciuto.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson03.fill.004
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: fill_in_blank
+  frame:
+    text: Cinq {item} à pied. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Cinq minutes à pied significa cinque minuti a piedi; minutes è plurale dopo cinq.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit07.lesson03.translate.005
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: translation
+  frame:
+    text: Cinque minuti a piedi.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cinq minutes à {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: À pied significa a piedi, quindi cinque minuti a piedi sono cinque minuti di cammino.
+    language_code: it
+    direction: ltr
