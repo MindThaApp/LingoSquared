@@ -1,0 +1,396 @@
+schema_version: '1.0'
+pack_key: practice.nl-it.a1.unit15
+source_language: nl
+target_language: it
+unit_content_key: it.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_buone
+    - w_dei
+    - w_delle
+    - w_più
+    - w_quale
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_più
+      - w_dei
+      - w_delle
+  t_piu: &id002
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_più
+  t_delle: &id003
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_delle
+  t_dei: &id004
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_dei
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - pronoun
+    - adverb
+    - preposition
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+      - w_buone
+  t_quale: &id006
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_quale
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_delle
+  t_buone: &id009
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_buone
+templates:
+- content_key: practice.nl-it.it.a1.unit15.lesson01.choose.001
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Più betekent meer; dei en delle zijn de meervoudsvormen van di plus het lidwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.listen.002
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dei hoort bij mannelijke meervoudszelfstandige naamwoorden en delle bij vrouwelijke.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.order.003
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: Voglio {item} caffè, meno tè.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voglio {item} caffè, meno tè.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Più betekent meer en meno betekent minder.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.order.004
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: I pomodori costano meno {item} mele.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Mele is vrouwelijk meervoud, dus di plus le wordt delle.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.fill.005
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: fill_in_blank
+  frame:
+    text: Le mele costano più {item} pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Pomodori is mannelijk meervoud, dus di plus i wordt dei.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.translate.006
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: De appels kosten meer dan de tomaten.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele costano più {item} pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dei is di plus i en komt overeen met pomodori, het ding waarmee je vergelijkt, niet met mele.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson01.translate.007
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: De tomaten kosten minder dan de appels.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Meno delle betekent minder dan de, voor een vrouwelijk meervoudszelfstandig naamwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.choose.001
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Quale betekent welke en vraagt je te kiezen tussen opties.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson02.order.001
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: word_order
+  frame:
+    text: Ciao, {item} preferisci, le mele o i pomodori?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Quale preferisci? vraagt welk van twee dingen je liever hebt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson02.fill.002
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: fill_in_blank
+  frame:
+    text: Ciao, {item} preferisci, il caffè o il tè? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quale betekent welke en staat in deze vraag voor het werkwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson02.translate.003
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: translation
+  frame:
+    text: Hoi, welke heb je liever, de appels of de tomaten? (informeel, tu)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Preferisci is de informele tu-vorm, dus deze vraag is voor een vriend.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.choose.002
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone is het vrouwelijk meervoud van buono en komt overeen met mele.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.listen.003
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone eindigt op -e omdat het een vrouwelijk meervoudszelfstandig naamwoord beschrijft.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.order.004
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: word_order
+  frame:
+    text: Sì, le mele sono {item} come i pomodori.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sono buone is meervoud, dus buono wordt buone bij het vrouwelijke meervoud mele.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.fill.005
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: fill_in_blank
+  frame:
+    text: Le mele sono {item} come i pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Come verbindt twee gelijke dingen: buone come betekent net zo goed als.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit15.lesson03.translate.006
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: translation
+  frame:
+    text: De appels zijn net zo lekker als de tomaten.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Buone komt overeen met mele; come betekent in deze vergelijking als.
+    language_code: nl
+    direction: ltr
