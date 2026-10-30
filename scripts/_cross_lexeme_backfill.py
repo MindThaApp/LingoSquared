@@ -25,8 +25,9 @@ def build(learner: str, target: str):
     lex = json.loads((REPO_ROOT / f"docs/content/lexicon/{pair}.json").read_text(encoding="utf-8"))
     sibling = importlib.import_module(f"backfill_lexemes_en_{target}")
     levels = {}
+    sib_levels = getattr(sibling, "LEVELS", None) or {"a1": f"en-{target}"}   # en-nl has no LEVELS table (one a1 group)
     for level in lex:
-        sib_group = sibling.LEVELS[level]
+        sib_group = sib_levels[level]
         group = sib_group.replace("en-", f"{learner}-", 1)
         if manifest_group(group)[0] != manifest_group(sib_group)[0]:
             raise SystemExit(f"{group} does not list the same realizations as {sib_group}; derive all units of the level first")
