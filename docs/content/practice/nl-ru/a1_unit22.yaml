@@ -1,0 +1,477 @@
+schema_version: '1.0'
+pack_key: practice.nl-ru.a1.unit22
+source_language: nl
+target_language: ru
+unit_content_key: ru.a1.unit22.emotions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_выходной
+    - w_грустно
+    - w_потому
+    - w_работы
+    - w_рад
+    - w_рада
+    - w_себя
+    - w_устал
+    - w_устала
+    - w_чувствуешь
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_рад
+      - w_рада
+      - w_грустно
+  p2: &id002
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_рада
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_грустно
+  p4: &id004
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_рад
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_устал
+      - w_устала
+      - w_потому
+      - w_работы
+  p6: &id006
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_устала
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_устал
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_работы
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_себя
+      - w_чувствуешь
+      - w_выходной
+  p10: &id010
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_себя
+  p11: &id011
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_чувствуешь
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_выходной
+  p13: &id013
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_рад
+      - w_рада
+      - w_грустно
+      - w_устал
+      - w_устала
+      - w_выходной
+templates:
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.choose.001
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Рад zegt een man en рада een vrouw; грустно is onpersoonlijk en gebruikt мне.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.order.002
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: word_order
+  frame:
+    text: Сегодня я {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Рада eindigt op -а omdat de spreker een vrouw is.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.fill.003
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: fill_in_blank
+  frame:
+    text: Мне {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Мне грустно gebruikt мне, "mij", en geen onderwerp, ongeveer zoals "het is verdrietig voor mij".
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.translate.004
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: translation
+  frame:
+    text: Ik ben blij. (gezegd door een man)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Een man zegt рад zonder uitgang.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.translate.005
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: translation
+  frame:
+    text: Ik ben blij. (gezegd door een vrouw)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Een vrouw voegt -а toe: рада.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson01.translate.006
+  lesson_content_key: ru.a1.unit22.lesson01.ya_rad
+  type: translation
+  frame:
+    text: Ik ben verdrietig.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Мне грустно is de gebruikelijke manier om te zeggen dat je verdrietig bent.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson02.choose.001
+  lesson_content_key: ru.a1.unit22.lesson02.ya_ustal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Устал zegt een man en устала een vrouw; потому что betekent omdat.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson02.order.002
+  lesson_content_key: ru.a1.unit22.lesson02.ya_ustal
+  type: word_order
+  frame:
+    text: Я {item}, потому что много работы.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}, потому что много работы.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Устала eindigt op -а voor een vrouw; потому что leidt de reden in.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson02.fill.003
+  lesson_content_key: ru.a1.unit22.lesson02.ya_ustal
+  type: fill_in_blank
+  frame:
+    text: Я {item}, потому что много работы. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Een man zegt устал zonder uitgang.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson02.translate.004
+  lesson_content_key: ru.a1.unit22.lesson02.ya_ustal
+  type: translation
+  frame:
+    text: Ik ben moe. (gezegd door een man)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Устал is de mannelijke verleden tijd van устать.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson02.translate.005
+  lesson_content_key: ru.a1.unit22.lesson02.ya_ustal
+  type: translation
+  frame:
+    text: Ik ben moe omdat er veel werk is. (gezegd door een vrouw)
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {a}, потому что много {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Много wordt gevolgd door de vorm работы, veel werk.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.choose.001
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Как ты себя чувствуешь? vraagt hoe je je voelt; себя is het wederkerend voornaamwoord "jezelf".
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.order.002
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: word_order
+  frame:
+    text: Как ты {item} чувствуешь?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Как ты {item} чувствуешь?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Себя is een wederkerend voornaamwoord dat voor elke persoon hetzelfde blijft.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.fill.003
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: fill_in_blank
+  frame:
+    text: Как ты себя {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Чувствуешь is de informele ты-vorm van чувствовать.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.fill.004
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: fill_in_blank
+  frame:
+    text: Я рад, потому что завтра {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Выходной is een vrije dag; завтра, morgen, staat ervoor.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.translate.005
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: translation
+  frame:
+    text: Hoe voel je je? (informeel)
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id010
+    b: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Как ты {a} {b}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Как ты себя чувствуешь? is de informele manier om te vragen hoe iemand zich voelt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.translate.006
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: translation
+  frame:
+    text: Morgen is het een vrije dag.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Завтра {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Een woord voor "is" is niet nodig: Завтра выходной.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ru.ru.a1.unit22.lesson03.match.007
+  lesson_content_key: ru.a1.unit22.lesson03.posle_raboty
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id013
+    second: *id013
+    third: *id013
+    fourth: *id013
+    fifth: *id013
+    sixth: *id013
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Рад en устал zijn mannelijk, рада en устала zijn de vrouwelijke vormen.
+    language_code: nl
+    direction: ltr
