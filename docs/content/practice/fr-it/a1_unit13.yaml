@@ -1,0 +1,509 @@
+schema_version: '1.0'
+pack_key: practice.fr-it.a1.unit13
+source_language: fr
+target_language: it
+unit_content_key: it.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_andata
+    - w_andato
+    - w_bel
+    - w_fatto
+    - w_film
+    - w_ieri
+    - w_mangiato
+    - w_pranzo
+    - w_stamattina
+    - w_visto
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_ieri
+      - w_stamattina
+      - w_andato
+      - w_andata
+      - w_visto
+      - w_bel
+      - w_film
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_ieri
+      - w_stamattina
+      - w_andato
+      - w_andata
+      - w_visto
+      - w_film
+  pool3: &id003
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic:
+      - w_andato
+      - w_andata
+  t_visto: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_visto
+  t_bel: &id005
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bel
+  t_film: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_film
+  t_andato: &id007
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_andato
+  t_andata: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_andata
+  pool9: &id009
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_ieri
+      - w_stamattina
+      - w_visto
+      - w_film
+      - w_mangiato
+      - w_pranzo
+      - w_fatto
+      - w_bel
+  pool10: &id010
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_mangiato
+      - w_pranzo
+      - w_fatto
+      - w_visto
+      - w_film
+  pool11: &id011
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_mangiato
+      - w_pranzo
+      - w_fatto
+      - w_film
+  t_mangiato: &id012
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_mangiato
+  t_pranzo: &id013
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pranzo
+  t_fatto: &id014
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_fatto
+  pool15: &id015
+    language_code: it
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_ieri
+      - w_stamattina
+      - w_pranzo
+templates:
+- content_key: practice.fr-it.it.a1.unit13.lesson01.choose.001
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Andato et andata sont les formes passées masculine et féminine du verbe aller.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.listen.002
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Andata est employé par une femme, andato par un homme.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.order.003
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: word_order
+  frame:
+    text: Sono {item} al cinema ieri.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} al cinema ieri.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Avec sono, le participe passé s’accorde avec la personne qui parle : andato pour un homme, andata pour une femme.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.fill.004
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: fill_in_blank
+  frame:
+    text: Ho {item} un bel film! ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Visto s’emploie avec ho : ho visto, j’ai vu.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.fill.005
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: fill_in_blank
+  frame:
+    text: Ho visto un {item} film! ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Bel est la forme courte de bello devant un nom masculin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.order.006
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: word_order
+  frame:
+    text: Ho visto un bel {item}!
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho visto un bel {item}!
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Film est masculin, il se construit donc avec un et bel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.translate.007
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: translation
+  frame:
+    text: Hier, je suis allé au cinéma. (dit par un homme)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} al cinema ieri.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Un homme dit sono andato, une femme sono andata.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.translate.008
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: translation
+  frame:
+    text: Hier, je suis allée au cinéma. (dit par une femme)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} al cinema ieri.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Andare se conjugue avec sono : la terminaison s’accorde donc avec la personne qui parle.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson01.translate.009
+  lesson_content_key: it.a1.unit13.lesson01.sono_andato_al_cinema_ieri
+  type: translation
+  frame:
+    text: J’ai vu un beau film !
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho visto un bel {item}!
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Vedere se conjugue avec ho : ho visto, j’ai vu.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.match.001
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Beaucoup de passés se forment avec ho et un participe : ho visto, ho mangiato, ho fatto ; andare, lui, se conjugue avec sono.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.choose.002
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Pranzo signifie déjeuner (le repas de midi) et s’emploie avec a : a pranzo.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.listen.003
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ho mangiato signifie j’ai mangé ; hai fatto signifie tu as fait.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.fill.004
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: fill_in_blank
+  frame:
+    text: Ho {item} un panino a pranzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mangiato est le participe passé employé après ho.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.fill.005
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: fill_in_blank
+  frame:
+    text: Ho mangiato un panino a {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A pranzo signifie au déjeuner, à l’heure du déjeuner.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.order.006
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: word_order
+  frame:
+    text: Cosa hai {item} ieri?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cosa hai {item} ieri?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai fatto signifie tu as fait.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.translate.007
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: translation
+  frame:
+    text: J’ai mangé un sandwich au déjeuner.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho mangiato un panino a {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A pranzo signifie au déjeuner.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.translate.008
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: translation
+  frame:
+    text: Qu’est-ce que tu as fait hier ? (informel, tu)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cosa hai {item} ieri?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai fatto est la forme du tutoiement (tu).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit13.lesson02.translate.009
+  lesson_content_key: it.a1.unit13.lesson02.ho_mangiato_un_panino
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ieri signifie hier et stamattina signifie ce matin.
+    language_code: fr
+    direction: ltr

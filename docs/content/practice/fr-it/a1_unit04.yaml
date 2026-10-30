@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.fr-it.a1.unit04
+source_language: fr
+target_language: it
+unit_content_key: it.a1.unit04.calendar_dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Roma
+    - w_aprile
+    - w_arrivi
+    - w_arrivo
+    - w_data
+    - w_domenica
+    - w_dopodomani
+    - w_febbraio
+    - w_gennaio
+    - w_giorno
+    - w_giovedì
+    - w_lunedì
+    - w_martedì
+    - w_marzo
+    - w_mercoledì
+    - w_oggi
+    - w_pomeriggio
+    - w_quando
+    - w_quindici
+    - w_sabato
+    - w_venerdì
+slot_presets:
+  l1_core: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_lunedì
+      - w_martedì
+      - w_mercoledì
+      - w_giovedì
+      - w_venerdì
+      - w_sabato
+      - w_domenica
+      - w_giorno
+      - w_oggi
+  days: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_lunedì
+      - w_martedì
+      - w_mercoledì
+      - w_giovedì
+      - w_venerdì
+      - w_sabato
+      - w_domenica
+  giorno: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_giorno
+  oggi: &id003
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_oggi
+  l2_core: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_data
+      - w_gennaio
+      - w_febbraio
+      - w_marzo
+      - w_aprile
+      - w_quindici
+  months: &id008
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_gennaio
+      - w_febbraio
+      - w_marzo
+      - w_aprile
+  data: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_data
+  quindici: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_quindici
+  l3_core: &id009
+    language_code: it
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_quando
+      - w_arrivi
+      - w_Roma
+      - w_arrivo
+      - w_pomeriggio
+      - w_dopodomani
+  roma: &id010
+    language_code: it
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Roma
+  arrivi: &id011
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_arrivi
+  pomeriggio: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pomeriggio
+templates:
+- content_key: practice.fr-it.it.a1.unit04.lesson01.choose.001
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Les jours de la semaine italiens s’écrivent en minuscules, comme en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson01.listen.002
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Martedì et mercoledì portent un accent écrit sur la dernière syllabe, qui est accentuée.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson01.order.003
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: word_order
+  frame:
+    text: Che {item} è oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} è oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che giorno è oggi? demande le jour de la semaine ; pour la date, on demande Che data è oggi?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson01.fill.004
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: fill_in_blank
+  frame:
+    text: Che giorno è {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Oggi signifie aujourd’hui ; domani signifie demain, et la même question fonctionne pour les deux.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson01.match.005
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Du lundi au vendredi, les noms se terminent en -dì, du latin dies, jour ; sabato et domenica non.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson01.translate.006
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: translation
+  frame:
+    text: Aujourd’hui, c’est {day}.
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      day: english_gloss
+  slots:
+    day: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi è {day}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'L’italien omet l’article avec les jours de la semaine employés ainsi : Oggi è lunedì, et non Oggi è il lunedì.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.choose.001
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Les mois italiens ne prennent pas de majuscule : gennaio, febbraio, marzo.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.listen.002
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Febbraio a un double b ; écoute bien la consonne tenue.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.order.003
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: word_order
+  frame:
+    text: Che {item} è oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} è oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Data signifie date ; Che data è oggi? demande le jour et le mois, pas le jour de la semaine.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.fill.004
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: fill_in_blank
+  frame:
+    text: Oggi è il {item} marzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Les dates se forment avec il et un nombre cardinal : il quindici marzo, le quinze mars.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.translate.005
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gennaio, febbraio, marzo et aprile suivent l’ordre de l’année, comme en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson02.translate.006
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: translation
+  frame:
+    text: Aujourd’hui, on est le cinq {month}.
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      month: english_gloss
+  slots:
+    month: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi è il cinque {month}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'L’italien met le jour en premier : il cinque gennaio, littéralement « le cinq janvier ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.choose.001
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Arrivo signifie j’arrive et arrivi signifie tu arrives ; la terminaison -i marque le tu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.order.002
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: word_order
+  frame:
+    text: Quando arrivi a {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quando arrivi a {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Roma, c’est Rome ; avec un nom de ville, on emploie a pour dire « à ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.fill.003
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: fill_in_blank
+  frame:
+    text: Quando {item} a Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quando arrivi? demande à un ami quand il arrive ; la forme de politesse est Quando arriva?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.match.004
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Dopodomani est formé de dopo, après, et domani, demain : après-demain.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.translate.005
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Arrivo signifie j’arrive et arrivi signifie tu arrives ; seule la voyelle finale change.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit04.lesson03.translate.006
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: translation
+  frame:
+    text: J’arrive jeudi après-midi.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Arrivo giovedì {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'L’italien n’a pas besoin de préposition devant un jour de la semaine : arrivo giovedì, j’arrive jeudi.'
+    language_code: fr
+    direction: ltr

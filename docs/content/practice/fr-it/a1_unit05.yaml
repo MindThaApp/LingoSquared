@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.fr-it.a1.unit05
+source_language: fr
+target_language: it
+unit_content_key: it.a1.unit05.ask_tell_time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_alle
+    - w_cinque
+    - w_dieci
+    - w_dodici
+    - w_due
+    - w_l'una
+    - w_le
+    - w_mattina
+    - w_meno
+    - w_mezzo
+    - w_nove
+    - w_ora
+    - w_ore
+    - w_otto
+    - w_quarto
+    - w_quattro
+    - w_sera
+    - w_sette
+    - w_tre
+slot_presets:
+  l1_core: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_ore
+      - w_le
+      - w_l'una
+      - w_dodici
+  hours: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_due
+      - w_tre
+      - w_quattro
+      - w_cinque
+      - w_sette
+      - w_otto
+      - w_nove
+      - w_dieci
+      - w_dodici
+  ore: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ore
+  le: &id003
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_le
+  l2_core: &id005
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_mezzo
+      - w_quarto
+      - w_meno
+  quarto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_quarto
+  mezzo: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_mezzo
+  l3_core: &id009
+    language_code: it
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_ora
+      - w_alle
+      - w_mattina
+      - w_sera
+  ora: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ora
+  alle: &id011
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_alle
+  pairs: &id008
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+      - w_meno
+  words: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+templates:
+- content_key: practice.fr-it.it.a1.unit05.lesson01.choose.001
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Pour l''heure, on utilise le féminin pluriel le parce que ore (les heures) est un féminin pluriel : sono le tre.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson01.listen.002
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Une heure est l''exception : l''una est au singulier, donc on dit è, et non sono.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson01.order.003
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: word_order
+  frame:
+    text: Che {item} sono?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} sono?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che ore sono? demande littéralement « quelles heures sont-elles ? », c'est pourquoi la réponse commence par sono le.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson01.fill.004
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: fill_in_blank
+  frame:
+    text: Sono {item} tre. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Le s''accorde avec ore, qui est sous-entendu : sono le tre signifie « il est trois heures ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson01.translate.005
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: translation
+  frame:
+    text: Il est {n} heures.
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      n: english_gloss
+  slots:
+    n: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le {n}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sono le s'emploie pour toutes les heures sauf une heure, qui se dit l'una.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.choose.001
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'E ajoute des minutes et meno en retire : le tre e mezzo = 3 h 30, le quattro meno un quarto = 3 h 45.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.listen.002
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mezzo a un double z ; prolonge un peu le son.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.order.003
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: word_order
+  frame:
+    text: Sono le tre e un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'E un quarto ajoute quinze minutes : le tre e un quarto = 3 h 15.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.fill.004
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: fill_in_blank
+  frame:
+    text: Sono le tre e {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mezzo signifie « demi », donc e mezzo ajoute trente minutes.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.match.005
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mezzo signifie « demi » et quarto « quart » ; l'heure vient d'abord, puis e ou meno.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.translate.006
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: Il est quatre heures moins le quart.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le quattro meno un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Meno retire des minutes à l''heure suivante : le quattro meno un quarto = 3 h 45.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson02.translate.007
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: Il est trois heures et demie.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: E mezzo, « et demie », est la façon courante de dire une demi-heure après l'heure pleine.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.choose.001
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Alle signifie « à » devant une heure (féminin pluriel) : alle tre, à trois heures.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.listen.002
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ora signifie « heure » ; ore est son pluriel, c'est pourquoi la question est Che ore sono?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.order.003
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: word_order
+  frame:
+    text: A che {item} ci vediamo?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che {item} ci vediamo?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A che ora demande « à quelle heure » ; ora est au singulier ici, car on demande un seul moment.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.fill.004
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: fill_in_blank
+  frame:
+    text: Ci vediamo {item} tre e mezzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Alle s'emploie avec toutes les heures sauf une heure, où l'on dit all'una.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.translate.005
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: On se retrouve à trois heures et demie.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ci vediamo {item} tre e mezzo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ci vediamo alle suivi d'une heure est la formule habituelle pour fixer un rendez-vous.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit05.lesson03.translate.006
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Mattina et sera signifient « matin » et « soir » ; l''italien place di devant : di mattina, di sera.'
+    language_code: fr
+    direction: ltr
