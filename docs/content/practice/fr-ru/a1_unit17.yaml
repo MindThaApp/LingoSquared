@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.fr-ru.a1.unit17
+source_language: fr
+target_language: ru
+unit_content_key: ru.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_больница
+    - w_больнице
+    - w_врач
+    - w_инженер
+    - w_кем
+    - w_магазине
+    - w_он
+    - w_офис
+    - w_офисе
+    - w_повар
+    - w_работает
+    - w_работаешь
+    - w_ресторане
+    - w_учитель
+    - w_школа
+    - w_школе
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_больница
+      - w_учитель
+      - w_школа
+      - w_инженер
+      - w_офис
+      - w_он
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_больница
+      - w_школа
+      - w_офис
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работает
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_больнице
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_офисе
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_врач
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_школе
+  p8: &id008
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_кем
+      - w_работаешь
+      - w_повар
+      - w_магазине
+      - w_ресторане
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работаешь
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ресторане
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_магазине
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_повар
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_офис
+templates:
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.choose.001
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Les noms de métiers russes comme врач ou инженер n’ont pas besoin d’article.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.match.002
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Un métier s’exprime par un nom seul : Я врач signifie « Je suis médecin ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.order.003
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: word_order
+  frame:
+    text: Он {item} в офисе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он {item} в офисе.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работает est la forme « il » ou « elle » de работать, « travailler ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.fill.004
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Я работаю в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Après в, qui signifie « dans » ou « à », le nom prend la terminaison du prépositif -е : больница devient больнице.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.fill.005
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Он инженер. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Офис prend la terminaison du prépositif -е après в : в офисе.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.translate.006
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: Je suis médecin.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Aucun article n’est nécessaire devant un nom de métier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.translate.007
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: Il travaille au bureau.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: В suivi de la terminaison du prépositif -е répond à la question « où ? ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.translate.008
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: Elle est enseignante. Elle travaille à l’école.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она учитель. Она работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Школа devient школе après в : à l’école.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.translate.009
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Les noms de métiers comme врач et инженер gardent la même forme pour les hommes et les femmes : Она врач.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.choose.001
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Кем ты работаешь ? demande littéralement « en tant que qui travailles-tu ? », c’est ainsi que les Russes demandent quel est ton métier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.order.002
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: word_order
+  frame:
+    text: Кем ты {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работаешь est la forme familière en ты de работать.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.fill.003
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Кем ты {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La terminaison -ешь de la forme en ты indique que c’est toi qui travailles, de façon familière.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.fill.004
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Он повар. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ресторан prend la terminaison du prépositif -е après в : в ресторане.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.translate.005
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Quel est ton métier ? (familier)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Кем interroge sur le métier de quelqu’un, et ты indique une question familière.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.translate.006
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Je travaille dans un magasin.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я работаю в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Магазин devient магазине après в : dans un magasin.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson02.translate.007
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Elle est cuisinière. Elle travaille dans un restaurant.
+    language_code: fr
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она {a}. Она работает в {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Повар reste masculin dans sa forme, même quand il désigne une femme.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit17.lesson01.listen.010
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ces noms de métiers et de lieux de travail n’ont pas besoin d’article.
+    language_code: fr
+    direction: ltr
