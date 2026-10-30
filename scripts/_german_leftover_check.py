@@ -43,11 +43,13 @@ TOKEN = re.compile(r"[^\W\d_]+", re.UNICODE)
 DUTCH_SAFE = set("und ich ist ein eine mit für zu zum zur von wir auch nach dass oder aber wenn weil über noch nur sehr".split()) - {"ik"}
 
 
-def german_markers(text: str, learner: str) -> bool:
+def german_markers(text: str, learner: str, target: str = "") -> bool:
     toks = [t.lower() for t in TOKEN.findall(re.sub(r"\{[^}]*\}", " ", text))]
     if not toks:
         return False
     words = DUTCH_SAFE if learner == "nl" else DE_WORDS
+    if target == "nl":
+        words = words - {"wie"}          # Dutch "Met wie spreek ik?" is target text of X-nl pairs
     if learner == "fr":
         words = words - {"uns"}          # "quelques-uns", "les uns"
     hits = [t for t in toks if t in words]
@@ -106,7 +108,7 @@ def scan_pair(pair: str, quiet: bool = False) -> list[str]:
                         sibling_equal = not dd.teaching_title_is_english(v, tgt)
                     elif role == "title" or role in dd.ALWAYS_LEARNER:
                         sibling_equal = dd.english_fraction(v) < 0.9
-                if sibling_equal or german_markers(v, learner):
+                if sibling_equal or german_markers(v, learner, pair.split("-")[1]):
                     out.append(f"{pair} {kind}/{p.name}: {'/'.join(map(str, path))[:90]}: {v[:90]!r}")
     return out
 
