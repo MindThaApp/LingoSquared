@@ -1215,7 +1215,8 @@ TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will"}}
 _PROSE_TARGET = ""
 _PROSE_LEARNER = ""
 # Dutch learner-language prose shares these with the English function-word list ("Dit is een groet").
-LEARNER_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will", "me", "an", "in", "had", "kind"}}
+LEARNER_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will", "me", "an", "in", "had", "kind"},
+                     "pl": {"to", "we", "my", "was", "a", "i"}}   # Polish "to" (is), "we" (in), "my" (we), "was" (you)
 NL_MARKERS = {"ik", "je", "jij", "u", "wij", "jullie", "niet", "geen", "een", "het", "de", "van", "met", "voor", "naar", "op", "aan",
               "hallo", "kun", "kan", "wil", "zijn", "heb", "heeft", "dat", "dit", "wat", "waar", "hoe", "ook", "maar", "en", "om", "bij"}
 
