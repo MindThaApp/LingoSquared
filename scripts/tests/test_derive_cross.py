@@ -330,3 +330,14 @@ def test_english_prose_does_not_flag_dutch_learner_text_but_still_flags_english(
         assert dc.english_prose("Hello is an informal greeting.")
     finally:
         dc._PROSE_TARGET, dc._PROSE_LEARNER = old
+
+
+def test_english_prose_does_not_flag_polish_function_words_but_still_flags_english():
+    old = (dc._PROSE_TARGET, dc._PROSE_LEARNER)
+    try:
+        dc._PROSE_TARGET, dc._PROSE_LEARNER = "de", "pl"
+        assert not dc.english_prose("*Was möchten Sie?* to standardowy, formalny sposób, w jaki obsługa pyta.")
+        assert not dc.english_prose("*Restiamo* to forma „my” użyta jako propozycja.")
+        assert dc.english_prose("This is the formal way to ask what you want.")
+    finally:
+        dc._PROSE_TARGET, dc._PROSE_LEARNER = old
