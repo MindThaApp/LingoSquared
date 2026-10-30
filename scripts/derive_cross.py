@@ -1168,7 +1168,7 @@ STRICT_LEARNER_ROLES = {"instruction", "feedback", "note", "gloss", "example_glo
 
 
 # German phrases that contain English-only function words as German words ("was ... tun will" = what ... wants to do).
-GERMAN_PROSE_PHRASES = ("wählen Sie, was ", "Diego is gracioso")   # 2nd: quoted source text of es unit63 (kept verbatim)
+GERMAN_PROSE_PHRASES = ("wählen Sie, was ", "Diego is gracioso", "Thomas is drôle")   # 2nd: quoted source text of es unit63 (kept verbatim)
 
 
 def english_prose(v: str) -> bool:

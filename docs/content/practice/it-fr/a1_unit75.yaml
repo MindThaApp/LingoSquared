@@ -1,0 +1,307 @@
+schema_version: '1.0'
+pack_key: practice.it-fr.a1.unit75
+source_language: it
+target_language: fr
+unit_content_key: fr.a1.unit75.restaurant
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_boire
+    - w_boissons
+    - w_cinéma
+    - w_commander
+    - w_menu
+    - w_sandwich
+    - w_soupe
+templates:
+- content_key: practice.it-fr.fr.a1.unit75.lesson02.choose.001
+  lesson_content_key: fr.a1.unit75.lesson02.que_voulez_vous_manger
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_commander
+        - w_soupe
+        - w_boire
+        - w_menu
+        - w_boissons
+        - w_sandwich
+        - w_cinéma
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una parola di questa unità, dalla lezione «Che cosa desideri mangiare?».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson04.listen.001
+  lesson_content_key: fr.a1.unit75.lesson04.au_restaurant
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione «Al ristorante».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson05.translate.001
+  lesson_content_key: fr.a1.unit75.lesson05.lire_le_menu_du
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione su come leggere il menù del giorno.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson06.match.001
+  lesson_content_key: fr.a1.unit75.lesson06.camille_au_restaurant
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Abbina ogni parola francese al suo significato; le parole provengono dalle lezioni di questa unità.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson02.choose.002
+  lesson_content_key: fr.a1.unit75.lesson02.que_voulez_vous_manger
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una parola di questa unità, dalla lezione «Che cosa desideri mangiare?».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson04.translate.002
+  lesson_content_key: fr.a1.unit75.lesson04.au_restaurant
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, dalla lezione «Al ristorante».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson02.order.003
+  lesson_content_key: fr.a1.unit75.lesson02.que_voulez_vous_manger
+  type: word_order
+  frame:
+    text: Je veux {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_commander
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je veux {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Voglio ordinare. commander significa ordinare.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson04.order.003
+  lesson_content_key: fr.a1.unit75.lesson04.au_restaurant
+  type: word_order
+  frame:
+    text: Oui, je voudrais la {item}, s'il vous plaît.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_soupe
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oui, je voudrais la {item}, s'il vous plaît.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Sì, vorrei la zuppa, per favore. soupe significa zuppa.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson04.fill.004
+  lesson_content_key: fr.a1.unit75.lesson04.au_restaurant
+  type: fill_in_blank
+  frame:
+    text: Parfait, et vous voulez aussi quelque chose à {item} ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_boire
+    hint:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_boire
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Perfetto, e desidera anche qualcosa da bere? boire significa bere.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson05.order.002
+  lesson_content_key: fr.a1.unit75.lesson05.lire_le_menu_du
+  type: word_order
+  frame:
+    text: Je lis le {item} du jour.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_menu
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je lis le {item} du jour.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Sto leggendo il menu del giorno. menu significa menu.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson05.fill.003
+  lesson_content_key: fr.a1.unit75.lesson05.lire_le_menu_du
+  type: fill_in_blank
+  frame:
+    text: Je veux commander les {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_boissons
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_boissons
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Voglio ordinare le bevande. boissons significa bevande.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit75.lesson06.order.002
+  lesson_content_key: fr.a1.unit75.lesson06.camille_au_restaurant
+  type: word_order
+  frame:
+    text: Je vais au {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cinéma
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je vais au {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Vado al cinema. cinéma significa cinema.
+    language_code: it
+    direction: ltr
