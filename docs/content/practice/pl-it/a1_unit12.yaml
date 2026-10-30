@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.pl-it.a1.unit12
+source_language: pl
+target_language: it
+unit_content_key: it.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_allora
+    - w_andiamo
+    - w_cinema
+    - w_davanti
+    - w_non
+    - w_se
+    - w_stasera
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_stasera
+      - w_andiamo
+      - w_cinema
+  t_cinema: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cinema
+  t_stasera: &id003
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_stasera
+  t_andiamo: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_andiamo
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - preposition
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_davanti
+      - w_allora
+      - w_stasera
+      - w_cinema
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - preposition
+    - adverb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_davanti
+      - w_allora
+      - w_se
+      - w_non
+      - w_stasera
+  t_davanti: &id007
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_davanti
+  t_allora: &id008
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_allora
+  pool9: &id009
+    language_code: it
+    part_of_speech:
+    - particle
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_se
+      - w_non
+      - w_andiamo
+      - w_allora
+  t_se: &id010
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_se
+  t_non: &id011
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_non
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    - preposition
+    - particle
+    agreement_tags:
+      semantic:
+      - w_stasera
+      - w_andiamo
+      - w_cinema
+      - w_davanti
+      - w_allora
+      - w_se
+      - w_non
+  pool13: &id013
+    language_code: it
+    part_of_speech:
+    - adverb
+    - noun
+    - preposition
+    - particle
+    agreement_tags:
+      semantic:
+      - w_stasera
+      - w_davanti
+      - w_allora
+      - w_se
+      - w_non
+templates:
+- content_key: practice.pl-it.it.a1.unit12.lesson01.choose.001
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Stasera znaczy „dziś wieczorem”; pochodzi od questa sera.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.listen.002
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Andiamo to forma „my” czasownika andare, używana w propozycjach: chodźmy.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.order.003
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: word_order
+  frame:
+    text: Andiamo al {item} stasera?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Andiamo al {item} stasera?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Al to a + il: al cinema znaczy „do kina”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.fill.004
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: fill_in_blank
+  frame:
+    text: Andiamo al cinema {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Stasera, czyli „dziś wieczorem”, daje też pożegnanie a stasera: do zobaczenia wieczorem.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.fill.005
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: fill_in_blank
+  frame:
+    text: Va bene, {item}! ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Andiamo to odpowiedź na propozycję: chodźmy.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.translate.006
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: translation
+  frame:
+    text: Pójdziemy dziś wieczorem do kina?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Andiamo al {item} stasera?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Andiamo wypowiedziane z rosnącą intonacją to propozycja.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson01.translate.007
+  lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
+  type: translation
+  frame:
+    text: Dobrze, chodźmy!
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Va bene, {item}!
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Va bene, andiamo! to przyjęcie propozycji.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson02.choose.001
+  lesson_content_key: it.a1.unit12.lesson02.a_che_ora_ci_vediamo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Davanti al cinema znaczy „przed kinem”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.listen.001
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Allora może znaczyć „wtedy” lub „więc”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson02.order.002
+  lesson_content_key: it.a1.unit12.lesson02.a_che_ora_ci_vediamo
+  type: word_order
+  frame:
+    text: Ci vediamo alle otto, {item} al cinema.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ci vediamo alle otto, {item} al cinema.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Davanti al + miejsce znaczy „przed nim”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson02.fill.003
+  lesson_content_key: it.a1.unit12.lesson02.a_che_ora_ci_vediamo
+  type: fill_in_blank
+  frame:
+    text: Perfetto, a stasera {item}! ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A stasera allora znaczy „no to do zobaczenia wieczorem”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson02.translate.004
+  lesson_content_key: it.a1.unit12.lesson02.a_che_ora_ci_vediamo
+  type: translation
+  frame:
+    text: Spotkajmy się o ósmej przed kinem.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ci vediamo alle otto, {item} al cinema.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ci vediamo alle + godzina ustala spotkanie.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.choose.002
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Se znaczy „jeśli”, a non znaczy „nie”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.fill.003
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: fill_in_blank
+  frame:
+    text: Allora, {item} stasera non va bene, andiamo domani. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Se otwiera warunek: jeśli dziś wieczorem się nie uda.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.fill.004
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: fill_in_blank
+  frame:
+    text: Se stasera {item} va bene, andiamo domani. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Non stoi przed czasownikiem i tworzy przeczenie.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.translate.005
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: translation
+  frame:
+    text: Jeśli dziś wieczorem się nie uda, chodźmy jutro.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Se stasera {item} va bene, andiamo domani.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Non va bene znaczy „nie pasuje”, dosłownie „nie jest dobrze”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.match.006
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Se to „jeśli”, non to „nie”, allora to „wtedy”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit12.lesson03.translate.007
+  lesson_content_key: it.a1.unit12.lesson03.se_stasera_non_va_bene
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Se, non i allora to małe słowa używane przy planach.
+    language_code: pl
+    direction: ltr
