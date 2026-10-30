@@ -1,0 +1,366 @@
+schema_version: '1.0'
+pack_key: practice.pl-fr.a1.unit43
+source_language: pl
+target_language: fr
+unit_content_key: fr.a1.unit43.voyage
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_allez
+    - w_arrive
+    - w_attention
+    - w_billet
+    - w_doit
+    - w_déjà
+    - w_départ
+    - w_encore
+    - w_guichet
+    - w_général
+    - w_monte
+    - w_panneau
+    - w_part
+    - w_pile
+    - w_problème
+    - w_quai
+    - w_quarante
+    - w_salle
+    - w_simple
+    - w_sortie
+    - w_train
+    - w_utilise
+    - w_vouvoiement
+templates:
+- content_key: practice.pl-fr.fr.a1.unit43.lesson01.choose.001
+  lesson_content_key: fr.a1.unit43.lesson01.acheter_un_billet
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_billet
+        - w_simple
+        - w_guichet
+        - w_utilise
+        - w_général
+        - w_vouvoiement
+        - w_quai
+        - w_part
+        - w_train
+        - w_arrive
+        - w_attention
+        - w_sortie
+        - w_salle
+        - w_départ
+        - w_quarante
+        - w_doit
+        - w_panneau
+        - w_problème
+        - w_encore
+        - w_déjà
+        - w_pile
+        - w_allez
+        - w_monte
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słów tego działu, z lekcji o kupowaniu biletu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson02.listen.001
+  lesson_content_key: fr.a1.unit43.lesson02.a_quelle_heure_part
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej lekcji, z lekcji „O której odjeżdża pociąg?”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson03.translate.001
+  lesson_content_key: fr.a1.unit43.lesson03.le_retard
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej lekcji, z lekcji o opóźnieniu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson04.match.001
+  lesson_content_key: fr.a1.unit43.lesson04.se_reperer_a_la
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Połącz każde francuskie słowo z jego polskim znaczeniem; słowa pochodzą z lekcji tej jednostki.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson05.choose.001
+  lesson_content_key: fr.a1.unit43.lesson05.lire_un_billet_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej lekcji, z lekcji o czytaniu biletu kolejowego.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson06.translate.001
+  lesson_content_key: fr.a1.unit43.lesson06.camille_et_mathieu_en
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słów tej lekcji, z części „Camille i Mathieu w podróży”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson01.order.002
+  lesson_content_key: fr.a1.unit43.lesson01.acheter_un_billet
+  type: word_order
+  frame:
+    text: Je voudrais un {item} pour Lyon.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_billet
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je voudrais un {item} pour Lyon.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Chciałbym bilet do Lyonu. billet znaczy „bilet”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson01.fill.003
+  lesson_content_key: fr.a1.unit43.lesson01.acheter_un_billet
+  type: fill_in_blank
+  frame:
+    text: Voulez-vous un aller {item} ou un aller-retour ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_simple
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_simple
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Czy chce Pan bilet w jedną stronę, czy w obie? Voulez-vous to grzecznościowa forma vous od vouloir, użyta tu wobec nieznajomego pracownika dworca.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson02.order.002
+  lesson_content_key: fr.a1.unit43.lesson02.a_quelle_heure_part
+  type: word_order
+  frame:
+    text: De quel {item} part le train pour Lyon ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_quai
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De quel {item} part le train pour Lyon ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Z którego peronu odjeżdża pociąg do Lyonu? quai znaczy „peron”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson02.fill.003
+  lesson_content_key: fr.a1.unit43.lesson02.a_quelle_heure_part
+  type: fill_in_blank
+  frame:
+    text: Le train ne {item} pas à l'heure. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_part
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_part
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Pociąg nie odjeżdża o czasie. part znaczy „strona; udział” (jak w „z twojej strony”).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson02.translate.004
+  lesson_content_key: fr.a1.unit43.lesson02.a_quelle_heure_part
+  type: translation
+  frame:
+    text: O której godzinie przyjeżdża pociąg?
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_train
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: À quelle heure arrive le {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'O której przyjeżdża pociąg? À quelle heure arrive ... ? pyta o godzinę; arriver to regularny czasownik na -er: le train arrive.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson04.order.002
+  lesson_content_key: fr.a1.unit43.lesson04.se_reperer_a_la
+  type: word_order
+  frame:
+    text: Où est la {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_sortie
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Où est la {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Gdzie jest wyjście? sortie znaczy „wyjście”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-fr.fr.a1.unit43.lesson04.fill.003
+  lesson_content_key: fr.a1.unit43.lesson04.se_reperer_a_la
+  type: fill_in_blank
+  frame:
+    text: Où est la {item} d'attente ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_salle
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_salle
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gdzie jest poczekalnia? salle znaczy „sala; pomieszczenie”.
+    language_code: pl
+    direction: ltr
