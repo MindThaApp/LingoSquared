@@ -1,0 +1,396 @@
+schema_version: '1.0'
+pack_key: practice.fr-it.a1.unit15
+source_language: fr
+target_language: it
+unit_content_key: it.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_buone
+    - w_dei
+    - w_delle
+    - w_più
+    - w_quale
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_più
+      - w_dei
+      - w_delle
+  t_piu: &id002
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_più
+  t_delle: &id003
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_delle
+  t_dei: &id004
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_dei
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - pronoun
+    - adverb
+    - preposition
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+      - w_buone
+  t_quale: &id006
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_quale
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_delle
+  t_buone: &id009
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_buone
+templates:
+- content_key: practice.fr-it.it.a1.unit15.lesson01.choose.001
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Più signifie « plus » ; dei et delle sont les formes plurielles de di + article défini.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.listen.002
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dei s’emploie avec les noms masculins pluriels et delle avec les noms féminins pluriels.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.order.003
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: Voglio {item} caffè, meno tè.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voglio {item} caffè, meno tè.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Più signifie « plus » et meno signifie « moins ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.order.004
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: I pomodori costano meno {item} mele.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Mele est un féminin pluriel, donc di + le devient delle.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.fill.005
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: fill_in_blank
+  frame:
+    text: Le mele costano più {item} pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Pomodori est un masculin pluriel, donc di + i devient dei.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.translate.006
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: Les pommes coûtent plus cher que les tomates.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele costano più {item} pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dei est di + i et s’accorde avec pomodori, le terme auquel on compare, et non avec mele.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson01.translate.007
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: Les tomates coûtent moins cher que les pommes.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Meno delle signifie « moins que les », devant un nom féminin pluriel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.choose.001
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Quale signifie « lequel » et sert à choisir entre plusieurs options.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson02.order.001
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: word_order
+  frame:
+    text: Ciao, {item} preferisci, le mele o i pomodori?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Quale preferisci? demande lequel des deux tu préfères.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson02.fill.002
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: fill_in_blank
+  frame:
+    text: Ciao, {item} preferisci, il caffè o il tè? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quale signifie « lequel » et se place avant le verbe dans cette question.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson02.translate.003
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: translation
+  frame:
+    text: Salut, tu préfères les pommes ou les tomates ? (tutoiement)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Preferisci est la forme du tu, donc cette question s’adresse à un ami.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.choose.002
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone est le féminin pluriel de buono et s’accorde avec mele.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.listen.003
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone se termine par -e parce qu’il qualifie un nom féminin pluriel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.order.004
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: word_order
+  frame:
+    text: Sì, le mele sono {item} come i pomodori.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sono buone est au pluriel, donc buono devient buone avec le féminin pluriel mele.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.fill.005
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: fill_in_blank
+  frame:
+    text: Le mele sono {item} come i pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Come relie deux choses égales : buone come signifie « aussi bonnes que ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit15.lesson03.translate.006
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: translation
+  frame:
+    text: Les pommes sont aussi bonnes que les tomates.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Buone s’accorde avec mele ; come signifie « que » dans cette comparaison.
+    language_code: fr
+    direction: ltr
