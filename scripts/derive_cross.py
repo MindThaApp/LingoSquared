@@ -1213,6 +1213,9 @@ GERMAN_PROSE_PHRASES = ("wählen Sie, was ",)
 # in learner-language strings ("Het is half drie" is Dutch, not English).  Set by learner_leftovers() for the pair at hand.
 TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will"}}
 _PROSE_TARGET = ""
+_PROSE_LEARNER = ""
+# Dutch learner-language prose shares these with the English function-word list ("Dit is een groet").
+LEARNER_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will", "me", "an", "in", "had", "kind"}}
 NL_MARKERS = {"ik", "je", "jij", "u", "wij", "jullie", "niet", "geen", "een", "het", "de", "van", "met", "voor", "naar", "op", "aan",
               "hallo", "kun", "kan", "wil", "zijn", "heb", "heeft", "dat", "dit", "wat", "waar", "hoe", "ook", "maar", "en", "om", "bij"}
 
@@ -1222,16 +1225,17 @@ def english_prose(v: str) -> bool:
     toks = norm_tokens(v)
     if len(toks) < 3 or any(ph in v for ph in GERMAN_PROSE_PHRASES):
         return False
-    amb = TARGET_AMBIGUOUS.get(_PROSE_TARGET, ())
+    amb = set(TARGET_AMBIGUOUS.get(_PROSE_TARGET, ())) | LEARNER_AMBIGUOUS.get(_PROSE_LEARNER, set())
     hits = [t for t in toks if t in EN_ONLY and t not in amb]
-    return len(set(hits)) >= 2 or bool(set(hits) & EN_STRONG)
+    strong = EN_STRONG - amb
+    return len(set(hits)) >= 2 or bool(set(hits) & strong)
 
 
 def learner_leftovers(pair: str) -> list[str]:
     """Learner-role strings of a cross pair that are still English prose, or that changed target-language text."""
     learner, target = pair.split("-")
-    global _PROSE_TARGET
-    _PROSE_TARGET = target
+    global _PROSE_TARGET, _PROSE_LEARNER
+    _PROSE_TARGET, _PROSE_LEARNER = target, learner
     sib = f"en-{target}"
     out = []
     for kind in ("overlays", "practice"):
