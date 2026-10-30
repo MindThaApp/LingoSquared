@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.fr-ru.a1.unit12
+source_language: fr
+target_language: ru
+unit_content_key: ru.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Дима
+    - w_Настя
+    - w_встретимся
+    - w_давай
+    - w_кино
+    - w_кинотеатра
+    - w_могу
+    - w_мы
+    - w_не
+    - w_отлично
+    - w_пойдём
+    - w_согласен
+    - w_сожалению
+    - w_субботу
+    - w_субботы
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кино
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_пойдём
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботу
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - particle
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_согласен
+      - w_могу
+      - w_мы
+      - w_встретимся
+      - w_не
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сожалению
+  p8: &id008
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_встретимся
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_могу
+  p10: &id010
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_согласен
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_мы
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кинотеатра
+  p14: &id014
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботы
+  p15: &id015
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_отлично
+templates:
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.choose.001
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Давай est la façon familière, avec ты, de proposer une activité ; avec вы, on dirait давайте.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.order.002
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: word_order
+  frame:
+    text: Давай пойдём в {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Кино ne change jamais de terminaison : il reste кино après в.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.fill.003
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: fill_in_blank
+  frame:
+    text: Давай {item} в кино. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Давай + пойдём propose un projet : « Allons-y ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.translate.004
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: Allons au cinéma demain. (familier)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай {item} в кино завтра.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Давай пойдём est l’invitation amicale avec ты : « Allons-y ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.translate.005
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: Allons au cinéma samedi. (familier)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в кино в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Pour dire « le » + jour de la semaine, le russe emploie в + l’accusatif : суббота devient субботу.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson01.translate.006
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Кино est invariable, et давай est le « allons-y » familier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.choose.001
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Согласен se termine par une consonne parce que le locuteur est un homme ; une femme dit согласна.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.fill.002
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: К {item}, я не могу. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: К сожалению est la façon standard de dire « malheureusement ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.fill.003
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: Во сколько мы {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Встретимся est la forme de « nous », elle va donc avec мы : мы встретимся.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.order.004
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: word_order
+  frame:
+    text: К сожалению, я не {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: К сожалению, я не {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Не nie le verbe, et могу est la forme de я qui signifie « je peux ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.translate.005
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: D’accord, je suis d’accord. (dit par un homme)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хорошо, я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Согласен est la forme masculine ; une femme dirait согласна.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson02.translate.006
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: À quelle heure on se retrouve ?
+    language_code: fr
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Во сколько {a} {b}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Во сколько demande littéralement « à combien », c’est-à-dire « à quelle heure ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.listen.001
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Les prénoms russes ont des formes courtes et amicales, comme Настя et Дима, employées entre amis.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.order.002
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: word_order
+  frame:
+    text: Давай в семь часов, у {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'У signifie « près de » ou « chez/devant » et se construit avec le génitif : кинотеатр devient кинотеатра.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.fill.003
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: fill_in_blank
+  frame:
+    text: Отлично, до {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'До signifie « jusqu’à » et se construit avec le génitif : суббота devient субботы.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.translate.004
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: Parfait, à samedi.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Отлично, до {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: До субботы signifie littéralement « jusqu’à samedi » et c’est la façon amicale de dire « à ce jour-là ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.translate.005
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: Disons sept heures, devant le cinéma. (familier)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Давай в семь часов propose une heure ; у кинотеатра ajoute le lieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit12.lesson03.translate.006
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Отлично est un adverbe qui signifie « parfait » ; il ne change ni en genre ni en nombre.
+    language_code: fr
+    direction: ltr
