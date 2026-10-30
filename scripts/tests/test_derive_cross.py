@@ -316,3 +316,17 @@ def test_normalize_spans_never_masks_a_real_mismatch():
     # a replaced span (wrong word) still fails the verbatim check
     tr2 = dc.normalize_spans(src, "*Pollo* es masculino.")
     assert dc.lint("feedback", src, tr2)
+
+
+def test_english_prose_does_not_flag_dutch_learner_text_but_still_flags_english():
+    old = (dc._PROSE_TARGET, dc._PROSE_LEARNER)
+    try:
+        dc._PROSE_TARGET, dc._PROSE_LEARNER = "de", "nl"
+        assert not dc.english_prose("*Hallo* is een informele begroeting die je op elk moment kunt gebruiken.")
+        assert not dc.english_prose("Dit is een formele groet en het was er al.")
+        assert dc.english_prose("This is an informal greeting you can use at any time.")
+        assert dc.english_prose("It is not the formal word for you.")
+        dc._PROSE_LEARNER = "es"
+        assert dc.english_prose("Hello is an informal greeting.")
+    finally:
+        dc._PROSE_TARGET, dc._PROSE_LEARNER = old
