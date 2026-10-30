@@ -1,0 +1,292 @@
+schema_version: '1.0'
+pack_key: practice.de-ru.a1.unit60
+source_language: de
+target_language: ru
+unit_content_key: ru.a1.unit60.bakery
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_выпечка
+    - w_выпечку
+    - w_круассан
+    - w_круассана
+    - w_круассанами
+    - w_круассаны
+    - w_пакет
+    - w_пекарня
+    - w_печём
+    - w_прилавок
+    - w_свежий
+    - w_сладкая
+    - w_сотрудника
+templates:
+- content_key: practice.de-ru.ru.a1.unit60.lesson01.choose.001
+  lesson_content_key: ru.a1.unit60.lesson01.davay_skhodim_v_pekarnyu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ru
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_пекарня
+        - w_прилавок
+        - w_свежий
+        - w_выпечка
+        - w_сладкая
+        - w_выпечку
+        - w_круассан
+        - w_сотрудника
+        - w_круассаны
+        - w_печём
+        - w_круассана
+        - w_пакет
+        - w_круассанами
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Lektion: Gehen wir zur Bäckerei?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson02.listen.001
+  lesson_content_key: ru.a1.unit60.lesson02.khleb_i_vypechka
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion über Brot und Gebäck.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson03.translate.001
+  lesson_content_key: ru.a1.unit60.lesson03.kruassan_i_sotrudnik
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion über das Croissant und den Angestellten.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson04.match.001
+  lesson_content_key: ru.a1.unit60.lesson04.tseny_v_pekarne
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Ordnen Sie jedem russischen Wort die passende deutsche Bedeutung zu; die Wörter stammen aus den Lektionen dieser Einheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson05.choose.001
+  lesson_content_key: ru.a1.unit60.lesson05.u_prilavka_v_pekarne
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Lektion, aus der Lektion „An der Bäckereitheke“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson06.translate.001
+  lesson_content_key: ru.a1.unit60.lesson06.nina_slyshit_o_pekarne
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Einheit, aus der Lektion „Nina hört von der Bäckerei“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson01.order.002
+  lesson_content_key: ru.a1.unit60.lesson01.davay_skhodim_v_pekarnyu
+  type: word_order
+  frame:
+    text: Как тебе {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_пекарня
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Как тебе {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Nina: Wie war die Bäckerei? пекарня bedeutet Bäckerei.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson01.fill.003
+  lesson_content_key: ru.a1.unit60.lesson01.davay_skhodim_v_pekarnyu
+  type: fill_in_blank
+  frame:
+    text: Я вижу {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_прилавок
+    hint:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_прилавок
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ich sehe die Theke. прилавок bedeutet Theke.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson02.order.002
+  lesson_content_key: ru.a1.unit60.lesson02.khleb_i_vypechka
+  type: word_order
+  frame:
+    text: Я вижу хлеб и {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_выпечку
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я вижу хлеб и {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Ich sehe das Brot und das Gebäck. выпечку bedeutet Gebäck (als Objekt).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson03.order.002
+  lesson_content_key: ru.a1.unit60.lesson03.kruassan_i_sotrudnik
+  type: word_order
+  frame:
+    text: Я вижу {item} и сотрудника.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_круассан
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я вижу {item} и сотрудника.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Ich sehe das Croissant und den Mitarbeiter. круассан bedeutet Croissant.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit60.lesson06.order.002
+  lesson_content_key: ru.a1.unit60.lesson06.nina_slyshit_o_pekarne
+  type: word_order
+  frame:
+    text: У Насти есть {item} с круассанами.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_пакет
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У Насти есть {item} с круассанами.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Nastja hat eine Tüte mit Croissants. пакет bedeutet Tüte, Papiertüte.
+    language_code: de
+    direction: ltr

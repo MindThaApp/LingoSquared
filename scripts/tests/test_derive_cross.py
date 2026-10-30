@@ -341,3 +341,17 @@ def test_english_prose_does_not_flag_polish_function_words_but_still_flags_engli
         assert dc.english_prose("This is the formal way to ask what you want.")
     finally:
         dc._PROSE_TARGET, dc._PROSE_LEARNER = old
+
+
+def test_latin_in_cyrillic_flags_latin_in_ru_blocks_only(tmp_path):
+    import json
+    course = {"blocks": [
+        {"language_code": "ru", "text": "Добрый ___! (guten Tag)"},         # trailing hint is learner text
+        {"language_code": "ru", "text": "Я хочу tea."},                      # Latin leftover in target text
+        {"language_code": "en", "text": "Say привет to Anna."},             # learner-language block
+    ]}
+    p = tmp_path / "c.json"
+    p.write_text(json.dumps(course), encoding="utf-8")
+    hits = dc.latin_in_cyrillic(p, "ru")
+    assert len(hits) == 1 and "tea" in hits[0]
+    assert dc.latin_in_cyrillic(p, "es") == []
