@@ -1,0 +1,474 @@
+schema_version: '1.0'
+pack_key: practice.fr-ru.a1.unit09
+source_language: fr
+target_language: ru
+unit_content_key: ru.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Пушкина
+    - w_аптека
+    - w_банк
+    - w_библиотека
+    - w_большое
+    - w_вашей
+    - w_вокзал
+    - w_где
+    - w_гостиница
+    - w_моей
+    - w_находится
+    - w_ресторан
+    - w_улица
+    - w_улице
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+      - w_банк
+      - w_аптека
+  p2: &id002
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_находится
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_улице
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_аптека
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_банк
+      - w_аптека
+      - w_вокзал
+      - w_гостиница
+      - w_ресторан
+      - w_библиотека
+  p7: &id007
+    language_code: ru
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Пушкина
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_гостиница
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_вашей
+      - w_моей
+      - w_большое
+      - w_библиотека
+      - w_банк
+  p10: &id010
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_вашей
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_моей
+  p12: &id012
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_большое
+templates:
+- content_key: practice.fr-ru.ru.a1.unit09.lesson01.choose.001
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Где signifie « où » et находится ajoute « se trouve » ; ensemble, ils servent à demander l’emplacement d’un lieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson01.order.002
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: word_order
+  frame:
+    text: Где {item} магазин?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где {item} магазин?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Находится est une forme verbale de la 3e personne du singulier ; elle s’accorde donc avec un nom singulier comme магазин.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson01.fill.003
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: fill_in_blank
+  frame:
+    text: Магазин на Тверской {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Après на au sens de « dans/sur », улица devient улице pour indiquer où se trouve quelque chose.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson01.translate.004
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: Où se trouve la pharmacie ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...? est la façon habituelle de demander où se trouve un lieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson01.translate.005
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Где signifie « où », et улица signifie « rue ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.choose.001
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Банк, вокзал et ресторан sont masculins ; аптека, гостиница et библиотека sont féminins.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.listen.002
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ces noms de lieux sont des noms communs, et il n’y a pas d’article à ajouter dans Где находится банк ? (« Où se trouve la banque ? »).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.match.003
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Банк et ресторан ressemblent beaucoup à « banque » et « restaurant », et аптека est apparenté à « apothicaire ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.order.004
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: word_order
+  frame:
+    text: Где находится {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...? fonctionne avec n’importe quel nom de lieu au singulier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.fill.005
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: fill_in_blank
+  frame:
+    text: Банк на улице {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Une rue qui porte le nom d’une personne met ce nom au génitif : улица Пушкина signifie « rue Pouchkine ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson02.translate.006
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: translation
+  frame:
+    text: Où se trouve l’hôtel ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Гостиница est un nom féminin qui signifie « hôtel ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.choose.001
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Вашей et моей sont les formes féminines de ваш et мой employées après на : на вашей улице, на моей улице.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.order.002
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: word_order
+  frame:
+    text: Что есть на {item} улице?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Вашей s’accorde avec улице, qui est féminin ; c’est la question de politesse avec вы.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.fill.003
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: На {item} улице есть банк. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Моей est la forme de моя employée après на, parce que улица est féminin et au prépositionnel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.fill.004
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: Спасибо {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Спасибо большое est une façon chaleureuse de dire « merci beaucoup ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.translate.005
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: Qu’y a-t-il dans votre rue ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Что есть на вашей улице? demande ce qu’il y a dans la rue ; la forme de vouvoiement вашей reste polie.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.translate.006
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: Merci beaucoup.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Спасибо {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Большое s’accorde avec спасибо, qui est neutre, donc il se termine en -ое.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit09.lesson03.translate.007
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: Il y a une banque dans ma rue.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На {item} улице есть банк.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У меня есть sert à exprimer la possession ; pour dire que quelque chose se trouve dans une rue, le russe emploie На моей улице есть.
+    language_code: fr
+    direction: ltr
