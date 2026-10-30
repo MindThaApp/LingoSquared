@@ -1,0 +1,410 @@
+schema_version: '1.0'
+pack_key: practice.it-nl.a1.unit03
+source_language: it
+target_language: nl
+unit_content_key: nl.a1.unit03.calendar_dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - register_language
+    - wellbeing
+    - name_exchange
+    - origin_language
+    - cafe_small_talk
+    - first_meeting_dialogue
+    - number
+    - contact_number
+    - age_quantity
+    - price
+    - library_registration
+    - weekday
+    - weekday_pure
+    - month
+    - ordinal_number
+    - date_expression
+    - library_date
+    - cafe_appointment
+    - clock_time
+    - quarter_hour
+    - time_question
+    - time_of_day
+    - schedule
+    - cafe_meetup_time
+    - informal_address
+    - polite_address
+    - greeting
+    - wellbeing_answer
+    - person_name
+    - place_name
+    - country
+    - language_or_nationality
+    register:
+    - informal
+    - polite
+slot_presets:
+  informal_address:
+    language_code: nl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: informal_address
+  greeting:
+    language_code: nl
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: greeting
+  person_name:
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  country:
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: country
+  number:
+    language_code: nl
+    part_of_speech:
+    - symbol
+    - noun
+    agreement_tags:
+      semantic: number
+  weekday:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  weekday_pure: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday_pure
+  month: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: month
+  ordinal_number: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ordinal_number
+  time_of_day:
+    language_code: nl
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic: time_of_day
+templates:
+- content_key: practice.it-nl.nl.a1.unit03.lesson01.match.001
+  lesson_content_key: nl.a1.unit03.lesson01.weekdagen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  feedback_frame:
+    text: Abbina ogni giorno della settimana olandese al suo nome in italiano.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson01.translate.003
+  lesson_content_key: nl.a1.unit03.lesson01.weekdagen
+  type: translation
+  frame:
+    text: Oggi è {item}. (Inizia con Vandaag.)
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vandaag is het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Oggi è {item}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson02.listen.001
+  lesson_content_key: nl.a1.unit03.lesson02.maanden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è il mese che hai sentito.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson02.choose.002
+  lesson_content_key: nl.a1.unit03.lesson02.maanden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Scegli il mese in italiano.
+      language_code: it
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è questo mese in olandese.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson02.translate.003
+  lesson_content_key: nl.a1.unit03.lesson02.maanden
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il mese in olandese è {item}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson03.choose.001
+  lesson_content_key: nl.a1.unit03.lesson03.rangtelwoorden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è questo numero ordinale in olandese.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson03.translate.003
+  lesson_content_key: nl.a1.unit03.lesson03.rangtelwoorden
+  type: translation
+  frame:
+    text: È il {item} aprile.
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is de {item} april.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: La data usa {item}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson04.order.001
+  lesson_content_key: nl.a1.unit03.lesson04.datum_vragen
+  type: word_order
+  frame:
+    text: Vandaag is het {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vandaag is het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'La frase olandese indica il giorno della settimana di oggi: {item}.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson04.translate.003
+  lesson_content_key: nl.a1.unit03.lesson04.datum_vragen
+  type: translation
+  frame:
+    text: Oggi è {item}. (Inizia con Vandaag.)
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vandaag is het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'La frase olandese indica il giorno della settimana di oggi: {item}.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson05.order.001
+  lesson_content_key: nl.a1.unit03.lesson05.bibliotheekdatum
+  type: word_order
+  frame:
+    text: Het boek moet op de {item} april terug.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het boek moet op de {item} april terug.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: La data di restituzione in olandese usa {item}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson05.translate.003
+  lesson_content_key: nl.a1.unit03.lesson05.bibliotheekdatum
+  type: translation
+  frame:
+    text: Il libro deve essere restituito il {item} aprile.
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het boek moet op de {item} april terug.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: L'espressione olandese per la data di restituzione usa op de {item} april.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson06.order.001
+  lesson_content_key: nl.a1.unit03.lesson06.taalcafe_afspraak
+  type: word_order
+  frame:
+    text: Het taalcafé is op {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het taalcafé is op {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Il prossimo caffè linguistico è {item}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-nl.nl.a1.unit03.lesson06.translate.003
+  lesson_content_key: nl.a1.unit03.lesson06.taalcafe_afspraak
+  type: translation
+  frame:
+    text: Il caffè linguistico è {item}.
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het taalcafé is op {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: La frase olandese usa op + il giorno della settimana {item}.
+    language_code: it
+    direction: ltr
