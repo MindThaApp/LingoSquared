@@ -1,0 +1,345 @@
+schema_version: '1.0'
+pack_key: practice.pl-es.a1.unit07
+source_language: pl
+target_language: es
+unit_content_key: es.a1.unit07.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u07
+    - es_a1_u07_l01
+    - es_a1_u07_l06
+    - w_cuesta
+    - w_cuestan
+    - w_docena
+    - w_necesita
+    - w_todo
+    - w_ingredientes
+slot_presets:
+  market: &id001
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u07_l01
+  nouns: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u07
+  content: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u07
+  dialogue: &id010
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u07_l06
+  cuesta: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cuesta
+  cuestan: &id004
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cuestan
+  docena: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_docena
+  necesita: &id006
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_necesita
+  todo: &id007
+    language_code: es
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_todo
+  ingredientes: &id009
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ingredientes
+templates:
+- content_key: practice.pl-es.es.a1.unit07.lesson01.choose.001
+  lesson_content_key: es.a1.unit07.lesson01.el_mercado
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Przymiotniki zgadzają się z rzeczownikiem: la fruta fresca, los tomates frescos.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson01.listen.002
+  lesson_content_key: es.a1.unit07.lesson01.el_mercado
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Verdura to jedno warzywo; na targu zwykle prosi się o verduras.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson02.order.001
+  lesson_content_key: es.a1.unit07.lesson02.preguntar_el_precio
+  type: word_order
+  frame:
+    text: ¿Cuánto {item} el kilo de tomates?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cuánto {item} el kilo de tomates?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Ile kosztuje kilo pomidorów? Cuesta stosuje się do jednej rzeczy, cuestan do kilku.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson02.translate.002
+  lesson_content_key: es.a1.unit07.lesson02.preguntar_el_precio
+  type: translation
+  frame:
+    text: Ile kosztują jajka?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cuánto {item} los huevos?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Huevos to liczba mnoga, więc czasownik to cuestan; przy chlebie byłoby cuesta.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson03.order.001
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: word_order
+  frame:
+    text: Una {item} de huevos, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Una {item} de huevos, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Tuzin jajek, poproszę. Przed nazwą produktu przy ilościach stawia się de: un kilo de tomates.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson03.match.002
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Medio kilo to pół kilo; przed medio nie występuje un.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson03.translate.003
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wyrazy zakończone na -o są zwykle rodzaju męskiego (el mercado), a na -a żeńskiego (la fruta).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson04.fill.001
+  lesson_content_key: es.a1.unit07.lesson04.una_compra_sencilla
+  type: fill_in_blank
+  frame:
+    text: ¿{item} algo más? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Sprzedawcy na targu zwracają się do klientów w formie usted: ¿Necesita algo más?'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson04.translate.002
+  lesson_content_key: es.a1.unit07.lesson04.una_compra_sencilla
+  type: translation
+  frame:
+    text: Mamy już wszystko.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ya tenemos {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Ya, czyli „już”, zwykle stoi w hiszpańskim przed czasownikiem.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson05.choose.001
+  lesson_content_key: es.a1.unit07.lesson05.leer_las_etiquetas_de_precio
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Todos los días znaczy „codziennie”, dosłownie „wszystkie dni”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson06.order.001
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: word_order
+  frame:
+    text: Necesitamos {item} para la próxima clase.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Necesitamos {item} para la próxima clase.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Potrzebujemy składników na następne zajęcia. Necesitamos to forma „my” od necesitar.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson06.translate.002
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ¡Qué tomates tan frescos! tak po hiszpańsku mówi się „Jakie świeże pomidory!”
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-es.es.a1.unit07.lesson06.listen.003
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Vamos znaczy zarówno „chodźmy”, jak i „idziemy”; odróżnia je kontekst.
+    language_code: pl
+    direction: ltr
