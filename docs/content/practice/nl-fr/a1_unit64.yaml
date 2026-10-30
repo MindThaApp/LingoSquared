@@ -1,0 +1,288 @@
+schema_version: '1.0'
+pack_key: practice.nl-fr.a1.unit64
+source_language: nl
+target_language: fr
+unit_content_key: fr.a1.unit64.personnalite
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_calme
+    - w_connaissez
+    - w_curieux
+    - w_différent
+    - w_drôle
+    - w_gentille
+    - w_notre
+    - w_parler
+    - w_patient
+    - w_raconte
+    - w_timide
+templates:
+- content_key: practice.nl-fr.fr.a1.unit64.lesson01.choose.001
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_gentille
+        - w_drôle
+        - w_calme
+        - w_patient
+        - w_curieux
+        - w_parler
+        - w_timide
+        - w_connaissez
+        - w_raconte
+        - w_différent
+        - w_notre
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over aardig en grappig.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson02.listen.001
+  lesson_content_key: fr.a1.unit64.lesson02.calme_et_patient
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over rustig en geduldig.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson03.translate.001
+  lesson_content_key: fr.a1.unit64.lesson03.curieux_et_timide
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over nieuwsgierig en verlegen.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson04.match.001
+  lesson_content_key: fr.a1.unit64.lesson04.nina_pose_des_questions
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Koppel elk Frans woord aan de juiste Nederlandse betekenis; de woorden komen uit de lessen van deze unit.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson05.choose.001
+  lesson_content_key: fr.a1.unit64.lesson05.nina_entend_parler_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze unit, uit de les waarin Nina over iedereen hoort.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson06.translate.001
+  lesson_content_key: fr.a1.unit64.lesson06.nina_se_decrit
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze unit, uit de les waarin Nina zichzelf beschrijft.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson01.order.002
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: word_order
+  frame:
+    text: Camille est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_gentille
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Camille est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Camille is aardig. gentille betekent aardig (vrouwelijk).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson01.fill.003
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: fill_in_blank
+  frame:
+    text: Thomas est {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_drôle
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_drôle
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Thomas is grappig. drôle betekent grappig.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson02.order.002
+  lesson_content_key: fr.a1.unit64.lesson02.calme_et_patient
+  type: word_order
+  frame:
+    text: Mathieu est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_calme
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mathieu est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Mathieu is rustig. calme betekent rustig.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson03.order.002
+  lesson_content_key: fr.a1.unit64.lesson03.curieux_et_timide
+  type: word_order
+  frame:
+    text: Nina est un peu {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_timide
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina est un peu {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Nina is een beetje verlegen. timide betekent verlegen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-fr.fr.a1.unit64.lesson06.order.002
+  lesson_content_key: fr.a1.unit64.lesson06.nina_se_decrit
+  type: word_order
+  frame:
+    text: Bienvenue dans {item} café des langues !
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_notre
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bienvenue dans {item} café des langues !
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Welkom in ons taalcafé! notre betekent ons/onze.
+    language_code: nl
+    direction: ltr
