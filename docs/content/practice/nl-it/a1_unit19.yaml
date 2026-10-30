@@ -1,0 +1,333 @@
+schema_version: '1.0'
+pack_key: practice.nl-it.a1.unit19
+source_language: nl
+target_language: it
+unit_content_key: it.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_biglietto
+    - w_binario
+    - w_parte
+    - w_treno
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+      - w_parte
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_biglietto
+      - w_binario
+  t_treno: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_treno
+  t_parte: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_parte
+  t_binario: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_binario
+  t_biglietto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_biglietto
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+templates:
+- content_key: practice.nl-it.it.a1.unit19.lesson01.choose.001
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario en il biglietto zijn allemaal mannelijk.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.listen.002
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Parte is de vorm voor 'hij vertrekt', gebruikt bij de trein.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.choose.003
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Een biglietto koop je om te reizen; het binario is waar de trein stopt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.order.004
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il {item} è alla stazione.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è alla stazione.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla stazione betekent 'op het station'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.order.005
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno {item} alle otto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Parte is de hij/zij/het-vorm van partire: hij vertrekt.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.order.006
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno parte dal {item} tre.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal is da + il, gebruikt voor het perron van vertrek.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.fill.007
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} è per Roma. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per Roma betekent 'naar Rome', de bestemming.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.fill.008
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: A che ora {item} il treno per Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Parte hoort bij il treno: hoe laat vertrekt de trein?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.fill.009
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} per Roma parte alle otto. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno per Roma is de trein die naar Rome gaat.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.translate.010
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: De trein vertrekt om acht uur.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Parte is de derde persoon enkelvoud: hij vertrekt.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.translate.011
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: Heb je het kaartje voor Rome? (informeel, tu)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai il {item} per Roma?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai is de informele tu-vorm van 'hebben'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.translate.012
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: De trein vertrekt van perron drie.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal binario tre betekent 'vanaf perron drie'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.translate.013
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: De trein naar Rome vertrekt om acht uur.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} per Roma parte alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Per Roma zegt waar de trein naartoe gaat.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-it.it.a1.unit19.lesson01.translate.014
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario en il biglietto zijn mannelijke zelfstandige naamwoorden.
+    language_code: nl
+    direction: ltr
