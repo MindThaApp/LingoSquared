@@ -1,0 +1,396 @@
+schema_version: '1.0'
+pack_key: practice.pl-it.a1.unit20
+source_language: pl
+target_language: it
+unit_content_key: it.a1.unit20.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_caldo
+    - w_freddo
+    - w_piove
+    - w_restiamo
+    - w_sole
+    - w_tempo
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adjective
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_caldo
+      - w_freddo
+      - w_piove
+      - w_sole
+      - w_tempo
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - adjective
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_caldo
+      - w_freddo
+      - w_piove
+      - w_sole
+  pool3: &id003
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_caldo
+      - w_freddo
+  t_tempo: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tempo
+  t_sole: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sole
+  t_piove: &id006
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_piove
+  t_caldo: &id007
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_caldo
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_caldo
+      - w_freddo
+      - w_sole
+      - w_piove
+  pool9: &id009
+    language_code: it
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_restiamo
+      - w_caldo
+      - w_freddo
+      - w_piove
+  pool10: &id010
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_restiamo
+      - w_piove
+      - w_sole
+      - w_freddo
+  t_restiamo: &id011
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_restiamo
+templates:
+- content_key: practice.pl-it.it.a1.unit20.lesson01.choose.001
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Fa caldo i fa freddo opisują pogodę za pomocą fa.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.listen.002
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Piove znaczy „pada deszcz” i nie potrzebuje podmiotu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.order.003
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: word_order
+  frame:
+    text: Oggi fa {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi fa {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Fa caldo znaczy „jest gorąco”, a fa freddo znaczy „jest zimno”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.order.004
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: word_order
+  frame:
+    text: Che {item} fa oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} fa oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che tempo fa? to standardowe pytanie o pogodę.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.fill.005
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: fill_in_blank
+  frame:
+    text: Oggi c'è il {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'C''è il sole znaczy „jest słonecznie”, dosłownie: „jest słońce”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.fill.006
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: fill_in_blank
+  frame:
+    text: Oggi {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Piove to czasownik bezosobowy, bez podmiotu: pada deszcz.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.translate.007
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: translation
+  frame:
+    text: Dziś jest gorąco.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi fa {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Mówiąc o pogodzie, po włosku używa się fa: oggi fa caldo.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.translate.008
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: translation
+  frame:
+    text: Dziś pada deszcz.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Piove znaczy „pada deszcz” i nie ma podmiotu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.translate.009
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: translation
+  frame:
+    text: Dziś jest słonecznie.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi c'è il {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: C'è il sole to zwykły sposób, by powiedzieć, że jest słonecznie.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson01.translate.010
+  lesson_content_key: it.a1.unit20.lesson01.il_tempo_oggi
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Caldo i freddo są przeciwieństwami.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson02.choose.001
+  lesson_content_key: it.a1.unit20.lesson02.restiamo_a_casa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Restiamo to forma „my” od restare: zostajemy.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson02.listen.002
+  lesson_content_key: it.a1.unit20.lesson02.restiamo_a_casa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Restiamo a casa znaczy: zostańmy w domu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson02.order.003
+  lesson_content_key: it.a1.unit20.lesson02.restiamo_a_casa
+  type: word_order
+  frame:
+    text: Oggi piove, {item} a casa.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi piove, {item} a casa.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Restiamo to forma „my”, używana, gdy proponujemy, by zostać w domu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson02.fill.004
+  lesson_content_key: it.a1.unit20.lesson02.restiamo_a_casa
+  type: fill_in_blank
+  frame:
+    text: Piove, allora {item} a casa? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Allora łączy pogodę z planem.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-it.it.a1.unit20.lesson02.translate.005
+  lesson_content_key: it.a1.unit20.lesson02.restiamo_a_casa
+  type: translation
+  frame:
+    text: Dziś pada deszcz, zostańmy w domu.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi piove, {item} a casa.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Restiamo a casa znaczy: zostańmy w domu.'
+    language_code: pl
+    direction: ltr
