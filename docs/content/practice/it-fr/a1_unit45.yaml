@@ -1,0 +1,412 @@
+schema_version: '1.0'
+pack_key: practice.it-fr.a1.unit45
+source_language: it
+target_language: fr
+unit_content_key: fr.a1.unit45.travail
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bureau
+    - w_certaines
+    - w_cuisinier
+    - w_curieuse
+    - w_finis
+    - w_forme
+    - w_gardent
+    - w_horaires
+    - w_infirmière
+    - w_métier
+    - w_pause
+    - w_personnes
+    - w_propre
+    - w_restaurant
+    - w_rythme
+    - w_son
+    - w_travaille
+    - w_travaillent
+    - w_tôt
+    - w_verbes
+    - w_vie
+templates:
+- content_key: practice.it-fr.fr.a1.unit45.lesson01.choose.001
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_vie
+        - w_métier
+        - w_cuisinier
+        - w_travaille
+        - w_infirmière
+        - w_restaurant
+        - w_certaines
+        - w_personnes
+        - w_travaillent
+        - w_bureau
+        - w_pause
+        - w_finis
+        - w_verbes
+        - w_gardent
+        - w_forme
+        - w_curieuse
+        - w_horaires
+        - w_tôt
+        - w_son
+        - w_propre
+        - w_rythme
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, della lezione «Che lavoro fai?».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson02.listen.001
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, della lezione «Dove lavori?».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson03.translate.001
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, della lezione «La mia giornata di lavoro».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson04.match.001
+  lesson_content_key: fr.a1.unit45.lesson04.decrire_des_collegues
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Abbina ogni parola francese al suo significato; le parole provengono dalle lezioni di questa unità.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson06.choose.001
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, della lezione «Una conversazione sul lavoro».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson01.translate.002
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} è una delle parole di questa unità, della lezione «Che lavoro fai?».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson01.order.003
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: word_order
+  frame:
+    text: Tu fais quoi dans la {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_vie
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tu fais quoi dans la {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Che lavoro fai? Un modo standard e informale per chiedere la professione a qualcuno.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson01.fill.004
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: fill_in_blank
+  frame:
+    text: Quel est ton {item} ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_métier
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_métier
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Qual è il tuo mestiere? métier significa mestiere; professione.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson01.translate.005
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: translation
+  frame:
+    text: Lavoro come cuoco.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cuisinier
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je travaille comme {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Lavoro come cuoco. cuisinier significa cuoco (maschile).
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson02.order.002
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: word_order
+  frame:
+    text: Je travaille dans un {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_restaurant
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je travaille dans un {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Lavoro in un ristorante. Qui si usa l'articolo indeterminativo un davanti a restaurant, perché è uno fra tanti ristoranti.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson02.fill.003
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: fill_in_blank
+  frame:
+    text: Certaines {item} travaillent dans un bureau. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_personnes
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_personnes
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Alcune persone lavorano in un ufficio. Dans un bureau (in un ufficio) vuole l'articolo, come dans un restaurant.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson03.order.002
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: word_order
+  frame:
+    text: J'ai une {item} à douze heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_pause
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'ai une {item} à douze heures.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Ho una pausa alle dodici. pause significa pausa.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson03.fill.003
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: fill_in_blank
+  frame:
+    text: Je {item} à cinq heures. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_finis
+    hint:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_finis
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Finisco alle cinque. Finis è la forma di je del verbo finir (finire).
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson06.order.002
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: word_order
+  frame:
+    text: Tu fais quels {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_horaires
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tu fais quels {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Che orari fai? Tu fais quels horaires ? è un modo naturale per chiedere l'orario di lavoro di qualcuno; quels concorda con il plurale horaires.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fr.fr.a1.unit45.lesson06.fill.003
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: fill_in_blank
+  frame:
+    text: Chaque métier a {item} propre rythme, je crois. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_son
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_son
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ogni lavoro ha il suo ritmo, immagino. Una frase di chiusura naturale e riflessiva: riconoscila per il significato, non serve riprodurla esattamente.'
+    language_code: it
+    direction: ltr
