@@ -50,6 +50,8 @@ def german_markers(text: str, learner: str, target: str = "") -> bool:
     words = DUTCH_SAFE if learner == "nl" else DE_WORDS
     if target == "nl":
         words = words - {"wie"}          # Dutch "Met wie spreek ik?" is target text of X-nl pairs
+    if learner == "pl":
+        words = words - {"ich", "wie"}   # Polish "ich" (their), "wie" (knows): "Elena jeszcze nie wie"
     if learner == "fr":
         words = words - {"uns"}          # "quelques-uns", "les uns"
     hits = [t for t in toks if t in words]
