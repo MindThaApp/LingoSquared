@@ -154,13 +154,11 @@ PRODUCTION_EXERCISE_TYPES = {
     "dialogue_response",
     "speak_response",
 }
+# Indefinite articles ("a word", "un mot", "una palabra", "a parole") are
+# deliberately absent: they are ordinary grammar, not a stated count, and
+# "a parole" (Italian "by words") even collides with the English article.
 NUMBER_WORDS = {
-    "a": 1,
-    "an": 1,
     "one": 1,
-    "un": 1,
-    "una": 1,
-    "uno": 1,
     "two": 2,
     "due": 2,
     "three": 3,
