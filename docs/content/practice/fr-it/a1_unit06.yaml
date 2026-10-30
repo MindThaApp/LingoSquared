@@ -1,0 +1,505 @@
+schema_version: '1.0'
+pack_key: practice.fr-it.a1.unit06
+source_language: fr
+target_language: it
+unit_content_key: it.a1.unit06.family_relationships
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_femmina
+    - w_figli
+    - w_figlia
+    - w_figlio
+    - w_fratelli
+    - w_fratello
+    - w_madre
+    - w_marito
+    - w_maschio
+    - w_mia
+    - w_moglie
+    - w_nonna
+    - w_nonno
+    - w_padre
+    - w_questa
+    - w_questo
+    - w_sorella
+    - w_sorelle
+    - w_sì
+    - w_una
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_madre
+      - w_padre
+      - w_fratello
+      - w_sorella
+      - w_nonno
+      - w_nonna
+      - w_questo
+      - w_questa
+      - w_mia
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_madre
+      - w_padre
+      - w_fratello
+      - w_sorella
+      - w_nonno
+      - w_nonna
+  pool3: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_padre
+      - w_fratello
+      - w_nonno
+  t_madre: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_madre
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_fratelli
+      - w_sorelle
+      - w_una
+      - w_marito
+      - w_moglie
+  pool6: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_fratelli
+      - w_sorelle
+      - w_marito
+      - w_moglie
+  t_sorella: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sorella
+  t_sorelle: &id008
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sorelle
+  pool9: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_marito
+      - w_moglie
+      - w_fratelli
+      - w_sorelle
+      - w_figlio
+      - w_figlia
+      - w_figli
+  pool10: &id010
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_figli
+      - w_sì
+      - w_maschio
+      - w_femmina
+      - w_figlio
+      - w_figlia
+  pool11: &id011
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_figli
+      - w_maschio
+      - w_femmina
+      - w_figlio
+      - w_figlia
+  t_figli: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_figli
+  pool13: &id013
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_figlio
+      - w_figlia
+      - w_maschio
+      - w_femmina
+templates:
+- content_key: practice.fr-it.it.a1.unit06.lesson01.choose.001
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Avec un possessif, les noms de famille au singulier se passent de l’article : mio padre, mia madre.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson01.listen.002
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Padre et madre se terminent tous deux en -e mais n’ont pas le même genre : apprends chaque mot avec son genre ; nonno et nonna se terminent en -o et en -a.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson01.order.003
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: word_order
+  frame:
+    text: Questo è mio {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questo è mio {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Questo et mio sont masculins, donc ils vont avec un nom masculin : questo è mio padre.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson01.fill.004
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: fill_in_blank
+  frame:
+    text: Questa è mia {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Questa et mia sont féminins et s’accordent avec madre : « voici ma mère ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson01.translate.005
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: translation
+  frame:
+    text: Voici ma mère.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questa è mia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Utilise questa et mia avec un nom féminin, questo et mio avec un nom masculin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson01.translate.006
+  lesson_content_key: it.a1.unit06.lesson01.i_membri_della_famiglia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Madre et padre, fratello et sorella, nonno et nonna sont des paires de mots de la famille, au féminin et au masculin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.choose.001
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Fratelli est le pluriel de fratello et peut aussi signifier « frères et sœurs ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.listen.002
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Marito et moglie signifient « mari » et « femme » ; moglie se termine en -e mais est féminin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.order.003
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: word_order
+  frame:
+    text: Ho un fratello e una {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho un fratello e una {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Un s’emploie avec un nom masculin et una avec un nom féminin : un fratello, una sorella.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.fill.004
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: fill_in_blank
+  frame:
+    text: Hai fratelli o {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Le pluriel de sorella est sorelle : la terminaison -a devient -e.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.translate.005
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: translation
+  frame:
+    text: J’ai un frère et une sœur.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho un fratello e una {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ho signifie « j’ai » ; utilise un devant un nom masculin et una devant un nom féminin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson02.translate.006
+  lesson_content_key: it.a1.unit06.lesson02.hai_fratelli_o_sorelle
+  type: translation
+  frame:
+    text: Tu as des frères ou des sœurs ? (informel, tu)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai fratelli o {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai est la forme de « avoir » pour tu, donc cette question s’adresse à un ami ou à un collègue.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.match.001
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Les mots de la famille vont par paires, au masculin et au féminin : marito et moglie, figlio et figlia.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.choose.002
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Figli désigne les enfants en général ; figlio et figlia désignent un fils ou une fille.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.listen.003
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Maschio et femmina servent à dire « garçon » et « fille » dans une famille.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.fill.004
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: fill_in_blank
+  frame:
+    text: Sì, ho due {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Figli est le pluriel de figlio et désigne des enfants de l’un ou l’autre sexe.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.translate.005
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: translation
+  frame:
+    text: Tu as des enfants ? (informel, tu)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai figli? est la façon informelle de demander à quelqu’un s’il a des enfants.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-it.it.a1.unit06.lesson03.translate.006
+  lesson_content_key: it.a1.unit06.lesson03.hai_figli
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Figlio et figlia signifient « fils » et « fille » ; maschio et femmina désignent un garçon et une fille parmi tes enfants.
+    language_code: fr
+    direction: ltr
