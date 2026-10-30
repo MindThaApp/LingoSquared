@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.ro-ru.a1.unit17
+source_language: ro
+target_language: ru
+unit_content_key: ru.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_больница
+    - w_больнице
+    - w_врач
+    - w_инженер
+    - w_кем
+    - w_магазине
+    - w_он
+    - w_офис
+    - w_офисе
+    - w_повар
+    - w_работает
+    - w_работаешь
+    - w_ресторане
+    - w_учитель
+    - w_школа
+    - w_школе
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_больница
+      - w_учитель
+      - w_школа
+      - w_инженер
+      - w_офис
+      - w_он
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_больница
+      - w_школа
+      - w_офис
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работает
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_больнице
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_офисе
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_врач
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_школе
+  p8: &id008
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_кем
+      - w_работаешь
+      - w_повар
+      - w_магазине
+      - w_ресторане
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работаешь
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ресторане
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_магазине
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_повар
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_офис
+templates:
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.choose.001
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Numele rusești de meserii, precum врач sau инженер, se folosesc fără articol.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.match.002
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Meseria se exprimă printr-un substantiv simplu: Я врач înseamnă „Sunt medic”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.order.003
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: word_order
+  frame:
+    text: Он {item} в офисе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он {item} в офисе.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работает este forma de el sau ea a verbului работать, „a lucra”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.fill.004
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Я работаю в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'După в, cu sensul „în” sau „la”, substantivul primește terminația de prepozițional -е: больница devine больнице.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.fill.005
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Он инженер. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Офис primește după в terminația de prepozițional -е: в офисе.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.translate.006
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: Sunt medic.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Înaintea numelui unei meserii nu se folosește articol.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.translate.007
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: El lucrează la birou.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: В plus terminația de prepozițional -е răspunde la întrebarea „unde?”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.translate.008
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: Ea este profesoară. Lucrează la școală.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она учитель. Она работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Школа devine школе după в, „la școală”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.translate.009
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Numele de meserii precum врач și инженер au aceeași formă pentru bărbați și femei: Она врач.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.choose.001
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Кем ты работаешь? înseamnă literal „în calitate de cine lucrezi?”, iar rușii așa întreabă ce meserie ai.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.order.002
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: word_order
+  frame:
+    text: Кем ты {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работаешь este forma informală, de ты, a verbului работать.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.fill.003
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Кем ты {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Terminația -ешь de la ты arată că acțiunea de a lucra îți aparține ție, în vorbirea informală.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.fill.004
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Он повар. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ресторан primește după в terminația de prepozițional -е: в ресторане.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.translate.005
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Ce meserie ai? (informal)
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Кем întreabă despre meseria cuiva, iar ты arată că întrebarea este informală.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.translate.006
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Lucrez într-un magazin.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я работаю в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Магазин devine магазине după в, „într-un magazin”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson02.translate.007
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: Ea este bucătăreasă. Lucrează într-un restaurant.
+    language_code: ro
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она {a}. Она работает в {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Повар rămâne masculin ca formă chiar și când se referă la o femeie.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ru.ru.a1.unit17.lesson01.listen.010
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Aceste substantive pentru meserii și locuri de muncă se folosesc fără articol.
+    language_code: ro
+    direction: ltr
