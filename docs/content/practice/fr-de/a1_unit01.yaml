@@ -1,0 +1,561 @@
+schema_version: '1.0'
+pack_key: practice.fr-de.a1.unit01
+source_language: fr
+target_language: de
+unit_content_key: de.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-de by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_hallo
+    - w_Morgen
+    - w_Tag
+    - w_Abend
+    - w_tschüss
+    - w_Nacht
+    - w_bald
+    - w_später
+    - w_Sie
+    - w_du
+    - w_Ihnen
+    - w_dir
+    - w_danke
+    - w_gut
+    - w_sehr
+    - w_wie
+    - w_und
+    - w_es
+    - w_bitte
+    - w_Entschuldigung
+    - w_Problem
+    - w_gern
+slot_presets:
+  hello_words: &id001
+    language_code: de
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_hallo
+      - w_Morgen
+      - w_Tag
+      - w_Abend
+      - w_tschüss
+      - w_Nacht
+      - w_bald
+      - w_später
+  day_parts: &id007
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic:
+      - w_Morgen
+      - w_Tag
+      - w_Abend
+  bye_words: &id002
+    language_code: de
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_tschüss
+      - w_Nacht
+      - w_bald
+      - w_später
+      - w_hallo
+      - w_Abend
+  see_you: &id006
+    language_code: de
+    part_of_speech:
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_später
+      - w_bald
+  you_words: &id003
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - phrase
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_Sie
+      - w_du
+      - w_Ihnen
+      - w_dir
+      - w_danke
+      - w_gut
+      - w_sehr
+      - w_wie
+  you_match: &id008
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - phrase
+    - adjective
+    - adverb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_Sie
+      - w_du
+      - w_Ihnen
+      - w_dir
+      - w_danke
+      - w_gut
+      - w_sehr
+      - w_und
+      - w_es
+      - w_wie
+  polite_words: &id004
+    language_code: de
+    part_of_speech:
+    - particle
+    - phrase
+    - noun
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_bitte
+      - w_Entschuldigung
+      - w_Problem
+      - w_gern
+      - w_danke
+      - w_gut
+  polite_bare: &id011
+    language_code: de
+    part_of_speech:
+    - particle
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_bitte
+      - w_Entschuldigung
+      - w_Problem
+      - w_gern
+  ihnen: &id005
+    language_code: de
+    part_of_speech:
+    - pronoun
+    agreement_tags:
+      semantic: w_Ihnen
+  dir: &id009
+    language_code: de
+    part_of_speech:
+    - pronoun
+    agreement_tags:
+      semantic: w_dir
+  gern: &id010
+    language_code: de
+    part_of_speech:
+    - adverb
+    agreement_tags:
+      semantic: w_gern
+templates:
+- content_key: practice.fr-de.de.a1.unit01.lesson01.choose.001
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Guten Morgen s’emploie le matin, Guten Tag pendant la journée et Guten Abend à partir du soir.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson02.listen.001
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Tschüss est l’au revoir décontracté ; Auf Wiedersehen est l’au revoir poli, pour les inconnus et les situations formelles.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.choose.001
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'L’allemand a deux mots pour « tu / vous » : Sie est la forme de politesse (inconnus, administrations), du est la forme familière (amis, famille, enfants).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson04.listen.001
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bitte couvre à la fois « s’il vous plaît » et « de rien », et Entschuldigung sert à attirer l’attention de quelqu’un ou à dire pardon.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.order.002
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: word_order
+  frame:
+    text: Wie geht es {item}?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie geht es {item}?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Wie geht es Ihnen? est le « comment allez-vous ? » de politesse ; avec un ami, on demande Wie geht's?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson02.order.002
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: word_order
+  frame:
+    text: Bis {item}!
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bis {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Bis signifie « jusqu’à », donc Bis bald équivaut à « à bientôt » et Bis später à « à plus tard ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson01.order.002
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: word_order
+  frame:
+    text: Guten {item}!
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Guten {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Guten se termine par -n parce que Morgen, Tag et Abend sont masculins ; le féminin Nacht donne Gute Nacht.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson02.match.003
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tschüss est informel ; Auf Wiedersehen est l’au revoir poli, pour les personnes que l’on connaît peu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.match.003
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Sie, Ihnen et Ihr prennent une majuscule dans le registre formel ; du et dir n’en prennent pas.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson04.match.002
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Danke et bitte sont les deux mots de politesse du quotidien ; bitte peut aussi signifier « de rien ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.fill.004
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: fill_in_blank
+  frame:
+    text: Und {item}? ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La forme informelle ici est dir, écrite en minuscule ; la question formelle est Und Ihnen?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson04.fill.003
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: fill_in_blank
+  frame:
+    text: '{item} geschehen. ({hint})'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gern geschehen est la réponse standard à danke, littéralement « avec plaisir, c’est arrivé ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson01.translate.003
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Tous les noms allemands prennent une majuscule : Morgen, Tag, Abend et Nacht commencent donc par une majuscule.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.translate.005
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sie et du sont les formes sujet de « tu / vous » ; Ihnen et dir sont les formes signifiant « à vous / à toi ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson04.translate.004
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Kein Problem est la réponse courante à un remerciement ou à de petites excuses.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson01.translate.004
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: translation
+  frame:
+    text: Bon(ne) {item} !
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Guten {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Guten Tag s’emploie à partir de la fin de la matinée et sert aussi de salut général.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson02.translate.004
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: translation
+  frame:
+    text: À {item} !
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bis {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Bis bald et Bis später sont tous deux décontractés ; Auf Wiedersehen est l’au revoir formel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-de.de.a1.unit01.lesson03.translate.006
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: translation
+  frame:
+    text: Comment allez-vous ? (forme de politesse)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie geht es {item}?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: 'Sie et Ihnen prennent une majuscule dans le registre formel : le I majuscule de Ihnen fait donc partie de l’orthographe.'
+    language_code: fr
+    direction: ltr
