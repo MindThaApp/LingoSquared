@@ -1,0 +1,367 @@
+schema_version: '1.0'
+pack_key: practice.fr-pl.a1.unit40
+source_language: fr
+target_language: pl
+unit_content_key: pl.a1.unit40.zguba
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dosyć
+    - w_emocji
+    - w_idziemy
+    - w_informacja
+    - w_informacji
+    - w_kurtki
+    - w_plecak
+    - w_portfel
+    - w_szuka
+    - w_zajrzyj
+    - w_zgubiony
+    - w_zgubił
+    - w_znaleziony
+    - w_został
+templates:
+- content_key: practice.fr-pl.pl.a1.unit40.lesson01.choose.001
+  lesson_content_key: pl.a1.unit40.lesson01.zgubione_i_znalezione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: pl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_zgubiony
+        - w_zgubił
+        - w_znaleziony
+        - w_został
+        - w_plecak
+        - w_informacji
+        - w_portfel
+        - w_informacja
+        - w_idziemy
+        - w_szuka
+        - w_zajrzyj
+        - w_kurtki
+        - w_dosyć
+        - w_emocji
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} fait partie des mots de cette unité, tirés de la leçon sur les objets perdus et retrouvés.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson02.listen.001
+  lesson_content_key: pl.a1.unit40.lesson02.telefon_plecak_i_portfel
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} fait partie des mots de cette unité, tirés de la leçon sur le téléphone, le sac à dos et le portefeuille.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson03.translate.001
+  lesson_content_key: pl.a1.unit40.lesson03.przy_informacji
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} fait partie des mots de cette unité, issu de la leçon « Au comptoir ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson04.match.001
+  lesson_content_key: pl.a1.unit40.lesson04.nina_pyta_przy_informacji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Associe chaque mot polonais à sa signification en français ; les mots viennent des leçons de cette unité.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson05.choose.001
+  lesson_content_key: pl.a1.unit40.lesson05.wiadomosc_o_znalezionym_telefonie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} fait partie des mots de cette unité, issu de la leçon « Un message sur un téléphone retrouvé ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson06.translate.001
+  lesson_content_key: pl.a1.unit40.lesson06.tomek_sprawdza_portfel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} est l’un des mots de cette unité, tiré de la leçon « Tomek vérifie son portefeuille ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson01.order.002
+  lesson_content_key: pl.a1.unit40.lesson01.zgubione_i_znalezione
+  type: word_order
+  frame:
+    text: Telefon nie jest już {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zgubiony
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Telefon nie jest już {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Le téléphone n’est plus perdu. zgubiony signifie « perdu ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson01.fill.003
+  lesson_content_key: pl.a1.unit40.lesson01.zgubione_i_znalezione
+  type: fill_in_blank
+  frame:
+    text: Mój telefon się {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zgubił
+    hint:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zgubił
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mon téléphone est perdu. zgubił signifie « a perdu / s’est perdu » (masc., passé).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson01.translate.004
+  lesson_content_key: pl.a1.unit40.lesson01.zgubione_i_znalezione
+  type: translation
+  frame:
+    text: Est-ce que mon téléphone a été retrouvé ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_znaleziony
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy mój telefon został {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Est-ce que mon téléphone a été retrouvé ? znaleziony signifie « retrouvé » (masc.).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson02.order.002
+  lesson_content_key: pl.a1.unit40.lesson02.telefon_plecak_i_portfel
+  type: word_order
+  frame:
+    text: Mój {item} jest przy informacji.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_plecak
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mój {item} jest przy informacji.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Mon sac à dos est à l’accueil. plecak signifie « sac à dos ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson02.fill.003
+  lesson_content_key: pl.a1.unit40.lesson02.telefon_plecak_i_portfel
+  type: fill_in_blank
+  frame:
+    text: Chodź, idziemy do {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_informacji
+    hint:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_informacji
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Viens, on va à l’accueil. informacji signifie « de l’accueil » (génitif).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson02.translate.004
+  lesson_content_key: pl.a1.unit40.lesson02.telefon_plecak_i_portfel
+  type: translation
+  frame:
+    text: Mon portefeuille n’a pas disparu.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_portfel
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mój {item} się nie zgubił.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Mon portefeuille n’est pas perdu. portfel signifie « portefeuille ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson04.order.002
+  lesson_content_key: pl.a1.unit40.lesson04.nina_pyta_przy_informacji
+  type: word_order
+  frame:
+    text: Chodź, {item} do informacji.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_idziemy
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chodź, {item} do informacji.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Viens, on va à l’accueil. idziemy signifie « nous allons ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit40.lesson06.order.002
+  lesson_content_key: pl.a1.unit40.lesson06.tomek_sprawdza_portfel
+  type: word_order
+  frame:
+    text: Zajrzyj do {item}, Tomku.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kurtki
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zajrzyj do {item}, Tomku.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Regarde dans ta veste, Tomek. kurtki signifie « de la veste » (génitif).
+    language_code: fr
+    direction: ltr
