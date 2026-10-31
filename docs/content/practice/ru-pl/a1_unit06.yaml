@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.ru-pl.a1.unit06
+source_language: ru
+target_language: pl
+unit_content_key: pl.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chleb
+    - w_masło
+    - w_ser
+    - w_woda
+    - w_mleko
+    - w_kawa
+    - w_herbata
+    - w_kawę
+    - w_herbatę
+    - w_wodę
+    - w_zupa
+    - w_sok
+    - w_cukier
+    - w_rachunek
+    - w_lubić
+    - w_lubię
+    - w_lubi
+    - w_zupę
+    - w_danie
+    - w_polecać
+    - w_polecam
+    - w_poleca
+    - w_co
+    - w_już
+    - w_podaję
+slot_presets:
+  u06_l1: &id001
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_chleb
+      - w_masło
+      - w_ser
+      - w_woda
+      - w_mleko
+      - w_kawa
+      - w_herbata
+  u06_ask: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_mleko
+      - w_masło
+  s_herbate: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_herbatę
+  s_wode: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_wodę
+  u06_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_zupa
+      - w_sok
+      - w_cukier
+      - w_rachunek
+      - w_lubić
+      - w_lubię
+      - w_lubi
+  u06_like: &id006
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_zupę
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_sok
+  s_lubi: &id007
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubi
+  s_zupe: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_zupę
+  u06_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - particle
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_danie
+      - w_polecać
+      - w_polecam
+      - w_poleca
+      - w_co
+      - w_już
+      - w_podaję
+  s_podaje: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_podaję
+  s_poleca: &id011
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_poleca
+templates:
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.choose.001
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'У каждого польского существительного есть род: chleb и ser — мужского рода, kawa, herbata и woda — женского, а masło и mleko — среднего.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.listen.002
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: В польском нет артиклей, поэтому chleb может означать и «хлеб», и «этот хлеб».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.order.003
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: word_order
+  frame:
+    text: Proszę o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: После proszę o существительные женского рода на -a меняют окончание на -ę (kawa, kawę), а существительные мужского и среднего рода, такие как chleb и mleko, остаются без изменений.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.fill.004
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: fill_in_blank
+  frame:
+    text: Proszę o {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Proszę o и форма дополнения — вежливый способ о чём-то попросить.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.translate.005
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: Воды, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Существительное после proszę o стоит в форме дополнения: woda становится wodę.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson01.translate.006
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Masło и mleko оканчиваются на -o — это типичное окончание среднего рода, а chleb и ser оканчиваются на согласный и относятся к мужскому роду.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.choose.001
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubić — это словарная форма; lubię говорят о себе, а lubi — о другом человеке.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.match.002
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Окончание глагола указывает на лицо: -ę для «я» (lubię) и -i для «он» или «она» (lubi).'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.order.003
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: word_order
+  frame:
+    text: Lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'После lubię то, что тебе нравится, ставится в форму прямого дополнения: zupa превращается в zupę, а sok, chleb и ser не меняются.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.fill.004
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: fill_in_blank
+  frame:
+    text: On {item} zupę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lubi — это форма «он» или «она», поэтому с ней можно использовать местоимение on.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.translate.005
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: Я люблю суп.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Существительные женского рода на -a в роли прямого дополнения получают окончание -ę, поэтому zupa становится zupę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson02.translate.006
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Пара lubię и lubi показывает закономерность: для каждого лица своё окончание.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.listen.001
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Polecać спрягается как lubić: polecam — «я рекомендую», а poleca — «он, она рекомендует» или, с pan и pani, «вы рекомендуете».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.match.002
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: В Co pan poleca? используется форма poleca, как для «он» или «она», потому что с pan и pani глагол ставится в третьем лице.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.order.003
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: word_order
+  frame:
+    text: Polecam {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Polecam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Polecam, как и lubię, тоже требует, чтобы существительное стояло в форме прямого дополнения.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.fill.004
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: fill_in_blank
+  frame:
+    text: Już {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Официант говорит в форме «я», podaję, потому что именно он подаёт блюда.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.translate.005
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: Что вы рекомендуете? (мужчине, вежливо)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: С pan или pani глагол имеет форму poleca — такую же, как для «он» или «она».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit06.lesson03.translate.006
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Już может означать «уже» или, как в Już podaję, «сейчас же», «сию минуту».
+    language_code: ru
+    direction: ltr
