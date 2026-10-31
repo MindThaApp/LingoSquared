@@ -1,0 +1,471 @@
+schema_version: '1.0'
+pack_key: practice.ar-it.a1.unit11
+source_language: ar
+target_language: it
+unit_content_key: it.a1.unit11.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_anch'io
+    - w_casa
+    - w_colazione
+    - w_faccio
+    - w_letto
+    - w_presto
+    - w_solito
+    - w_torni
+    - w_torno
+    - w_trenta
+    - w_vado
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_faccio
+      - w_colazione
+      - w_vado
+      - w_torno
+      - w_casa
+      - w_letto
+      - w_solito
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_faccio
+      - w_colazione
+      - w_vado
+      - w_torno
+      - w_casa
+      - w_letto
+  t_colazione: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_colazione
+  t_casa: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_casa
+  t_letto: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_letto
+  t_solito: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_solito
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_faccio
+      - w_colazione
+      - w_vado
+      - w_torno
+      - w_casa
+      - w_letto
+      - w_presto
+      - w_trenta
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_torni
+      - w_trenta
+      - w_presto
+      - w_torno
+      - w_vado
+  t_trenta: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_trenta
+  t_torni: &id010
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_torni
+  t_presto: &id011
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_presto
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_anch'io
+      - w_faccio
+      - w_colazione
+      - w_letto
+      - w_presto
+  t_anch_io: &id013
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_anch'io
+templates:
+- content_key: practice.ar-it.it.a1.unit11.lesson01.choose.001
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تعني Faccio colazione حرفيًا «أصنع الفطور».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.listen.002
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Vado وtorno صيغتان للمتكلم «أنا»: «أذهب» و«أعود».'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.order.003
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: word_order
+  frame:
+    text: Faccio {item} alle sette e poi vado al lavoro.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Faccio {item} alle sette e poi vado al lavoro.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Faccio colazione عبارة ثابتة تعني «تناول الفطور».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.fill.004
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: fill_in_blank
+  frame:
+    text: Vado al lavoro e poi torno a {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تعني A casa «في البيت» أو «إلى البيت»، وبلا أداة تعريف.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.fill.005
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: fill_in_blank
+  frame:
+    text: Alle dieci vado a {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تعني A letto «إلى السرير» أو «إلى النوم»، وبلا أداة تعريف.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.translate.006
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: translation
+  frame:
+    text: أتناول الفطور في السابعة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Faccio {item} alle sette.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تعني Faccio colazione حرفيًا «أصنع الفطور».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson01.translate.007
+  lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+  type: translation
+  frame:
+    text: في أي ساعة تتناول الفطور عادةً؟ (بصيغة غير رسمية، tu)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che ora fai colazione di {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تعني Di solito «عادةً»، وfai هي صيغة المخاطب غير الرسمية tu.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.match.001
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+    fourth: *id007
+    fifth: *id007
+    sixth: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Vado وtorno صيغتان للمتكلم «أنا»، أما faccio فتعني «أفعل» أو «أصنع».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.choose.002
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Torni صيغة المخاطب tu وtorno صيغة المتكلم «أنا» من الفعل tornare.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.listen.003
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تعني Presto في هذه الوحدة «باكرًا»، كما في vado a letto presto.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.fill.004
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: fill_in_blank
+  frame:
+    text: Torno a casa alle sei e {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'تضيف E trenta ثلاثين دقيقة: alle sei e trenta تعني السادسة والنصف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.order.005
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: word_order
+  frame:
+    text: A che ora {item} a casa la sera?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che ora {item} a casa la sera?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Torni صيغة المخاطب غير الرسمية، تُستعمل مع الأصدقاء والزملاء.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.order.006
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: word_order
+  frame:
+    text: Vado a letto {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vado a letto {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تعني Presto هنا «باكرًا»، أما في a presto، أي «إلى اللقاء قريبًا»، فتعني «قريبًا».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson02.translate.008
+  lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+  type: translation
+  frame:
+    text: أذهب إلى النوم باكرًا.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vado a letto {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: قد تعني Presto «باكرًا» أو «قريبًا».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson03.choose.001
+  lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تعني Anch'io «وأنا أيضًا»، وتُستعمل في بدء الجواب لصديق.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson03.fill.002
+  lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+  type: fill_in_blank
+  frame:
+    text: Sì, {item} faccio colazione alle sette. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Anch'io كلمة واحدة فيها فاصلة عليا، وتعني «وأنا أيضًا».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit11.lesson03.translate.003
+  lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+  type: translation
+  frame:
+    text: نعم، أنا أيضًا أتناول الفطور في السابعة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, {item} faccio colazione alle sette.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تدل Anch'io على الموافقة على كلام المتحدث، وتعني «أنا أيضًا».
+    language_code: ar
+    direction: rtl

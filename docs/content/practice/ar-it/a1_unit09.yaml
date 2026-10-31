@@ -1,0 +1,460 @@
+schema_version: '1.0'
+pack_key: practice.ar-it.a1.unit09
+source_language: ar
+target_language: it
+unit_content_key: it.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_accanto
+    - w_alla
+    - w_banca
+    - w_c'è
+    - w_ce n'è
+    - w_farmacia
+    - w_l'ufficio
+    - w_postale
+    - w_stazione
+    - w_via
+    - w_vicino
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_banca
+      - w_stazione
+      - w_l'ufficio
+      - w_postale
+      - w_vicino
+      - w_via
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_banca
+      - w_stazione
+      - w_l'ufficio
+      - w_via
+      - w_vicino
+  pool3: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_banca
+      - w_stazione
+  t_vicino: &id004
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_vicino
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_banca
+      - w_stazione
+      - w_l'ufficio
+      - w_via
+      - w_vicino
+      - w_postale
+  t_farmacia: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_farmacia
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_banca
+      - w_stazione
+      - w_l'ufficio
+      - w_via
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - verb
+    - preposition
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_c'è
+      - w_ce n'è
+      - w_accanto
+      - w_alla
+      - w_vicino
+      - w_banca
+  pool9: &id009
+    language_code: it
+    part_of_speech:
+    - verb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_c'è
+      - w_ce n'è
+      - w_accanto
+      - w_alla
+  t_banca: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_banca
+  t_ce_n_e: &id011
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ce n'è
+  t_accanto: &id012
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_accanto
+  t_alla: &id013
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_alla
+templates:
+- content_key: practice.ar-it.it.a1.unit09.lesson01.choose.001
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La farmacia وla banca وla stazione كلمات مؤنثة؛ أما l'ufficio postale فمذكر وأداة التعريف فيه محذوفة الحرف الأخير.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.listen.002
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قد تعني Via شارعًا أو طريقًا، وتُستخدم في أسماء مثل Via Roma.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.order.003
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: word_order
+  frame:
+    text: Scusi, dov'è la {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Scusi, dov'è la {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: يُسأل بـ Dov'è la مع اسم مؤنث عن مكان ما؛ وscusi هي «المعذرة» بصيغة المجاملة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.fill.004
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: fill_in_blank
+  frame:
+    text: È qui {item}, in Via Roma. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تعني Qui vicino «قريب، هنا بالقرب».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.match.005
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: تعني Vicino «قريب»؛ وتعني qui vicino «قريب من هنا».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.translate.006
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: translation
+  frame:
+    text: المعذرة، أين الصيدلية؟ (بصيغة المجاملة)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Scusi, dov'è la {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Scusi فعل أمر بصيغة المجاملة، ويناسب مخاطبة شخص غريب.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson01.translate.007
+  lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'يتغير il أو la بحسب الجنس، لكن تُستخدم l'' قبل حرف العلة: l''ufficio.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.choose.001
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تسأل C'è عن وجود شيء أو تقرره؛ وتُجيب ce n'è بذكر واحد منه.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.listen.002
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'تعني Ce n''è una «يوجد واحدة»: وتقوم ne مقام «منها».'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.fill.003
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: fill_in_blank
+  frame:
+    text: C'è una {item} qui vicino? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: يسأل C'è una banca? هل يوجد أي بنك قريب من هنا.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.order.004
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: word_order
+  frame:
+    text: Sì, {item} una qui vicino.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, {item} una qui vicino.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تُجيب Ce n'è una عن سؤال c'è una ... بأنه يوجد واحدة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.fill.005
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: fill_in_blank
+  frame:
+    text: È {item} alla stazione. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تعني Accanto alla «بجانب ال…»؛ وalla هي a + la.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.fill.006
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: fill_in_blank
+  frame:
+    text: Sì, ce n'è una qui vicino, accanto {item} stazione. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تجمع Alla بين a وla قبل اسم مؤنث.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.translate.007
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: translation
+  frame:
+    text: هل يوجد بنك قريب؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: C'è una {item} qui vicino?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تستخدم C'è una banca qui vicino? كلمة una لأن banca مؤنثة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.translate.008
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: translation
+  frame:
+    text: نعم، يوجد واحد قريب.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, {item} una qui vicino.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تعني Ce n'è una «يوجد واحدة منها».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-it.it.a1.unit09.lesson02.translate.009
+  lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+  type: translation
+  frame:
+    text: إنها بجانب المحطة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: È {item} alla stazione.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: تعني Accanto alla stazione «بجانب المحطة».
+    language_code: ar
+    direction: rtl
