@@ -1,0 +1,572 @@
+schema_version: '1.0'
+pack_key: practice.nl-ro.a1.unit16
+source_language: nl
+target_language: ro
+unit_content_key: ro.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_doare
+    - w_cap
+    - w_stomac
+    - w_capul
+    - w_stomacul
+    - w_simt
+    - w_sunt
+    - w_bolnav
+    - w_doctor
+    - w_nevoie
+    - w_odihnă
+    - w_multă
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_doare
+      - w_cap
+      - w_stomac
+      - w_capul
+      - w_stomacul
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_simt
+      - w_sunt
+      - w_bolnav
+      - w_doctor
+      - w_nevoie
+  l3_pool: &id011
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_odihnă
+      - w_multă
+      - w_doctor
+      - w_bolnav
+  m6: &id006
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_doare
+      - w_cap
+      - w_stomac
+      - w_bolnav
+      - w_doctor
+      - w_odihnă
+  t_doare: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_doare
+  t_capul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_capul
+  t_stomacul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_stomacul
+  t_simt: &id007
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_simt
+  t_bolnav: &id008
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bolnav
+  t_nevoie: &id009
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_nevoie
+  t_doctor: &id010
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_doctor
+  t_odihna: &id013
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_odihnă
+  t_multa: &id012
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_multă
+templates:
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.choose.001
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Capul en stomacul zijn cap en stomac met het lidwoord -ul; doare betekent 'doet pijn'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.listen.002
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mă doare plus het lichaamsdeel zegt dat iets pijn doet.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.order.003
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: word_order
+  frame:
+    text: Mă {item} capul.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă {item} capul.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Mă doare capul zegt letterlijk: het hoofd doet mij pijn.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.order.004
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: word_order
+  frame:
+    text: Mă doare {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Stomacul is stomac plus het lidwoord -ul.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.fill.005
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: fill_in_blank
+  frame:
+    text: Mă doare {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Capul is cap plus -ul, dus de zin zegt 'het hoofd'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.translate.006
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: Mijn hoofd doet pijn.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: In het Roemeens zeg je 'het hoofd doet mij pijn' in plaats van 'mijn hoofd'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.translate.007
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: Mijn maag doet pijn.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Doare blijft hetzelfde omdat datgene wat pijn doet enkelvoud is.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson01.translate.008
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: Doet uw hoofd of uw maag pijn? (formeel, tegen iemand die je met dumneavoastră aanspreekt)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vă doare capul sau {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vă is de dumneavoastră-vorm van 'u'; tegen een vriend zou je Te doare zeggen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.choose.001
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Simt betekent 'ik voel', zoals in Mă simt bine; sunt betekent 'ik ben'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.listen.002
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Nevoie komt voor in Am nevoie de un doctor, 'ik heb een dokter nodig'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.match.003
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Deze woorden noemen lichaamsdelen, een toestand en een persoon die helpt; doare is het enige werkwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.order.004
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: word_order
+  frame:
+    text: Nu mă {item} bine.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă {item} bine.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mă simt is een wederkerend werkwoord, dus mă blijft ervoor staan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.order.005
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: word_order
+  frame:
+    text: Nu mă simt bine. Sunt {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă simt bine. Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bolnav is de mannelijke vorm, gebruikt als een man het zegt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.fill.006
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: fill_in_blank
+  frame:
+    text: Am {item} de un doctor. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Am nevoie de betekent 'ik heb nodig' en wordt gevolgd door de.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.fill.007
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: fill_in_blank
+  frame:
+    text: Am nevoie de un {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Doctor krijgt un: un doctor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.translate.008
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Ik voel me niet goed.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă {item} bine.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Nu staat voor mă simt om de ontkenning te maken.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.translate.009
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Ik ben ziek. (gezegd door een man)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bolnav is de vorm voor een mannelijke spreker; een vrouw zegt Sunt bolnavă.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson02.translate.010
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Ik heb een dokter nodig.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am nevoie de un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Am nevoie de is de gebruikelijke manier om 'ik heb nodig' te zeggen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson03.choose.001
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Odihnă betekent 'rust' en multă betekent 'veel', in overeenstemming met vrouwelijke zelfstandige naamwoorden.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson03.order.002
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: word_order
+  frame:
+    text: Odihnă și {item} apă!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Odihnă și {item} apă!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Apă is vrouwelijk, dus 'veel' is multă.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson03.fill.003
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: fill_in_blank
+  frame:
+    text: Aveți nevoie de {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aveți nevoie de is het formele 'u hebt nodig'; odihnă volgt na de.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson03.translate.004
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: translation
+  frame:
+    text: U hebt rust nodig. (formeel, tegen iemand die je met dumneavoastră aanspreekt)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aveți nevoie de {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aveți is de dumneavoastră-vorm van 'hebben'; tegen een vriend zou je Ai zeggen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit16.lesson03.translate.005
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: translation
+  frame:
+    text: Rust en veel water!
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Odihnă și {item} apă!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Multă congrueert met het vrouwelijke zelfstandig naamwoord apă.
+    language_code: nl
+    direction: ltr
