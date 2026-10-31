@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.ar-ru.a1.unit12
+source_language: ar
+target_language: ru
+unit_content_key: ru.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Дима
+    - w_Настя
+    - w_встретимся
+    - w_давай
+    - w_кино
+    - w_кинотеатра
+    - w_могу
+    - w_мы
+    - w_не
+    - w_отлично
+    - w_пойдём
+    - w_согласен
+    - w_сожалению
+    - w_субботу
+    - w_субботы
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кино
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_пойдём
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботу
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - particle
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_согласен
+      - w_могу
+      - w_мы
+      - w_встретимся
+      - w_не
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сожалению
+  p8: &id008
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_встретимся
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_могу
+  p10: &id010
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_согласен
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_мы
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кинотеатра
+  p14: &id014
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботы
+  p15: &id015
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_отлично
+templates:
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.choose.001
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Давай هي صيغة المخاطب المفرد (ты) غير الرسمية لاقتراح نشاط؛ ومع вы تصبح давайте.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.order.002
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: word_order
+  frame:
+    text: Давай пойдём в {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: لا تتغير نهاية كلمة кино أبدًا، لذا تبقى кино بعد в.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.fill.003
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: fill_in_blank
+  frame:
+    text: Давай {item} в кино. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Давай مع пойдём تقترح خطة: هيا نذهب.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.translate.004
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: هيا نذهب إلى السينما غدًا. (بصيغة غير رسمية)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай {item} в кино завтра.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Давай пойдём دعوة ودية بصيغة ты، بمعنى «هيا نذهب».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.translate.005
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: هيا نذهب إلى السينما يوم السبت. (بصيغة غير رسمية)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в кино в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'للتعبير عن «يوم» مع أيام الأسبوع تستخدم الروسية в مع المنصوب: تصبح суббота ← субботу.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson01.translate.006
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: لا تتغير кино أبدًا، وдавай تعني «هيا بنا» بصيغة غير رسمية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.choose.001
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تنتهي Согласен بحرف ساكن لأن المتكلم رجل؛ وتقول المرأة согласна.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.fill.002
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: К {item}, я не могу. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: К сожалению هي العبارة المعتادة لـ«للأسف».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.fill.003
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: Во сколько мы {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Встретимся صيغة «نحن»، لذا تأتي مع мы: мы встретимся.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.order.004
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: word_order
+  frame:
+    text: К сожалению, я не {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: К сожалению, я не {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: تنفي Не الفعل، وмогу صيغة «أنا» بمعنى «أستطيع».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.translate.005
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: حسنًا، أنا موافق. (يقولها رجل)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хорошо, я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Согласен صيغة المذكر؛ وتقول المرأة согласна.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson02.translate.006
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: في أي ساعة سنلتقي؟
+    language_code: ar
+    direction: rtl
+  slots:
+    a: *id011
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Во сколько {a} {b}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Во сколько تعني حرفيًا «بكم»، والمقصود «في أي ساعة».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.listen.001
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: للأسماء الروسية صيغ تحبّب قصيرة وودية مثل Настя وДима، تُستخدم بين الأصدقاء.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.order.002
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: word_order
+  frame:
+    text: Давай в семь часов, у {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'تعني У «عند» أو «بالقرب من» وتأتي مع المجرور: تصبح кинотеатр ← кинотеатра.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.fill.003
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: fill_in_blank
+  frame:
+    text: Отлично, до {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تعني До «حتى» وتأتي مع المجرور، لذا تصبح суббота ← субботы.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.translate.004
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: ممتاز، إلى اللقاء يوم السبت.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Отлично, до {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: تعني До субботы حرفيًا «حتى السبت»، وهي طريقة ودية للقول «إلى اللقاء حينها».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.translate.005
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: لنتفق على الساعة السابعة، عند السينما. (بصيغة غير رسمية)
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Давай в семь часов تقترح وقتًا؛ وу кинотеатра تضيف المكان.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit12.lesson03.translate.006
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Отлично ظرف بمعنى «ممتاز» ولا يتغير بحسب الجنس أو العدد.
+    language_code: ar
+    direction: rtl
