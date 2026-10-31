@@ -39,3 +39,8 @@ Measured at a6f9f44ec (shipped 2026-10-31): 3000 = 2542 + 7 x 20 (de/es/fr/it/nl
 + 318 for ru -> X (ru-es 138, ru-fr 112, ru-de 4, ru-nl 56, ru-it-a1 8). en-ru unchanged by #85 (a1 20, a2 2, b1 10, c1 2);
 no pre-existing course changed. The de/nl realization compile WARNs count (they are the en-de 4 / en-nl 56 siblings).
 Leakage 17 hits (29 allowlisted); cyrillic-latin 0; 67 practice packs 0 errors.
+
+Measured at d9d564b64 (shipped 2026-10-31, second ship): 3060 = 3000 + 6 x 10 (de/es/fr/it/nl/pl -> ro, each equals en-ro's 10;
+en-ro is 10, not 5). en-ro (10) and en-de (4) unchanged by #87 versus a6f9f44ec; no pre-existing course changed.
+Leakage 17 hits (29 allowlisted); cyrillic-latin 0; leftovers 0; all practice packs 0 errors; scripts/tests 181; vitest 461.
+Current WARN baseline: 3060.
