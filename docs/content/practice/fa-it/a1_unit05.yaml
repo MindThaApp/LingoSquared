@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.fa-it.a1.unit05
+source_language: fa
+target_language: it
+unit_content_key: it.a1.unit05.ask_tell_time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_alle
+    - w_cinque
+    - w_dieci
+    - w_dodici
+    - w_due
+    - w_l'una
+    - w_le
+    - w_mattina
+    - w_meno
+    - w_mezzo
+    - w_nove
+    - w_ora
+    - w_ore
+    - w_otto
+    - w_quarto
+    - w_quattro
+    - w_sera
+    - w_sette
+    - w_tre
+slot_presets:
+  l1_core: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_ore
+      - w_le
+      - w_l'una
+      - w_dodici
+  hours: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_due
+      - w_tre
+      - w_quattro
+      - w_cinque
+      - w_sette
+      - w_otto
+      - w_nove
+      - w_dieci
+      - w_dodici
+  ore: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ore
+  le: &id003
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_le
+  l2_core: &id005
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_mezzo
+      - w_quarto
+      - w_meno
+  quarto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_quarto
+  mezzo: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_mezzo
+  l3_core: &id009
+    language_code: it
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_ora
+      - w_alle
+      - w_mattina
+      - w_sera
+  ora: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ora
+  alle: &id011
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_alle
+  pairs: &id008
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+      - w_meno
+  words: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+templates:
+- content_key: practice.fa-it.it.a1.unit05.lesson01.choose.001
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'برای گفتن ساعت از le (جمع مؤنث) استفاده می‌شود، چون ore یعنی «ساعت‌ها» و جمع مؤنث است: sono le tre.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson01.listen.002
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ساعت یک استثنا است: l''una مفرد است، برای همین با è می‌آید، نه sono.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson01.order.003
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: word_order
+  frame:
+    text: Che {item} sono?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} sono?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che ore sono? در اصل یعنی «ساعت‌ها چندند؟» برای همین جواب با sono le شروع می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson01.fill.004
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: fill_in_blank
+  frame:
+    text: Sono {item} tre. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'le با ore هماهنگ است، که در جمله گفته نمی‌شود ولی منظور است: sono le tre یعنی ساعت سه است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson01.translate.005
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: translation
+  frame:
+    text: ساعت {n} است.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      n: english_gloss
+  slots:
+    n: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le {n}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sono le برای همهٔ ساعت‌ها به کار می‌رود، به جز ساعت یک که l'una است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.choose.001
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'e دقیقه اضافه می‌کند و meno کم می‌کند: le tre e mezzo یعنی ۳:۳۰ و le quattro meno un quarto یعنی ۳:۴۵.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.listen.002
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mezzo دو z دارد؛ صدا را کمی کشیده‌تر بگویید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.order.003
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: word_order
+  frame:
+    text: Sono le tre e un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'E un quarto پانزده دقیقه اضافه می‌کند: le tre e un quarto یعنی ۳:۱۵.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.fill.004
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: fill_in_blank
+  frame:
+    text: Sono le tre e {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mezzo یعنی نیم، پس e mezzo سی دقیقه اضافه می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.match.005
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mezzo یعنی نیم و quarto یعنی ربع؛ اول ساعت می‌آید، بعد e یا meno.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.translate.006
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: یک ربع به چهار است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le quattro meno un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Meno از ساعت بعدی کم می‌کند: le quattro meno un quarto یعنی ۳:۴۵.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson02.translate.007
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: ساعت سه و نیم است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: E mezzo، یعنی «و نیم»، روش معمول گفتن نیم‌ساعت گذشته از هر ساعت است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.choose.001
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Alle یعنی «در/ساعت» (جمع مؤنث) و برای ساعت‌ها به کار می‌رود: alle tre، یعنی ساعت سه.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.listen.002
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ora یعنی ساعت یا وقت؛ ore جمع آن است، برای همین سؤال می‌شود Che ore sono?
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.order.003
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: word_order
+  frame:
+    text: A che {item} ci vediamo?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che {item} ci vediamo?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A che ora یعنی «چه ساعتی»؛ ora اینجا مفرد است، چون یک لحظهٔ مشخص را می‌پرسد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.fill.004
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: fill_in_blank
+  frame:
+    text: Ci vediamo {item} tre e mezzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Alle با همهٔ ساعت‌ها به کار می‌رود، به جز ساعت یک که می‌گویید all'una.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.translate.005
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: ساعت سه و نیم همدیگر را می‌بینیم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ci vediamo {item} tre e mezzo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ci vediamo alle به‌اضافهٔ یک ساعت، روش معمول قرار گذاشتن است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit05.lesson03.translate.006
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Mattina یعنی صبح و sera یعنی عصر؛ در ایتالیایی قبل از آن‌ها di می‌آید: di mattina، di sera.'
+    language_code: fa
+    direction: rtl
