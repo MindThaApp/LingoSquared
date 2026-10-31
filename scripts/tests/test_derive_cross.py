@@ -422,3 +422,10 @@ def test_english_in_nonlatin_ignores_capitalised_midsentence_words():
     assert f("كلمة Brand تعني حريق.", "de", src="Brand means fire.") == []          # German noun without asterisks
     assert f("وفي الألمانية هو das Haar", "de", src="In German it is das Haar") == []
     assert f("ترجم الجملة. Tomorrow", "es", src="Translate the sentence. Tomorrow") == ["Tomorrow"]   # sentence-initial English
+
+
+def test_english_in_nonlatin_ignores_dutch_words_that_are_also_english():
+    f = dc.english_in_nonlatin
+    assert f("सही क्रम है Mijn naam is Noor.", "nl") == []
+    assert f("Dat past goed का मतलब है ठीक आता है।", "nl") == []
+    assert f("यह is एक वाक्य है", "es") == ["is"]            # still English when the target is not Dutch
