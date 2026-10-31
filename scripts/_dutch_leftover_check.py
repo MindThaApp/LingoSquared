@@ -386,6 +386,25 @@ def _visible(path: tuple) -> bool:
     return not any(isinstance(p, str) and p in NON_VISIBLE_KEYS for p in path)
 
 
+QUOTED = re.compile(r"«([^»]{3,60})»|„([^“”]{3,60})[“”]|\u201c([^\u201d]{3,60})\u201d")
+
+
+@functools.lru_cache(maxsize=None)
+def target_blob(target: str) -> str:
+    return "\n".join(v.casefold() for f in sorted((CONTENT / "realizations" / target).glob("*.yaml"))
+                     for _p, v in dd.walk_strings(load(f)) if isinstance(v, str))
+
+
+def drop_source_quotes(v: str, target: str) -> str:
+    """Blank out quoted titles/names that the source course itself contains verbatim (a cinema called 'De Nieuwe Film' in the
+    es realization): they are source content, not a Dutch leftover of the translation."""
+    def sub(m):
+        inner = next(g for g in m.groups() if g)
+        low = inner.casefold()
+        return " " if low in target_blob(target) and " " in low else m.group(0)
+    return QUOTED.sub(sub, v)
+
+
 def scan_file(kind: str, pair: str, p: Path, learner: str, target: str) -> tuple[list[str], set[str]]:
     y = load(p)
     lang = text_lang(learner, target, kind)
@@ -401,8 +420,8 @@ def scan_file(kind: str, pair: str, p: Path, learner: str, target: str) -> tuple
         en_field = learner == "en" and kind != "realizations" and not (kind == "practice" and _is_target_text(path))
         if identity_hit(v, src, target, lang):
             tag = "identical to Dutch source"
-        elif nl_markers(v, lang):
-            tag = "dutch words " + ",".join(nl_markers(v, lang))
+        elif nl_markers(drop_source_quotes(v, target), lang):
+            tag = "dutch words " + ",".join(nl_markers(drop_source_quotes(v, target), lang))
         elif en_field and nl_only_tokens(v, target):
             tag = "dutch-only words " + ",".join(nl_only_tokens(v, target))
         elif SLUG.search(v) and dutch_slugs(v, lang):
