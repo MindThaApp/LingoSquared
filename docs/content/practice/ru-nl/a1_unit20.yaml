@@ -1,0 +1,354 @@
+schema_version: '1.0'
+pack_key: practice.ru-nl.a1.unit20
+source_language: ru
+target_language: nl
+unit_content_key: nl.a1.unit20.clothing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - clothing_noun
+    - clothing_item_singular
+    - color
+    - clothing_fit
+    - clothing_fit_pure
+    - receipt_reading
+slot_presets:
+  clothing_noun: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: clothing_noun
+  clothing_item_singular: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: clothing_item_singular
+  color: &id004
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: color
+  clothing_noun_or_receipt: &id002
+    language_code: nl
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic:
+      - clothing_noun
+      - receipt_reading
+  clothing_fit:
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: clothing_fit
+  clothing_fit_pure: &id005
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: clothing_fit_pure
+templates:
+- content_key: practice.ru-nl.nl.a1.unit20.lesson01.choose.001
+  lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Выбери значение на русском.
+      language_code: ru
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из уроков о магазине одежды.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson01.listen.002
+  lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Слово, которое прозвучало: {item}.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson01.match.003
+  lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Соотнеси каждое слово с его значением на русском.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson01.order.004
+  lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+  type: word_order
+  frame:
+    text: Ik zoek een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik zoek een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — то, что ты ищешь.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson01.translate.005
+  lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
+  type: translation
+  frame:
+    text: 'Я ищу: {item}. (Используй глагол zoeken.)'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik zoek de {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik zoek de {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson02.choose.001
+  lesson_content_key: nl.a1.unit20.lesson02.welke_maat
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Выбери значение на русском.
+      language_code: ru
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из уроков о магазине одежды.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson02.listen.002
+  lesson_content_key: nl.a1.unit20.lesson02.welke_maat
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Слово, которое прозвучало: {item}.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson03.order.001
+  lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+  type: word_order
+  frame:
+    text: Ik wil de jas in het {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil de jas in het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — запрошенный цвет.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson03.translate.002
+  lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+  type: translation
+  frame:
+    text: 'Я хочу куртку, цвет: {item}.'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil de jas in het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik wil de jas in het {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson03.listen.003
+  lesson_content_key: nl.a1.unit20.lesson03.welke_kleur
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Слово, которое прозвучало: {item}.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson04.order.001
+  lesson_content_key: nl.a1.unit20.lesson04.past_het
+  type: word_order
+  frame:
+    text: Het {item} goed.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het {item} goed.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — глагол в этом предложении.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson04.translate.002
+  lesson_content_key: nl.a1.unit20.lesson04.past_het
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нидерландское слово — {item}.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson05.choose.001
+  lesson_content_key: nl.a1.unit20.lesson05.bonnetje_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Выбери значение на русском.
+      language_code: ru
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из уроков о покупках.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit20.lesson06.listen.001
+  lesson_content_key: nl.a1.unit20.lesson06.winterjas_passen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово, которое прозвучало в этом диалоге.'
+    language_code: ru
+    direction: ltr
