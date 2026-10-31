@@ -1,0 +1,396 @@
+schema_version: '1.0'
+pack_key: practice.ru-it.a1.unit15
+source_language: ru
+target_language: it
+unit_content_key: it.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_buone
+    - w_dei
+    - w_delle
+    - w_più
+    - w_quale
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_più
+      - w_dei
+      - w_delle
+  t_piu: &id002
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_più
+  t_delle: &id003
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_delle
+  t_dei: &id004
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_dei
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - pronoun
+    - adverb
+    - preposition
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+      - w_buone
+  t_quale: &id006
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_quale
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_dei
+      - w_delle
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - adjective
+    - pronoun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_buone
+      - w_quale
+      - w_più
+      - w_delle
+  t_buone: &id009
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_buone
+templates:
+- content_key: practice.ru-it.it.a1.unit15.lesson01.choose.001
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Più значит «больше»; dei и delle — формы множественного числа от di + артикль.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.listen.002
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dei употребляется с существительными мужского рода во множественном числе, а delle — женского рода.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.order.003
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: Voglio {item} caffè, meno tè.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voglio {item} caffè, meno tè.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Più значит «больше», а meno — «меньше».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.order.004
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: word_order
+  frame:
+    text: I pomodori costano meno {item} mele.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Mele — женский род, множественное число, поэтому di + le превращается в delle.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.fill.005
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: fill_in_blank
+  frame:
+    text: Le mele costano più {item} pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Pomodori — мужской род, множественное число, поэтому di + i превращается в dei.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.translate.006
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: Яблоки стоят дороже, чем помидоры.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele costano più {item} pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dei — это di + i; оно согласуется с pomodori, то есть с тем, с чем сравнивают, а не с mele.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson01.translate.007
+  lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+  type: translation
+  frame:
+    text: Помидоры стоят дешевле, чем яблоки.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I pomodori costano meno {item} mele.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Meno delle значит «меньше, чем» перед существительным женского рода во множественном числе.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.choose.001
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Quale значит «какой, что из...» и просит выбрать из нескольких вариантов.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson02.order.001
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: word_order
+  frame:
+    text: Ciao, {item} preferisci, le mele o i pomodori?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Quale preferisci? — вопрос о том, что из двух вещей ты предпочитаешь.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson02.fill.002
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: fill_in_blank
+  frame:
+    text: Ciao, {item} preferisci, il caffè o il tè? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quale значит «какой, что из...» и в этом вопросе стоит перед глаголом.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson02.translate.003
+  lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+  type: translation
+  frame:
+    text: 'Привет, что ты предпочитаешь: яблоки или помидоры? (неформально, tu)'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ciao, {item} preferisci, le mele o i pomodori?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Preferisci — неформальная форма для «ты» (tu), поэтому этот вопрос задают другу.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.choose.002
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone — форма женского рода множественного числа от buono; она согласуется с mele.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.listen.003
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buone оканчивается на -e, потому что относится к существительному женского рода во множественном числе.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.order.004
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: word_order
+  frame:
+    text: Sì, le mele sono {item} come i pomodori.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sì, le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sono buone стоит во множественном числе, поэтому buono меняется на buone вместе с mele женского рода.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.fill.005
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: fill_in_blank
+  frame:
+    text: Le mele sono {item} come i pomodori. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Come соединяет два равных предмета: buone come значит «такие же хорошие, как».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit15.lesson03.translate.006
+  lesson_content_key: it.a1.unit15.lesson03.buone_come
+  type: translation
+  frame:
+    text: Яблоки такие же хорошие, как помидоры.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le mele sono {item} come i pomodori.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Buone согласуется с mele; come в этом сравнении значит «как».
+    language_code: ru
+    direction: ltr
