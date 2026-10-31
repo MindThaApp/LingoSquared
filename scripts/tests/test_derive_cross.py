@@ -415,3 +415,10 @@ def test_english_in_nonlatin_grammar_terms_names_and_endings():
     assert f("يقول ماتيو: Me has ayudado mucho.", "es", src="Mateo says: Me has ayudado mucho.") == []
     assert f("ترجم tomorrow", "es", src="Translate tomorrow.") == ["tomorrow"]
     assert f("ترجم tomorrow", "es", src="Translate the sentence.") == []   # not in the source: a translator-added word is not judged
+
+
+def test_english_in_nonlatin_ignores_capitalised_midsentence_words():
+    f = dc.english_in_nonlatin
+    assert f("كلمة Brand تعني حريق.", "de", src="Brand means fire.") == []          # German noun without asterisks
+    assert f("وفي الألمانية هو das Haar", "de", src="In German it is das Haar") == []
+    assert f("ترجم الجملة. Tomorrow", "es", src="Translate the sentence. Tomorrow") == ["Tomorrow"]   # sentence-initial English
