@@ -7,6 +7,8 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | `scripts/verify.sh --content-only` | pass; WARN count (lines starting `WARN`, full run) <= formula below |
 | `scripts/_answer_leakage_check.py` | <= 36 hits (24 at 53bec4a11, 17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
+| `scripts/_cyrillic_latin_check.py`, `scripts/check_dari_register.py` | 0 findings |
+| `scripts/_target_name_check.py` (wrong language name in cross-pair overlays/practice; allowlist `scripts/_target_name_allowlist.tsv`) | 0 hits |
 | practice-validate (all packs) | 0 errors |
 | `pytest scripts/tests` | pass (187 at 53bec4a11) |
 | backend pytest (repo mounted, `test_content_answer_shapes` deselected) | pass |
@@ -57,3 +59,10 @@ appear; en-fr, en-it (source-typo fixes in unit67/unit53) and every other pre-ex
 fix in hi-de/ar-de/prs-de changed no WARN counts). Leakage 24 hits (37 allowlisted); cyrillic-latin 0; leftovers 0; check_dari_register 0 findings;
 97 practice packs 0 errors; scripts/tests 187; vitest 461; backend pytest pass.
 Current WARN baseline: 4230.
+
+## Measured at 76a2dd9c5 (shipped 2026-10-31e)
+
+WARN 4534 = 4230 (53bec4a11) + 4x56 (ar/fa/hi/prs-nl, same as en-nl) + 4x20 (ar/fa/hi/prs-ru-a1, same as en-ru-a1).
+Own verify run on a base worktree at 53bec4a11 gave 4230; the per-course diff vs the ship commit is exactly those 8 new courses,
+every pre-existing course unchanged (including the live pairs edited by #124/#130). Leakage 24 hits (41 allowlisted).
+Cross-pair rule above extended: target nl +56 each (now also ar/fa/hi/prs-nl); target ru (A1): +20 each (ar/fa/hi/prs-ru-a1).
