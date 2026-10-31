@@ -1,0 +1,344 @@
+schema_version: '1.0'
+pack_key: practice.ru-pl.a1.unit60
+source_language: ru
+target_language: pl
+unit_content_key: pl.a1.unit60.lodziarnia
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_gałka
+    - w_gałki
+    - w_kubeczek
+    - w_kwiaciarni
+    - w_lody
+    - w_lodziarnia
+    - w_lodów
+    - w_rożek
+    - w_smak
+    - w_smaki
+    - w_witryna
+    - w_zimne
+templates:
+- content_key: practice.ru-pl.pl.a1.unit60.lesson01.choose.001
+  lesson_content_key: pl.a1.unit60.lesson01.pojdziemy_do_lodziarni
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: pl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_lodziarnia
+        - w_witryna
+        - w_lody
+        - w_zimne
+        - w_smak
+        - w_gałka
+        - w_rożek
+        - w_smaki
+        - w_lodów
+        - w_gałki
+        - w_kubeczek
+        - w_kwiaciarni
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Пойдём в мороженицу?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson02.listen.001
+  lesson_content_key: pl.a1.unit60.lesson02.lody_i_smak
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Мороженое и вкус».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson03.translate.001
+  lesson_content_key: pl.a1.unit60.lesson03.galka_i_pracownik
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Шарик и сотрудник».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson04.match.001
+  lesson_content_key: pl.a1.unit60.lesson04.ceny_w_lodziarni
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Подбери к каждому польскому слову его русское значение; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson05.choose.001
+  lesson_content_key: pl.a1.unit60.lesson05.przy_witrynie_w_lodziarni
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «У витрины в мороженице».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson06.translate.001
+  lesson_content_key: pl.a1.unit60.lesson06.ewa_dowiaduje_sie_o
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока, из темы «Ева узнаёт о мороженом кафе».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson02.order.002
+  lesson_content_key: pl.a1.unit60.lesson02.lody_i_smak
+  type: word_order
+  frame:
+    text: Widzę {item} i smak.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_lody
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Widzę {item} i smak.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Я вижу мороженое и вкус. lody означает «мороженое».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson02.fill.003
+  lesson_content_key: pl.a1.unit60.lesson02.lody_i_smak
+  type: fill_in_blank
+  frame:
+    text: Lody są {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zimne
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zimne
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Мороженое холодное. zimne означает «холодное» (мн. число или средний род).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson03.order.002
+  lesson_content_key: pl.a1.unit60.lesson03.galka_i_pracownik
+  type: word_order
+  frame:
+    text: Ile kosztuje {item} lodów?
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_gałka
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ile kosztuje {item} lodów?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Сколько стоит шарик? gałka означает «шарик (мороженого)».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson04.order.002
+  lesson_content_key: pl.a1.unit60.lesson04.ceny_w_lodziarni
+  type: word_order
+  frame:
+    text: Ile kosztuje {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_rożek
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ile kosztuje {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Сколько стоит рожок? rożek означает «рожок».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson04.fill.003
+  lesson_content_key: pl.a1.unit60.lesson04.ceny_w_lodziarni
+  type: fill_in_blank
+  frame:
+    text: Ile kosztuje gałka {item}? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_lodów
+    hint:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_lodów
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Сколько стоит шарик мороженого? lodów означает «мороженого» (род. падеж).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson06.order.002
+  lesson_content_key: pl.a1.unit60.lesson06.ewa_dowiaduje_sie_o
+  type: word_order
+  frame:
+    text: Nina ma {item} lodów.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kubeczek
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina ma {item} lodów.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: У Нины стаканчик мороженого. kubeczek означает «стаканчик».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit60.lesson06.fill.003
+  lesson_content_key: pl.a1.unit60.lesson06.ewa_dowiaduje_sie_o
+  type: fill_in_blank
+  frame:
+    text: Pójdziemy w przyszłym tygodniu razem do {item}? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kwiaciarni
+    hint:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kwiaciarni
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ева: Пойдём на следующей неделе вместе в цветочный магазин? kwiaciarni означает «в цветочном магазине; цветочного магазина».'
+    language_code: ru
+    direction: ltr

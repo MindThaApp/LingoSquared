@@ -1,0 +1,468 @@
+schema_version: '1.0'
+pack_key: practice.ru-pl.a1.unit15
+source_language: ru
+target_language: pl
+unit_content_key: pl.a1.unit15.podroz
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dworzec
+    - w_bilet
+    - w_peron
+    - w_jechać
+    - w_jadę
+    - w_jedzie
+    - w_jutro
+    - w_Krakowa
+    - w_autobus
+    - w_Warszawa
+    - w_Warszawy
+    - w_dokąd
+slot_presets:
+  u15_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dworzec
+      - w_bilet
+      - w_peron
+      - w_jechać
+      - w_jadę
+      - w_jedzie
+      - w_jutro
+  s_jedzie: &id002
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jedzie
+  s_Krakowa: &id003
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Krakowa
+  s_jade: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jadę
+  u15_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+  u15_mp2: &id006
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+      - w_dworzec
+  s_Warszawy: &id007
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Warszawy
+  s_autobus: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_autobus
+templates:
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.choose.001
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Jadę — форма «я» от jechać, а jedzie — форма «он/она»; оба слова используются, когда едешь на транспорте.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.listen.002
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dworzec — это здание вокзала, а peron — платформа, у которой останавливается поезд.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.match.003
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Jechać — начальная форма; jadę («я») и jedzie («он/она») — две её формы.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.order.004
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Marek {item} do Krakowa jutro.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa jutro.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie — форма «он/она», поэтому она сочетается с именем, например Marek.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.order.005
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Bilet do {item}, proszę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'После do название города меняется: Kraków становится Krakowa.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.fill.006
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Bilet do {item}, proszę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Форму вроде Krakowa запоминают вместе с do, как одно целое.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.fill.007
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Ja {item} do Warszawy. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Jadę — форма «я» от jechać, «ехать» на транспорте.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.translate.008
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Один билет до Кракова, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'После do нужна другая форма города: Kraków становится Krakowa.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.translate.009
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Марек едет в Краков (на транспорте).
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie — форма «он/она» от jechać.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson01.translate.010
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Я еду в Варшаву (на транспорте; употреби местоимение «я»).
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja {item} do Warszawy.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja здесь добавлено для выделения; окончание -ę уже показывает форму «я».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.choose.001
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dokąd спрашивает, куда кто-то едет, поэтому ответ строится с do.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.listen.002
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Warszawa — это основная форма названия города; после do она становится Warszawy.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.match.003
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'После do города меняются по-разному: Kraków становится Krakowa, Warszawa становится Warszawy.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.order.004
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Autobus do {item} odjeżdża o siódmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'После do город получает другое окончание: Warszawa становится Warszawy.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.order.005
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Dokąd jedzie {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dokąd jedzie {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Autobus — один предмет, поэтому глагол стоит в той же форме, что и для «он/она»: jedzie.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.fill.006
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: fill_in_blank
+  frame:
+    text: Ewa jedzie do {item} jutro. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: У каждого города после do своя форма, поэтому учи их по одной.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.translate.007
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: Автобус в Варшаву отправляется в семь.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: После do идёт Warszawy, а не Warszawa.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit15.lesson02.translate.008
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Dokąd спрашивает о направлении, а gdzie — о местонахождении.
+    language_code: ru
+    direction: ltr
