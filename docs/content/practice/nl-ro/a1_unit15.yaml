@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.nl-ro.a1.unit15
+source_language: nl
+target_language: ro
+unit_content_key: ro.a1.unit15.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_tren
+    - w_pleacă
+    - w_peron
+    - w_trenul
+    - w_peronul
+    - w_bilet
+    - w_București
+    - w_drum
+    - w_bun
+slot_presets:
+  a_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_trenul
+      - w_peronul
+  all6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_bilet
+      - w_București
+      - w_drum
+  b_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_bilet
+      - w_București
+      - w_drum
+      - w_tren
+      - w_peron
+  c_pool: &id008
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_drum
+      - w_bun
+      - w_tren
+      - w_bilet
+  t_trenul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_trenul
+  t_peronul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_peronul
+  t_pleaca: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_pleacă
+  t_bilet: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_bilet
+  t_bun: &id009
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bun
+templates:
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.choose.001
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Trenul en peronul zijn tren en peron met het lidwoord -ul erachter.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.listen.002
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pleacă is het werkwoord voor 'vertrekt', gebruikt met trenul in La ce oră pleacă trenul?
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.order.003
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: La ce oră {item} trenul?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră {item} trenul?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Pleacă past bij hij, zij of het, dus het werkt met trenul.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.order.004
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: Trenul este la {item} trei.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul is peron plus het lidwoord, dus het betekent 'het perron'.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.fill.005
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: fill_in_blank
+  frame:
+    text: Trenul {item} la ora nouă. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Pleacă is de derde persoon: hij/zij/het vertrekt.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.translate.006
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: Hoe laat vertrekt de trein?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră pleacă {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Trenul is tren plus -ul, dus 'de trein'; ora nouă geeft het uur aan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.translate.007
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: De trein vertrekt om negen uur.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul {item} la ora nouă.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La ora nouă geeft het uur aan; het werkwoord blijft hetzelfde voor hij, zij of het.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson01.translate.008
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: De trein staat op perron drie.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul trei betekent 'perron drie', met het lidwoord achter het zelfstandig naamwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.choose.001
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bilet betekent 'kaartje' en București is de hoofdstad.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.listen.002
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Bilet is onzijdig: un bilet in het enkelvoud, două bilete in het meervoud.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.match.003
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tren, peron, bilet en drum zijn zelfstandige naamwoorden; pleacă is een werkwoord; București is een eigennaam.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.order.004
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: word_order
+  frame:
+    text: Am un {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bilet is onzijdig, en onzijdige zelfstandige naamwoorden krijgen in het enkelvoud un.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.fill.005
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: fill_in_blank
+  frame:
+    text: Aș dori un {item} la București, vă rog. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aș dori un bilet is een beleefd verzoek; vă rog past bij dumneavoastră.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.translate.006
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: Ik wil graag een kaartje naar Boekarest, alstublieft. (formeel, tegen iemand die je met dumneavoastră aanspreekt)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aș dori un {item} la București, vă rog.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aș dori plus un en een zelfstandig naamwoord vormt een beleefd verzoek.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.translate.007
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: Hoeveel kost een kaartje naar Boekarest?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cât costă un {item} la București?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cât costă vraagt naar de prijs van één ding, dus het werkwoord blijft enkelvoud.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson02.translate.008
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Elk van deze woorden benoemt iets uit een reis: een ding, een handeling of een plaats.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson03.choose.001
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Drum bun wenst iemand een goede reis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson03.order.002
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: word_order
+  frame:
+    text: Drum {item}, Mihai!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum is onzijdig, dus in het enkelvoud krijgt het bijvoeglijk naamwoord de mannelijke vorm bun.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson03.fill.003
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: fill_in_blank
+  frame:
+    text: Drum {item}, Mihai! ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Bun staat in deze afscheidswens achter het zelfstandig naamwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ro.ro.a1.unit15.lesson03.translate.004
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: translation
+  frame:
+    text: Goede reis, Mihai!
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum bun is een vaste wens voor iemand die vertrekt.
+    language_code: nl
+    direction: ltr
