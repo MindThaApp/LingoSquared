@@ -361,6 +361,7 @@ def test_cross_guide_has_no_english_script_note_and_a_dari_rule():
     g = dc.cross_guide("en-es", "hi", "es")
     assert "English words in Latin script" not in g
     assert "words quoted in the text stay in Latin script" in g
+    assert "Grammar terms" in g and "Grammar terms" not in dc.cross_guide("en-es", "de", "es")
     assert "Dari (prs) is NOT Iranian Farsi" not in g
     prs = dc.cross_guide("en-de", "prs", "de")
     assert "Dari (prs) is NOT Iranian Farsi" in prs and "check_dari_register.py" in prs
