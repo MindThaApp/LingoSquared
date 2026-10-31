@@ -1,0 +1,427 @@
+schema_version: '1.0'
+pack_key: practice.prs-fr.a1.unit07
+source_language: prs
+target_language: fr
+unit_content_key: fr.a1.unit07.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dari (Afghanistan)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - fr_a1_u07_l01
+    - w_banque
+    - w_côté
+    - w_d'ici
+    - w_excusez-moi
+    - w_face
+    - w_gare
+    - w_loin
+    - w_minutes
+    - w_où
+    - w_pharmacie
+    - w_pied
+    - w_poste
+    - w_prie
+slot_presets:
+  n_l01: &id001
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: fr_a1_u07_l01
+  la: &id002
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_gare
+      - w_pharmacie
+      - w_banque
+      - w_poste
+  a_banque_noun: &id003
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_banque
+  a_gare_noun: &id004
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_gare
+  c2: &id005
+    language_code: fr
+    part_of_speech:
+    - adverb
+    - preposition
+    - particle
+    agreement_tags:
+      semantic:
+      - w_où
+      - w_face
+      - w_côté
+      - w_loin
+      - w_d'ici
+  a_cote_prep: &id006
+    language_code: fr
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_côté
+  a_face_prep: &id007
+    language_code: fr
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_face
+  a_loin_adve: &id008
+    language_code: fr
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_loin
+  c3: &id009
+    language_code: fr
+    part_of_speech:
+    - phrase
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_excusez-moi
+      - w_minutes
+      - w_pied
+      - w_prie
+      - w_loin
+  lis3: &id010
+    language_code: fr
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_excusez-moi
+      - w_minutes
+      - w_pied
+      - w_loin
+  m3: &id011
+    language_code: fr
+    part_of_speech:
+    - noun
+    - adverb
+    - phrase
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_gare
+      - w_pharmacie
+      - w_banque
+      - w_poste
+      - w_loin
+      - w_excusez-moi
+  a_minutes_noun: &id012
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_minutes
+  a_pied_noun: &id013
+    language_code: fr
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pied
+templates:
+- content_key: practice.prs-fr.fr.a1.unit07.lesson01.choose.001
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La gare, la pharmacie, la banque و la poste همه مؤنث‌اند، به همین خاطر la می‌گیرند؛ l'école پیش از مصوت l' می‌گیرد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson01.listen.002
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La poste یعنی پستخانه؛ مثل gare، pharmacie و banque اسم مؤنث است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson01.order.003
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: word_order
+  frame:
+    text: La {item} est grande.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: این اسم‌ها مؤنث‌اند، پس حرف تعریف la است و صفت grande نشانهٔ مؤنث -e را دارد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson01.fill.004
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: fill_in_blank
+  frame:
+    text: La {item} est fermée le dimanche. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Fermée چون banque مؤنث است به -e ختم می‌شود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson01.translate.005
+  lesson_content_key: fr.a1.unit07.lesson01.lieux_du_quartier
+  type: translation
+  frame:
+    text: ایستگاه قطار بزرگ است.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'La gare est grande: gare مؤنث است، پس هم la و هم grande با آن هماهنگ می‌شوند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson02.choose.001
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Où می‌پرسد «کجا»؛ en face de و à côté de عبارت‌های مکانی‌اند که پیش از اسم به de نیاز دارند.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson02.listen.002
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Loin d'ici یعنی دور از اینجا؛ près d'ici مخالف آن است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson02.order.003
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: word_order
+  frame:
+    text: La pharmacie est à {item} de la banque.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La pharmacie est à {item} de la banque.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: À côté de یعنی پهلوی؛ de آن را به اسمی که بعدش می‌آید وصل می‌کند.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson02.fill.004
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: fill_in_blank
+  frame:
+    text: La banque est en {item} de la gare. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: En face de یعنی روبه‌روی و پیش از اسم de می‌گیرد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson02.translate.005
+  lesson_content_key: fr.a1.unit07.lesson02.demander_son_chemin
+  type: translation
+  frame:
+    text: پستخانه از اینجا دور است.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La poste est {item} d'ici.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Loin d'ici یعنی دور از اینجا.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson03.choose.001
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Excusez-moi راه مؤدبانهٔ جلب توجه یک ناشناس پیش از پرسیدن سؤال است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson03.listen.002
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Excusez-moi شکل vous فعل excuser است، به همین خاطر با ناشناس‌ها به کار می‌رود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson03.match.003
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: La gare, la pharmacie, la banque و la poste مؤنث‌اند؛ excusez-moi آغاز هر سؤال از یک ناشناس است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson03.fill.004
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: fill_in_blank
+  frame:
+    text: Cinq {item} à pied. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Cinq minutes à pied یعنی پنج دقیقه پیاده؛ minutes بعد از cinq جمع است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-fr.fr.a1.unit07.lesson03.translate.005
+  lesson_content_key: fr.a1.unit07.lesson03.dialogue_chercher_pharmacie
+  type: translation
+  frame:
+    text: پنج دقیقه پیاده.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cinq minutes à {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: À pied یعنی پیاده، پس «پنج دقیقه پیاده» یعنی پنج دقیقه راه.
+    language_code: prs
+    direction: rtl
