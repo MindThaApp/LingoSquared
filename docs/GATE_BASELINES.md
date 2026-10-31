@@ -5,10 +5,10 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | Gate | Threshold |
 |---|---|
 | `scripts/verify.sh --content-only` | pass; WARN count (lines starting `WARN`, full run) <= formula below |
-| `scripts/_answer_leakage_check.py` | <= 36 hits (17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
+| `scripts/_answer_leakage_check.py` | <= 36 hits (24 at 53bec4a11, 17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
 | practice-validate (all packs) | 0 errors |
-| `pytest scripts/tests` | pass (187 at 294b3618b) |
+| `pytest scripts/tests` | pass (187 at 53bec4a11) |
 | backend pytest (repo mounted, `test_content_answer_shapes` deselected) | pass |
 | vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (461) |
 
@@ -49,4 +49,11 @@ Measured at 294b3618b (shipped 2026-10-31, third ship): 3750 = 3060 + ru-ro 10 +
 + 4 es-target x 138 (hi-es, ar-es, fa-es, prs-es) + 4 de-target x 4 (hi-de, ar-de, fa-de, prs-de). Per-course diff versus d9d564b64: only the 16 new
 courses appear; en-pl, en-de, en-es and every other pre-existing course unchanged. Leakage 22 hits (29 allowlisted); cyrillic-latin 0;
 leftovers 0; check_dari_register 0 findings; 89 practice packs 0 errors; scripts/tests 187; vitest 461; backend pytest pass.
-Current WARN baseline: 3750.
+Current WARN baseline: 3750 (superseded below).
+
+Measured at 53bec4a11 (shipped 2026-10-31, fourth ship): 4230 = 3750 + 4 fr-target x 112 (hi-fr, ar-fr, fa-fr, prs-fr, each equals en-fr's 112)
++ 4 it-target x 8 (hi-it-a1, ar-it-a1, fa-it-a1, prs-it-a1, each equals en-it-a1's 8). Per-course diff versus 294b3618b: only the 8 new courses
+appear; en-fr, en-it (source-typo fixes in unit67/unit53) and every other pre-existing course unchanged (the #118 translation-memory
+fix in hi-de/ar-de/prs-de changed no WARN counts). Leakage 24 hits (37 allowlisted); cyrillic-latin 0; leftovers 0; check_dari_register 0 findings;
+97 practice packs 0 errors; scripts/tests 187; vitest 461; backend pytest pass.
+Current WARN baseline: 4230.
