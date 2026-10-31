@@ -1,0 +1,342 @@
+schema_version: '1.0'
+pack_key: practice.prs-es.a1.unit08
+source_language: prs
+target_language: es
+unit_content_key: es.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dari (Afghanistan)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u08
+    - w_banco
+    - w_parque
+    - w_farmacia
+    - w_biblioteca
+    - w_enfrente
+    - w_lejos
+    - w_entre
+    - w_bastante
+    - w_compramos
+slot_presets:
+  nouns: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u08
+  content: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u08
+  words: &id009
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u08
+  verbs_adv: &id010
+    language_code: es
+    part_of_speech:
+    - verb
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u08
+  place_m: &id003
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_banco
+      - w_parque
+  place_f: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_biblioteca
+  enfrente: &id004
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_enfrente
+  lejos: &id005
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_lejos
+  entre: &id006
+    language_code: es
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_entre
+  bastante: &id007
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_bastante
+  compramos: &id011
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_compramos
+templates:
+- content_key: practice.prs-es.es.a1.unit08.lesson01.choose.001
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Biblioteca یعنی کتابخانه؛ کتاب‌فروشی librería است، که یک دوست دروغین معمول است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson01.listen.002
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Banco یعنی نیمکت هم؛ در این درس منظور بانکِ سر سرک است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson01.order.003
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: word_order
+  frame:
+    text: La {item} está cerca de aquí.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} está cerca de aquí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'برای گفتن جای چیزی از estar استفاده کنید: la farmacia está cerca.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson01.translate.004
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: translation
+  frame:
+    text: '{item} پهلوی بازار است.'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El {item} está al lado del mercado.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'De + el به del تبدیل می‌شود: al lado del mercado، پهلوی بازار.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson02.fill.001
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: fill_in_blank
+  frame:
+    text: La farmacia está {item} del mercado. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Enfrente de، al lado de، lejos de و cerca de همه پیش از نام جا به de ضرورت دارند.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson02.order.002
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: word_order
+  frame:
+    text: El parque está {item} del mercado.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El parque está {item} del mercado.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: پارک از بازار دور است. ضد آن cerca de است، یعنی نزدیکِ.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson02.translate.003
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: translation
+  frame:
+    text: کتابخانه بین بانک و پارک است.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La biblioteca está {item} el banco y el parque.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Entre دو جا را که با y وصل شده‌اند می‌گیرد، و بعد از آن de نمی‌آید.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson04.fill.001
+  lesson_content_key: es.a1.unit08.lesson04.preguntar_si_esta_lejos
+  type: fill_in_blank
+  frame:
+    text: Sí, está {item} lejos. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Bastante یعنی نسبتاً: bastante lejos، نسبتاً دور؛ bastante cerca، نسبتاً نزدیک.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson05.match.001
+  lesson_content_key: es.a1.unit08.lesson05.leer_sobre_el_barrio
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'En este barrio hay muchos lugares útiles: hay چیزهایی را که در یک جا وجود دارد معرفی می‌کند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson05.translate.002
+  lesson_content_key: es.a1.unit08.lesson05.leer_sobre_el_barrio
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Útil در جمع به شکل útiles می‌آید، چون به حرف بی‌صدا ختم می‌شود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson06.choose.001
+  lesson_content_key: es.a1.unit08.lesson06.lugares_del_barrio_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Donde بدون accent دو فکر را وصل می‌کند؛ ¿dónde? با accent سوال می‌پرسد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-es.es.a1.unit08.lesson06.translate.002
+  lesson_content_key: es.a1.unit08.lesson06.lugares_del_barrio_dialogue
+  type: translation
+  frame:
+    text: پهلوی بازاری است که از آن تخم خریدیم.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Está al lado del mercado donde {item} los huevos.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Compramos هم «می‌خریم» است و هم «خریدیم»؛ زمان را از بافت جمله می‌فهمیم.
+    language_code: prs
+    direction: rtl
