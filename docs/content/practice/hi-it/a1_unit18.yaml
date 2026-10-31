@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.hi-it.a1.unit18
+source_language: hi
+target_language: it
+unit_content_key: it.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bagno
+    - w_camera
+    - w_cucina
+    - w_dietro
+    - w_divano
+    - w_dov'è
+    - w_finestra
+    - w_nel
+    - w_nella
+    - w_sedia
+    - w_soggiorno
+    - w_sopra
+    - w_sotto
+    - w_stanze
+    - w_tavolo
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_bagno
+      - w_stanze
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_camera
+      - w_bagno
+  pool3: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_camera
+  t_stanze: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_stanze
+  t_cucina: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cucina
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_tavolo
+      - w_sedia
+      - w_divano
+      - w_nella
+      - w_nel
+  t_tavolo: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tavolo
+  t_nel: &id008
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_nel
+  t_nella: &id009
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_nella
+  t_sedia: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sedia
+  pool11: &id011
+    language_code: it
+    part_of_speech:
+    - preposition
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_dietro
+      - w_sopra
+      - w_sotto
+      - w_finestra
+      - w_dov'è
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - preposition
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dietro
+      - w_sopra
+      - w_sotto
+      - w_finestra
+  t_dietro: &id013
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_dietro
+  t_sotto: &id014
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_sotto
+  t_finestra: &id015
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_finestra
+  pool16: &id016
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_bagno
+      - w_tavolo
+      - w_sedia
+      - w_divano
+      - w_finestra
+templates:
+- content_key: practice.hi-it.it.a1.unit18.lesson01.choose.001
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il soggiorno और il bagno पुल्लिंग हैं; la cucina स्त्रीलिंग है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson01.listen.002
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Camera da letto का अर्थ शयनकक्ष है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson01.order.003
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: word_order
+  frame:
+    text: Questa è la mia {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questa è la mia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Questa और mia स्त्रीलिंग हैं और स्त्रीलिंग कमरे के अनुसार आते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson01.fill.004
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: fill_in_blank
+  frame:
+    text: Ci sono quattro {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Stanze, stanza का बहुवचन है, इसलिए यह quattro के बाद आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson01.translate.005
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: translation
+  frame:
+    text: यह मेरी रसोई है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questa è la mia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Cucina स्त्रीलिंग है, इसलिए questa और mia का प्रयोग होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson02.choose.001
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Nel पुल्लिंग संज्ञाओं के साथ आता है और nella स्त्रीलिंग संज्ञाओं के साथ।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson02.order.002
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: word_order
+  frame:
+    text: Il {item} è in cucina.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è in cucina.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Il tavolo पुल्लिंग है और in cucina में कोई आर्टिकल नहीं आता।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson02.fill.003
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: fill_in_blank
+  frame:
+    text: Il divano è {item} soggiorno. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nel यानी in और il, पुल्लिंग soggiorno के लिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson02.translate.004
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: translation
+  frame:
+    text: बिस्तर शयनकक्ष में है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il letto è {item} camera da letto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Nella यानी in और la, स्त्रीलिंग camera के लिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson02.translate.005
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: translation
+  frame:
+    text: कुर्सी मेज़ के पास है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} è vicino al tavolo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sedia स्त्रीलिंग है और उसके साथ la आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.choose.001
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dietro, sopra और sotto बताते हैं कि कोई चीज़ कहाँ है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.listen.002
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Sopra का अर्थ ऊपर या पर है, और sotto का अर्थ नीचे है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.order.003
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: word_order
+  frame:
+    text: Il divano è {item} il tavolo.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il divano è {item} il tavolo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Dietro सीधे संज्ञा से पहले आ सकता है: dietro il tavolo, यानी मेज़ के पीछे।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.fill.004
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: fill_in_blank
+  frame:
+    text: La sedia è {item} il tavolo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sotto il tavolo का अर्थ मेज़ के नीचे है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.translate.005
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: translation
+  frame:
+    text: बिस्तर खिड़की के पास है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il letto è vicino alla {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla यानी a और la, स्त्रीलिंग finestra के लिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit18.lesson03.match.006
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id016
+    second: *id016
+    third: *id016
+    fourth: *id016
+    fifth: *id016
+    sixth: *id016
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Cucina, soggiorno और bagno कमरे हैं; tavolo, sedia और divano फ़र्नीचर हैं।
+    language_code: hi
+    direction: ltr
