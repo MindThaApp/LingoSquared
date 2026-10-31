@@ -1,0 +1,468 @@
+schema_version: '1.0'
+pack_key: practice.ar-pl.a1.unit15
+source_language: ar
+target_language: pl
+unit_content_key: pl.a1.unit15.podroz
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dworzec
+    - w_bilet
+    - w_peron
+    - w_jechać
+    - w_jadę
+    - w_jedzie
+    - w_jutro
+    - w_Krakowa
+    - w_autobus
+    - w_Warszawa
+    - w_Warszawy
+    - w_dokąd
+slot_presets:
+  u15_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dworzec
+      - w_bilet
+      - w_peron
+      - w_jechać
+      - w_jadę
+      - w_jedzie
+      - w_jutro
+  s_jedzie: &id002
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jedzie
+  s_Krakowa: &id003
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Krakowa
+  s_jade: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jadę
+  u15_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+  u15_mp2: &id006
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+      - w_dworzec
+  s_Warszawy: &id007
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Warszawy
+  s_autobus: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_autobus
+templates:
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.choose.001
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Jadę هي صيغة المتكلم (أنا) من الفعل jechać، وjedzie هي صيغة الغائب أو الغائبة؛ وكلتاهما للسفر بواسطة مركبة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.listen.002
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dworzec هو مبنى المحطة، أما peron فهو الرصيف الذي يقف عنده القطار.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.match.003
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Jechać هي صيغة المصدر الواردة في القاموس؛ أما jadę (أنا) وjedzie (هو أو هي) فهما صيغتان من صيغها.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.order.004
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Marek {item} do Krakowa jutro.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa jutro.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie هي صيغة الغائب أو الغائبة، لذلك تُستعمل مع اسم مثل Marek.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.order.005
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Bilet do {item}, proszę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'بعد do يتغيّر اسم المدينة: تصبح Kraków هي Krakowa.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.fill.006
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Bilet do {item}, proszę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نتعلّم صيغة مثل Krakowa مع do معًا، كعبارة واحدة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.fill.007
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Ja {item} do Warszawy. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Jadę هي صيغة المتكلم (أنا) من الفعل jechać، للذهاب بواسطة مركبة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.translate.008
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: تذكرة إلى كراكوف، من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'تتطلّب do صيغة مختلفة من اسم المدينة: تصبح Kraków هي Krakowa.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.translate.009
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: ماريك ذاهب إلى كراكوف (بواسطة مركبة).
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie هي صيغة الغائب أو الغائبة من الفعل jechać.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson01.translate.010
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: أنا ذاهب إلى وارسو (بواسطة مركبة؛ أضف ضمير المتكلم).
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja {item} do Warszawy.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: أُضيفت Ja هنا للتوكيد؛ فالنهاية -ę تدلّ أصلًا على صيغة المتكلم.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.choose.001
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تسأل Dokąd عن وجهة الذهاب، لذلك تتوقّع جوابًا فيه do.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.listen.002
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Warszawa هو الاسم الأساسي للمدينة؛ وبعد do يصبح Warszawy.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.match.003
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'تتغيّر المدن بطرق مختلفة بعد do: تصبح Kraków هي Krakowa، وتصبح Warszawa هي Warszawy.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.order.004
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Autobus do {item} odjeżdża o siódmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'بعد do تأخذ المدينة نهاية مختلفة: تصبح Warszawa هي Warszawy.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.order.005
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Dokąd jedzie {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dokąd jedzie {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Autobus شيء واحد، لذلك يأخذ الفعل الصيغة نفسها التي مع الغائب أو الغائبة: jedzie.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.fill.006
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: fill_in_blank
+  frame:
+    text: Ewa jedzie do {item} jutro. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: لكل مدينة صيغتها الخاصة بعد do، لذلك نتعلّمها واحدة واحدة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.translate.007
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: الحافلة إلى وارسو تغادر في السابعة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: يأتي بعد do الشكل Warszawy وليس Warszawa.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-pl.pl.a1.unit15.lesson02.translate.008
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تسأل Dokąd عن الاتجاه، بينما تسأل gdzie عن المكان.
+    language_code: ar
+    direction: rtl
