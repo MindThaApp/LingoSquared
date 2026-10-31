@@ -1,0 +1,443 @@
+schema_version: '1.0'
+pack_key: practice.it-pl.a1.unit11
+source_language: it
+target_language: pl
+unit_content_key: pl.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chcieć
+    - w_chcę
+    - w_chcesz
+    - w_kino
+    - w_móc
+    - w_mogę
+    - w_możesz
+    - w_przyjść
+    - w_chętnie
+    - w_niestety
+    - w_sobotę
+slot_presets:
+  u11_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_chcieć
+      - w_chcę
+      - w_chcesz
+      - w_kino
+      - w_móc
+      - w_mogę
+      - w_możesz
+  u11_i: &id002
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic:
+      - w_chcę
+      - w_mogę
+  s_chcesz: &id003
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_chcesz
+  s_chce: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_chcę
+  u11_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_móc
+      - w_mogę
+      - w_możesz
+      - w_przyjść
+      - w_chętnie
+      - w_niestety
+      - w_sobotę
+  u11_l2m: &id006
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_móc
+      - w_mogę
+      - w_możesz
+      - w_przyjść
+      - w_chętnie
+      - w_niestety
+      - w_sobotę
+      - w_kino
+  u11_come: &id007
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_przyjść
+  u11_sat: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sobotę
+  s_moge: &id009
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_mogę
+  s_chetnie: &id010
+    language_code: pl
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_chętnie
+templates:
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.choose.001
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chcę è la forma «io» di chcieć e chcesz è la forma «tu», usata con amici e familiari.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.listen.002
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'La desinenza -sz indica il «tu» informale: chcesz, możesz, masz (jesteś è l''eccezione, con la desinenza -ś).'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.match.003
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Chcieć e móc seguono lo stesso schema: -ę per «io» e -sz per «tu».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.order.004
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: word_order
+  frame:
+    text: Dziś {item} iść do kina.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dziś {item} iść do kina.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Dopo chcę o mogę il secondo verbo resta all'infinito.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.fill.005
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: fill_in_blank
+  frame:
+    text: Czy {item} iść razem do kina? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Una domanda a un amico usa la forma «tu» chcesz, con czy all'inizio della domanda.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.translate.006
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: translation
+  frame:
+    text: Oggi voglio andare al cinema.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dziś {item} iść do kina.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Chcę è seguito da un infinito, quindi iść resta nella forma del dizionario.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson01.translate.007
+  lesson_content_key: pl.a1.unit11.lesson01.propozycja
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Móc significa «essere in grado di» o «potere» e si usa come chcieć.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.choose.001
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chętnie e niestety sono avverbi, quindi non cambiano mai forma.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.listen.002
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Sobotę è la forma usata dopo w: i nomi femminili dei giorni cambiano -a in -ę, quindi sobota diventa sobotę.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.match.003
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Przyjść significa «venire» e dopo mogę o możesz resta all'infinito.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.order.004
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: word_order
+  frame:
+    text: Czy możesz {item} w piątek?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy możesz {item} w piątek?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Czy możesz più un infinito chiede con gentilezza a un amico se può fare qualcosa.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.order.005
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: word_order
+  frame:
+    text: Czy możesz przyjść w {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy możesz przyjść w {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: I giorni maschili come piątek restano invariati dopo w, mentre i giorni femminili come sobota diventano sobotę.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.fill.006
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: fill_in_blank
+  frame:
+    text: Niestety, nie {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nie mogę è il modo cortese per dire che non puoi venire.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.fill.007
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: fill_in_blank
+  frame:
+    text: Tak, bardzo {item}! ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Bardzo chętnie è un modo caloroso di accettare un invito.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.translate.008
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: translation
+  frame:
+    text: Purtroppo non posso.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Niestety, nie {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Nie va prima del verbo per renderlo negativo.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-pl.pl.a1.unit11.lesson02.translate.009
+  lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Przyjść è la forma del dizionario di «venire», usata qui dopo mogę.
+    language_code: it
+    direction: ltr
