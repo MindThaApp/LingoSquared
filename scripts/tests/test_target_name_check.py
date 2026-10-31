@@ -67,3 +67,11 @@ def test_scan_respects_allowlist(tmp_path):
 
 def test_repo_is_clean():
     assert tn.scan(tn.cross_pairs()) == []
+
+
+def test_dari_farsi_arabic_hindi_spellings_of_spanish():
+    assert langs("prs", "de", "کلمه‌ها را مرتب کنید به اسپانوی ساخته شود") == {"es"}
+    assert langs("prs", "fr", "به اسپانیایی بگویید") == {"es"}
+    assert langs("fa", "it", "به اسپانیایی بگویید") == {"es"}
+    assert langs("ar", "fr", "قلها بالأسبانية") == {"es"}
+    assert langs("hi", "fr", "इसे स्पैनिश में कहें") == {"es"}
