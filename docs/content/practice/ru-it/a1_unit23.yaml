@@ -1,0 +1,344 @@
+schema_version: '1.0'
+pack_key: practice.ru-it.a1.unit23
+source_language: ru
+target_language: it
+unit_content_key: it.a1.unit23.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chi
+    - w_mando
+    - w_messaggio
+    - w_piano
+    - w_pronto
+    - w_puoi
+    - w_ripetere
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - phrase
+    - pronoun
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_pronto
+      - w_chi
+      - w_messaggio
+      - w_mando
+  t_chi: &id002
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_chi
+  t_messaggio: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_messaggio
+  t_mando: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_mando
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_puoi
+      - w_ripetere
+      - w_piano
+      - w_chi
+  t_ripetere: &id006
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ripetere
+  t_piano: &id007
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_piano
+  t_puoi: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_puoi
+templates:
+- content_key: practice.ru-it.it.a1.unit23.lesson01.choose.001
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pronto — так по-итальянски отвечают на телефонный звонок.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.listen.002
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chi значит «кто» и используется во фразе chi parla?
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.order.003
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: word_order
+  frame:
+    text: Pronto, {item} parla?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Pronto, {item} parla?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Pronto, chi parla? — стандартное начало телефонного разговора.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.order.004
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: word_order
+  frame:
+    text: Ti mando un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ti mando un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Un messaggio — мужского рода, поэтому с ним используется un.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.fill.005
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: fill_in_blank
+  frame:
+    text: Ti {item} un messaggio. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Mando — форма «я» глагола mandare: я посылаю.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.translate.006
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: translation
+  frame:
+    text: Алло, кто говорит?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Pronto, {item} parla?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Pronto — ответ на звонок, а chi значит «кто».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.translate.007
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: translation
+  frame:
+    text: Я отправляю тебе сообщение.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ti {item} un messaggio.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ti значит «тебе» и стоит перед глаголом.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson01.translate.008
+  lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Как приветствие pronto используется только по телефону; в других случаях оно значит «готов».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.choose.001
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Puoi — неформальная форма глагола potere на «ты»: ты можешь.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.order.002
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: word_order
+  frame:
+    text: Sam, puoi {item}, per favore?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sam, puoi {item}, per favore?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Puoi + инфинитив — так просят кого-то что-то сделать.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.order.003
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: word_order
+  frame:
+    text: Parla più {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Parla più {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Più piano значит «помедленнее».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.fill.004
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: fill_in_blank
+  frame:
+    text: Sam, {item} ripetere, per favore? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Puoi оканчивается на -i, потому что это форма на «ты».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.translate.005
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: translation
+  frame:
+    text: Сэм, ты можешь повторить, пожалуйста? (неформально, на «ты»)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sam, {item} ripetere, per favore?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Puoi — неформальная форма, её используют с другом.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit23.lesson02.translate.006
+  lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+  type: translation
+  frame:
+    text: Говори помедленнее, пожалуйста. (неформально, на «ты»)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Parla più {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Piano может значить «медленный» или «медленно».
+    language_code: ru
+    direction: ltr
