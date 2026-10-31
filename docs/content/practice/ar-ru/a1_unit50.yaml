@@ -1,0 +1,261 @@
+schema_version: '1.0'
+pack_key: practice.ar-ru.a1.unit50
+source_language: ar
+target_language: ru
+unit_content_key: ru.a1.unit50.museum
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_большой
+    - w_выставка
+    - w_гид
+    - w_закрываться
+    - w_зал
+    - w_картина
+    - w_картины
+    - w_концерт
+    - w_осматриваю
+    - w_открыто
+    - w_посетить
+templates:
+- content_key: practice.ar-ru.ru.a1.unit50.lesson01.choose.001
+  lesson_content_key: ru.a1.unit50.lesson01.ya_khochu_poyti_v
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ru
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_посетить
+        - w_выставка
+        - w_осматриваю
+        - w_закрываться
+        - w_гид
+        - w_зал
+        - w_большой
+        - w_картина
+        - w_открыто
+        - w_картины
+        - w_концерт
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} من كلمات هذه الوحدة، من درس أريد الذهاب إلى المتحف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson02.listen.001
+  lesson_content_key: ru.a1.unit50.lesson02.ya_khochu_kupit_bilet
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} من كلمات هذه الوحدة، من درس أريد شراء تذكرة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson03.translate.001
+  lesson_content_key: ru.a1.unit50.lesson03.vo_skolko_zakryvaetsya_muzey
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} من كلمات هذه الوحدة، من درس في أي ساعة يُغلق المتحف؟'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson04.match.001
+  lesson_content_key: ru.a1.unit50.lesson04.v_muzee
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: طابق كل كلمة روسية مع معناها بالعربية؛ الكلمات من دروس هذه الوحدة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson05.choose.001
+  lesson_content_key: ru.a1.unit50.lesson05.chitaem_tablichku
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} من كلمات هذه الوحدة، من درس قراءة لافتة المعلومات.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson06.translate.001
+  lesson_content_key: ru.a1.unit50.lesson06.dima_nina_i_nastya
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} إحدى كلمات هذه الوحدة، من درس ديما ونينا وناستيا في المتحف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson01.order.002
+  lesson_content_key: ru.a1.unit50.lesson01.ya_khochu_poyti_v
+  type: word_order
+  frame:
+    text: Я хочу {item} музей.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_посетить
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я хочу {item} музей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: أريد زيارة المتحف. «посетить» تعني يزور.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson02.order.002
+  lesson_content_key: ru.a1.unit50.lesson02.ya_khochu_kupit_bilet
+  type: word_order
+  frame:
+    text: Я {item} выставку.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_осматриваю
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item} выставку.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: أنا أزور المعرض. «осматриваю» تعني أتجوّل لأشاهد، أزور (معلمًا).
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson04.order.002
+  lesson_content_key: ru.a1.unit50.lesson04.v_muzee
+  type: word_order
+  frame:
+    text: Хорошо, а {item} вам тоже нужен?
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_гид
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хорошо, а {item} вам тоже нужен?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: رائع، وهل تحتاج إلى مرشد أيضًا؟ «гид» تعني مرشدًا (شخصًا).
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit50.lesson06.order.002
+  lesson_content_key: ru.a1.unit50.lesson06.dima_nina_i_nastya
+  type: word_order
+  frame:
+    text: Я иду на {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_концерт
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я иду на {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: أنا ذاهب إلى حفلة موسيقية. «концерт» تعني حفلة موسيقية.
+    language_code: ar
+    direction: rtl

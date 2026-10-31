@@ -1,0 +1,479 @@
+schema_version: '1.0'
+pack_key: practice.ar-ru.a1.unit24
+source_language: ar
+target_language: ru
+unit_content_key: ru.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_карта
+    - w_картой
+    - w_наличными
+    - w_нужен
+    - w_нужны
+    - w_рубли
+    - w_только
+    - w_триста
+    - w_чек
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_картой
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужны
+  p4: &id004
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_наличными
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_рубли
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_нужен
+      - w_триста
+      - w_только
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужен
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_триста
+  p9: &id009
+    language_code: ru
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_только
+  p10: &id010
+    language_code: ru
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_триста
+      - w_только
+  p11: &id011
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+      - w_чек
+      - w_триста
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_чек
+templates:
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.choose.001
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными تعني «نقدًا» وкартой تعني «بالبطاقة»؛ وكلتاهما بصيغة الحالة الأداتية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.order.002
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: word_order
+  frame:
+    text: Можно {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Можно مع الصيغة الأداتية تسأل: هل يمكن الدفع بهذه الطريقة؟'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.fill.003
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Можно {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Карта تصبح картой، أي «بالبطاقة»، بعد можно.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.fill.004
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Мне {item} рубли. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تتفق нужны مع الاسم الجمع рубли.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.translate.005
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: هل يمكنني الدفع بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Можно مع картой تسأل: هل الدفع بالبطاقة ممكن؟'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.translate.006
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: يمكنك الدفع نقدًا.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно تعني «ممكن» أو «يجوز».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.translate.007
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: أحتاج إلى روبلات.
+    language_code: ar
+    direction: rtl
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {a} {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: تتفق нужны مع الجمع рубли.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.choose.001
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: كلمة чек مذكّرة، لذا تأتي معها нужен؛ ومع الأشياء بصيغة الجمع تأتي нужны.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.order.002
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: word_order
+  frame:
+    text: Чек {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: تتفق нужен مع الاسم المذكّر чек.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.fill.003
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: С вас {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بعد триста، أي «ثلاثمئة»، يأتي الجمع рублей.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.fill.004
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Сегодня {item} наличными. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تحصر только ما يأتي بعدها، أي «فقط».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.fill.005
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Чек {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: нужен مذكّر ويتفق مع чек.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.translate.006
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: هل الإيصال مطلوب؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: نужен بصيغة المذكّر لتتفق مع чек.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.translate.007
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: المطلوب منك ثلاثمئة روبل.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: С вас {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: С вас تعني حرفيًا «منكم»، وهي الطريقة المهذّبة التي يذكر بها الكاشير المبلغ.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.translate.008
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: نقدًا فقط اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} наличными.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: تأتي только قبل ما تحصره.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.translate.009
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هذه كلمات يومية عند شباك الدفع.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson02.match.010
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: تُستعمل нужны مع الأشياء بصيغة الجمع، وнужен مع الشيء المفرد المذكّر.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-ru.ru.a1.unit24.lesson01.listen.008
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными تعني «نقدًا»؛ أما карта وрубли وчек فهي أسماء الدفع المجرّدة.
+    language_code: ar
+    direction: rtl
