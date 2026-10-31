@@ -447,7 +447,7 @@ Rules (checked by `inject`):
    unless the currency or unit is part of the {t_en} cultural setting (then keep it).
 6. Learner-facing text only: no authoring jargon, no ids, no notes to the reviewer, no remark that the text was translated.
 7. Course titles read like "<{t_en} in {n_en}> A1" in the {n_en} naming style of the other courses of the app.
-{"8. " + ("RTL language: logical-order text, no bidi control characters; " if new_code in dd.RTL else "") + f"{t_en} words quoted in the text stay in Latin script (inside the *asterisk* spans); never transliterate them into the {n_en} script and never leave English words in the text." if new_code in dd.NON_LATIN and target not in dd.NON_LATIN else ""}
+{"8. " + ("RTL language: logical-order text, no bidi control characters; " if new_code in dd.RTL else "") + f"{t_en} words quoted in the text stay in Latin script (inside the *asterisk* spans); never transliterate them into the {n_en} script and never leave English words in the text. Grammar terms (article, infinitive, present perfect, subject, plural...) are written in {n_en} script, never as Latin-script English words or in parentheses after the {n_en} term." if new_code in dd.NON_LATIN and target not in dd.NON_LATIN else ""}
 {"9. Dari (prs) is NOT Iranian Farsi: use Afghan Dari vocabulary, forms and the colloquial register above (no Tehrani contractions such as mikhoram/mitoonam, no Iranian-only words, no copied Farsi sentences); the Dari register checker (scripts/check_dari_register.py) must report 0 findings." if new_code == "prs" else ""}
 {"9. Farsi (fa) is Iranian Persian, not Dari: no Afghan-only vocabulary." if new_code == "fa" else ""}
 """
