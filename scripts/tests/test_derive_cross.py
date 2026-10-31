@@ -355,3 +355,23 @@ def test_latin_in_cyrillic_flags_latin_in_ru_blocks_only(tmp_path):
     hits = dc.latin_in_cyrillic(p, "ru")
     assert len(hits) == 1 and "tea" in hits[0]
     assert dc.latin_in_cyrillic(p, "es") == []
+
+
+def test_cross_guide_has_no_english_script_note_and_a_dari_rule():
+    g = dc.cross_guide("en-es", "hi", "es")
+    assert "English words in Latin script" not in g
+    assert "words quoted in the text stay in Latin script" in g
+    assert "Dari (prs) is NOT Iranian Farsi" not in g
+    prs = dc.cross_guide("en-de", "prs", "de")
+    assert "Dari (prs) is NOT Iranian Farsi" in prs and "check_dari_register.py" in prs
+    assert "RTL language" in prs and "RTL language" not in g
+    assert "not Dari" in dc.cross_guide("en-es", "fa", "es")
+    assert "words quoted in the text" not in dc.cross_guide("en-es", "de", "es")      # Latin learner: no script rule
+
+
+def test_dari_register_checker_covers_cross_pair_lanes():
+    import check_dari_register as cdr
+    rels = [r for r, _ in cdr.PRS_LANES]
+    assert "overlays/prs-en" in rels
+    assert all(r.startswith(("overlays/prs-", "practice/prs-")) or r in rels for r in rels)
+    assert [r for r, _ in cdr._cross_prs_lanes() if r.endswith("prs-en")] == []

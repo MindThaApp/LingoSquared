@@ -419,6 +419,9 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
 def cross_guide(sib_code: str, new_code: str, target: str) -> str:
     n_en, _, n_notes = dd.LANG.get(new_code, (new_code, new_code, ""))
     t_en = dd.lang_name(target)
+    # the shared LANG note was written for English-source courses ("English words stay in Latin script"); here the Latin-script
+    # words are the TARGET language's, and there is no English in the learner's text
+    n_notes = n_notes.replace(" Keep English words in Latin script.", "")
     return f"""# Translator guide: English -> {n_en} (learner language {new_code}, target {target} = {t_en})
 
 You translate flat item files, not YAML. For every `NAME.src.json` write `NAME.tr.json`:
@@ -444,7 +447,9 @@ Rules (checked by `inject`):
    unless the currency or unit is part of the {t_en} cultural setting (then keep it).
 6. Learner-facing text only: no authoring jargon, no ids, no notes to the reviewer, no remark that the text was translated.
 7. Course titles read like "<{t_en} in {n_en}> A1" in the {n_en} naming style of the other courses of the app.
-{"8. RTL language: logical-order text, no bidi control characters; Latin-script target words stay in Latin script." if new_code in dd.RTL else ""}
+{"8. " + ("RTL language: logical-order text, no bidi control characters; " if new_code in dd.RTL else "") + f"{t_en} words quoted in the text stay in Latin script (inside the *asterisk* spans); never transliterate them into the {n_en} script and never leave English words in the text." if new_code in dd.NON_LATIN and target not in dd.NON_LATIN else ""}
+{"9. Dari (prs) is NOT Iranian Farsi: use Afghan Dari vocabulary, forms and the colloquial register above (no Tehrani contractions such as mikhoram/mitoonam, no Iranian-only words, no copied Farsi sentences); the Dari register checker (scripts/check_dari_register.py) must report 0 findings." if new_code == "prs" else ""}
+{"9. Farsi (fa) is Iranian Persian, not Dari: no Afghan-only vocabulary." if new_code == "fa" else ""}
 """
 
 
