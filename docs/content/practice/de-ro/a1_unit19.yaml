@@ -1,0 +1,448 @@
+schema_version: '1.0'
+pack_key: practice.de-ro.a1.unit19
+source_language: de
+target_language: ro
+unit_content_key: ro.a1.unit19.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_vreme
+    - w_vremea
+    - w_soare
+    - w_cald
+    - w_plouă
+    - w_vânt
+    - w_frig
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_vreme
+      - w_vremea
+      - w_soare
+      - w_cald
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_plouă
+      - w_vânt
+      - w_frig
+      - w_soare
+      - w_cald
+  m6: &id006
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_vreme
+      - w_soare
+      - w_cald
+      - w_plouă
+      - w_vânt
+      - w_frig
+  t_vremea: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_vremea
+  t_soare: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_soare
+  t_cald: &id004
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_cald
+  t_plouea: &id007
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_plouă
+  t_vant: &id008
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_vânt
+  t_frig: &id009
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_frig
+templates:
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.choose.001
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Vremea ist vreme plus der Artikel -a: das Wetter.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.listen.002
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cum este vremea? fragt nach dem Wetter.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.order.003
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: word_order
+  frame:
+    text: Cum este {item}?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cum este {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cum este fragt, wie etwas ist; vremea ist das Wetter.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.order.004
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: word_order
+  frame:
+    text: Astăzi este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Astăzi este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Auf Rumänisch sagt man wörtlich „heute ist Sonne“, um „es ist sonnig“ auszudrücken.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.order.005
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: word_order
+  frame:
+    text: Astăzi este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Astăzi este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'In Wettersätzen wird cald an nichts angeglichen: este cald bedeutet „es ist warm“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.fill.006
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: fill_in_blank
+  frame:
+    text: Astăzi este {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Soare bezeichnet die Sonne und beschreibt auch sonniges Wetter.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.translate.007
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: translation
+  frame:
+    text: Wie ist das Wetter?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cum este {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vremea steht mit dem Artikel, weil es „das Wetter“ bedeutet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.translate.008
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: translation
+  frame:
+    text: Heute ist es sonnig.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Astăzi este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Este soare ist die übliche Art zu sagen, dass es sonnig ist.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson01.translate.009
+  lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+  type: translation
+  frame:
+    text: Heute ist es warm.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Astăzi este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cald bedeutet je nach Situation sowohl „warm“ als auch „heiß“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.choose.001
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Plouă bedeutet „es regnet“; vânt und frig sind Nomen, die nach este stehen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.listen.002
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Este vânt und este frig bestehen beide aus este plus einem Nomen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.match.003
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Vreme, soare, vânt und frig sind Nomen; plouă ist ein Verb; cald ist ein Adjektiv.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.order.004
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: word_order
+  frame:
+    text: Mâine {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mâine {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Plouă steht allein ohne Subjekt, wie „es regnet“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.order.005
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: word_order
+  frame:
+    text: Mâine este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mâine este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Este vânt sagt, dass es windig ist.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.fill.006
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: fill_in_blank
+  frame:
+    text: Mâine este {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Este frig sagt, dass es kalt ist.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.translate.007
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: translation
+  frame:
+    text: Morgen regnet es.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mâine {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Plouă braucht kein Wort für „es“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.translate.008
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: translation
+  frame:
+    text: Morgen ist es windig.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mâine este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vânt ist ein Nomen, deshalb sagt man auf Rumänisch wörtlich „es ist Wind“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit19.lesson02.translate.009
+  lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+  type: translation
+  frame:
+    text: Morgen ist es kalt.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mâine este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Frig ist ein Nomen, das nach este steht.
+    language_code: de
+    direction: ltr
