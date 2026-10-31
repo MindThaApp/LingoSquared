@@ -37,6 +37,17 @@ def test_compiler_localizes_learner_language_prompt_blocks():
     assert cc.localize_prompt_blocks(blocks, None, "es", "fr") == blocks
 
 
+def test_cloze_hint_override_keeps_target_block_language():
+    """A cloze prompt is ONE target-language block with a learner-language hint embedded ('Где ___ ...? (hint)').
+    The {index: text} override swaps the text only: the block stays language_code ru / ltr on purpose, so the speaker
+    button, TTS (sanitizeForSpeech drops the parenthesised hint) and the sentence's LTR layout keep working."""
+    import compile_content as cc
+    blocks = [{"text": "Где ___ библиотека? (is located)", "language_code": "ru", "direction": "ltr"}]
+    out = cc.localize_prompt_blocks(blocks, {"0": "Где ___ библиотека? (يقع)"}, "ar", "ru")
+    assert out == [{"text": "Где ___ библиотека? (يقع)", "language_code": "ru", "direction": "ltr"}]
+    assert blocks[0]["text"].endswith("(is located)")
+
+
 def test_prompt_block_validator_flags_unlocalized_blocks():
     import compile_content as cc
     real = {"target_language": "fr", "units": [{"lessons": [{"exercises": [
@@ -429,3 +440,38 @@ def test_english_in_nonlatin_ignores_dutch_words_that_are_also_english():
     assert f("सही क्रम है Mijn naam is Noor.", "nl") == []
     assert f("Dat past goed का मतलब है ठीक आता है।", "nl") == []
     assert f("यह is एक वाक्य है", "es") == ["is"]            # still English when the target is not Dutch
+
+
+def test_cards_claude_backend_uses_claude_call(monkeypatch, tmp_path):
+    """`cards --claude` must translate through claude_call (it once fell back to codex_call, which rejects model 'sonnet' with a 400)."""
+    import argparse
+    seen = {}
+
+    def fake(args, call=None, sleep=None, backend="codex"):
+        seen["call"], seen["backend"] = call, backend
+        return 0
+
+    monkeypatch.setattr(dc, "cmd_translate_codex", fake)
+    monkeypatch.setattr(dc.dd, "read_manifest", lambda *_: {"x-ru": ([], [])})
+    monkeypatch.setattr(dc.dd, "group_names", lambda *_: ["x-ru"])
+    monkeypatch.setattr(dc, "foreign_teaching_targets", lambda *a: {"k": ("card", "Hello")})
+    monkeypatch.setattr(dc, "foreign_prompt_blocks", lambda *a: {})
+    monkeypatch.setattr(dc, "cross_guide", lambda *a: "guide")
+    real = tmp_path / "r.yaml"; real.write_text("{}"); ov = tmp_path / "o.yaml"; ov.write_text("{}")
+    monkeypatch.setattr(dc, "ROOT", tmp_path)
+    monkeypatch.setattr(dc.dd, "read_manifest", lambda *_: {"x-ru": ([str(real)], [str(ov)])})
+    dc.cmd_cards(argparse.Namespace(new="x-ru", levels=["a1"], work=str(tmp_path / "w"), claude=True, codex=False))
+    assert seen["backend"] == "claude" and seen["call"] is dc.claude_call
+
+
+def test_prompt_block_dict_form_rejects_learner_language_blocks():
+    """The {index: text} override keeps language_code, so it is only valid on target-coded blocks (hint embedded in a ru/es/fr sentence);
+    an English-coded block must use the list form, which recodes it to the learner language."""
+    import compile_content as cc
+    real = {"target_language": "ru", "units": [{"lessons": [{"exercises": [
+        {"content_key": "ru.x", "prompt": {"target_blocks": [
+            {"text": "What day is it? — ___ среда. (today)", "language_code": "en"}]}}]}]}]}
+    for override, errors in (({"0": "Welke dag? — ___ среда. (vandaag)"}, 1), (["Welke dag? — ___ среда. (vandaag)"], 0)):
+        report = cc.Report()
+        cc.validate_prompt_block_localization(real, {"source_language": "nl", "exercises": {"ru.x": {"prompt_blocks": override}}}, report)
+        assert len(report.errors) == errors, report.errors
