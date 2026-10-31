@@ -1,0 +1,455 @@
+schema_version: '1.0'
+pack_key: practice.hi-pl.a1.unit20
+source_language: hi
+target_language: pl
+unit_content_key: pl.a1.unit20.ubrania
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_sklep
+    - w_koszula
+    - w_spodnie
+    - w_kupić
+    - w_koszulę
+    - w_sukienka
+    - w_kolor
+    - w_niebieska
+    - w_czerwona
+    - w_rozmiar
+    - w_chce
+slot_presets:
+  u20_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_sklep
+      - w_koszula
+      - w_spodnie
+      - w_kupić
+      - w_koszulę
+  u20_mp1: &id002
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_sklep
+      - w_koszula
+      - w_spodnie
+      - w_kupić
+      - w_koszulę
+      - w_sukienka
+  s_spodnie: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_spodnie
+  s_koszule: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_koszulę
+  u20_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_kolor
+      - w_sukienka
+      - w_niebieska
+      - w_czerwona
+  s_niebieska: &id006
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_niebieska
+  s_czerwona: &id007
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_czerwona
+  s_kolor: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_kolor
+  u20_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_rozmiar
+      - w_chce
+      - w_kolor
+      - w_sklep
+  s_chce: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_chce
+templates:
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.choose.001
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Spodnie पोलिश में हमेशा बहुवचन में रहता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.listen.002
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Koszula मूल रूप है और koszulę वह रूप है जो kupić के बाद वस्तु के लिए आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.match.003
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Koszula, sukienka और spodnie कपड़े हैं; koszula और sukienka स्त्रीलिंग एकवचन हैं, spodnie बहुवचन है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.order.004
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: word_order
+  frame:
+    text: To są {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: To są {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Spodnie बहुवचन है, इसलिए इसके साथ jest की जगह są आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.fill.005
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: fill_in_blank
+  frame:
+    text: Chcę kupić {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: kupić के बाद -a पर समाप्त होने वाली स्त्रीलिंग संज्ञा -ę पर समाप्त होती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.translate.006
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: translation
+  frame:
+    text: ये पैंट हैं।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: To są {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Spodnie बहुवचन है, इसलिए क्रिया są आती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson01.translate.007
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: translation
+  frame:
+    text: मैं एक कमीज़ खरीदना चाहता हूँ।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chcę kupić {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: जो चीज़ आप खरीदते हैं, वह वस्तु-रूप koszulę में आती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.choose.001
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Niebieska और czerwona स्त्रीलिंग हैं और koszula तथा sukienka के अनुसार आते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.listen.002
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'रंग बताने वाले विशेषण संज्ञा के अनुसार बदलते हैं: स्त्रीलिंग संज्ञा के साथ वे -a पर समाप्त होते हैं।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.order.003
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: word_order
+  frame:
+    text: Koszula jest {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koszula jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Niebieska स्त्रीलिंग है और koszula के अनुसार आया है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.fill.004
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: fill_in_blank
+  frame:
+    text: Koszula jest {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: विशेषण koszula का स्त्रीलिंग रूप अपनाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.translate.005
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: ड्रेस लाल है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sukienka jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Czerwona स्त्रीलिंग संज्ञा sukienka के साथ मेल खाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.translate.006
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: कमीज़ नीली है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koszula jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Niebieska स्त्रीलिंग संज्ञा koszula के साथ मेल खाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson02.translate.007
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: कौन-सा रंग?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Jaki {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jaki पुल्लिंग है, यह kolor से मेल खाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson03.choose.001
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chce, chcieć का वह/वह (स्त्री) या औपचारिक "आप" वाला रूप है; Co pan chce? विनम्र वाक्य है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson03.listen.002
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Rozmiar का अर्थ "आकार/साइज़" है और यह पुल्लिंग है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson03.order.003
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: word_order
+  frame:
+    text: Co pan {item} kupić?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item} kupić?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Pan के साथ "वह" वाला रूप chce आता है, chcesz नहीं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit20.lesson03.translate.004
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: translation
+  frame:
+    text: आप क्या खरीदना चाहते हैं? (किसी पुरुष से, औपचारिक pan)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item} kupić?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Pan के साथ chce आता है, जो "वह" वाले रूप जैसा ही है।
+    language_code: hi
+    direction: ltr
