@@ -1,0 +1,410 @@
+schema_version: '1.0'
+pack_key: practice.ru-it.a1.unit60
+source_language: ru
+target_language: it
+unit_content_key: it.a1.unit60.farmacia
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_acqua
+    - w_aiutarla
+    - w_antidolorifici
+    - w_antidolorifico
+    - w_comprare
+    - w_compressa
+    - w_compresse
+    - w_deve
+    - w_etichetta
+    - w_farmacista
+    - w_mal
+    - w_medicinale
+    - w_meglio
+    - w_paracetamolo
+    - w_posologia
+    - w_prendere
+    - w_prenderli
+    - w_prenderlo
+    - w_preso
+    - w_riposarsi
+    - w_riposati
+    - w_scatola
+templates:
+- content_key: practice.ru-it.it.a1.unit60.lesson01.choose.001
+  lesson_content_key: it.a1.unit60.lesson01.ho_mal_di_testa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: it
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_mal
+        - w_comprare
+        - w_antidolorifico
+        - w_compressa
+        - w_prendere
+        - w_deve
+        - w_medicinale
+        - w_prenderlo
+        - w_posologia
+        - w_scatola
+        - w_compresse
+        - w_farmacista
+        - w_aiutarla
+        - w_antidolorifici
+        - w_prenderli
+        - w_etichetta
+        - w_paracetamolo
+        - w_acqua
+        - w_meglio
+        - w_riposarsi
+        - w_riposati
+        - w_preso
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого модуля, из урока «У меня болит голова».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson02.listen.001
+  lesson_content_key: it.a1.unit60.lesson02.prendere_una_compressa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого модуля, из урока «Принимать таблетку».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson03.translate.001
+  lesson_content_key: it.a1.unit60.lesson03.leggere_la_posologia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого модуля, из урока «Читаем дозировку».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson04.match.001
+  lesson_content_key: it.a1.unit60.lesson04.in_farmacia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое итальянское слово с его русским значением; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson05.choose.001
+  lesson_content_key: it.a1.unit60.lesson05.leggere_l_etichetta
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого модуля, из урока «Читаем этикетку».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson06.translate.001
+  lesson_content_key: it.a1.unit60.lesson06.marco_chiede_come_sta
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого модуля, из урока «Марко спрашивает, как она себя чувствует».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson01.order.002
+  lesson_content_key: it.a1.unit60.lesson01.ho_mal_di_testa
+  type: word_order
+  frame:
+    text: Ho {item} di testa.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mal
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho {item} di testa.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: У меня болит голова. mal — боль.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson01.fill.003
+  lesson_content_key: it.a1.unit60.lesson01.ho_mal_di_testa
+  type: fill_in_blank
+  frame:
+    text: Voglio {item} un antidolorifico. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_comprare
+    hint:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_comprare
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я хочу купить обезболивающее. comprare — покупать.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson02.order.002
+  lesson_content_key: it.a1.unit60.lesson02.prendere_una_compressa
+  type: word_order
+  frame:
+    text: Prenda una {item} con l'acqua.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_compressa
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Prenda una {item} con l'acqua.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Примите одну таблетку с водой. compressa — таблетка.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson02.fill.003
+  lesson_content_key: it.a1.unit60.lesson02.prendere_una_compressa
+  type: fill_in_blank
+  frame:
+    text: Deve {item} questo medicinale. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_prendere
+    hint:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_prendere
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Вы должны принимать это лекарство. prendere — принимать; брать.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson02.translate.004
+  lesson_content_key: it.a1.unit60.lesson02.prendere_una_compressa
+  type: translation
+  frame:
+    text: Как часто мне это принимать?
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_prenderlo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quante volte devo {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Как часто мне это принимать? prenderlo — принимать это.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson03.order.002
+  lesson_content_key: it.a1.unit60.lesson03.leggere_la_posologia
+  type: word_order
+  frame:
+    text: Legga la {item} sulla scatola.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_posologia
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Legga la {item} sulla scatola.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Прочитайте дозировку на коробке. posologia — дозировка.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson03.fill.003
+  lesson_content_key: it.a1.unit60.lesson03.leggere_la_posologia
+  type: fill_in_blank
+  frame:
+    text: Prenda due {item} al giorno. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_compresse
+    hint:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_compresse
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Принимайте две таблетки в день. compresse — таблетки.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson04.order.002
+  lesson_content_key: it.a1.unit60.lesson04.in_farmacia
+  type: word_order
+  frame:
+    text: Devo {item} con l'acqua?
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_prenderli
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Devo {item} con l'acqua?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Мне запивать их водой? prenderli — принимать их.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit60.lesson06.order.002
+  lesson_content_key: it.a1.unit60.lesson06.marco_chiede_come_sta
+  type: word_order
+  frame:
+    text: Va già {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_meglio
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Va già {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Уже лучше. meglio — лучше.
+    language_code: ru
+    direction: ltr
