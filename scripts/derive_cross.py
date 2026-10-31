@@ -1265,16 +1265,17 @@ def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str
     tv = {fold(t) for t in target_vocab(target)}
     src_words = None if src is None else {w.lower().replace("\u2019", "'") for w in LATIN_WORD.findall(_SPANS.sub(" ", src))}
     out = []
-    for m in LATIN_WORD.finditer(_SPANS.sub(" ", v)):
+    body = _SPANS.sub(" ", v)                       # offsets below refer to `body`, not to `v`
+    for m in LATIN_WORD.finditer(body):
         w = m.group(0)
         t = w.lower().replace("\u2019", "'")
         if t not in vocab or (t in STOP and t not in EN_ONLY):
             continue
         if src_words is not None and t not in src_words:
             continue
-        if t in ("am", "pm") or v[max(0, m.start() - 1):m.start()] == "-":
+        if t in ("am", "pm") or body[max(0, m.start() - 1):m.start()] == "-":
             continue                                # AM/PM and verb endings (-er, -ar) are written in Latin on purpose
-        if w[0].isupper() and fold(t) in tv and v.find(w) > 0:
+        if w[0].isupper() and fold(t) in tv and body.find(w) > 0:
             continue                                # name or loanword mid-sentence
         if fold(t) in tv and t not in EN_STRONG and t not in GRAMMAR_ENGLISH:
             continue                                # Spanish (or cognate) word
