@@ -1,0 +1,425 @@
+schema_version: '1.0'
+pack_key: practice.ru-ro.a1.unit17
+source_language: ru
+target_language: ro
+unit_content_key: ro.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_lucrează
+    - w_inginer
+    - w_birou
+    - w_școală
+    - w_profesoară
+    - w_lucrați
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_lucrează
+      - w_inginer
+      - w_birou
+      - w_școală
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_profesoară
+      - w_școală
+      - w_lucrați
+      - w_inginer
+  m6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_lucrează
+      - w_inginer
+      - w_birou
+      - w_profesoară
+      - w_școală
+      - w_lucrați
+  t_lucreaza: &id004
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lucrează
+  t_inginer: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_inginer
+  t_birou: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_birou
+  t_prof: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_profesoară
+  t_scoala: &id008
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_școală
+  t_lucrati: &id009
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lucrați
+templates:
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.choose.001
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lucrează подходит и для «он», и для «она»; Mihai lucrează la birou.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.listen.002
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Inginer мужского рода, а birou среднего; в единственном числе оба берут un: un inginer, un birou.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.order.003
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: word_order
+  frame:
+    text: Mihai este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Названия профессии в румынском стоит без артикля: Mihai este inginer.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.order.004
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: word_order
+  frame:
+    text: Lucrează la {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrează la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La значит «в, на», а birou после него стоит без артикля.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.fill.005
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: fill_in_blank
+  frame:
+    text: Mihai {item} la birou. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lucrează — форма «он/она» глагола «работать».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.translate.006
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Mihai — инженер.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Перед названием профессии в румынском не нужно никакого дополнительного слова.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.translate.007
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Mihai работает в офисе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai {item} la birou.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrează употребляется для «он» и «она», поэтому подходит к Mihai.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson01.translate.008
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Он работает в офисе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrează la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: В румынском «он» или «она» часто опускают, если это понятно по глаголу.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.choose.001
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Profesoară — форма женского рода; lucrați — вежливое «вы работаете».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.listen.002
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lucrați — это форма вежливого обращения (dumneavoastră), её используют с человеком, к которому обращаются на «вы».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.match.003
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Эти слова обозначают профессии, места работы и глаголы со значением «работать»; lucrează и lucrați различаются лицом.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.order.004
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: word_order
+  frame:
+    text: Sunt {item}. Lucrez la școală.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}. Lucrez la școală.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Profesoară оканчивается на -ă, потому что говорит женщина.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.order.005
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: word_order
+  frame:
+    text: Lucrez la {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrez la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Școală — существительное женского рода; lucrez la școală означает «я работаю в школе».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.fill.006
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: fill_in_blank
+  frame:
+    text: Unde {item}? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Lucrați — вежливый вопрос: где вы работаете?'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.translate.007
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Где вы работаете? (вежливо, к человеку, к которому обращаются на dumneavoastră)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Unde {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrați употребляется с dumneavoastră; с другом ты сказал бы lucrezi.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.translate.008
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Я учитель. (говорит женщина)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Profesoară — название профессии в женском роде; в румынском здесь не нужен артикль.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit17.lesson02.translate.009
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Я работаю в школе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrez la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrez — форма для «я», а la означает «в» или «на».
+    language_code: ru
+    direction: ltr
