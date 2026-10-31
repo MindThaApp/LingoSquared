@@ -1,0 +1,425 @@
+schema_version: '1.0'
+pack_key: practice.de-ro.a1.unit17
+source_language: de
+target_language: ro
+unit_content_key: ro.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_lucrează
+    - w_inginer
+    - w_birou
+    - w_școală
+    - w_profesoară
+    - w_lucrați
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_lucrează
+      - w_inginer
+      - w_birou
+      - w_școală
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_profesoară
+      - w_școală
+      - w_lucrați
+      - w_inginer
+  m6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_lucrează
+      - w_inginer
+      - w_birou
+      - w_profesoară
+      - w_școală
+      - w_lucrați
+  t_lucreaza: &id004
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lucrează
+  t_inginer: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_inginer
+  t_birou: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_birou
+  t_prof: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_profesoară
+  t_scoala: &id008
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_școală
+  t_lucrati: &id009
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lucrați
+templates:
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.choose.001
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lucrează passt zu „er“ und „sie“; Mihai lucrează la birou.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.listen.002
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Inginer ist maskulin und birou ist neutral; beide haben im Singular un: un inginer, un birou.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.order.003
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: word_order
+  frame:
+    text: Mihai este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Bei Berufen lässt das Rumänische den Artikel weg: Mihai este inginer.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.order.004
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: word_order
+  frame:
+    text: Lucrează la {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrează la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La bedeutet „in/bei“, und birou steht hier ohne Artikel dahinter.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.fill.005
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: fill_in_blank
+  frame:
+    text: Mihai {item} la birou. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lucrează ist die Form für „er/sie arbeitet“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.translate.006
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Mihai ist Ingenieur.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vor dem Beruf steht kein Artikel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.translate.007
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Mihai arbeitet im Büro.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai {item} la birou.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrează wird für „er/sie“ verwendet, passt also zu Mihai.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson01.translate.008
+  lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+  type: translation
+  frame:
+    text: Er arbeitet im Büro.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrează la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Das Rumänische lässt „er“ oder „sie“ oft weg, wenn die Verbform es schon klar macht.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.choose.001
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Profesoară ist die feminine Form; lucrați ist das höfliche „arbeiten Sie“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.listen.002
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lucrați ist die dumneavoastră-Form, die man bei Personen verwendet, die man siezt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.match.003
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Diese Wörter nennen Berufe, Arbeitsorte und Verben des Arbeitens; lucrează und lucrați unterscheiden sich in der Person.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.order.004
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: word_order
+  frame:
+    text: Sunt {item}. Lucrez la școală.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}. Lucrez la școală.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Profesoară endet auf -ă, weil die sprechende Person eine Frau ist.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.order.005
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: word_order
+  frame:
+    text: Lucrez la {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrez la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Școală ist feminin; lucrez la școală bedeutet „Ich arbeite in der Schule“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.fill.006
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: fill_in_blank
+  frame:
+    text: Unde {item}? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Lucrați ist die höfliche Frage: Wo arbeiten Sie?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.translate.007
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Wo arbeiten Sie? (formell, zu jemandem, den Sie mit dumneavoastră ansprechen)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Unde {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrați gehört zu dumneavoastră; zu einem Freund würden Sie lucrezi sagen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.translate.008
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Ich bin Lehrerin. (von einer Frau gesagt)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Profesoară ist die feminine Berufsbezeichnung; ein Artikel ist nicht nötig.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit17.lesson02.translate.009
+  lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+  type: translation
+  frame:
+    text: Ich arbeite in einer Schule.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lucrez la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Lucrez ist die Ich-Form und la bedeutet „in/bei“.
+    language_code: de
+    direction: ltr

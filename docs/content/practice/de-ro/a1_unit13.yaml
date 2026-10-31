@@ -1,0 +1,366 @@
+schema_version: '1.0'
+pack_key: practice.de-ro.a1.unit13
+source_language: de
+target_language: ro
+unit_content_key: ro.a1.unit13.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_cafeaua
+    - w_ceaiul
+    - w_pâinea
+    - w_prefer
+    - w_sau
+slot_presets:
+  f_pool: &id001
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cafeaua
+      - w_ceaiul
+      - w_pâinea
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - particle
+    - verb
+    agreement_tags:
+      semantic:
+      - w_prefer
+      - w_sau
+      - w_cafeaua
+      - w_ceaiul
+      - w_pâinea
+  t_cafeaua: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cafeaua
+  t_ceaiul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ceaiul
+  t_painea: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pâinea
+  t_sau: &id006
+    language_code: ro
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_sau
+templates:
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.choose.001
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Das Rumänische setzt den Artikel ans Ende: Aus cafea wird cafeaua und aus ceai wird ceaiul.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.listen.002
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cafeaua, ceaiul und pâinea sind bestimmte Formen; die Endung -a oder -ul übernimmt die Aufgabe des Artikels.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.order.003
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: word_order
+  frame:
+    text: Îmi place {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Îmi place plus ein Nomen mit Artikel drückt aus, dass Sie diese Sache mögen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.order.004
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: word_order
+  frame:
+    text: Nu-mi place {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu-mi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Nu-mi place ist die Verneinung; das Nomen behält seinen Artikel: pâinea.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.fill.005
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: fill_in_blank
+  frame:
+    text: Îmi place {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ceaiul ist ceai plus der Artikel -ul, es bedeutet also „der Tee“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.translate.006
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Ich mag den Tee.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Îmi place funktioniert wie „es gefällt mir“, daher steht das, was man mag, danach.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.translate.007
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Ich mag den Kaffee nicht.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu-mi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Nu-mi ist nu plus ein verkürztes îmi, mit Bindestrich verbunden: gefällt mir nicht.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson01.translate.008
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Ich mag {item}.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Das, was Ihnen gefällt, ist das Subjekt von place: Îmi place cafeaua, Îmi place ceaiul, Îmi place pâinea.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.choose.001
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Prefer bedeutet „ich bevorzuge“, und sau verbindet zwei Möglichkeiten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.listen.002
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Sau bedeutet „oder“, wie in cafea sau ceai.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.order.003
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: word_order
+  frame:
+    text: Prefer {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Prefer {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Prefer heißt „ich bevorzuge“; was Sie bevorzugen, folgt danach mit seinem Artikel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.order.004
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: word_order
+  frame:
+    text: Cafea {item} ceai?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cafea {item} ceai?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Sau bietet die Wahl zwischen zwei Dingen an.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.fill.005
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: fill_in_blank
+  frame:
+    text: Cafea {item} ceai? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sau bedeutet „oder“ und ändert nie seine Form.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.translate.006
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Gefällt Ihnen der Kaffee? (formell, zu jemandem, den Sie mit dumneavoastră ansprechen)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vă place {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vă place ist die Frage mit dumneavoastră; bei einem Freund würden Sie Îți place sagen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.translate.007
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Ich bevorzuge den Kaffee.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Prefer {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Prefer braucht kein eigenes Wort für „ich“; die Endung zeigt die Person an.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit13.lesson02.translate.008
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Kaffee oder Tee?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cafea {item} ceai?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Sau verbindet die beiden Möglichkeiten in einer kurzen Frage.
+    language_code: de
+    direction: ltr

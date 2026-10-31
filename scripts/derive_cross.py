@@ -1383,6 +1383,10 @@ UNCHANGED_OK = {
     ("de", "winter in madrid"),     # German title is the same two words plus a place name
     ("fr", "football / yoga"),      # gloss of es "fútbol / yoga": French uses the same two words as English
 }
+# Target-language strings (same in every pair) that read as English to the heuristic; keyed by target language.
+TARGET_UNCHANGED_OK = {
+    ("ro", "a elibera camera"),     # Romanian "to vacate the room" (matching clue; "a" + "camera" look English)
+}
 
 
 def unchanged_english(cross_json: Path, sib_json: Path, target: str, learner: str = "") -> list[str]:
@@ -1409,7 +1413,7 @@ def unchanged_english(cross_json: Path, sib_json: Path, target: str, learner: st
                 return                                    # "500 g": numbers and unit symbols
             if target == "nl" and set(toks) & NL_MARKERS and not set(toks) & EN_STRONG:
                 return                                    # Dutch sentence, same in every pair
-            if x.strip().casefold() in ts or (learner, x.strip().casefold()) in UNCHANGED_OK:
+            if x.strip().casefold() in ts or (learner, x.strip().casefold()) in UNCHANGED_OK or (target, x.strip().casefold()) in TARGET_UNCHANGED_OK:
                 return
             words_ = re.sub(r"[.!?,;:]", " ", x).split()
             if len(words_) <= 3 and words_ and all(w[:1].isupper() for w in words_):
