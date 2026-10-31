@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.fa-es.a1.unit10
+source_language: fa
+target_language: es
+unit_content_key: es.a1.unit10.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u10
+    - es_a1_u10_l01
+    - w_calor
+    - w_frío
+    - w_llueve
+    - w_nublado
+    - w_porque
+    - w_demasiado
+    - w_razón
+    - w_tienda
+slot_presets:
+  weather: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u10_l01
+  nouns: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u10
+  content: &id009
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  words: &id010
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  others: &id011
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  calor: &id003
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_calor
+  frio: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_frío
+  llueve: &id005
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_llueve
+  nublado: &id006
+    language_code: es
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_nublado
+  porque: &id007
+    language_code: es
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_porque
+  demasiado: &id008
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_demasiado
+  razon: &id012
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_razón
+  tienda: &id013
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tienda
+templates:
+- content_key: practice.fa-es.es.a1.unit10.lesson01.choose.001
+  lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'کلمه‌ی tiempo هم یعنی «هوا» و هم «زمان»: ¿Qué tiempo hace? درباره‌ی هوا می‌پرسه.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson01.listen.002
+  lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lluvia اسم است و یعنی «باران»؛ llueve فعل است و یعنی «باران می‌آد».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson02.order.001
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: word_order
+  frame:
+    text: En julio hace {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En julio hace {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'برای هوا در اسپانیایی از hacer با یک اسم استفاده می‌شه: hace calor، یعنی تحت‌اللفظی «گرما می‌کنه».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson02.translate.002
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: translation
+  frame:
+    text: در دسامبر هوا سرده.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En diciembre hace {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Frío اینجا بعد از hace اسم است؛ «خیلی سرد» می‌شه hace mucho frío، نه muy frío.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson02.fill.003
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: fill_in_blank
+  frame:
+    text: Hoy {item} y hace frío. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Llover فاعل نمی‌خواد: llueve یعنی «باران می‌آد» یا «باران داره می‌آد».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson02.order.004
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: word_order
+  frame:
+    text: Hoy está {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoy está {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: امروز هوا ابریه. Nublado صفت است، پس با está می‌آد، نه با hace.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson04.fill.001
+  lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+  type: fill_in_blank
+  frame:
+    text: Necesitamos agua {item} hace calor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Porque یک کلمه و بدون accent است و یعنی «چون»؛ ¿por qué? دو کلمه و با accent است و یعنی «چرا».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson04.translate.002
+  lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+  type: translation
+  frame:
+    text: در ژوئیه هوا زیادی گرمه.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En julio hace {item} calor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Demasiado یعنی «زیادی» و قبل از اسم می‌آد: demasiado calor.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson05.match.001
+  lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Es importante + مصدر برای توصیه کردن است: es importante llevar agua.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson05.translate.002
+  lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'واژه‌های هوا در اسپانیایی: sol، lluvia، viento و nube اسم هستند؛ nublado صفت است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson06.choose.001
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Prefiero از preferir می‌آد؛ e به ie تبدیل می‌شه: prefiero، prefieres.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson06.translate.002
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: translation
+  frame:
+    text: حق با شماست. (دوستانه)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tienes {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: در اسپانیایی برای «حق داشتن» از tener razón استفاده می‌شه، یعنی تحت‌اللفظی «دلیل داشتن».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-es.es.a1.unit10.lesson06.order.003
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: word_order
+  frame:
+    text: Hay una {item} cerca de aquí.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hay una {item} cerca de aquí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: یک مغازه نزدیک اینجا هست. Tienda مؤنث است، برای همین una می‌گیره.
+    language_code: fa
+    direction: rtl
