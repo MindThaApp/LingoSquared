@@ -1,0 +1,371 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a1.unit18
+source_language: fa
+target_language: nl
+unit_content_key: nl.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - room_word
+    - room_word_pure
+    - housing_vocab
+    - housing_vocab_pure
+    - home_adjective
+    - room_count_question
+    - room_count_question_pure
+slot_presets:
+  room_word:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_word
+  room_word_pure: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_word_pure
+  housing_vocab:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: housing_vocab
+  housing_vocab_pure: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: housing_vocab_pure
+  home_adjective: &id004
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: home_adjective
+  room_count_question:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_count_question
+  room_count_question_pure: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_count_question_pure
+templates:
+- content_key: practice.fa-nl.nl.a1.unit18.lesson01.order.001
+  lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} اسمِ این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson01.choose.002
+  lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های مربوط به خانه در این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson01.listen.003
+  lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson01.match.004
+  lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر واژهٔ مربوط به خانه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson02.translate.002
+  lesson_content_key: nl.a1.unit18.lesson02.hoeveel_kamers
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson03.choose.001
+  lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های مربوط به خانه در این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson03.listen.002
+  lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson04.translate.001
+  lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson04.order.002
+  lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+  type: word_order
+  frame:
+    text: Het appartement is {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het appartement is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} در این جمله آپارتمان را توصیف می‌کند.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson04.listen.003
+  lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson05.choose.001
+  lesson_content_key: nl.a1.unit18.lesson05.advertentie_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های آگهی مسکن است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson05.match.002
+  lesson_content_key: nl.a1.unit18.lesson05.advertentie_lezen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر واژهٔ مربوط به خانه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson06.listen.001
+  lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های این گفت‌وگو است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit18.lesson06.translate.002
+  lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
+  type: translation
+  frame:
+    text: آپارتمان {item} است.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het appartement is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het appartement is {item}.
+    language_code: nl
+    direction: ltr

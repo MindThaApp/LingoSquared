@@ -1,0 +1,263 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a1.unit11
+source_language: fa
+target_language: nl
+unit_content_key: nl.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - weekday
+    - plan_vocab
+    - accept_decline
+slot_presets:
+  weekday: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  plan_vocab: &id002
+    language_code: nl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic: plan_vocab
+  accept_decline_noun: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: accept_decline
+templates:
+- content_key: practice.fa-nl.nl.a1.unit11.lesson01.order.001
+  lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+  type: word_order
+  frame:
+    text: Zullen we {item} koffie drinken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} koffie drinken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} روزی است که برای قهوه پیشنهاد شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson01.choose.003
+  lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای از این درس دربارهٔ قرار گذاشتن است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson02.listen.001
+  lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson02.translate.003
+  lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+  type: translation
+  frame:
+    text: '{item} (یک واژهٔ هلندی، بدون de/het)'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای برای قبول یا رد کردن یک قرار است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson03.order.001
+  lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+  type: word_order
+  frame:
+    text: Zullen we {item} om half drie afspreken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} om half drie afspreken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} روزی است که برای دیدار پیشنهاد شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson03.translate.003
+  lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+  type: translation
+  frame:
+    text: بیایید {item} ساعت 2:30 همدیگر را ببینیم؟
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} om half drie afspreken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: بیایید {item} ساعت 2:30 همدیگر را ببینیم؟
+    slot_rendering:
+      item: english_gloss
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson04.choose.001
+  lesson_content_key: nl.a1.unit11.lesson04.een_bericht_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از کلمه‌های این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson05.listen.001
+  lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson05.translate.002
+  lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+  type: translation
+  frame:
+    text: '{item} (یک واژهٔ هلندی، بدون de/het)'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson06.order.001
+  lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+  type: word_order
+  frame:
+    text: Zullen we {item} koffie drinken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} koffie drinken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} روزی است که برای قهوه پیشنهاد شده است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit11.lesson06.listen.002
+  lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که در این گفتگو شنیدید.'
+    language_code: fa
+    direction: rtl
