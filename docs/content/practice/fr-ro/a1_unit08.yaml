@@ -1,0 +1,422 @@
+schema_version: '1.0'
+pack_key: practice.fr-ro.a1.unit08
+source_language: fr
+target_language: ro
+unit_content_key: ro.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_gară
+    - w_magazin
+    - w_bancă
+    - w_aproape
+    - w_departe
+    - w_spital
+    - w_poștă
+    - w_bibliotecă
+    - w_stație
+    - w_autobuz
+    - w_lângă
+    - w_vizavi
+    - w_între
+    - w_gara
+    - w_banca
+    - w_poșta
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_gară
+      - w_magazin
+      - w_bancă
+      - w_aproape
+      - w_departe
+  l2_pool: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_spital
+      - w_poștă
+      - w_bibliotecă
+      - w_stație
+      - w_autobuz
+      - w_lângă
+      - w_vizavi
+      - w_între
+  p_match: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_magazin
+      - w_bancă
+      - w_spital
+      - w_poștă
+      - w_bibliotecă
+      - w_autobuz
+  t_gara: &id005
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_gara
+  t_banca: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_banca
+  t_aproape: &id003
+    language_code: ro
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_aproape
+  t_vizavi: &id007
+    language_code: ro
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_vizavi
+  t_langa: &id008
+    language_code: ro
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_lângă
+  t_autobuz: &id009
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_autobuz
+  t_posta: &id010
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_poșta
+templates:
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.choose.001
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Gară désigne une gare, magazin un magasin et bancă une banque ; aproape et departe indiquent la distance.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.listen.002
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Aproape signifie « proche » et departe « loin » ; les deux décrivent où se trouve quelque chose.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.match.009
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Bancă, poștă et bibliotecă se terminent en -ă et sont féminins ; magazin, spital et autobuz n’ont pas cette terminaison.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.translate.004
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gară, magazin et bancă sont les noms sans article ; avec l’article, ils deviennent gara, magazinul et banca.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.order.005
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: word_order
+  frame:
+    text: Da, magazinul este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Da, magazinul este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aproape signifie « proche » ; Este aproape? demande si quelque chose est proche.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.fill.006
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: fill_in_blank
+  frame:
+    text: Unde este {item}? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'L’article se place à la fin : bancă devient banca, donc Unde este banca? signifie « Où est la banque ? »'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.translate.007
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: translation
+  frame:
+    text: Où est la gare ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Unde este {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Gară devient gara quand on ajoute l’article à la fin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson01.translate.008
+  lesson_content_key: ro.a1.unit08.lesson01.unde_este
+  type: translation
+  frame:
+    text: Le magasin est près d’ici.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Magazinul este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Magazinul, c’est magazin plus l’article -ul ; aproape est un adverbe et ne change jamais.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.choose.001
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Lângă, vizavi et între se placent avant le lieu indiqué : lângă bibliotecă, vizavi de magazin.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.listen.002
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Poștă est la poste et bibliotecă une bibliothèque ; stație est un arrêt et autobuz un bus.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.translate.003
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Spital et bibliotecă sont des noms ; lângă, vizavi et între sont des mots de lieu qui n’ont pas de terminaisons.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.order.004
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: word_order
+  frame:
+    text: Spitalul este {item} de magazin.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Spitalul este {item} de magazin.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Vizavi est toujours suivi de de : vizavi de magazin signifie « en face du magasin ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.order.005
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: word_order
+  frame:
+    text: Stația de autobuz este {item} bibliotecă.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Stația de autobuz este {item} bibliotecă.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Lângă signifie « à côté de » et se place directement devant le nom : lângă bibliotecă.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.fill.006
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: fill_in_blank
+  frame:
+    text: Stația de {item} este lângă bibliotecă. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Stația de autobuz est un arrêt de bus : l’article se joint à stație, pas à autobuz.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.translate.007
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: translation
+  frame:
+    text: L’hôpital est en face du magasin.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Spitalul este {item} de magazin.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Spital plus -ul donne spitalul ; vizavi demande de devant le second lieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit08.lesson02.translate.008
+  lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+  type: translation
+  frame:
+    text: Où est la poste ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Unde este {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Poștă devient poșta avec l’article ; le mot interrogatif unde ne change pas.
+    language_code: fr
+    direction: ltr
