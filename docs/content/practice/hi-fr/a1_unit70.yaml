@@ -1,0 +1,390 @@
+schema_version: '1.0'
+pack_key: practice.hi-fr.a1.unit70
+source_language: hi
+target_language: fr
+unit_content_key: fr.a1.unit70.hebergement
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_avait
+    - w_cet
+    - w_clé
+    - w_compris
+    - w_mot
+    - w_nuit
+    - w_nuits
+    - w_réceptionniste
+    - w_réservation
+    - w_réserver
+    - w_réservé
+    - w_wifi
+templates:
+- content_key: practice.hi-fr.fr.a1.unit70.lesson01.choose.001
+  lesson_content_key: fr.a1.unit70.lesson01.reserver_une_chambre
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_réserver
+        - w_cet
+        - w_réservé
+        - w_compris
+        - w_clé
+        - w_mot
+        - w_wifi
+        - w_réceptionniste
+        - w_réservation
+        - w_nuits
+        - w_nuit
+        - w_avait
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, जो कमरा बुक करने वाले पाठ से है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson02.listen.001
+  lesson_content_key: fr.a1.unit70.lesson02.est_ce_que_le
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ "क्या नाश्ता शामिल है?" से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson03.translate.001
+  lesson_content_key: fr.a1.unit70.lesson03.la_cle_et_le
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, जो चाबी और वाई-फ़ाई पासवर्ड वाले पाठ से है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson04.match.001
+  lesson_content_key: fr.a1.unit70.lesson04.s_enregistrer_a_la
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: हर फ़्रेंच शब्द को उसके हिंदी अर्थ से मिलाइए; शब्द इस यूनिट के पाठों से लिए गए हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson06.choose.001
+  lesson_content_key: fr.a1.unit70.lesson06.camille_appelle_a_propos
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ "Camille वीकेंड के बारे में फ़ोन करती है" से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson01.translate.002
+  lesson_content_key: fr.a1.unit70.lesson01.reserver_une_chambre
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, जो कमरा बुक करने वाले पाठ से है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson01.order.003
+  lesson_content_key: fr.a1.unit70.lesson01.reserver_une_chambre
+  type: word_order
+  frame:
+    text: Je veux {item} une chambre.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_réserver
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je veux {item} une chambre.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: मुझे एक कमरा बुक करना है। réserver का मतलब है बुक करना; आरक्षित करना।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson01.fill.004
+  lesson_content_key: fr.a1.unit70.lesson01.reserver_une_chambre
+  type: fill_in_blank
+  frame:
+    text: On va s'enregistrer {item} après-midi. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_cet
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_cet
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: आज दोपहर बाद हम चेक-इन करने वाले हैं। cet का मतलब है 'यह' (पुल्लिंग, स्वर से पहले)।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson01.translate.005
+  lesson_content_key: fr.a1.unit70.lesson01.reserver_une_chambre
+  type: translation
+  frame:
+    text: मैंने एक कमरा बुक किया हुआ है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_réservé
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'ai {item} une chambre.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: मैंने एक कमरा बुक किया है। réservé का मतलब है बुक किया हुआ; आरक्षित।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson02.order.002
+  lesson_content_key: fr.a1.unit70.lesson02.est_ce_que_le
+  type: word_order
+  frame:
+    text: Le petit-déjeuner est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_compris
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le petit-déjeuner est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: नाश्ता शामिल है। compris का मतलब है शामिल (पुल्लिंग)।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson03.order.002
+  lesson_content_key: fr.a1.unit70.lesson03.la_cle_et_le
+  type: word_order
+  frame:
+    text: Voici votre {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_clé
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voici votre {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: यह आपकी चाबी है। clé का मतलब है चाबी।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson03.fill.003
+  lesson_content_key: fr.a1.unit70.lesson03.la_cle_et_le
+  type: fill_in_blank
+  frame:
+    text: Le {item} de passe du wifi est sur la carte. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mot
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mot
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: वाईफ़ाई का पासवर्ड कार्ड पर है। mot का मतलब है शब्द।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson03.translate.004
+  lesson_content_key: fr.a1.unit70.lesson03.la_cle_et_le
+  type: translation
+  frame:
+    text: वाई-फ़ाई का पासवर्ड क्या है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_wifi
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quel est le mot de passe du {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: वाई-फ़ाई का पासवर्ड क्या है? wifi का मतलब है वाई-फ़ाई।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson04.order.002
+  lesson_content_key: fr.a1.unit70.lesson04.s_enregistrer_a_la
+  type: word_order
+  frame:
+    text: Pour combien de {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_nuits
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Pour combien de {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: कितनी रातों के लिए? nuits का मतलब है रातें।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fr.fr.a1.unit70.lesson04.fill.003
+  lesson_content_key: fr.a1.unit70.lesson04.s_enregistrer_a_la
+  type: fill_in_blank
+  frame:
+    text: Pour une {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_nuit
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_nuit
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: एक रात के लिए। nuit का मतलब है रात।
+    language_code: hi
+    direction: ltr
