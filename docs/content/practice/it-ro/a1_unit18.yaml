@@ -1,0 +1,494 @@
+schema_version: '1.0'
+pack_key: practice.it-ro.a1.unit18
+source_language: it
+target_language: ro
+unit_content_key: ro.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_casă
+    - w_cameră
+    - w_camere
+    - w_dormitor
+    - w_bucătărie
+    - w_baie
+    - w_are
+    - w_apartament
+    - w_fereastră
+    - w_apartamentul
+    - w_baia
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_casă
+      - w_cameră
+      - w_camere
+      - w_dormitor
+      - w_bucătărie
+      - w_baie
+      - w_are
+  l2_pool: &id010
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_apartament
+      - w_fereastră
+      - w_apartamentul
+      - w_baia
+      - w_casă
+  m6: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_casă
+      - w_cameră
+      - w_dormitor
+      - w_bucătărie
+      - w_baie
+      - w_apartament
+  fem4: &id009
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_casă
+      - w_cameră
+      - w_bucătărie
+      - w_baie
+  t_are: &id003
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_are
+  t_casa: &id008
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_casă
+  t_camera: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cameră
+  t_camere: &id005
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_camere
+  t_dormitor: &id006
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_dormitor
+  t_bucatarie: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_bucătărie
+  t_apartament: &id011
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_apartament
+  t_fereastra: &id012
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_fereastră
+  t_baia: &id013
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_baia
+templates:
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.choose.001
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Casă, cameră, bucătărie e baie sono tutte femminili e prendono o; dormitor prende un.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.listen.002
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cameră è una stanza e camere è il plurale, «stanze».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.match.003
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Casă, cameră, bucătărie e baie prendono o; dormitor e apartament prendono un.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.order.004
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: word_order
+  frame:
+    text: Ana {item} o casă mare.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ana {item} o casă mare.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Are è la forma di «ha» (lui o lei).
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.order.005
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: word_order
+  frame:
+    text: Ana are o {item} mare.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ana are o {item} mare.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cameră è femminile, quindi prende o; mare ha la stessa forma al maschile e al femminile.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.order.006
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: word_order
+  frame:
+    text: Casa are trei {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Casa are trei {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Dopo trei si usa il plurale camere.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.fill.007
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: fill_in_blank
+  frame:
+    text: Ana are un {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Dormitor è neutro, quindi al singolare prende un, non o.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.fill.008
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: fill_in_blank
+  frame:
+    text: Ana are o {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Bucătărie è femminile, quindi prende o.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.translate.009
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: translation
+  frame:
+    text: Ana ha una casa grande.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ana are o {item} mare.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Casă è femminile, quindi prende o.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.translate.010
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: translation
+  frame:
+    text: La casa ha tre stanze.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Casa are trei {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Camere è il plurale di cameră e segue il numero.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson01.translate.011
+  lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+  type: translation
+  frame:
+    text: 'Ana ha: {item}.'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ana are o {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Tutti e quattro questi sostantivi sono femminili, quindi ognuno prende o.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.choose.001
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Apartamentul e baia sono apartament e baie con l'articolo aggiunto.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.listen.002
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Fereastră è un sostantivo femminile: o fereastră.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.order.003
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: word_order
+  frame:
+    text: Mihai are un {item} mic.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai are un {item} mic.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Apartament è neutro, quindi al singolare prende un.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.order.004
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: word_order
+  frame:
+    text: Apartamentul are o {item} mare.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Apartamentul are o {item} mare.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Fereastră è femminile, quindi prende o e l'aggettivo mare.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.fill.005
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: fill_in_blank
+  frame:
+    text: Unde este {item}? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Baia è baie con l''articolo: «il bagno».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.translate.006
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: translation
+  frame:
+    text: Dov'è il bagno?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Unde este {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Baie termina in -e e prende -a per l''articolo: baia.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.translate.007
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: translation
+  frame:
+    text: Mihai ha un appartamento piccolo.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai are un {item} mic.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Un apartament mic: l''aggettivo segue il sostantivo.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ro.ro.a1.unit18.lesson02.translate.008
+  lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+  type: translation
+  frame:
+    text: L'appartamento ha una finestra grande.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Apartamentul are o {item} mare.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Apartamentul è apartament più -ul, quindi significa «l'appartamento».
+    language_code: it
+    direction: ltr
