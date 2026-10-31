@@ -1,0 +1,511 @@
+schema_version: '1.0'
+pack_key: practice.es-ro.a1.unit01
+source_language: es
+target_language: ro
+unit_content_key: ro.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bună
+    - w_ziua
+    - w_tu
+    - w_dumneavoastră
+    - w_bine
+    - w_mulțumesc
+    - w_faceți
+    - w_faci
+    - w_numesc
+    - w_cum
+    - w_numiți
+    - w_cheamă
+    - w_pare
+    - w_și
+    - w_Ana
+    - w_Mihai
+    - w_mie
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    - phrase
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_bună
+      - w_ziua
+      - w_tu
+      - w_dumneavoastră
+      - w_bine
+      - w_mulțumesc
+      - w_faceți
+      - w_faci
+  l1_match: &id002
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    - phrase
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ziua
+      - w_tu
+      - w_dumneavoastră
+      - w_bine
+      - w_mulțumesc
+      - w_faceți
+  l1_words: &id003
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    - phrase
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ziua
+      - w_tu
+      - w_dumneavoastră
+      - w_bine
+      - w_mulțumesc
+      - w_faci
+      - w_faceți
+  t_ziua: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ziua
+  t_dumneavoastra: &id005
+    language_code: ro
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_dumneavoastră
+  t_faci: &id006
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_faci
+  t_faceti: &id007
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_faceți
+  l2_pool: &id011
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - particle
+    - verb
+    agreement_tags:
+      semantic:
+      - w_numesc
+      - w_cum
+      - w_numiți
+      - w_cheamă
+      - w_pare
+      - w_și
+  l2_words: &id012
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - particle
+    - verb
+    agreement_tags:
+      semantic:
+      - w_cum
+      - w_și
+      - w_numesc
+      - w_numiți
+      - w_pare
+  names: &id008
+    language_code: ro
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - w_Ana
+      - w_Mihai
+  t_pare: &id009
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_pare
+  t_cheama: &id010
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cheamă
+  t_mie: &id014
+    language_code: ro
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_mie
+  t_multumesc: &id013
+    language_code: ro
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_mulțumesc
+templates:
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.choose.001
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'El rumano tiene dos palabras para «tú/usted»: tu con amigos y familia, y dumneavoastră con desconocidos y para mostrar respeto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.listen.002
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Faceți va con dumneavoastră y faci va con tu, así que la terminación del verbo ya indica el registro.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.match.003
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Bună ziua se combina con dumneavoastră y salut con tu: el saludo que eliges marca el registro de toda la conversación.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.translate.004
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mulțumesc es el «gracias» de todos los días y sirve tanto con tu como con dumneavoastră.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.order.005
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: word_order
+  frame:
+    text: Bună {item}!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bună {item}!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bună ziua es el saludo cortés para desconocidos durante el día; con amigos se dice salut.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.fill.006
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: fill_in_blank
+  frame:
+    text: Bine, mulțumesc. Și {item}? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Și dumneavoastră? devuelve la pregunta con cortesía; con un amigo se dice Și tu?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.translate.007
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: translation
+  frame:
+    text: ¿Cómo estás? (informal, a un amigo)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ce mai {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Ce mai faci? es para un amigo (tu); con un desconocido se dice Ce mai faceți?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson01.translate.008
+  lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+  type: translation
+  frame:
+    text: ¿Cómo está usted? (formal, a alguien a quien tratas de dumneavoastră)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ce mai {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Ce mai faceți? es la pregunta cortés; la respuesta cortés es Bine, mulțumesc. Și dumneavoastră?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.order.001
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: word_order
+  frame:
+    text: Mă numesc {name}.
+    language_code: ro
+    direction: ltr
+  slots:
+    name: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă numesc {name}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mă numesc significa literalmente «me nombro»; Mă cheamă significa «me llaman».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.fill.002
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: fill_in_blank
+  frame:
+    text: Îmi {item} bine! ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Îmi pare bine significa literalmente «me parece bien»; la respuesta es Și mie îmi pare bine.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.translate.003
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: translation
+  frame:
+    text: ¿Cómo te llamas? (informal, a un amigo)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cum te {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cum te cheamă? usa te para un amigo; a un desconocido se le dice Cum vă numiți?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.choose.004
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cum vă numiți? es la pregunta cortés sobre el nombre y usa vă; con un amigo pasa a ser Cum te cheamă?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.listen.005
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Numesc es la forma de «yo» (mă numesc) y numiți es la forma de dumneavoastră (cum vă numiți).
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.translate.006
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Și significa «y» y también introduce la pregunta de vuelta: Și dumneavoastră? o Și tu?'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson02.match.007
+  lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'En estas frases sobre el nombre, el rumano pone el pronombre antes del verbo: mă numesc, vă numiți, te cheamă.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson03.translate.001
+  lesson_content_key: ro.a1.unit01.lesson03.street_meeting
+  type: translation
+  frame:
+    text: Bien, gracias.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bine, {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Después de Bine, mulțumesc se devuelve la pregunta: Și dumneavoastră? (formal) o Și tu? (informal).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ro.ro.a1.unit01.lesson03.order.002
+  lesson_content_key: ro.a1.unit01.lesson03.street_meeting
+  type: word_order
+  frame:
+    text: Și {item} îmi pare bine!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Și {item} îmi pare bine!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Și mie îmi pare bine significa «igualmente, mucho gusto»; mie pone énfasis en «a mí» y responde a la otra persona.
+    language_code: es
+    direction: ltr
