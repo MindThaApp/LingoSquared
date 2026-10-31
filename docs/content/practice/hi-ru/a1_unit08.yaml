@@ -1,0 +1,482 @@
+schema_version: '1.0'
+pack_key: practice.hi-ru.a1.unit08
+source_language: hi
+target_language: ru
+unit_content_key: ru.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_апельсины
+    - w_дайте
+    - w_двести
+    - w_капуста
+    - w_картофель
+    - w_килограмм
+    - w_магазин
+    - w_молоко
+    - w_огурцы
+    - w_полкило
+    - w_помидоров
+    - w_помидоры
+    - w_сто
+    - w_штук
+    - w_штука
+    - w_штуку
+    - w_яблок
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_магазин
+      - w_сто
+      - w_молоко
+      - w_двести
+      - w_килограмм
+      - w_полкило
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_молоко
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сто
+  p4: &id004
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_дайте
+      - w_килограмм
+      - w_полкило
+      - w_штука
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штуку
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штук
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_полкило
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+      - w_штука
+      - w_дайте
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_помидоры
+      - w_огурцы
+      - w_картофель
+      - w_капуста
+      - w_апельсины
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_яблок
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_помидоров
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_капуста
+templates:
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.choose.001
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Сто और двести संख्याएँ 100 और 200 हैं; इनके बाद की संज्ञा बहुवचन संबंध कारक में आती है: сто рублей, двести рублей।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.order.002
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: word_order
+  frame:
+    text: Сколько стоит {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сколько стоит? एक वस्तु का दाम पूछता है; молоко एकवचन संज्ञा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.fill.003
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: fill_in_blank
+  frame:
+    text: Хлеб стоит {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'сто के बाद, पाँच से ऊपर की हर संख्या की तरह, संज्ञा बहुवचन संबंध कारक में आती है: рублей।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.match.004
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Полкило का अर्थ आधा किलो है; इसे एक ही शब्द के रूप में लिखा जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.translate.005
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: दूध कितने का है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Стоит एक वस्तु молоко के साथ आता है; कई वस्तुओं के लिए रूसी में стоят का प्रयोग होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson01.translate.006
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: ब्रेड सौ रूबल की है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хлеб стоит {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сто के लिए "एक" जैसे किसी अलग शब्द की ज़रूरत नहीं; इसके बाद की संज्ञा рублей होती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.choose.001
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Дайте आदरसूचक вы वाला आदेश-रूप है, जिसका अर्थ "दीजिए" है; ты के साथ यह дай होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.order.002
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: word_order
+  frame:
+    text: Дайте {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Килограмм और полкило दोनों सामान की मात्रा बताते हैं और дайте के ठीक बाद आते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.fill.003
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте одну {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: дайте के बाद स्त्रीलिंग штука बदलकर штуку हो जाता है, यानी माँगी जा रही वस्तु का रूप।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.fill.004
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте пять {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'пять और उससे बड़ी संख्याओं के बाद संज्ञा बहुवचन संबंध कारक में आती है: пять штук।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.translate.005
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: कृपया मुझे आधा किलो दीजिए। (आदरपूर्वक)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Дайте полкило, пожалуйста विक्रेता से आधा किलो माँगने का विनम्र तरीका है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.translate.006
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: कृपया मुझे पाँच नग दीजिए। (आदरपूर्वक)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте пять {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: संख्या पाँच के बाद Штука बदलकर штук हो जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson02.translate.007
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Штука चीज़ों को एक-एक करके गिनता है, जबकि килограмм और полкило वज़न से गिनते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson03.listen.001
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Помидоры, огурцы और апельсины बहुवचन हैं; картофель और капуста एकवचन शब्द हैं, जिनका अर्थ आलू और पत्ता गोभी है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson03.order.002
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: word_order
+  frame:
+    text: У вас есть {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У вас есть ...? किसी भी संज्ञा के साथ चलता है और विक्रेता से यह पूछने का सामान्य तरीका है कि उनके पास कोई चीज़ है या नहीं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson03.fill.003
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: fill_in_blank
+  frame:
+    text: Сколько стоит кило {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: кило जैसे मात्रा-शब्द के बाद चीज़ बहुवचन संबंध कारक में आती है, इसलिए яблоки बदलकर яблок हो जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson03.translate.004
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: कृपया मुझे एक किलोग्राम टमाटर दीजिए। (आदरपूर्वक)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте килограмм {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'килограмм के बाद चीज़ बहुवचन संबंध कारक में आती है: помидоры बदलकर помидоров हो जाता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit08.lesson03.translate.005
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: क्या आपके पास पत्ता गोभी है? (आदरपूर्वक)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: रूसी में Капуста एकवचन है और इसके साथ "एक" जैसा कोई अलग शब्द नहीं लगता।
+    language_code: hi
+    direction: ltr
