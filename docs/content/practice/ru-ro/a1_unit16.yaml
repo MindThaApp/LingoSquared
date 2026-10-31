@@ -1,0 +1,572 @@
+schema_version: '1.0'
+pack_key: practice.ru-ro.a1.unit16
+source_language: ru
+target_language: ro
+unit_content_key: ro.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_doare
+    - w_cap
+    - w_stomac
+    - w_capul
+    - w_stomacul
+    - w_simt
+    - w_sunt
+    - w_bolnav
+    - w_doctor
+    - w_nevoie
+    - w_odihnă
+    - w_multă
+slot_presets:
+  l1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_doare
+      - w_cap
+      - w_stomac
+      - w_capul
+      - w_stomacul
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_simt
+      - w_sunt
+      - w_bolnav
+      - w_doctor
+      - w_nevoie
+  l3_pool: &id011
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_odihnă
+      - w_multă
+      - w_doctor
+      - w_bolnav
+  m6: &id006
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_doare
+      - w_cap
+      - w_stomac
+      - w_bolnav
+      - w_doctor
+      - w_odihnă
+  t_doare: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_doare
+  t_capul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_capul
+  t_stomacul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_stomacul
+  t_simt: &id007
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_simt
+  t_bolnav: &id008
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bolnav
+  t_nevoie: &id009
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_nevoie
+  t_doctor: &id010
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_doctor
+  t_odihna: &id013
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_odihnă
+  t_multa: &id012
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_multă
+templates:
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.choose.001
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Capul и stomacul — это cap и stomac с артиклем -ul; doare значит «болит».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.listen.002
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mă doare плюс часть тела означает, что она болит.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.order.003
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: word_order
+  frame:
+    text: Mă {item} capul.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă {item} capul.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mă doare capul буквально значит «мне болит голова».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.order.004
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: word_order
+  frame:
+    text: Mă doare {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Stomacul — это stomac плюс артикль -ul.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.fill.005
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: fill_in_blank
+  frame:
+    text: Mă doare {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Capul — это cap плюс -ul, поэтому в предложении говорится о конкретной голове.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.translate.006
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: У меня болит голова.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: По-румынски говорят «мне болит голова», а не «моя голова болит».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.translate.007
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: У меня болит живот.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mă doare {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Doare не меняется, потому что то, что болит, стоит в единственном числе.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson01.translate.008
+  lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+  type: translation
+  frame:
+    text: У вас болит голова или живот? (вежливо, к собеседнику, которому вы говорите dumneavoastră)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vă doare capul sau {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vă — форма вежливого «вы» (dumneavoastră); с другом сказали бы Te doare.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.choose.001
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Simt значит «я чувствую», как в Mă simt bine; sunt значит «я есть, я».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.listen.002
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Nevoie встречается во фразе Am nevoie de un doctor — «мне нужен врач».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.match.003
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Эти слова называют части тела, состояние и человека, который помогает; doare — единственный глагол.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.order.004
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: word_order
+  frame:
+    text: Nu mă {item} bine.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă {item} bine.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mă simt — возвратный глагол, поэтому mă стоит перед ним.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.order.005
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: word_order
+  frame:
+    text: Nu mă simt bine. Sunt {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă simt bine. Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bolnav — форма мужского рода, её говорит мужчина.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.fill.006
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: fill_in_blank
+  frame:
+    text: Am {item} de un doctor. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Am nevoie de значит «мне нужно»; после этого выражения стоит de.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.fill.007
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: fill_in_blank
+  frame:
+    text: Am nevoie de un {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Перед doctor стоит un: un doctor.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.translate.008
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Я плохо себя чувствую.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu mă {item} bine.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Nu стоит перед mă simt и образует отрицание.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.translate.009
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Я болен. (говорит мужчина)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bolnav — форма для говорящего мужчины; женщина говорит Sunt bolnavă.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson02.translate.010
+  lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+  type: translation
+  frame:
+    text: Мне нужен врач.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am nevoie de un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Am nevoie de — обычный способ сказать «мне нужно».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson03.choose.001
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Odihnă значит «отдых», а multă — «много», и оно согласуется с существительными женского рода.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson03.order.002
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: word_order
+  frame:
+    text: Odihnă și {item} apă!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Odihnă și {item} apă!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Apă — женского рода, поэтому «много» будет multă.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson03.fill.003
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: fill_in_blank
+  frame:
+    text: Aveți nevoie de {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id013
+    hint: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aveți nevoie de — вежливое «вам нужно»; после de стоит odihnă.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson03.translate.004
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: translation
+  frame:
+    text: Вам нужен отдых. (вежливо, к собеседнику, к которому обращаются на dumneavoastră)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aveți nevoie de {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aveți — форма «иметь» для dumneavoastră; с другом ты скажешь Ai.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit16.lesson03.translate.005
+  lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+  type: translation
+  frame:
+    text: Отдых и много воды!
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Odihnă și {item} apă!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Multă согласуется с существительным женского рода apă.
+    language_code: ru
+    direction: ltr
