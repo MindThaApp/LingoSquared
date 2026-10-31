@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.nl-pl.a1.unit42
+source_language: nl
+target_language: pl
+unit_content_key: pl.a1.unit42.nocleg
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_hasło
+    - w_jedenastej
+    - w_karcie
+    - w_klucz
+    - w_mieliśmy
+    - w_minął
+    - w_noc
+    - w_recepcjonista
+    - w_rezerwację
+    - w_wifi
+    - w_wliczone
+    - w_wymeldowanie
+    - w_wymeldować
+    - w_zaczyna
+    - w_zameldować
+    - w_zameldujemy
+    - w_zarezerwowany
+    - w_zarezerwować
+    - w_ósmej
+    - w_ładny
+templates:
+- content_key: practice.nl-pl.pl.a1.unit42.lesson01.choose.001
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: pl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_zarezerwować
+        - w_zameldować
+        - w_zameldujemy
+        - w_zarezerwowany
+        - w_zaczyna
+        - w_ósmej
+        - w_wliczone
+        - w_klucz
+        - w_hasło
+        - w_wifi
+        - w_karcie
+        - w_recepcjonista
+        - w_rezerwację
+        - w_noc
+        - w_wymeldowanie
+        - w_jedenastej
+        - w_wymeldować
+        - w_minął
+        - w_mieliśmy
+        - w_ładny
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over een kamer boeken.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson02.listen.001
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over: is het ontbijt inbegrepen?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson03.translate.001
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over de sleutel en het wifiwachtwoord.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson04.match.001
+  lesson_content_key: pl.a1.unit42.lesson04.zameldowanie_w_recepcji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Koppel elk Pools woord aan de Nederlandse betekenis; de woorden komen uit de lessen van dit deel.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson05.choose.001
+  lesson_content_key: pl.a1.unit42.lesson05.czytanie_potwierdzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze unit, uit de les over het lezen van een bevestiging.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson06.translate.001
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is een van de woorden van deze les, uit de les over Ewa die belt over het weekend.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson01.order.002
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: word_order
+  frame:
+    text: Chcę {item} pokój.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zarezerwować
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chcę {item} pokój.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ik wil een kamer boeken. zarezerwować betekent boeken; reserveren.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson01.fill.003
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: fill_in_blank
+  frame:
+    text: Mam {item} pokój. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zarezerwowany
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zarezerwowany
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ik heb een kamer gereserveerd. zarezerwowany betekent gereserveerd (mannelijk).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson02.order.002
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: word_order
+  frame:
+    text: Śniadanie {item} się o ósmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zaczyna
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Śniadanie {item} się o ósmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Het ontbijt begint om acht uur. zaczyna betekent begint (hij; zij).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson02.fill.003
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: fill_in_blank
+  frame:
+    text: Śniadanie jest {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_wliczone
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_wliczone
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Het ontbijt is inbegrepen. wliczone betekent inbegrepen (onzijdig).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson03.order.002
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: word_order
+  frame:
+    text: Oto pani {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_klucz
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oto pani {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Hier is uw sleutel. klucz betekent sleutel.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson03.fill.003
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: fill_in_blank
+  frame:
+    text: Jakie jest {item} do wifi? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_hasło
+    hint:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_hasło
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wat is het wifi-wachtwoord? hasło betekent wachtwoord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson03.translate.004
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: translation
+  frame:
+    text: Het wifi-wachtwoord staat op de kaart.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_wifi
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hasło do {item} jest na karcie.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Het wifiwachtwoord staat op de kaart. wifi betekent wifi.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson04.order.002
+  lesson_content_key: pl.a1.unit42.lesson04.zameldowanie_w_recepcji
+  type: word_order
+  frame:
+    text: Na jedną {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_noc
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Na jedną {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Voor één nacht. noc betekent nacht.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson05.order.002
+  lesson_content_key: pl.a1.unit42.lesson05.czytanie_potwierdzenia
+  type: word_order
+  frame:
+    text: Wymeldowanie jest o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_jedenastej
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wymeldowanie jest o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Het uitchecken is om elf uur. jedenastej betekent elf (uur).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson06.order.002
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: word_order
+  frame:
+    text: Jak {item} weekend we Wrocławiu?
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_minął
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Jak {item} weekend we Wrocławiu?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Hoe was het weekend in Wrocław? minął betekent verstreken (mannelijk, verleden tijd).
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit42.lesson06.fill.003
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: fill_in_blank
+  frame:
+    text: Mieliśmy bardzo {item} weekend. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_ładny
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_ładny
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: We hadden een heel mooi weekend. ładny betekent mooi; leuk (mannelijk).
+    language_code: nl
+    direction: ltr
