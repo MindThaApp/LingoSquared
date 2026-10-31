@@ -1,0 +1,366 @@
+schema_version: '1.0'
+pack_key: practice.ru-ro.a1.unit13
+source_language: ru
+target_language: ro
+unit_content_key: ro.a1.unit13.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_cafeaua
+    - w_ceaiul
+    - w_pâinea
+    - w_prefer
+    - w_sau
+slot_presets:
+  f_pool: &id001
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cafeaua
+      - w_ceaiul
+      - w_pâinea
+  l2_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - particle
+    - verb
+    agreement_tags:
+      semantic:
+      - w_prefer
+      - w_sau
+      - w_cafeaua
+      - w_ceaiul
+      - w_pâinea
+  t_cafeaua: &id002
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cafeaua
+  t_ceaiul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ceaiul
+  t_painea: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pâinea
+  t_sau: &id006
+    language_code: ro
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_sau
+templates:
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.choose.001
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'В румынском артикль стоит в конце слова: cafea превращается в cafeaua, а ceai — в ceaiul.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.listen.002
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cafeaua, ceaiul и pâinea — определённые формы; окончание -a или -ul играет роль артикля.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.order.003
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: word_order
+  frame:
+    text: Îmi place {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Îmi place плюс существительное с артиклем означает, что тебе нравится этот предмет.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.order.004
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: word_order
+  frame:
+    text: Nu-mi place {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu-mi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Nu-mi place — отрицание; существительное сохраняет артикль: pâinea.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.fill.005
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: fill_in_blank
+  frame:
+    text: Îmi place {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ceaiul — это ceai плюс артикль -ul, то есть «этот чай».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.translate.006
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Мне нравится чай.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Îmi place устроено как «мне приятно, мне нравится», поэтому то, что нравится, стоит после.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.translate.007
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Мне не нравится кофе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nu-mi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Nu-mi — это nu плюс сокращённое îmi, соединённые дефисом: «мне не нравится».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson01.translate.008
+  lesson_content_key: ro.a1.unit13.lesson01.imi_place
+  type: translation
+  frame:
+    text: Мне нравится {item}.
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Îmi place {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'То, что тебе нравится, — подлежащее при place: Îmi place cafeaua, Îmi place ceaiul, Îmi place pâinea.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.choose.001
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Prefer значит «я предпочитаю», а sau соединяет два варианта.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.listen.002
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Sau значит «или», как в cafea sau ceai.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.order.003
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: word_order
+  frame:
+    text: Prefer {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Prefer {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Prefer значит «я предпочитаю»; то, что ты предпочитаешь, идёт после него с артиклем.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.order.004
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: word_order
+  frame:
+    text: Cafea {item} ceai?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cafea {item} ceai?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Sau предлагает выбор между двумя вещами.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.fill.005
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: fill_in_blank
+  frame:
+    text: Cafea {item} ceai? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sau значит «или» и никогда не меняет форму.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.translate.006
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Вам нравится кофе? (вежливая форма, к собеседнику, которому говорят dumneavoastră)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vă place {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Vă place — вопрос к dumneavoastră; с другом ты бы сказал Îți place.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.translate.007
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Я предпочитаю кофе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Prefer {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Для «я» в prefer отдельное слово не нужно; лицо показывает окончание.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit13.lesson02.translate.008
+  lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+  type: translation
+  frame:
+    text: Кофе или чай?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cafea {item} ceai?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Sau связывает два варианта в одном коротком вопросе.
+    language_code: ru
+    direction: ltr
