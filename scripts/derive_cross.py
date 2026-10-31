@@ -1238,6 +1238,50 @@ def english_prose(v: str) -> bool:
     return len(set(hits)) >= 2 or bool(set(hits) & strong)
 
 
+NONLATIN_LEARNERS = {"ar", "fa", "prs", "hi"}          # learner languages whose text is not Latin script (Cyrillic ru has its own check)
+NONLATIN_LETTER = re.compile(r"[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff\u0900-\u097f]")
+LATIN_WORD = re.compile(r"[A-Za-z\u00c0-\u024f]{2,}(?:['\u2019-][A-Za-z\u00c0-\u024f]+)*")
+
+
+# English grammar/teaching terms that translators leave in Latin script inside Arabic/Hindi/Dari notes; unlike other English words
+# they may also occur in the English option strings of the target realizations, so they count even there.
+GRAMMAR_ENGLISH = frozenset("""article articles accent infinitive lowercase uppercase reflexive participle present perfect please plural
+singular masculine feminine verb noun adjective pronoun gerund imperative subjunctive past future tense preposition conjunction
+vowel consonant syllable stress suffix prefix ending contraction question formal informal""".split())
+_SPANS = re.compile(r"\{[^}]*\}|\*[^*]*\*|\"[^\"]*\"|\u00ab[^\u00bb]*\u00bb|\u201c[^\u201d]*\u201d")
+
+
+def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str]:
+    """English words left in a learner string written in Arabic / Devanagari script.  `english_prose` needs three tokens and
+    function words, so 'Thank you' or 'the beach' inside Arabic text would pass.  A Latin word counts when it is English
+    (`full_english_vocab`), sits outside `*spans*`/quotes/placeholders (quoted target words are Latin on purpose), is not a
+    capitalised name or a word of the target language (target vocabulary, which also holds bare English option strings, so
+    English words that happen to be option text can be missed), and, when the English source string `src` is given, also
+    occurs in that source outside its spans (a translator-added Spanish word without asterisks is not a leftover).
+    English function words (the, is, this, you...) and grammar terms count even when the realizations contain them as bare English option strings."""
+    if not NONLATIN_LETTER.search(v):
+        return []                                   # pure-Latin strings: english_prose / unchanged_english decide
+    vocab = full_english_vocab()
+    tv = {fold(t) for t in target_vocab(target)}
+    src_words = None if src is None else {w.lower().replace("\u2019", "'") for w in LATIN_WORD.findall(_SPANS.sub(" ", src))}
+    out = []
+    for m in LATIN_WORD.finditer(_SPANS.sub(" ", v)):
+        w = m.group(0)
+        t = w.lower().replace("\u2019", "'")
+        if t not in vocab or (t in STOP and t not in EN_ONLY):
+            continue
+        if src_words is not None and t not in src_words:
+            continue
+        if t in ("am", "pm") or v[max(0, m.start() - 1):m.start()] == "-":
+            continue                                # AM/PM and verb endings (-er, -ar) are written in Latin on purpose
+        if w[0].isupper() and fold(t) in tv and v.find(w) > 0:
+            continue                                # name or loanword mid-sentence
+        if fold(t) in tv and t not in EN_STRONG and t not in GRAMMAR_ENGLISH:
+            continue                                # Spanish (or cognate) word
+        out.append(w)
+    return out
+
+
 def _strip_semantic(o):
     if isinstance(o, dict):
         return {k: _strip_semantic(v) for k, v in o.items() if k != "semantic"}
@@ -1295,10 +1339,12 @@ def learner_leftovers(pair: str) -> list[str]:
                     continue          # unchanged option/answer/title text is normally target-language text
                 if english_prose(v):
                     out.append(f"{kind}/{pair}/{p.name}: {'/'.join(map(str, path))[-60:]}: {v[:70]!r} [English]")
+                elif learner in NONLATIN_LEARNERS and (hits := english_in_nonlatin(v, target, src=ss[path])):
+                    out.append(f"{kind}/{pair}/{p.name}: {'/'.join(map(str, path))[-60:]}: {v[:70]!r} [English in {learner} text: {', '.join(sorted(set(hits)))}]")
     return out
 
 
-def compiled_leftovers(path: Path) -> list[str]:
+def compiled_leftovers(path: Path, learner: str = "", target: str = "") -> list[str]:
     """English prose (or language_code en blocks) in the compiled course JSON of a cross pair: what the learner would see."""
     d = json.loads(path.read_text(encoding="utf-8"))
     out = []
@@ -1315,6 +1361,8 @@ def compiled_leftovers(path: Path) -> list[str]:
                 walk(v, trail + [str(i)])
         elif isinstance(o, str) and not re.match(r"^[a-z0-9_.\-]+$", o) and english_prose(o):
             out.append(f"compiled {'/'.join(trail)[-60:]}: {o[:70]!r} [English]")
+        elif isinstance(o, str) and learner in NONLATIN_LEARNERS and not re.match(r"^[a-z0-9_.\-]+$", o) and english_in_nonlatin(o, target):
+            out.append(f"compiled {'/'.join(trail)[-60:]}: {o[:70]!r} [English in {learner} text]")
 
     walk(d, [])
     return out
@@ -1453,7 +1501,7 @@ def cmd_validate(args):
     left = learner_leftovers(args.new)
     target = args.new.split("-")[1]
     for g, sg in zip(dd.group_names(args.new, args.levels), dd.group_names(f"en-{target}", args.levels)):
-        left += compiled_leftovers(Path(f"/tmp/derive_cross_{g}.json"))
+        left += compiled_leftovers(Path(f"/tmp/derive_cross_{g}.json"), args.new.split("-")[0], target)
         left += latin_in_cyrillic(Path(f"/tmp/derive_cross_{g}.json"), target)
         sreals, sovs = cm[sg]
         r = subprocess.run([py, "scripts/compile_content.py", "compile", "--realization", *sreals, "--overlay", *sovs,
