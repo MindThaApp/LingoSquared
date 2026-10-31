@@ -1,0 +1,397 @@
+schema_version: '1.0'
+pack_key: practice.hi-es.a1.unit06
+source_language: hi
+target_language: es
+unit_content_key: es.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u06
+    - w_sándwich
+    - w_ensalada
+    - w_sopa
+    - w_agua
+    - w_café
+    - w_postre
+    - w_pastel
+    - w_comida
+    - w_menú
+    - w_cuenta
+    - w_quieres
+    - w_provecho
+    - w_quiero
+    - w_comer
+    - w_podemos
+    - w_ver
+    - w_quieren
+    - w_incluido
+slot_presets:
+  food: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+  food_m: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_café
+      - w_pastel
+  verbs: &id009
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u06
+  production: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+      - w_quiero
+      - w_comer
+      - w_podemos
+      - w_ver
+      - w_quieren
+      - w_incluido
+  quieres: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_quieres
+  menu: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_menú
+  provecho: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_provecho
+  cuenta: &id006
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cuenta
+  pastel: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pastel
+templates:
+- content_key: practice.hi-es.es.a1.unit06.lesson01.choose.001
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Agua स्त्रीलिंग है, लेकिन बलाघात वाले a से शुरू होने के कारण एकवचन में उसके साथ el आता है: el agua fría।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson01.listen.002
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Café, menú और sándwich पर लिखित एक्सेंट चिह्न होते हैं; यह चिह्न बलाघात वाले अक्षर को दर्शाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson02.order.001
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: word_order
+  frame:
+    text: Quiero un {item}, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Un पुल्लिंग संज्ञाओं के साथ आता है (un café); स्त्रीलिंग संज्ञाओं के साथ una आता है (una ensalada)।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson02.translate.002
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: translation
+  frame:
+    text: कृपया मुझे एक {item} चाहिए।
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'ऑर्डर करने का एक और आम तरीका है para mí + व्यंजन: para mí, un café।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson02.fill.003
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: fill_in_blank
+  frame:
+    text: ¿Qué {item} comer? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Querer का धातु-स्वर बदलता है: quiero, quieres, quiere, लेकिन queremos।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson03.order.001
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: word_order
+  frame:
+    text: ¿Podemos ver el {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Podemos ver el {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: क्या हम मेन्यू देख सकते हैं? ¿Podemos + क्रिया का मूल रूप? किसी चीज़ को विनम्रता से माँगने का तरीका है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson03.translate.002
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: translation
+  frame:
+    text: भोजन का आनंद लीजिए!
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¡Buen {item}!
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Buen provecho उन लोगों से कहा जाता है जो खाना शुरू करने वाले हों, पास की मेज़ के अजनबियों से भी।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson04.fill.001
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: fill_in_blank
+  frame:
+    text: La {item}, por favor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: स्पेन में वेटर आमतौर पर इंतज़ार करता है कि आप खुद बिल माँगें।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson04.translate.002
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: translation
+  frame:
+    text: मिठाई में मुझे केक चाहिए।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De postre quiero {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: De postre का मतलब है "मिठाई के लिए"; यहाँ pastel से पहले किसी आर्टिकल की ज़रूरत नहीं होती।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson05.match.001
+  lesson_content_key: es.a1.unit06.lesson05.leer_el_menu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'स्पेन का menú del día एक तय दोपहर का खाना है: स्टार्टर, मुख्य व्यंजन, postre और आमतौर पर रोटी और एक पेय, सब एक ही कीमत में।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson06.translate.001
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Comida का मतलब "खाना" भी है और दोपहर का भोजन भी, जो स्पेन में दिन का मुख्य भोजन होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson06.choose.002
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: वेटर ¿Qué quieren comer? इसलिए कहता है क्योंकि quieren आप दोनों को संबोधित करता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit06.lesson06.match.003
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Quiero, quieres और quieren सभी querer (चाहना) के रूप हैं।
+    language_code: hi
+    direction: ltr
