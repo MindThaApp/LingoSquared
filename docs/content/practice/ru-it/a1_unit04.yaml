@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.ru-it.a1.unit04
+source_language: ru
+target_language: it
+unit_content_key: it.a1.unit04.calendar_dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Roma
+    - w_aprile
+    - w_arrivi
+    - w_arrivo
+    - w_data
+    - w_domenica
+    - w_dopodomani
+    - w_febbraio
+    - w_gennaio
+    - w_giorno
+    - w_giovedì
+    - w_lunedì
+    - w_martedì
+    - w_marzo
+    - w_mercoledì
+    - w_oggi
+    - w_pomeriggio
+    - w_quando
+    - w_quindici
+    - w_sabato
+    - w_venerdì
+slot_presets:
+  l1_core: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_lunedì
+      - w_martedì
+      - w_mercoledì
+      - w_giovedì
+      - w_venerdì
+      - w_sabato
+      - w_domenica
+      - w_giorno
+      - w_oggi
+  days: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_lunedì
+      - w_martedì
+      - w_mercoledì
+      - w_giovedì
+      - w_venerdì
+      - w_sabato
+      - w_domenica
+  giorno: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_giorno
+  oggi: &id003
+    language_code: it
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_oggi
+  l2_core: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_data
+      - w_gennaio
+      - w_febbraio
+      - w_marzo
+      - w_aprile
+      - w_quindici
+  months: &id008
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_gennaio
+      - w_febbraio
+      - w_marzo
+      - w_aprile
+  data: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_data
+  quindici: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_quindici
+  l3_core: &id009
+    language_code: it
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_quando
+      - w_arrivi
+      - w_Roma
+      - w_arrivo
+      - w_pomeriggio
+      - w_dopodomani
+  roma: &id010
+    language_code: it
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Roma
+  arrivi: &id011
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_arrivi
+  pomeriggio: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pomeriggio
+templates:
+- content_key: practice.ru-it.it.a1.unit04.lesson01.choose.001
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Итальянские названия дней недели пишутся со строчной буквы.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson01.listen.002
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'В словах martedì и mercoledì на конце пишется акцент: последний слог ударный.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson01.order.003
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: word_order
+  frame:
+    text: Che {item} è oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} è oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che giorno è oggi? — вопрос о дне недели; чтобы спросить о числе, говорят Che data è oggi?
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson01.fill.004
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: fill_in_blank
+  frame:
+    text: Che giorno è {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Oggi — «сегодня», domani — «завтра»; один и тот же вопрос подходит для обоих слов.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson01.match.005
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Названия с понедельника по пятницу оканчиваются на -dì (от dies — «день»); sabato и domenica — нет.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson01.translate.006
+  lesson_content_key: it.a1.unit04.lesson01.i_giorni_della_settimana
+  type: translation
+  frame:
+    text: Сегодня {day}.
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      day: english_gloss
+  slots:
+    day: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi è {day}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'С днями недели в таком употреблении артикль не нужен: Oggi è lunedì, а не Oggi è il lunedì.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.choose.001
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Итальянские названия месяцев пишутся со строчной буквы: gennaio, febbraio, marzo.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.listen.002
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: В слове febbraio двойное b; прислушайся к долгому согласному.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.order.003
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: word_order
+  frame:
+    text: Che {item} è oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} è oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Data — «дата»; вопрос Che data è oggi? спрашивает о числе и месяце, а не о дне недели.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.fill.004
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: fill_in_blank
+  frame:
+    text: Oggi è il {item} marzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'В датах используются il и количественное число: il quindici marzo — «пятнадцатое марта».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.translate.005
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gennaio, febbraio, marzo и aprile идут в том же порядке, что и месяцы в году.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson02.translate.006
+  lesson_content_key: it.a1.unit04.lesson02.che_data_e_oggi
+  type: translation
+  frame:
+    text: Сегодня пятое число, месяц — {month}.
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      month: english_gloss
+  slots:
+    month: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oggi è il cinque {month}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Сначала называется число, затем месяц: il cinque gennaio — «пятое января».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.choose.001
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Arrivo — «я приезжаю», arrivi — «ты приезжаешь»; окончание -i указывает на tu.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.order.002
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: word_order
+  frame:
+    text: Quando arrivi a {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quando arrivi a {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Roma — это Рим; перед названием города ставится предлог a, который передаёт значение «в».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.fill.003
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: fill_in_blank
+  frame:
+    text: Quando {item} a Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quando arrivi? — вопрос другу, когда он приезжает; вежливая форма — Quando arriva?
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.match.004
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Dopodomani образовано от dopo («после») и domani («завтра»): послезавтра.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.translate.005
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Arrivo — «я приезжаю», arrivi — «ты приезжаешь»; меняется только конечная гласная.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit04.lesson03.translate.006
+  lesson_content_key: it.a1.unit04.lesson03.quando_arrivi_a_roma
+  type: translation
+  frame:
+    text: Я приезжаю в четверг днём.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Arrivo giovedì {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'В итальянском перед днём недели нет слова, соответствующего русскому «в»: arrivo giovedì — «я приезжаю в четверг».'
+    language_code: ru
+    direction: ltr
