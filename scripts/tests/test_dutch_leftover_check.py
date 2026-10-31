@@ -175,3 +175,11 @@ def _scan_en_fr(ck, tmp_path, monkeypatch, feedback):
     ck._load.cache_clear()
     hits, _ = ck.scan_file("overlays", "en-fr", d / "a1_unit50.yaml", "en", "fr")
     return hits
+
+
+def test_quoted_title_present_in_target_realization_is_not_a_leftover(ck):
+    v = "Сколько, согласно афише, стоит «De Nieuwe Film»?"
+    assert ck.nl_markers(v, "ru+es+en")                                     # flagged without the source-quote filter
+    assert not ck.nl_markers(ck.drop_source_quotes(v, "es"), "ru+es+en")    # the es realization names that cinema itself
+    w = "Сколько стоит «Het nieuwe huis van Anna»?"
+    assert ck.nl_markers(ck.drop_source_quotes(w, "es"), "ru+es+en")        # a Dutch phrase absent from the course stays flagged

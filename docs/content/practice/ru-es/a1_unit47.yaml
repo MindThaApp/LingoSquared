@@ -1,0 +1,400 @@
+schema_version: '1.0'
+pack_key: practice.ru-es.a1.unit47
+source_language: ru
+target_language: es
+unit_content_key: es.a1.unit47.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_contarte
+    - w_devuelvo
+    - w_envío
+    - w_esperado
+    - w_esperar
+    - w_hables
+    - w_hablo
+    - w_llamada
+    - w_llamarme
+    - w_llamarte
+    - w_mensaje
+    - w_minutos
+    - w_oigo
+    - w_oír
+    - w_rápido
+    - w_significa
+    - w_turno
+templates:
+- content_key: practice.ru-es.es.a1.unit47.lesson01.choose.001
+  lesson_content_key: es.a1.unit47.lesson01.te_llamo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: es
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_llamarte
+        - w_hablo
+        - w_hables
+        - w_rápido
+        - w_oigo
+        - w_mensaje
+        - w_envío
+        - w_llamarme
+        - w_contarte
+        - w_devuelvo
+        - w_llamada
+        - w_minutos
+        - w_turno
+        - w_esperado
+        - w_esperar
+        - w_oír
+        - w_significa
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока, из темы «Я перезвоню тебе».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson02.listen.001
+  lesson_content_key: es.a1.unit47.lesson02.con_quien_hablo
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока, из темы «С кем я говорю?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson03.translate.001
+  lesson_content_key: es.a1.unit47.lesson03.puedes_repetir_eso
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока, из темы «Можешь повторить?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson04.match.001
+  lesson_content_key: es.a1.unit47.lesson04.enviar_un_mensaje
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое испанское слово с его русским значением; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson05.choose.001
+  lesson_content_key: es.a1.unit47.lesson05.leer_una_conversacion_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока, из темы «Читаем переписку в сообщениях».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson06.translate.001
+  lesson_content_key: es.a1.unit47.lesson06.una_llamada_despues_del
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока, из темы «Телефонный звонок после смены».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson01.order.002
+  lesson_content_key: es.a1.unit47.lesson01.te_llamo
+  type: word_order
+  frame:
+    text: Tengo que {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_llamarte
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tengo que {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Мне нужно тебе позвонить. llamarte значит «позвонить тебе».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson02.order.002
+  lesson_content_key: es.a1.unit47.lesson02.con_quien_hablo
+  type: word_order
+  frame:
+    text: ¿Con quién {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_hablo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Con quién {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: С кем я говорю? ¿Con quién hablo? — стандартная фраза, когда не знаешь, кто звонит.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson03.order.002
+  lesson_content_key: es.a1.unit47.lesson03.puedes_repetir_eso
+  type: word_order
+  frame:
+    text: No {item} tan rápido, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_hables
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: No {item} tan rápido, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Не говори так быстро, пожалуйста. No hables — отрицательный повелитель­ный глагол hablar в форме на «ты»; tan rápido («так быстро») указывает на степень.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson03.fill.003
+  lesson_content_key: es.a1.unit47.lesson03.puedes_repetir_eso
+  type: fill_in_blank
+  frame:
+    text: No te {item} bien. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_oigo
+    hint:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_oigo
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я тебя плохо слышу. Oír («слышать») с no ... bien («нехорошо») говорит о проблеме со слышимостью, в отличие от entender («понимать»); te oigo значит «я тебя слышу».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson04.order.002
+  lesson_content_key: es.a1.unit47.lesson04.enviar_un_mensaje
+  type: word_order
+  frame:
+    text: El {item} es de Elena.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mensaje
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El {item} es de Elena.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Сообщение от Элены. mensaje значит «сообщение»; текстовое сообщение.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson04.fill.003
+  lesson_content_key: es.a1.unit47.lesson04.enviar_un_mensaje
+  type: fill_in_blank
+  frame:
+    text: Te {item} un mensaje. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_envío
+    hint:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_envío
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Я пришлю тебе сообщение. Enviar («отправлять») стоит после местоимения te («тебе»): te envío un mensaje.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson06.order.002
+  lesson_content_key: es.a1.unit47.lesson06.una_llamada_despues_del
+  type: word_order
+  frame:
+    text: ¿Cómo ha ido tu primer {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_turno
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cómo ha ido tu primer {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Как прошла твоя первая смена? Ha ido — это перфект (pretérito perfecto) глагола ir (здесь «пройти, сложиться»): ha + причастие ido.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson06.fill.003
+  lesson_content_key: es.a1.unit47.lesson06.una_llamada_despues_del
+  type: fill_in_blank
+  frame:
+    text: Ha ido muy bien, mejor de lo {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_esperado
+    hint:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_esperado
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Всё прошло очень хорошо, лучше, чем я думал. Ha ido muy bien повторяет перфект из вопроса; mejor de lo esperado («лучше, чем ожидалось») строится со сравнением через de lo.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit47.lesson06.translate.004
+  lesson_content_key: es.a1.unit47.lesson06.una_llamada_despues_del
+  type: translation
+  frame:
+    text: Спасибо, для меня это очень важно.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_significa
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Muchas gracias, eso {item} mucho para mí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Спасибо, для меня это очень важно. Significa — форма 3-го лица от significar («значить»); para mí («для меня») показывает, для кого это важно.
+    language_code: ru
+    direction: ltr
