@@ -1,0 +1,455 @@
+schema_version: '1.0'
+pack_key: practice.fa-pl.a1.unit20
+source_language: fa
+target_language: pl
+unit_content_key: pl.a1.unit20.ubrania
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_sklep
+    - w_koszula
+    - w_spodnie
+    - w_kupić
+    - w_koszulę
+    - w_sukienka
+    - w_kolor
+    - w_niebieska
+    - w_czerwona
+    - w_rozmiar
+    - w_chce
+slot_presets:
+  u20_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_sklep
+      - w_koszula
+      - w_spodnie
+      - w_kupić
+      - w_koszulę
+  u20_mp1: &id002
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_sklep
+      - w_koszula
+      - w_spodnie
+      - w_kupić
+      - w_koszulę
+      - w_sukienka
+  s_spodnie: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_spodnie
+  s_koszule: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_koszulę
+  u20_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_kolor
+      - w_sukienka
+      - w_niebieska
+      - w_czerwona
+  s_niebieska: &id006
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_niebieska
+  s_czerwona: &id007
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_czerwona
+  s_kolor: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_kolor
+  u20_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_rozmiar
+      - w_chce
+      - w_kolor
+      - w_sklep
+  s_chce: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_chce
+templates:
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.choose.001
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Spodnie در لهستانی همیشه جمع است، حتی برای یک شلوار.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.listen.002
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Koszula شکل پایه است و koszulę شکل مفعولی است که بعد از kupić می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.match.003
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Koszula، sukienka و spodnie لباس هستند؛ koszula و sukienka مؤنثِ مفرد هستند و spodnie جمع.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.order.004
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: word_order
+  frame:
+    text: To są {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: To są {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Spodnie جمع است، برای همین به‌جای jest با są می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.fill.005
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: fill_in_blank
+  frame:
+    text: Chcę kupić {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بعد از kupić، اسم مؤنثِ مختوم به -a به -ę تبدیل می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.translate.006
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: translation
+  frame:
+    text: این‌ها شلوار هستند.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: To są {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Spodnie جمع است، برای همین فعل są می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson01.translate.007
+  lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+  type: translation
+  frame:
+    text: می‌خواهم یک پیراهن بخرم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chcę kupić {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: چیزی که می‌خرید شکل مفعولی koszulę می‌گیرد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.choose.001
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Niebieska و czerwona مؤنث هستند و با koszula و sukienka جور می‌شوند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.listen.002
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'صفت‌های رنگ با اسم جور می‌شوند: با اسم مؤنث به -a ختم می‌شوند.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.order.003
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: word_order
+  frame:
+    text: Koszula jest {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koszula jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Niebieska مؤنث است و با koszula جور می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.fill.004
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: fill_in_blank
+  frame:
+    text: Koszula jest {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: صفت جنسیت مؤنثِ koszula را می‌گیرد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.translate.005
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: لباس زنانه قرمز است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sukienka jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Czerwona شکل مؤنث است و با اسم مؤنث sukienka می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.translate.006
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: پیراهن آبی است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koszula jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Niebieska شکل مؤنث است و با اسم مؤنث koszula می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson02.translate.007
+  lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+  type: translation
+  frame:
+    text: چه رنگی؟
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Jaki {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jaki مذکر است و با kolor جور می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson03.choose.001
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chce شکل «او» یا «شما»ی رسمی از فعل chcieć است؛ Co pan chce? مؤدبانه است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson03.listen.002
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Rozmiar یعنی اندازه و مذکر است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson03.order.003
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: word_order
+  frame:
+    text: Co pan {item} kupić?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item} kupić?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Pan با شکل «او» یعنی chce می‌آید، نه chcesz.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-pl.pl.a1.unit20.lesson03.translate.004
+  lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+  type: translation
+  frame:
+    text: چه چیزی می‌خواهید بخرید؟ (خطاب به یک آقا، رسمی با pan)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item} kupić?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Pan با chce می‌آید که همان شکل «او» است.
+    language_code: fa
+    direction: rtl
