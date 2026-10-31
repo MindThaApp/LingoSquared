@@ -1,0 +1,421 @@
+schema_version: '1.0'
+pack_key: practice.ru-ro.a1.unit64
+source_language: ru
+target_language: ro
+unit_content_key: ro.a1.unit64.piata
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_aglomerată
+    - w_brutărie
+    - w_fructele
+    - w_geantă
+    - w_gustoase
+    - w_kilograme
+    - w_kilogramul
+    - w_legumele
+    - w_mere
+    - w_merele
+    - w_proaspete
+    - w_taraba
+    - w_tarabă
+    - w_vânzătorul
+templates:
+- content_key: practice.ru-ro.ro.a1.unit64.lesson01.choose.001
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ro
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_aglomerată
+        - w_taraba
+        - w_tarabă
+        - w_legumele
+        - w_proaspete
+        - w_fructele
+        - w_gustoase
+        - w_merele
+        - w_vânzătorul
+        - w_kilogramul
+        - w_mere
+        - w_kilograme
+        - w_geantă
+        - w_brutărie
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока на тему «Пойдём на рынок?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson02.listen.001
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока, из темы «Овощи и фрукты».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson03.translate.001
+  lesson_content_key: ro.a1.unit64.lesson03.merele_si_vanzatorul_din
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока на тему «Яблоки и продавец на рынке».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson04.match.001
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое румынское слово с его значением; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson05.choose.001
+  lesson_content_key: ro.a1.unit64.lesson05.la_taraba_in_piata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока на тему «У рыночного прилавка».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson06.translate.001
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока, из темы «Ана рассказывает о рынке».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson01.order.002
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: word_order
+  frame:
+    text: Piața este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_aglomerată
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Piața este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: На рынке многолюдно. aglomerată значит «многолюдная; переполненная» (ж. р.).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson01.fill.003
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: fill_in_blank
+  frame:
+    text: Văd o {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarabă
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarabă
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я вижу прилавок. tarabă значит «прилавок».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson02.order.002
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: word_order
+  frame:
+    text: Văd {item} și fructele.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_legumele
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Văd {item} și fructele.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Я вижу овощи и фрукты. legumele значит «овощи».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson02.fill.003
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: fill_in_blank
+  frame:
+    text: Legumele sunt {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_proaspete
+    hint:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_proaspete
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Овощи свежие. proaspete значит «свежие» (мн. ч.).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson02.translate.004
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: translation
+  frame:
+    text: Фрукты вкусные.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_gustoase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Fructele sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Фрукты вкусные. gustoase значит «вкусные» (мн. ч.).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson03.order.002
+  lesson_content_key: ro.a1.unit64.lesson03.merele_si_vanzatorul_din
+  type: word_order
+  frame:
+    text: Văd {item} și vânzătorul din piață.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_merele
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Văd {item} și vânzătorul din piață.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Я вижу яблоки и продавца на рынке. merele значит «яблоки».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson04.order.002
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: word_order
+  frame:
+    text: Da, doisprezece lei {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kilogramul
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Da, doisprezece lei {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Продавец на рынке: Да, двенадцать лей за килограмм. kilogramul значит «килограмм»; «за килограмм».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson04.fill.003
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: fill_in_blank
+  frame:
+    text: Cumpăr un kilogram de {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mere
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mere
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я покупаю килограмм яблок. mere значит «яблоки».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson06.order.002
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: word_order
+  frame:
+    text: Nina are o {item} cu fructe.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_geantă
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina are o {item} cu fructe.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: У Нины сумка с фруктами. geantă значит «сумка».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ro.ro.a1.unit64.lesson06.fill.003
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: fill_in_blank
+  frame:
+    text: Hai să mergem împreună la {item} săptămâna viitoare? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_brutărie
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_brutărie
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ана: Сходим вместе в пекарню на следующей неделе? brutărie значит «пекарня».'
+    language_code: ru
+    direction: ltr
