@@ -1,0 +1,327 @@
+schema_version: '1.0'
+pack_key: practice.es-pl.a1.unit13
+source_language: es
+target_language: pl
+unit_content_key: pl.a1.unit13.lubie_i_wole
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_muzyka
+    - w_muzykę
+    - w_lubisz
+    - w_wolę
+slot_presets:
+  u13_all: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_muzyka
+      - w_muzykę
+      - w_lubisz
+      - w_wolę
+  s_muzyke: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_muzykę
+  s_lubisz: &id003
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubisz
+  s_wole: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_wolę
+templates:
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.choose.001
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Muzyka es la forma básica del sustantivo; después de lubię o lubisz cambia a muzykę.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.listen.002
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubisz es la forma de «tú» de lubić, que se usa con un amigo; lubię es la forma de «yo».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.order.003
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Czy lubisz {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Los sustantivos femeninos en -a toman -ę después de lubić, el mismo cambio que de kawa a kawę.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.order.004
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Bardzo lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Bardzo va antes del verbo y lo refuerza, como «mucho» en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.fill.005
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Czy {item} muzykę? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Al añadir -sz a la raíz te diriges a un amigo: lubię (yo) pasa a lubisz (tú).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.fill.006
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Lubię {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Después de lubię, lo que te gusta va en la forma del complemento, así que muzyka pasa a muzykę.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.translate.007
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: Me gusta mucho la música.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: En polaco no se repite el sustantivo en las respuestas cortas, pero una frase completa necesita la forma del complemento muzykę.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.translate.008
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: ¿Te gusta la música? (a un amigo, ty; empieza con czy)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Czy al principio convierte una afirmación en una pregunta de sí o no.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson01.translate.009
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La forma del complemento muzykę y la forma básica muzyka son dos formas del mismo sustantivo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.choose.001
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę es la forma de «yo» de woleć, «preferir»; funciona como lubię.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.listen.002
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę termina en -ę como lubię, la terminación de la forma de «yo».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.order.003
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: word_order
+  frame:
+    text: Ja też {item} herbatę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja też significa «yo también» y va seguido del mismo verbo que en la frase de la primera persona que habla.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.fill.004
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: fill_in_blank
+  frame:
+    text: Ja {item} herbatę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wolę lleva la forma del complemento, así que herbata pasa a herbatę.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.translate.005
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: 'Yo también: prefiero el té.'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja se añade para dar énfasis; la terminación verbal -ę ya significa «yo».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-pl.pl.a1.unit13.lesson02.translate.006
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wolę es «prefiero»; a diferencia de lubię, elige una cosa en lugar de otra.
+    language_code: es
+    direction: ltr
