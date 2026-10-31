@@ -1,0 +1,307 @@
+schema_version: '1.0'
+pack_key: practice.ru-fr.a1.unit78
+source_language: ru
+target_language: fr
+unit_content_key: fr.a1.unit78.concert
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dure
+    - w_durer
+    - w_début
+    - w_groupe
+    - w_génial
+    - w_place
+    - w_public
+    - w_scène
+    - w_vagabonds
+templates:
+- content_key: practice.ru-fr.fr.a1.unit78.lesson01.choose.001
+  lesson_content_key: fr.a1.unit78.lesson01.je_veux_aller_au
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_groupe
+        - w_place
+        - w_durer
+        - w_dure
+        - w_scène
+        - w_public
+        - w_vagabonds
+        - w_début
+        - w_génial
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Я хочу пойти на концерт».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson02.listen.001
+  lesson_content_key: fr.a1.unit78.lesson02.je_veux_acheter_un
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Я хочу купить билет».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson03.translate.001
+  lesson_content_key: fr.a1.unit78.lesson03.a_quelle_heure_commence
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Во сколько начинается концерт?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson05.match.001
+  lesson_content_key: fr.a1.unit78.lesson05.lire_le_programme
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое французское слово с его значением по-русски; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson06.choose.001
+  lesson_content_key: fr.a1.unit78.lesson06.mathieu_nina_et_camille
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого урока: Mathieu, Nina и Camille на концерте.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson01.translate.002
+  lesson_content_key: fr.a1.unit78.lesson01.je_veux_aller_au
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Я хочу пойти на концерт».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson01.order.003
+  lesson_content_key: fr.a1.unit78.lesson01.je_veux_aller_au
+  type: word_order
+  frame:
+    text: Le {item} est bon.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_groupe
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le {item} est bon.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Группа хорошая. groupe значит «группа».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson02.order.002
+  lesson_content_key: fr.a1.unit78.lesson02.je_veux_acheter_un
+  type: word_order
+  frame:
+    text: J'ai une bonne {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_place
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'ai une bonne {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: У меня хорошее место. place значит «место».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson03.order.002
+  lesson_content_key: fr.a1.unit78.lesson03.a_quelle_heure_commence
+  type: word_order
+  frame:
+    text: Le concert {item} deux heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_dure
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le concert {item} deux heures.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Концерт длится два часа. dure значит «длится».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson05.order.002
+  lesson_content_key: fr.a1.unit78.lesson05.lire_le_programme
+  type: word_order
+  frame:
+    text: La {item} est grande.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_scène
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Сцена большая. scène значит «сцена».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson05.fill.003
+  lesson_content_key: fr.a1.unit78.lesson05.lire_le_programme
+  type: fill_in_blank
+  frame:
+    text: Le {item} est content. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_public
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_public
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Публика довольна. public значит «публика».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit78.lesson06.order.002
+  lesson_content_key: fr.a1.unit78.lesson06.mathieu_nina_et_camille
+  type: word_order
+  frame:
+    text: Le concert était {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_génial
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le concert était {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Концерт был потрясающий. génial значит «потрясающий».
+    language_code: ru
+    direction: ltr
