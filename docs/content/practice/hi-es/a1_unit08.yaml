@@ -1,0 +1,342 @@
+schema_version: '1.0'
+pack_key: practice.hi-es.a1.unit08
+source_language: hi
+target_language: es
+unit_content_key: es.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u08
+    - w_banco
+    - w_parque
+    - w_farmacia
+    - w_biblioteca
+    - w_enfrente
+    - w_lejos
+    - w_entre
+    - w_bastante
+    - w_compramos
+slot_presets:
+  nouns: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u08
+  content: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u08
+  words: &id009
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u08
+  verbs_adv: &id010
+    language_code: es
+    part_of_speech:
+    - verb
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u08
+  place_m: &id003
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_banco
+      - w_parque
+  place_f: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_farmacia
+      - w_biblioteca
+  enfrente: &id004
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_enfrente
+  lejos: &id005
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_lejos
+  entre: &id006
+    language_code: es
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_entre
+  bastante: &id007
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_bastante
+  compramos: &id011
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_compramos
+templates:
+- content_key: practice.hi-es.es.a1.unit08.lesson01.choose.001
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Biblioteca का अर्थ पुस्तकालय है; किताबों की दुकान को librería कहते हैं, जो अक्सर भ्रम पैदा करने वाला शब्द है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson01.listen.002
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Banco का अर्थ बेंच भी होता है; इस यूनिट में यह सड़क वाला बैंक है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson01.order.003
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: word_order
+  frame:
+    text: La {item} está cerca de aquí.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} está cerca de aquí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'कोई चीज़ कहाँ है, यह बताने के लिए estar का प्रयोग होता है: la farmacia está cerca।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson01.translate.004
+  lesson_content_key: es.a1.unit08.lesson01.lugares_comunes
+  type: translation
+  frame:
+    text: '{item} बाज़ार के बगल में है।'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El {item} está al lado del mercado.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'de + el मिलकर del बन जाता है: al lado del mercado, यानी बाज़ार के बगल में।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson02.fill.001
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: fill_in_blank
+  frame:
+    text: La farmacia está {item} del mercado. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Enfrente de, al lado de, lejos de और cerca de सभी में जगह से पहले de ज़रूरी है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson02.order.002
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: word_order
+  frame:
+    text: El parque está {item} del mercado.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El parque está {item} del mercado.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: पार्क बाज़ार से दूर है। इसका उलटा cerca de है, यानी पास।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson02.translate.003
+  lesson_content_key: es.a1.unit08.lesson02.preposiciones_de_lugar
+  type: translation
+  frame:
+    text: पुस्तकालय बैंक और पार्क के बीच में है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La biblioteca está {item} el banco y el parque.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Entre के बाद y से जुड़ी दो जगहें आती हैं, और उसके बाद de नहीं लगता।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson04.fill.001
+  lesson_content_key: es.a1.unit08.lesson04.preguntar_si_esta_lejos
+  type: fill_in_blank
+  frame:
+    text: Sí, está {item} lejos. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Bastante का अर्थ काफ़ी है: bastante lejos, यानी काफ़ी दूर; bastante cerca, यानी काफ़ी पास।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson05.match.001
+  lesson_content_key: es.a1.unit08.lesson05.leer_sobre_el_barrio
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'En este barrio hay muchos lugares útiles: hay यह बताता है कि किसी जगह में क्या-क्या है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson05.translate.002
+  lesson_content_key: es.a1.unit08.lesson05.leer_sobre_el_barrio
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Útil व्यंजन पर समाप्त होता है, इसलिए बहुवचन में útiles बन जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson06.choose.001
+  lesson_content_key: es.a1.unit08.lesson06.lugares_del_barrio_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: बिना accent वाला donde दो बातों को जोड़ता है; accent वाला ¿dónde? प्रश्न पूछता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit08.lesson06.translate.002
+  lesson_content_key: es.a1.unit08.lesson06.lugares_del_barrio_dialogue
+  type: translation
+  frame:
+    text: यह उस बाज़ार के बगल में है जहाँ हमने अंडे ख़रीदे थे।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Está al lado del mercado donde {item} los huevos.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Compramos का अर्थ "हम ख़रीदते हैं" भी है और "हमने ख़रीदा" भी; समय संदर्भ से पता चलता है।
+    language_code: hi
+    direction: ltr
