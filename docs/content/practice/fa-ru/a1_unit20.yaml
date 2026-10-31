@@ -1,0 +1,451 @@
+schema_version: '1.0'
+pack_key: practice.fa-ru.a1.unit20
+source_language: fa
+target_language: ru
+unit_content_key: ru.a1.unit20.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ветер
+    - w_дождь
+    - w_идёт
+    - w_какая
+    - w_останемся
+    - w_погода
+    - w_солнце
+    - w_тепло
+    - w_тогда
+    - w_холодно
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_холодно
+      - w_тепло
+      - w_погода
+  p2: &id002
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_холодно
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_тепло
+  p4: &id004
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_идёт
+      - w_дождь
+      - w_солнце
+      - w_ветер
+  p5: &id005
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_идёт
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_дождь
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_солнце
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ветер
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_какая
+      - w_тогда
+      - w_останемся
+  p10: &id010
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_какая
+  p11: &id011
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_останемся
+  p12: &id012
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_тогда
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_погода
+templates:
+- content_key: practice.fa-ru.ru.a1.unit20.lesson01.choose.001
+  lesson_content_key: ru.a1.unit20.lesson01.segodnya_holodno
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: «Холодно» و «тепло» هوا را توصیف می‌کنند و برای «است» واژه‌ای لازم ندارند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson01.order.002
+  lesson_content_key: ru.a1.unit20.lesson01.segodnya_holodno
+  type: word_order
+  frame:
+    text: Сегодня {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'جمله‌های هوا در روسی از یک قید بدون فاعل ساخته می‌شوند: Сегодня холодно.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson01.fill.003
+  lesson_content_key: ru.a1.unit20.lesson01.segodnya_holodno
+  type: fill_in_blank
+  frame:
+    text: Дома {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: «Тепло» مخالف «холодно» است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson01.translate.004
+  lesson_content_key: ru.a1.unit20.lesson01.segodnya_holodno
+  type: translation
+  frame:
+    text: امروز هوا سرده.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'برای «است» واژه‌ای لازم نیست: Сегодня холодно.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson01.translate.005
+  lesson_content_key: ru.a1.unit20.lesson01.segodnya_holodno
+  type: translation
+  frame:
+    text: تو خونه گرمه.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дома {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Дома» یعنی «در خانه» و یک قید ثابت است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.choose.001
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: «Идёт» تقریباً یعنی «می‌رود» و «Идёт дождь» یعنی «بارون میاد».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.order.002
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: word_order
+  frame:
+    text: Сегодня {item} дождь.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} дождь.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Идёт» برای هوایی به کار می‌رود که می‌بارد، مثل باران.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.fill.003
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: fill_in_blank
+  frame:
+    text: Сегодня идёт {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: «Идёт дождь» تقریباً یعنی «باران می‌رود».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.fill.004
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: fill_in_blank
+  frame:
+    text: Сегодня {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'روسی فقط وضعیت هوا را نام می‌برد: Сегодня солнце.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.translate.005
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: translation
+  frame:
+    text: امروز باران می‌آید.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} дождь.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: روسی برای باران از «идёт» به معنی «می‌رود» استفاده می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson02.translate.006
+  lesson_content_key: ru.a1.unit20.lesson02.idet_dozhd
+  type: translation
+  frame:
+    text: بیرون باد میاد.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На улице {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «На улице» یعنی «بیرون»، تقریباً «توی خیابان».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.choose.001
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: «Какая» شکل مؤنث «کدام/چطور» است و با اسم مؤنث «погода» هماهنگ است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.order.002
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: word_order
+  frame:
+    text: А {item} сегодня погода?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: А {item} сегодня погода?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Какая» با اسم مؤنث «погода» هماهنگ می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.order.003
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: word_order
+  frame:
+    text: Тогда давай {item} дома.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Тогда давай {item} дома.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Давай» به‌علاوهٔ شکل «ما» پیشنهاد انجام کاری با هم است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.fill.004
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: fill_in_blank
+  frame:
+    text: Хорошо, {item} давай останемся дома. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: «Тогда» برنامه را به چیزی که تازه گفته شد وصل می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.fill.005
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: fill_in_blank
+  frame:
+    text: А {item} сегодня погода? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: «Какая» مؤنث است و با «погода» هماهنگ می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.translate.006
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: translation
+  frame:
+    text: امروز هوا چطوره؟
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Какая сегодня {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Какая» با اسم مؤنث «погода» هماهنگ می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ru.ru.a1.unit20.lesson03.translate.007
+  lesson_content_key: ru.a1.unit20.lesson03.pogoda_i_plan
+  type: translation
+  frame:
+    text: پس بیا تو خونه بمونیم. (غیررسمی)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Тогда давай {item} дома.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: «Давай» به‌علاوهٔ شکل «ما» راه معمول پیشنهاد دادن یک برنامه است.
+    language_code: fa
+    direction: rtl
