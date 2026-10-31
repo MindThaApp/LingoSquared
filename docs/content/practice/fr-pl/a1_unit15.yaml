@@ -1,0 +1,468 @@
+schema_version: '1.0'
+pack_key: practice.fr-pl.a1.unit15
+source_language: fr
+target_language: pl
+unit_content_key: pl.a1.unit15.podroz
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dworzec
+    - w_bilet
+    - w_peron
+    - w_jechać
+    - w_jadę
+    - w_jedzie
+    - w_jutro
+    - w_Krakowa
+    - w_autobus
+    - w_Warszawa
+    - w_Warszawy
+    - w_dokąd
+slot_presets:
+  u15_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dworzec
+      - w_bilet
+      - w_peron
+      - w_jechać
+      - w_jadę
+      - w_jedzie
+      - w_jutro
+  s_jedzie: &id002
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jedzie
+  s_Krakowa: &id003
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Krakowa
+  s_jade: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jadę
+  u15_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+  u15_mp2: &id006
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+      - w_dworzec
+  s_Warszawy: &id007
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Warszawy
+  s_autobus: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_autobus
+templates:
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.choose.001
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Jadę est la forme de « je » de jechać et jedzie la forme de « il » ou « elle » ; les deux servent pour un trajet en véhicule.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.listen.002
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dworzec est le bâtiment de la gare ; le peron est le quai où s’arrête le train.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.match.003
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Jechać est la forme du dictionnaire ; jadę (je) et jedzie (il ou elle) en sont deux formes.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.order.004
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Marek {item} do Krakowa jutro.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa jutro.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Jedzie est la forme de « il » ou « elle » : elle va donc avec un prénom comme Marek.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.order.005
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Bilet do {item}, proszę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Après do, le nom de la ville change : Kraków devient Krakowa.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.fill.006
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Bilet do {item}, proszę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Une forme comme Krakowa s’apprend avec do, en un seul bloc.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.fill.007
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Ja {item} do Warszawy. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Jadę est la forme de « je » de jechać, pour aller quelque part en véhicule.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.translate.008
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Un billet pour Cracovie, s’il vous plaît.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Do demande une autre forme de la ville : Kraków devient Krakowa.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.translate.009
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Marek va à Cracovie (en véhicule).
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie est la forme de « il » ou « elle » de jechać.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson01.translate.010
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Je vais à Varsovie (en véhicule ; mets le pronom pour « je »).
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja {item} do Warszawy.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja est ajouté ici pour insister ; la terminaison -ę marque déjà la forme de « je ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.choose.001
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dokąd demande où quelqu’un va ; on attend donc une réponse avec do.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.listen.002
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Warszawa est le nom de base de la ville ; après do, il devient Warszawy.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.match.003
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Les villes changent différemment après do : Kraków devient Krakowa, Warszawa devient Warszawy.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.order.004
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Autobus do {item} odjeżdża o siódmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Après do, la ville prend une autre terminaison : Warszawa devient Warszawy.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.order.005
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Dokąd jedzie {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dokąd jedzie {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Autobus désigne une seule chose : le verbe prend donc la même forme que pour « il » ou « elle » : jedzie.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.fill.006
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: fill_in_blank
+  frame:
+    text: Ewa jedzie do {item} jutro. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Chaque ville a sa propre forme après do : apprends-les une par une.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.translate.007
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: Le bus pour Varsovie part à sept heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Do est suivi de Warszawy, et non de Warszawa.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit15.lesson02.translate.008
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Dokąd interroge sur la direction, alors que gdzie interroge sur le lieu.
+    language_code: fr
+    direction: ltr
