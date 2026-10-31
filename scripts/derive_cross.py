@@ -195,6 +195,8 @@ def english_hint(text: str) -> bool:
     if not m:
         return False
     hint = m.group(1)
+    if re.fullmatch(r"[A-Za-z][A-Za-z ,;/'\u2019-]*", hint) and re.search(r"[\u0400-\u04ff]", text[:m.start()]):
+        return True                           # Latin hint after Cyrillic text: "Где ___ библиотека? (is located)"
     return bool(norm_tokens(hint)) and (english_prose(hint) or en_fraction(hint) >= 0.8
                                          or re.match(r"(the|a|an|to) ", hint) is not None and en_fraction(hint) >= 0.5)
 
@@ -1253,7 +1255,8 @@ LATIN_WORD = re.compile(r"[A-Za-z\u00c0-\u024f]{2,}(?:['\u2019-][A-Za-z\u00c0-\u
 # they may also occur in the English option strings of the target realizations, so they count even there.
 GRAMMAR_ENGLISH = frozenset("""article articles accent infinitive lowercase uppercase reflexive participle present perfect please plural
 singular masculine feminine verb noun adjective pronoun gerund imperative subjunctive past future tense preposition conjunction
-vowel consonant syllable stress suffix prefix ending contraction question formal informal""".split())
+vowel consonant syllable stress suffix prefix ending contraction question formal informal
+nominative accusative genitive dative instrumental prepositional locative vocative perfective imperfective case cases reflexive lesson""".split())
 _SPANS = re.compile(r"\{[^}]*\}|\*[^*]*\*|\"[^\"]*\"|\u00ab[^\u00bb]*\u00bb|\u201c[^\u201d]*\u201d")
 
 
