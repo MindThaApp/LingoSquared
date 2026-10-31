@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.fr-ro.a1.unit15
+source_language: fr
+target_language: ro
+unit_content_key: ro.a1.unit15.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_tren
+    - w_pleacă
+    - w_peron
+    - w_trenul
+    - w_peronul
+    - w_bilet
+    - w_București
+    - w_drum
+    - w_bun
+slot_presets:
+  a_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_trenul
+      - w_peronul
+  all6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_bilet
+      - w_București
+      - w_drum
+  b_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_bilet
+      - w_București
+      - w_drum
+      - w_tren
+      - w_peron
+  c_pool: &id008
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_drum
+      - w_bun
+      - w_tren
+      - w_bilet
+  t_trenul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_trenul
+  t_peronul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_peronul
+  t_pleaca: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_pleacă
+  t_bilet: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_bilet
+  t_bun: &id009
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bun
+templates:
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.choose.001
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Trenul et peronul sont tren et peron avec l’article -ul ajouté à la fin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.listen.002
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pleacă est le verbe « part », employé avec trenul dans La ce oră pleacă trenul?
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.order.003
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: La ce oră {item} trenul?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră {item} trenul?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Pleacă convient pour il ou elle, donc il va avec trenul.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.order.004
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: Trenul este la {item} trei.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul est peron plus l’article, donc il signifie « le quai ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.fill.005
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: fill_in_blank
+  frame:
+    text: Trenul {item} la ora nouă. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Pleacă est la forme de la troisième personne : il part.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.translate.006
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: À quelle heure part le train ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră pleacă {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Trenul est tren plus -ul, « le train » ; ora nouă indique l’heure.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.translate.007
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: Le train part à neuf heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul {item} la ora nouă.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La ora nouă donne l’heure ; le verbe reste le même pour il ou elle.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson01.translate.008
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: Le train est au quai trois.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul trei signifie « le quai trois », avec l’article sur le nom.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.choose.001
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bilet signifie « billet » et București est la capitale.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.listen.002
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Bilet est neutre : un bilet au singulier, două bilete au pluriel.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.match.003
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tren, peron, bilet et drum sont des noms ; pleacă est un verbe ; București est un nom propre.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.order.004
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: word_order
+  frame:
+    text: Am un {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bilet est neutre, et les noms neutres se construisent avec un au singulier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.fill.005
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: fill_in_blank
+  frame:
+    text: Aș dori un {item} la București, vă rog. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aș dori un bilet est une demande polie ; vă rog convient avec dumneavoastră.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.translate.006
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: Je voudrais un billet pour Bucarest, s’il vous plaît. (formel, à quelqu’un que tu vouvoies avec dumneavoastră)
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aș dori un {item} la București, vă rog.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aș dori suivi de un et d’un nom forme une demande polie.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.translate.007
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: Combien coûte un billet pour Bucarest ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cât costă un {item} la București?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cât costă demande le prix d’une seule chose, donc le verbe reste au singulier.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson02.translate.008
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Chacun de ces mots désigne une chose, une action ou un lieu liés à un voyage.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson03.choose.001
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Drum bun souhaite bon voyage à quelqu’un.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson03.order.002
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: word_order
+  frame:
+    text: Drum {item}, Mihai!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum est neutre, donc au singulier l’adjectif prend la forme masculine bun.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson03.fill.003
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: fill_in_blank
+  frame:
+    text: Drum {item}, Mihai! ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Bun suit le nom dans ce souhait d’adieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ro.ro.a1.unit15.lesson03.translate.004
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: translation
+  frame:
+    text: Bon voyage, Mihai !
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum bun est un souhait figé adressé à quelqu’un qui part.
+    language_code: fr
+    direction: ltr
