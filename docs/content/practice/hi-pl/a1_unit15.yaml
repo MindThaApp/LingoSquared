@@ -1,0 +1,468 @@
+schema_version: '1.0'
+pack_key: practice.hi-pl.a1.unit15
+source_language: hi
+target_language: pl
+unit_content_key: pl.a1.unit15.podroz
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_dworzec
+    - w_bilet
+    - w_peron
+    - w_jechać
+    - w_jadę
+    - w_jedzie
+    - w_jutro
+    - w_Krakowa
+    - w_autobus
+    - w_Warszawa
+    - w_Warszawy
+    - w_dokąd
+slot_presets:
+  u15_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dworzec
+      - w_bilet
+      - w_peron
+      - w_jechać
+      - w_jadę
+      - w_jedzie
+      - w_jutro
+  s_jedzie: &id002
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jedzie
+  s_Krakowa: &id003
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Krakowa
+  s_jade: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_jadę
+  u15_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+  u15_mp2: &id006
+    language_code: pl
+    part_of_speech:
+    - proper_noun
+    - particle
+    - noun
+    agreement_tags:
+      semantic:
+      - w_autobus
+      - w_Warszawa
+      - w_Warszawy
+      - w_dokąd
+      - w_bilet
+      - w_dworzec
+  s_Warszawy: &id007
+    language_code: pl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Warszawy
+  s_autobus: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_autobus
+templates:
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.choose.001
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Jadę, jechać का 'मैं' वाला रूप है और jedzie 'वह' वाला रूप है; दोनों किसी वाहन से यात्रा के लिए हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.listen.002
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dworzec स्टेशन की इमारत है; peron वह प्लेटफ़ॉर्म है जहाँ ट्रेन रुकती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.match.003
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Jechać शब्दकोश वाला रूप है; jadę (मैं) और jedzie (वह) उसके दो रूप हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.order.004
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Marek {item} do Krakowa jutro.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa jutro.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie 'वह' वाला रूप है, इसलिए यह Marek जैसे नाम के साथ आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.order.005
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: word_order
+  frame:
+    text: Bilet do {item}, proszę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'do के बाद शहर का नाम बदल जाता है: Kraków से Krakowa हो जाता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.fill.006
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Bilet do {item}, proszę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Krakowa जैसा रूप do के साथ एक पूरे टुकड़े की तरह सीखा जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.fill.007
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: fill_in_blank
+  frame:
+    text: Ja {item} do Warszawy. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Jadę, jechać का 'मैं' वाला रूप है, जो वाहन से जाने के लिए आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.translate.008
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: कृपया Kraków का एक टिकट दीजिए।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bilet do {item}, proszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'do के बाद शहर का रूप बदलता है: Kraków से Krakowa हो जाता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.translate.009
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: Marek (वाहन से) Kraków जा रहा है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek {item} do Krakowa.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Jedzie, jechać का 'वह' वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson01.translate.010
+  lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+  type: translation
+  frame:
+    text: मैं (वाहन से) Warsaw जा रहा हूँ। ('मैं' के लिए सर्वनाम भी लिखिए।)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja {item} do Warszawy.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: यहाँ ja ज़ोर देने के लिए जोड़ा गया है; अंत का -ę पहले से ही 'मैं' वाला रूप बता देता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.choose.001
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dokąd पूछता है कि कोई कहाँ जा रहा है, इसलिए उसके उत्तर में do आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.listen.002
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Warszawa शहर का मूल नाम है; do के बाद यह Warszawy बन जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.match.003
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'do के बाद शहरों के रूप अलग-अलग तरह से बदलते हैं: Kraków से Krakowa, Warszawa से Warszawy।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.order.004
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Autobus do {item} odjeżdża o siódmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'do के बाद शहर के अंत में बदलाव आता है: Warszawa से Warszawy हो जाता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.order.005
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: word_order
+  frame:
+    text: Dokąd jedzie {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dokąd jedzie {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Autobus एक वस्तु है, इसलिए क्रिया का रूप वही रहता है जो ''वह'' के लिए होता है: jedzie।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.fill.006
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: fill_in_blank
+  frame:
+    text: Ewa jedzie do {item} jutro. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: do के बाद हर शहर का अपना रूप होता है, इसलिए उन्हें एक-एक करके सीखिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.translate.007
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: वारसॉ की बस सात बजे निकलती है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Autobus do {item} odjeżdża o siódmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: do के बाद Warszawy आता है, Warszawa नहीं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit15.lesson02.translate.008
+  lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Dokąd दिशा के बारे में पूछता है, जबकि gdzie स्थान के बारे में पूछता है।
+    language_code: hi
+    direction: ltr
