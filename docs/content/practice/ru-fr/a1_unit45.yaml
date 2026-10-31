@@ -1,0 +1,412 @@
+schema_version: '1.0'
+pack_key: practice.ru-fr.a1.unit45
+source_language: ru
+target_language: fr
+unit_content_key: fr.a1.unit45.travail
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bureau
+    - w_certaines
+    - w_cuisinier
+    - w_curieuse
+    - w_finis
+    - w_forme
+    - w_gardent
+    - w_horaires
+    - w_infirmière
+    - w_métier
+    - w_pause
+    - w_personnes
+    - w_propre
+    - w_restaurant
+    - w_rythme
+    - w_son
+    - w_travaille
+    - w_travaillent
+    - w_tôt
+    - w_verbes
+    - w_vie
+templates:
+- content_key: practice.ru-fr.fr.a1.unit45.lesson01.choose.001
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_vie
+        - w_métier
+        - w_cuisinier
+        - w_travaille
+        - w_infirmière
+        - w_restaurant
+        - w_certaines
+        - w_personnes
+        - w_travaillent
+        - w_bureau
+        - w_pause
+        - w_finis
+        - w_verbes
+        - w_gardent
+        - w_forme
+        - w_curieuse
+        - w_horaires
+        - w_tôt
+        - w_son
+        - w_propre
+        - w_rythme
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Кем ты работаешь?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson02.listen.001
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Где ты работаешь?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson03.translate.001
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Мой рабочий день».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson04.match.001
+  lesson_content_key: fr.a1.unit45.lesson04.decrire_des_collegues
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое французское слово с его значением по-русски; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson06.choose.001
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Разговор о работе».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson01.translate.002
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Кем ты работаешь?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson01.order.003
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: word_order
+  frame:
+    text: Tu fais quoi dans la {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_vie
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tu fais quoi dans la {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Кем ты работаешь? Обычный разговорный способ спросить о профессии.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson01.fill.004
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: fill_in_blank
+  frame:
+    text: Quel est ton {item} ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_métier
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_métier
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Какая у тебя профессия? métier означает «профессия; ремесло».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson01.translate.005
+  lesson_content_key: fr.a1.unit45.lesson01.tu_fais_quoi_dans
+  type: translation
+  frame:
+    text: Я работаю поваром.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cuisinier
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je travaille comme {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Я работаю поваром. cuisinier означает «повар» (м. р.).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson02.order.002
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: word_order
+  frame:
+    text: Je travaille dans un {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_restaurant
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je travaille dans un {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Я работаю в ресторане. Un restaurant здесь употребляется с неопределённым артиклем, потому что это один из многих ресторанов.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson02.fill.003
+  lesson_content_key: fr.a1.unit45.lesson02.ou_travailles_tu
+  type: fill_in_blank
+  frame:
+    text: Certaines {item} travaillent dans un bureau. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_personnes
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_personnes
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Некоторые работают в офисе. Dans un bureau (в офисе) употребляется с артиклем, как и dans un restaurant.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson03.order.002
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: word_order
+  frame:
+    text: J'ai une {item} à douze heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_pause
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'ai une {item} à douze heures.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: У меня перерыв в двенадцать часов. pause означает «перерыв».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson03.fill.003
+  lesson_content_key: fr.a1.unit45.lesson03.ma_journee_de_travail
+  type: fill_in_blank
+  frame:
+    text: Je {item} à cinq heures. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_finis
+    hint:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_finis
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я заканчиваю в пять часов. Finis — форма je от глагола finir (заканчивать).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson06.order.002
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: word_order
+  frame:
+    text: Tu fais quels {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_horaires
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tu fais quels {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Какой у тебя график? Tu fais quels horaires ? — естественный способ спросить о рабочем графике; quels согласуется с множественным числом horaires.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-fr.fr.a1.unit45.lesson06.fill.003
+  lesson_content_key: fr.a1.unit45.lesson06.une_conversation_sur_le
+  type: fill_in_blank
+  frame:
+    text: Chaque métier a {item} propre rythme, je crois. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_son
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_son
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Наверное, у каждой работы свой ритм. Естественная задумчивая заключительная реплика: достаточно узнавать её по смыслу, воспроизводить в точности не нужно.'
+    language_code: ru
+    direction: ltr
