@@ -1,0 +1,327 @@
+schema_version: '1.0'
+pack_key: practice.hi-pl.a1.unit13
+source_language: hi
+target_language: pl
+unit_content_key: pl.a1.unit13.lubie_i_wole
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_muzyka
+    - w_muzykę
+    - w_lubisz
+    - w_wolę
+slot_presets:
+  u13_all: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_muzyka
+      - w_muzykę
+      - w_lubisz
+      - w_wolę
+  s_muzyke: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_muzykę
+  s_lubisz: &id003
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubisz
+  s_wole: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_wolę
+templates:
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.choose.001
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Muzyka संज्ञा का मूल रूप है; lubię या lubisz के बाद यह muzykę बन जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.listen.002
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubisz, lubić का 'तुम' वाला रूप है, जो दोस्त के लिए इस्तेमाल होता है; lubię 'मैं' वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.order.003
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Czy lubisz {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: -a पर समाप्त होने वाली स्त्रीलिंग संज्ञाएँ lubić के बाद -ę लेती हैं, वही बदलाव जो kawa से kawę में होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.order.004
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Bardzo lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Bardzo क्रिया से पहले आता है और उसे और प्रबल बनाता है, जैसे हिंदी में 'बहुत'।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.fill.005
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Czy {item} muzykę? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'धातु में -sz जोड़ने से दोस्त को संबोधित किया जाता है: lubię (मैं) से lubisz (तुम) बनता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.fill.006
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Lubię {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: lubię के बाद पसंद की चीज़ कर्म वाले रूप में आती है, इसलिए muzyka से muzykę बनता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.translate.007
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: मुझे संगीत सचमुच बहुत पसंद है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: छोटे उत्तरों में पोलिश संज्ञा को दोहराती नहीं है, पर पूरे वाक्य में कर्म वाला रूप muzykę चाहिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.translate.008
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: क्या तुम्हें संगीत पसंद है? (दोस्त से, ty; czy से शुरू कीजिए)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: शुरू में czy लगाने से कथन 'हाँ या नहीं' वाला प्रश्न बन जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson01.translate.009
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: कर्म वाला रूप muzykę और मूल रूप muzyka एक ही संज्ञा के दो रूप हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.choose.001
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę, woleć ('ज़्यादा पसंद करना') का 'मैं' वाला रूप है; यह lubię की तरह काम करता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.listen.002
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę का अंत lubię की तरह -ę है, जो 'मैं' वाला रूप दर्शाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.order.003
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: word_order
+  frame:
+    text: Ja też {item} herbatę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja też का अर्थ है 'मैं भी'; इसके बाद वही क्रिया आती है जो पहले बोलने वाले के वाक्य में थी।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.fill.004
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: fill_in_blank
+  frame:
+    text: Ja {item} herbatę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wolę कर्म वाला रूप लेता है, इसलिए herbata से herbatę बनता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.translate.005
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: 'मैं भी: मुझे चाय ज़्यादा पसंद है।'
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja ज़ोर देने के लिए जोड़ा गया है; क्रिया का अंत -ę पहले से ही 'मैं' बता देता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-pl.pl.a1.unit13.lesson02.translate.006
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wolę का अर्थ है 'मुझे ज़्यादा पसंद है'; lubię के विपरीत यह एक चीज़ को दूसरी पर चुनता है।
+    language_code: hi
+    direction: ltr
