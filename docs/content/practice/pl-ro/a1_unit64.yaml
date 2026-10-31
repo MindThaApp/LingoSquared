@@ -1,0 +1,421 @@
+schema_version: '1.0'
+pack_key: practice.pl-ro.a1.unit64
+source_language: pl
+target_language: ro
+unit_content_key: ro.a1.unit64.piata
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_aglomerată
+    - w_brutărie
+    - w_fructele
+    - w_geantă
+    - w_gustoase
+    - w_kilograme
+    - w_kilogramul
+    - w_legumele
+    - w_mere
+    - w_merele
+    - w_proaspete
+    - w_taraba
+    - w_tarabă
+    - w_vânzătorul
+templates:
+- content_key: practice.pl-ro.ro.a1.unit64.lesson01.choose.001
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ro
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_aglomerată
+        - w_taraba
+        - w_tarabă
+        - w_legumele
+        - w_proaspete
+        - w_fructele
+        - w_gustoase
+        - w_merele
+        - w_vânzătorul
+        - w_kilogramul
+        - w_mere
+        - w_kilograme
+        - w_geantă
+        - w_brutărie
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej jednostki, z lekcji „Idziemy na targ?”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson02.listen.001
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej lekcji, z lekcji o warzywach i owocach.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson03.translate.001
+  lesson_content_key: ro.a1.unit64.lesson03.merele_si_vanzatorul_din
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej jednostki, z lekcji „Jabłka i sprzedawca na targu”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson04.match.001
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Dopasuj każde rumuńskie słowo do jego polskiego znaczenia; słowa pochodzą z lekcji tego działu.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson05.choose.001
+  lesson_content_key: ro.a1.unit64.lesson05.la_taraba_in_piata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej jednostki, z lekcji „Przy stoisku na targu”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson06.translate.001
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to jedno ze słówek tej jednostki, z lekcji „Ana dowiaduje się o targu”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson01.order.002
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: word_order
+  frame:
+    text: Piața este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_aglomerată
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Piața este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Na targu jest tłoczno. aglomerată znaczy tłoczny (r. ż.).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson01.fill.003
+  lesson_content_key: ro.a1.unit64.lesson01.hai_sa_mergem_la
+  type: fill_in_blank
+  frame:
+    text: Văd o {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarabă
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarabă
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Widzę stragan. tarabă znaczy stragan.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson02.order.002
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: word_order
+  frame:
+    text: Văd {item} și fructele.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_legumele
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Văd {item} și fructele.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Widzę warzywa i owoce. legumele znaczy warzywa (określone).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson02.fill.003
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: fill_in_blank
+  frame:
+    text: Legumele sunt {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_proaspete
+    hint:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_proaspete
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Warzywa są świeże. proaspete znaczy świeże (l. mn.).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson02.translate.004
+  lesson_content_key: ro.a1.unit64.lesson02.legumele_si_fructele
+  type: translation
+  frame:
+    text: Owoce są smaczne.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_gustoase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Fructele sunt {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Owoce są smaczne. gustoase znaczy smaczne (l. mn.).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson03.order.002
+  lesson_content_key: ro.a1.unit64.lesson03.merele_si_vanzatorul_din
+  type: word_order
+  frame:
+    text: Văd {item} și vânzătorul din piață.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_merele
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Văd {item} și vânzătorul din piață.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Widzę jabłka i sprzedawcę na targu. merele znaczy jabłka (określone).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson04.order.002
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: word_order
+  frame:
+    text: Da, doisprezece lei {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_kilogramul
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Da, doisprezece lei {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Sprzedawca: Tak, dwanaście lei za kilogram. kilogramul znaczy kilogram; „za kilogram”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson04.fill.003
+  lesson_content_key: ro.a1.unit64.lesson04.preturile_din_piata
+  type: fill_in_blank
+  frame:
+    text: Cumpăr un kilogram de {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mere
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mere
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Kupuję kilogram jabłek. mere znaczy jabłka.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson06.order.002
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: word_order
+  frame:
+    text: Nina are o {item} cu fructe.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_geantă
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina are o {item} cu fructe.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Nina ma torbę z owocami. geantă znaczy torba.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ro.ro.a1.unit64.lesson06.fill.003
+  lesson_content_key: ro.a1.unit64.lesson06.ana_aude_despre_piata
+  type: fill_in_blank
+  frame:
+    text: Hai să mergem împreună la {item} săptămâna viitoare? ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_brutărie
+    hint:
+      language_code: ro
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_brutărie
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Ana: Pójdziemy razem do piekarni w przyszłym tygodniu? brutărie znaczy piekarnia.'
+    language_code: pl
+    direction: ltr
