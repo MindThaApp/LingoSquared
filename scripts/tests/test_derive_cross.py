@@ -408,6 +408,7 @@ def test_english_in_nonlatin_grammar_terms_names_and_endings():
     assert f("هذا هو present perfect من الفعل", "es") == ["present", "perfect"]
     assert f("स्पेनिश में बिना article के", "es") == ["article"]
     assert f("فعل منتظم ينتهي بـ -er", "es") == []                      # verb ending
+    assert f("*Comer* فعل منتظم ينتهي بـ -er", "es") == []             # ...also after a span
     assert f("सुबह 9 बजे यानी 9 PM", "es") == []
     # source-aware: a Spanish word the translator left without asterisks is not a leftover, an English one is
     assert f("يقول ماتيو: Me has ayudado mucho.", "es", src="Mateo says: Me has ayudado mucho.") == []
