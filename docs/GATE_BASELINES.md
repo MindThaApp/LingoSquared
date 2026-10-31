@@ -8,7 +8,7 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | `scripts/_answer_leakage_check.py` | <= 36 hits (17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
 | practice-validate (all packs) | 0 errors |
-| `pytest scripts/tests` | pass (181 at a6f9f44ec) |
+| `pytest scripts/tests` | pass (187 at 294b3618b) |
 | backend pytest (repo mounted, `test_content_answer_shapes` deselected) | pass |
 | vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (461) |
 
@@ -43,4 +43,10 @@ Leakage 17 hits (29 allowlisted); cyrillic-latin 0; 67 practice packs 0 errors.
 Measured at d9d564b64 (shipped 2026-10-31, second ship): 3060 = 3000 + 6 x 10 (de/es/fr/it/nl/pl -> ro, each equals en-ro's 10;
 en-ro is 10, not 5). en-ro (10) and en-de (4) unchanged by #87 versus a6f9f44ec; no pre-existing course changed.
 Leakage 17 hits (29 allowlisted); cyrillic-latin 0; leftovers 0; all practice packs 0 errors; scripts/tests 181; vitest 461.
-Current WARN baseline: 3060.
+Current WARN baseline: 3060 (superseded below).
+
+Measured at 294b3618b (shipped 2026-10-31, third ship): 3750 = 3060 + ru-ro 10 + 7 X-pl x 16 (de/es/fr/it/nl/ro/ru -> pl, each equals en-pl's 16)
++ 4 es-target x 138 (hi-es, ar-es, fa-es, prs-es) + 4 de-target x 4 (hi-de, ar-de, fa-de, prs-de). Per-course diff versus d9d564b64: only the 16 new
+courses appear; en-pl, en-de, en-es and every other pre-existing course unchanged. Leakage 22 hits (29 allowlisted); cyrillic-latin 0;
+leftovers 0; check_dari_register 0 findings; 89 practice packs 0 errors; scripts/tests 187; vitest 461; backend pytest pass.
+Current WARN baseline: 3750.
