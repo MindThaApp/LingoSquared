@@ -1,0 +1,459 @@
+schema_version: '1.0'
+pack_key: practice.fa-it.a1.unit22
+source_language: fa
+target_language: it
+unit_content_key: it.a1.unit22.emotions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_felice
+    - w_ma
+    - w_nervoso
+    - w_perché
+    - w_senti
+    - w_stanca
+    - w_stanco
+    - w_sto
+    - w_triste
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - w_felice
+      - w_triste
+      - w_stanco
+      - w_nervoso
+      - w_senti
+  pool2: &id002
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_felice
+      - w_triste
+      - w_stanco
+      - w_nervoso
+  pool3: &id003
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_felice
+      - w_triste
+  t_senti: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_senti
+  t_stanco: &id005
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_stanco
+  t_felice: &id006
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_felice
+  t_nervoso: &id007
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_nervoso
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - particle
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - w_perché
+      - w_ma
+      - w_stanca
+      - w_sto
+  t_ma: &id009
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ma
+  t_stanca: &id010
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_stanca
+  t_perche: &id011
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_perché
+  t_sto: &id012
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_sto
+  pool13: &id013
+    language_code: it
+    part_of_speech:
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - w_felice
+      - w_triste
+      - w_stanco
+      - w_nervoso
+      - w_senti
+      - w_stanca
+      - w_sto
+templates:
+- content_key: practice.fa-it.it.a1.unit22.lesson01.choose.001
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Stanco و nervoso برای مرد به -o ختم می‌شوند؛ felice و triste به -e.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.listen.002
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Felice و triste برای مرد و زن تغییر نمی‌کنند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.order.003
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: word_order
+  frame:
+    text: Sono {item} oggi.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} oggi.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Felice و triste به -e ختم می‌شوند و با جنسیت تغییر نمی‌کنند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.order.004
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: word_order
+  frame:
+    text: Come ti {item} oggi?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Come ti {item} oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Senti شکل غیررسمیِ «تو» است: چه حسی داری؟'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.fill.005
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: fill_in_blank
+  frame:
+    text: Sam è {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Stanco به -o ختم می‌شود چون سام مرد است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.translate.006
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: translation
+  frame:
+    text: من امروز خوشحالم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} oggi.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Felice برای مرد و زن یکی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.translate.007
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: translation
+  frame:
+    text: امروز چه حسی داری؟ (غیررسمی، تو)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Come ti {item} oggi?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Come ti senti? پرسش غیررسمی است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.translate.008
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: translation
+  frame:
+    text: من امروز عصبی‌ام. (مرد می‌گوید)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item} oggi.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: زن nervosa می‌گوید؛ مرد nervoso می‌گوید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson01.translate.009
+  lesson_content_key: it.a1.unit22.lesson01.sentimenti_base
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Felice و triste کلمه‌های احساس‌اند؛ stanco و nervoso شکل مذکرند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.choose.001
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Perché هم می‌تواند «چون» باشد و هم «چرا».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.order.002
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: word_order
+  frame:
+    text: Sono stanca, {item} sto bene.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono stanca, {item} sto bene.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ma یعنی «ولی» و دو فکر متضاد را به هم وصل می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.order.003
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: word_order
+  frame:
+    text: Sono un po' {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono un po' {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Stanca شکل مؤنث است و زن آن را به کار می‌برد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.fill.004
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: fill_in_blank
+  frame:
+    text: Sono felice {item} oggi c'è il sole. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Perché دلیل می‌آورد: «چون».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.fill.005
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: fill_in_blank
+  frame:
+    text: Sono stanca, ma {item} bene. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sto bene یعنی «حالم خوب است».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.translate.006
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: translation
+  frame:
+    text: من کمی خسته‌ام. (زن می‌گوید)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono un po' {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Stanca مؤنث است، برای زنی که حرف می‌زند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.translate.007
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: translation
+  frame:
+    text: من خوشحالم چون امروز هوا آفتابی است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono felice {item} oggi c'è il sole.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Perché دلیل را می‌گوید، مثل «چون».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-it.it.a1.unit22.lesson02.match.008
+  lesson_content_key: it.a1.unit22.lesson02.perche_vedo_elena
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id013
+    second: *id013
+    third: *id013
+    fourth: *id013
+    fifth: *id013
+    sixth: *id013
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Stanco مذکر است و stanca مؤنث.
+    language_code: fa
+    direction: rtl
