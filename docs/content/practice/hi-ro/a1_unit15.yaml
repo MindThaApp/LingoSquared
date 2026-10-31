@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.hi-ro.a1.unit15
+source_language: hi
+target_language: ro
+unit_content_key: ro.a1.unit15.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_tren
+    - w_pleacă
+    - w_peron
+    - w_trenul
+    - w_peronul
+    - w_bilet
+    - w_București
+    - w_drum
+    - w_bun
+slot_presets:
+  a_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_trenul
+      - w_peronul
+  all6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_bilet
+      - w_București
+      - w_drum
+  b_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_bilet
+      - w_București
+      - w_drum
+      - w_tren
+      - w_peron
+  c_pool: &id008
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_drum
+      - w_bun
+      - w_tren
+      - w_bilet
+  t_trenul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_trenul
+  t_peronul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_peronul
+  t_pleaca: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_pleacă
+  t_bilet: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_bilet
+  t_bun: &id009
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bun
+templates:
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.choose.001
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Trenul और peronul असल में tren और peron हैं, जिनके अंत में निश्चित उपपद -ul जुड़ा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.listen.002
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pleacă "रवाना होता है" की क्रिया है, जो La ce oră pleacă trenul? में trenul के साथ आती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.order.003
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: La ce oră {item} trenul?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră {item} trenul?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Pleacă "वह" (पुल्लिंग या स्त्रीलिंग या निर्जीव) के लिए चलता है, इसलिए trenul के साथ ठीक बैठता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.order.004
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: Trenul este la {item} trei.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul, peron में उपपद जुड़ने से बना है, इसलिए इसका अर्थ है "वह प्लेटफ़ॉर्म"।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.fill.005
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: fill_in_blank
+  frame:
+    text: Trenul {item} la ora nouă. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Pleacă अन्य पुरुष का रूप है: वह रवाना होता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.translate.006
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: ट्रेन किस समय रवाना होती है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră pleacă {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Trenul, tren में -ul जुड़ने से "वह ट्रेन" है; ora nouă घंटा बताता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.translate.007
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: ट्रेन नौ बजे रवाना होती है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul {item} la ora nouă.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La ora nouă घंटा बताता है; क्रिया का रूप "वह" के लिए वही रहता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson01.translate.008
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: ट्रेन प्लेटफ़ॉर्म तीन पर है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul trei का अर्थ है प्लेटफ़ॉर्म तीन, जिसमें उपपद संज्ञा पर लगा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.choose.001
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bilet का अर्थ है टिकट और București राजधानी शहर है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.listen.002
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Bilet नपुंसक लिंग का है: एकवचन में un bilet, बहुवचन में două bilete।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.match.003
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tren, peron, bilet और drum संज्ञाएँ हैं; pleacă क्रिया है; București एक व्यक्तिवाचक नाम है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.order.004
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: word_order
+  frame:
+    text: Am un {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bilet नपुंसक लिंग का है, और नपुंसक संज्ञाएँ एकवचन में un लेती हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.fill.005
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: fill_in_blank
+  frame:
+    text: Aș dori un {item} la București, vă rog. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aș dori un bilet एक विनम्र अनुरोध है; vă rog, dumneavoastră के साथ उपयुक्त है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.translate.006
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: मुझे बुखारेस्ट का एक टिकट चाहिए, कृपया। (औपचारिक, ऐसे व्यक्ति से जिसे आप dumneavoastră कहते हैं)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aș dori un {item} la București, vă rog.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aș dori के बाद un और कोई संज्ञा आने से विनम्र अनुरोध बनता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.translate.007
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: बुखारेस्ट का टिकट कितने का है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cât costă un {item} la București?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cât costă एक चीज़ का दाम पूछता है, इसलिए क्रिया एकवचन में रहती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson02.translate.008
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: इनमें से हर शब्द यात्रा की किसी चीज़, क्रिया या जगह का नाम है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson03.choose.001
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Drum bun किसी को शुभ यात्रा की शुभकामना देता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson03.order.002
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: word_order
+  frame:
+    text: Drum {item}, Mihai!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum नपुंसक लिंग का शब्द है, इसलिए एकवचन में विशेषण पुल्लिंग रूप bun लेता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson03.fill.003
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: fill_in_blank
+  frame:
+    text: Drum {item}, Mihai! ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: इस विदाई-शुभकामना में bun संज्ञा के बाद आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ro.ro.a1.unit15.lesson03.translate.004
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: translation
+  frame:
+    text: शुभ यात्रा, Mihai!
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum bun एक तयशुदा शुभकामना है, जो जा रहे व्यक्ति से कही जाती है।
+    language_code: hi
+    direction: ltr
