@@ -1,0 +1,496 @@
+schema_version: '1.0'
+pack_key: practice.ru-pl.a1.unit16
+source_language: ru
+target_language: pl
+unit_content_key: pl.a1.unit16.zdrowie
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_boli
+    - w_bolą
+    - w_mnie
+    - w_głowa
+    - w_gardło
+    - w_brzuch
+    - w_zęby
+    - w_cię
+    - w_czuć
+    - w_czuję
+    - w_czujesz
+    - w_źle
+    - w_gorączka
+    - w_chory
+    - w_chora
+    - w_gorączkę
+    - w_odpocząć
+    - w_boleć
+slot_presets:
+  u16_l1: &id001
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_boli
+      - w_bolą
+      - w_mnie
+      - w_głowa
+      - w_gardło
+      - w_brzuch
+      - w_zęby
+      - w_cię
+  u16_mp1: &id002
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - noun
+    agreement_tags:
+      semantic:
+      - w_głowa
+      - w_gardło
+      - w_brzuch
+      - w_zęby
+      - w_mnie
+      - w_cię
+  s_mnie: &id003
+    language_code: pl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_mnie
+  s_boli: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_boli
+  s_cie: &id005
+    language_code: pl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_cię
+  u16_l2: &id006
+    language_code: pl
+    part_of_speech:
+    - adjective
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_czuć
+      - w_czuję
+      - w_czujesz
+      - w_źle
+      - w_gorączka
+      - w_chory
+      - w_chora
+  s_goraczke: &id007
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_gorączkę
+  s_chora: &id008
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_chora
+  s_chory: &id009
+    language_code: pl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_chory
+  u16_l3: &id010
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_odpocząć
+      - w_czuć
+      - w_boleć
+      - w_gorączka
+  s_odpoczac: &id011
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_odpocząć
+templates:
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.choose.001
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Boli употребляется, когда болит что-то одно, а bolą — когда несколько частей, поэтому с zęby ставится bolą.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.listen.002
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'В польском говорят буквально «голова меня болит»: часть тела — подлежащее, а mnie показывает, кто чувствует боль.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.match.003
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Mnie и cię — косвенные формы местоимений ja и ty: болит у меня, болит у тебя.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.order.004
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: word_order
+  frame:
+    text: Gardło {item} boli.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Gardło {item} boli.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Mnie означает «мне/меня»; Gardło mnie boli буквально: «горло меня болит».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.fill.005
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: fill_in_blank
+  frame:
+    text: Co cię {item}? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Boli — форма для он, она, оно; вопросительное слово Co обозначает то, что болит.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.translate.006
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: translation
+  frame:
+    text: У меня болит горло. (начни со слова «горло»)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Gardło mnie {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Gardło — среднего рода, единственного числа, поэтому глагол стоит в форме boli.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson01.translate.007
+  lesson_content_key: pl.a1.unit16.lesson01.co_cie_boli
+  type: translation
+  frame:
+    text: Что у тебя болит? (другу, на ty)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co {item} boli?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Cię — краткая форма от ty в винительном падеже («тебя»).
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.choose.001
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Czuję — форма «я» от czuć się, а czujesz — форма «ты»; обе употребляются с się.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.listen.002
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chory — мужской род, а chora — женский, так что форма показывает, кто болен.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.match.003
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Źle — наречие со значением «плохо», оно не изменяется; chory и chora изменяются по родам.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.order.004
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: word_order
+  frame:
+    text: Mam {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Форма винительного падежа от gorączka оканчивается на -ę, как kawa → kawę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.order.005
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: word_order
+  frame:
+    text: Ewa jest {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ewa jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ewa — женщина, поэтому прилагательное получает женское окончание -a.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.fill.006
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: fill_in_blank
+  frame:
+    text: Mam {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mam плюс форма винительного падежа говорит о том, что у тебя есть.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.translate.007
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: translation
+  frame:
+    text: У меня температура.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'То, что у тебя есть, ставится в винительный падеж: gorączka → gorączkę.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson02.translate.008
+  lesson_content_key: pl.a1.unit16.lesson02.zle_sie_czuje
+  type: translation
+  frame:
+    text: Марек болен.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Marek jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Марек — мужчина, поэтому прилагательное имеет форму chory.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson03.choose.001
+  lesson_content_key: pl.a1.unit16.lesson03.rozmowa_o_zdrowiu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Odpocząć — начальная форма; она стоит после proszę в вежливой просьбе.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson03.fill.002
+  lesson_content_key: pl.a1.unit16.lesson03.rozmowa_o_zdrowiu
+  type: fill_in_blank
+  frame:
+    text: Proszę {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: После proszę глагол стоит в начальной форме — так выражается вежливая просьба.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit16.lesson03.translate.003
+  lesson_content_key: pl.a1.unit16.lesson03.rozmowa_o_zdrowiu
+  type: translation
+  frame:
+    text: Отдохните, пожалуйста. (на vy)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: После proszę глагол остаётся в начальной форме.
+    language_code: ru
+    direction: ltr
