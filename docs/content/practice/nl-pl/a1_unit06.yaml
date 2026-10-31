@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.nl-pl.a1.unit06
+source_language: nl
+target_language: pl
+unit_content_key: pl.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chleb
+    - w_masło
+    - w_ser
+    - w_woda
+    - w_mleko
+    - w_kawa
+    - w_herbata
+    - w_kawę
+    - w_herbatę
+    - w_wodę
+    - w_zupa
+    - w_sok
+    - w_cukier
+    - w_rachunek
+    - w_lubić
+    - w_lubię
+    - w_lubi
+    - w_zupę
+    - w_danie
+    - w_polecać
+    - w_polecam
+    - w_poleca
+    - w_co
+    - w_już
+    - w_podaję
+slot_presets:
+  u06_l1: &id001
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_chleb
+      - w_masło
+      - w_ser
+      - w_woda
+      - w_mleko
+      - w_kawa
+      - w_herbata
+  u06_ask: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_mleko
+      - w_masło
+  s_herbate: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_herbatę
+  s_wode: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_wodę
+  u06_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_zupa
+      - w_sok
+      - w_cukier
+      - w_rachunek
+      - w_lubić
+      - w_lubię
+      - w_lubi
+  u06_like: &id006
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_zupę
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_sok
+  s_lubi: &id007
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubi
+  s_zupe: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_zupę
+  u06_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - particle
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_danie
+      - w_polecać
+      - w_polecam
+      - w_poleca
+      - w_co
+      - w_już
+      - w_podaję
+  s_podaje: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_podaję
+  s_poleca: &id011
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_poleca
+templates:
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.choose.001
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Elk Pools zelfstandig naamwoord heeft een geslacht: chleb en ser zijn mannelijk, kawa, herbata en woda zijn vrouwelijk, en masło en mleko zijn onzijdig.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.listen.002
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: In het Pools bestaan geen woorden voor een of de, dus chleb kan brood of het brood betekenen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.order.003
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: word_order
+  frame:
+    text: Proszę o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Na proszę o veranderen vrouwelijke woorden op -a in -ę (kawa, kawę), terwijl mannelijke en onzijdige woorden zoals chleb en mleko hetzelfde blijven.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.fill.004
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: fill_in_blank
+  frame:
+    text: Proszę o {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Proszę o plus de objectvorm is de beleefde manier om iets te vragen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.translate.005
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: Mag ik water, alstublieft?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Het zelfstandig naamwoord na proszę o staat in de objectvorm: woda wordt wodę.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson01.translate.006
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Masło en mleko eindigen op -o, een typische onzijdige uitgang, terwijl chleb en ser op een medeklinker eindigen en mannelijk zijn.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.choose.001
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubić is de woordenboekvorm; lubię zeg je over jezelf en lubi zeg je over iemand anders.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.match.002
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'De werkwoordsuitgang geeft de persoon aan: -ę voor ik (lubię) en -i voor hij of zij (lubi).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.order.003
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: word_order
+  frame:
+    text: Lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Na lubię krijgt wat je lekker of leuk vindt de vorm van het lijdend voorwerp: zupa wordt zupę, terwijl sok, chleb en ser hetzelfde blijven.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.fill.004
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: fill_in_blank
+  frame:
+    text: On {item} zupę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lubi is de vorm voor hij of zij, dus het voornaamwoord on past erbij.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.translate.005
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: Ik hou van soep.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Vrouwelijke zelfstandige naamwoorden op -a krijgen -ę als ze lijdend voorwerp zijn, dus zupa wordt zupę.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson02.translate.006
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Het paar lubię en lubi laat het patroon zien: voor elke persoon een andere uitgang.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.listen.001
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Polecać werkt zoals lubić: polecam is ik raad aan en poleca is hij, zij of – met pan of pani – u raadt aan.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.match.002
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Co pan poleca? gebruikt de hij/zij-vorm poleca, omdat pan en pani met een werkwoord in de derde persoon staan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.order.003
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: word_order
+  frame:
+    text: Polecam {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Polecam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ook na polecam staat het zelfstandig naamwoord in de vorm van het lijdend voorwerp, net als bij lubię.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.fill.004
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: fill_in_blank
+  frame:
+    text: Już {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De ober spreekt in de ik-vorm, podaję, omdat hij degene is die serveert.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.translate.005
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: Wat raadt u aan? (tegen een man, formeel)
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Bij pan of pani is het werkwoord poleca, dezelfde vorm als bij hij of zij.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-pl.pl.a1.unit06.lesson03.translate.006
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Już kan al betekenen of, zoals in Już podaję, meteen.
+    language_code: nl
+    direction: ltr
