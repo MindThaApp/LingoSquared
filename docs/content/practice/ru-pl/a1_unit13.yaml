@@ -1,0 +1,327 @@
+schema_version: '1.0'
+pack_key: practice.ru-pl.a1.unit13
+source_language: ru
+target_language: pl
+unit_content_key: pl.a1.unit13.lubie_i_wole
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_muzyka
+    - w_muzykę
+    - w_lubisz
+    - w_wolę
+slot_presets:
+  u13_all: &id001
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_muzyka
+      - w_muzykę
+      - w_lubisz
+      - w_wolę
+  s_muzyke: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_muzykę
+  s_lubisz: &id003
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubisz
+  s_wole: &id004
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_wolę
+templates:
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.choose.001
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Muzyka — исходная форма существительного; после lubię или lubisz она меняется на muzykę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.listen.002
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubisz — форма lubić для «ты», так говорят другу; lubię — форма для «я».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.order.003
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Czy lubisz {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Существительные женского рода на -a после lubić получают окончание -ę — то же изменение, что kawa → kawę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.order.004
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: word_order
+  frame:
+    text: Bardzo lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Bardzo стоит перед глаголом и усиливает его, как русское «очень».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.fill.005
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Czy {item} muzykę? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Если добавить к основе -sz, получится обращение к другу: lubię («я») превращается в lubisz («ты»).'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.fill.006
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: fill_in_blank
+  frame:
+    text: Lubię {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: После lubię то, что тебе нравится, ставится в форму дополнения, поэтому muzyka становится muzykę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.translate.007
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: Я очень люблю музыку.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bardzo lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: В коротких ответах польский не повторяет существительное, но в полном предложении нужна форма дополнения muzykę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.translate.008
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: Ты любишь музыку? (другу, на «ты»; начни с czy)
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Czy lubisz {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Czy в начале превращает утверждение в вопрос, на который отвечают «да» или «нет».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson01.translate.009
+  lesson_content_key: pl.a1.unit13.lesson01.czy_lubisz
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Форма дополнения muzykę и исходная форма muzyka — две формы одного существительного.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.choose.001
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę — форма woleć («предпочитать») для «я»; она работает так же, как lubię.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.listen.002
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wolę, как и lubię, оканчивается на -ę — это признак формы для «я».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.order.003
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: word_order
+  frame:
+    text: Ja też {item} herbatę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja też означает «я тоже», и дальше стоит тот же глагол, что в предложении первого говорящего.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.fill.004
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: fill_in_blank
+  frame:
+    text: Ja {item} herbatę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: После wolę нужна форма дополнения, поэтому herbata становится herbatę.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.translate.005
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: 'Я тоже: я предпочитаю чай.'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ja też {item} herbatę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Ja добавляется для выделения; окончание глагола -ę уже означает «я».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-pl.pl.a1.unit13.lesson02.translate.006
+  lesson_content_key: pl.a1.unit13.lesson02.kawa_czy_herbata
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Wolę — «я предпочитаю»; в отличие от lubię, оно выбирает одно вместо другого.
+    language_code: ru
+    direction: ltr
