@@ -1,0 +1,323 @@
+schema_version: '1.0'
+pack_key: practice.ru-es.a1.unit46
+source_language: ru
+target_language: es
+unit_content_key: es.a1.unit46.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ayudarle
+    - w_bebe
+    - w_cabeza
+    - w_descansa
+    - w_descansar
+    - w_dolor
+    - w_enfermo
+    - w_estómago
+    - w_fiebre
+    - w_garganta
+    - w_médico
+    - w_pastilla
+    - w_resfriado
+    - w_sentirte
+    - w_toma
+templates:
+- content_key: practice.ru-es.es.a1.unit46.lesson01.choose.001
+  lesson_content_key: es.a1.unit46.lesson01.no_me_siento_bien
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: es
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_enfermo
+        - w_dolor
+        - w_cabeza
+        - w_estómago
+        - w_garganta
+        - w_fiebre
+        - w_resfriado
+        - w_ayudarle
+        - w_pastilla
+        - w_toma
+        - w_descansa
+        - w_bebe
+        - w_sentirte
+        - w_médico
+        - w_descansar
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Мне нехорошо».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson02.listen.001
+  lesson_content_key: es.a1.unit46.lesson02.que_te_pasa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Что случилось?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson03.translate.001
+  lesson_content_key: es.a1.unit46.lesson03.fiebre_y_resfriado
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Температура и простуда».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson04.match.001
+  lesson_content_key: es.a1.unit46.lesson04.en_la_farmacia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Соедини каждое испанское слово с его русским значением; слова взяты из уроков этого раздела.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson05.choose.001
+  lesson_content_key: es.a1.unit46.lesson05.leer_una_nota_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Читаем записку с советами».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson06.translate.001
+  lesson_content_key: es.a1.unit46.lesson06.elena_pregunta_por_mateo
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — одно из слов этого раздела, из урока «Элена проверяет, как дела у Матео».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson01.order.002
+  lesson_content_key: es.a1.unit46.lesson01.no_me_siento_bien
+  type: word_order
+  frame:
+    text: Tengo {item} de cabeza.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_dolor
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tengo {item} de cabeza.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: У меня болит голова. dolor — это боль.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson01.fill.003
+  lesson_content_key: es.a1.unit46.lesson01.no_me_siento_bien
+  type: fill_in_blank
+  frame:
+    text: ¿Tiene algo para el dolor de {item}? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cabeza
+    hint:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cabeza
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'У тебя есть что-нибудь от головной боли? Algo para + симптом — естественный способ попросить средство: algo para el dolor de cabeza.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson01.translate.004
+  lesson_content_key: es.a1.unit46.lesson01.no_me_siento_bien
+  type: translation
+  frame:
+    text: У меня болит живот.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_estómago
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tengo dolor de {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: У меня болит живот. estómago — это желудок; живот.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson02.order.002
+  lesson_content_key: es.a1.unit46.lesson02.que_te_pasa
+  type: word_order
+  frame:
+    text: Tengo dolor de {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_garganta
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tengo dolor de {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: У меня болит горло. garganta — это горло.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson04.order.002
+  lesson_content_key: es.a1.unit46.lesson04.en_la_farmacia
+  type: word_order
+  frame:
+    text: ¿En qué puedo {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_ayudarle
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿En qué puedo {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Чем я могу вам помочь? ¿En qué puedo ayudarle? — стандартный вежливый вопрос в сфере обслуживания; в ayudarle используется формальное местоимение usted в форме le.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-es.es.a1.unit46.lesson04.fill.003
+  lesson_content_key: es.a1.unit46.lesson04.en_la_farmacia
+  type: fill_in_blank
+  frame:
+    text: Tomo una {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_pastilla
+    hint:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_pastilla
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Я принимаю таблетку. pastilla — это таблетка.
+    language_code: ru
+    direction: ltr
