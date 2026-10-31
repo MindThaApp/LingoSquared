@@ -1,0 +1,425 @@
+schema_version: '1.0'
+pack_key: practice.hi-it.a1.unit14
+source_language: hi
+target_language: it
+unit_content_key: it.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_me
+    - w_piace
+    - w_preferire
+    - w_preferisci
+    - w_preferisco
+    - w_te
+    - w_tè
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+  t_te: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tè
+  t_preferisco: &id003
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_preferisco
+  pool4: &id004
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+      - w_piace
+      - w_te
+      - w_me
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - verb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_piace
+      - w_te
+      - w_me
+      - w_preferisco
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_piace
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+  t_piace: &id007
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_piace
+  t_tex: &id008
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_te
+  t_me: &id009
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_me
+  pool10: &id010
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tè
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+templates:
+- content_key: practice.hi-it.it.a1.unit14.lesson01.choose.001
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Preferisco, preferire का 'मैं' वाला रूप है और preferisci अनौपचारिक 'तुम' वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson01.listen.002
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Preferisco और preferisci में सिर्फ़ आख़िरी स्वर का फ़र्क़ है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson01.order.003
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: word_order
+  frame:
+    text: Preferisci il caffè o il {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Preferisci il caffè o il {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Tè पर उच्चारण-चिह्न इसलिए है कि इसे te (तुम) से अलग पहचाना जा सके।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson01.fill.004
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: fill_in_blank
+  frame:
+    text: Io {item} il caffè. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Preferisco के अंत में -o इसलिए है क्योंकि कर्ता 'मैं' है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson01.translate.005
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: translation
+  frame:
+    text: क्या तुम्हें कॉफ़ी ज़्यादा पसंद है या चाय? (अनौपचारिक, tu)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Preferisci il caffè o il {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Preferisci क्रिया का अनौपचारिक tu वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson03.translate.001
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: translation
+  frame:
+    text: मुझे भी कॉफ़ी ज़्यादा पसंद है!
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Anch'io {item} il caffè!
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Anch'io यानी 'मैं भी', और preferisco 'मैं' वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson03.match.002
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tè यानी चाय; te एक सर्वनाम है जो पूर्वसर्ग के बाद आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson03.choose.003
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Piace का प्रयोग mi piace में होता है, जिसका अर्थ है 'मुझे पसंद है'।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson02.listen.001
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mi piace molto यानी 'मुझे बहुत पसंद है'।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson02.order.002
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: word_order
+  frame:
+    text: Mi {item} molto il cornetto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi {item} molto il cornetto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Piace उस चीज़ के अनुसार चलता है जो पसंद की जा रही है; यहाँ वह एकवचन है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson02.fill.003
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: fill_in_blank
+  frame:
+    text: E a {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A te यानी 'तुम्हें', और यही वही सवाल पलटकर पूछने का अनौपचारिक तरीक़ा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson02.translate.004
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: translation
+  frame:
+    text: मुझे क्रोसां बहुत पसंद है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi {item} molto il cornetto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Mi piace molto यानी 'मुझे बहुत पसंद है'; शाब्दिक रूप से 'यह मुझे बहुत भाता है'।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson02.translate.005
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: translation
+  frame:
+    text: और तुम्हें? (अनौपचारिक, अपनी पसंद बताने के बाद पलटकर पूछना)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: E a {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'a जैसे पूर्वसर्ग के बाद tu, te बन जाता है: a te यानी ''तुम्हें''।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson03.fill.004
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: fill_in_blank
+  frame:
+    text: A {item} no, preferisco il tè. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A me यानी 'मुझे'; पूर्वसर्ग के बाद io, me बन जाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson03.translate.005
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: translation
+  frame:
+    text: मुझे नहीं, मुझे चाय ज़्यादा पसंद है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A {item} no, preferisco il tè.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A me no यानी 'मुझे नहीं'।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit14.lesson01.translate.006
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Preferire का अर्थ है ज़्यादा पसंद करना; preferisco का अर्थ है मुझे ज़्यादा पसंद है।
+    language_code: hi
+    direction: ltr
