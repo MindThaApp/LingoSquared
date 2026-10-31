@@ -150,6 +150,13 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
+    # Wrong-language names (e.g. "in Spanish" in a fr-target pair) in cross-language overlays + packs.
+    echo "-- target-name check (X->Y overlays + packs name only language Y) --"
+    if ! python scripts/_target_name_check.py; then
+      echo "!! target-name check FAILED"
+      CONTENT_OK=0
+    fi
+
     deactivate 2>/dev/null || true
     [ "$CONTENT_OK" = "1" ] && CONTENT_STATUS="pass" || CONTENT_STATUS="fail"
   fi
