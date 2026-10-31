@@ -1,0 +1,474 @@
+schema_version: '1.0'
+pack_key: practice.hi-ru.a1.unit09
+source_language: hi
+target_language: ru
+unit_content_key: ru.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Пушкина
+    - w_аптека
+    - w_банк
+    - w_библиотека
+    - w_большое
+    - w_вашей
+    - w_вокзал
+    - w_где
+    - w_гостиница
+    - w_моей
+    - w_находится
+    - w_ресторан
+    - w_улица
+    - w_улице
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+      - w_банк
+      - w_аптека
+  p2: &id002
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_находится
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_улице
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_аптека
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_банк
+      - w_аптека
+      - w_вокзал
+      - w_гостиница
+      - w_ресторан
+      - w_библиотека
+  p7: &id007
+    language_code: ru
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Пушкина
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_гостиница
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_вашей
+      - w_моей
+      - w_большое
+      - w_библиотека
+      - w_банк
+  p10: &id010
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_вашей
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_моей
+  p12: &id012
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_большое
+templates:
+- content_key: practice.hi-ru.ru.a1.unit09.lesson01.choose.001
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Где का अर्थ "कहाँ" है और находится जोड़ता है "स्थित है"; दोनों मिलकर किसी जगह की स्थिति पूछते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson01.order.002
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: word_order
+  frame:
+    text: Где {item} магазин?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где {item} магазин?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Находится अन्य पुरुष एकवचन क्रिया रूप है, इसलिए यह магазин जैसी एकवचन संज्ञा के साथ मेल खाता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson01.fill.003
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: fill_in_blank
+  frame:
+    text: Магазин на Тверской {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '"पर" के अर्थ वाले на के बाद, कोई चीज़ कहाँ है यह बताने के लिए улица बदलकर улице हो जाता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson01.translate.004
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: दवाखाना कहाँ स्थित है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...? किसी जगह के बारे में पूछने का मानक तरीका है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson01.translate.005
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Где का अर्थ "कहाँ" है, और улица का अर्थ "सड़क" है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.choose.001
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Банк, вокзал और ресторан पुल्लिंग हैं; аптека, гостиница और библиотека स्त्रीलिंग हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.listen.002
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ये स्थानों के नाम संज्ञाएँ हैं, और Где находится банк? में हिंदी के किसी अलग शब्द के लिए रूसी में अलग शब्द की ज़रूरत नहीं होती।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.match.003
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Банк और ресторан हिंदी में प्रचलित शब्द «बैंक» और «रेस्टोरेंट» से मिलते-जुलते हैं, जबकि аптека यूनानी मूल का शब्द है, जिसका अर्थ भंडार या दुकान है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.order.004
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: word_order
+  frame:
+    text: Где находится {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...? किसी भी एकवचन स्थान-संज्ञा के साथ चलता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.fill.005
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: fill_in_blank
+  frame:
+    text: Банк на улице {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'किसी व्यक्ति के नाम पर बनी सड़क में नाम संबंध कारक (जेनिटिव) में आता है: улица Пушкина यानी पुश्किन मार्ग।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson02.translate.006
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: translation
+  frame:
+    text: होटल कहाँ स्थित है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Гостиница एक स्त्रीलिंग संज्ञा है, जिसका अर्थ होटल है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.choose.001
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Вашей और моей, ваш और мой के स्त्रीलिंग रूप हैं, जो на के बाद आते हैं: на вашей улице, на моей улице।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.order.002
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: word_order
+  frame:
+    text: Что есть на {item} улице?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Вашей स्त्रीलिंग улице के अनुसार बदलता है; यह आदरपूर्ण вы वाला प्रश्न है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.fill.003
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: На {item} улице есть банк. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Моей, моя का वह रूप है जो на के बाद आता है, क्योंकि улица स्त्रीलिंग है और अधिकरण कारक (प्रीपोज़िशनल) में है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.fill.004
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: Спасибо {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Спасибо большое «बहुत-बहुत धन्यवाद» कहने का आत्मीय तरीक़ा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.translate.005
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: आपकी सड़क पर क्या है? (आदरपूर्वक)
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Что есть на вашей улице? पूछता है कि सड़क पर क्या मौजूद है; вы वाला रूप вашей इसे शिष्ट बनाए रखता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.translate.006
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: बहुत-बहुत धन्यवाद।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Спасибо {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Большое नपुंसकलिंग спасибо के अनुसार है, इसलिए यह -ое पर समाप्त होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ru.ru.a1.unit09.lesson03.translate.007
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: मेरी सड़क पर एक बैंक है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На {item} улице есть банк.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У меня есть का प्रयोग किसी के पास कुछ होने के लिए होता है; सड़क पर कुछ स्थित होने के लिए रूसी में На моей улице есть कहा जाता है।
+    language_code: hi
+    direction: ltr
