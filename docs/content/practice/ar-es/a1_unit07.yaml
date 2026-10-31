@@ -1,0 +1,345 @@
+schema_version: '1.0'
+pack_key: practice.ar-es.a1.unit07
+source_language: ar
+target_language: es
+unit_content_key: es.a1.unit07.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u07
+    - es_a1_u07_l01
+    - es_a1_u07_l06
+    - w_cuesta
+    - w_cuestan
+    - w_docena
+    - w_necesita
+    - w_todo
+    - w_ingredientes
+slot_presets:
+  market: &id001
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u07_l01
+  nouns: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u07
+  content: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u07
+  dialogue: &id010
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u07_l06
+  cuesta: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cuesta
+  cuestan: &id004
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cuestan
+  docena: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_docena
+  necesita: &id006
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_necesita
+  todo: &id007
+    language_code: es
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_todo
+  ingredientes: &id009
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ingredientes
+templates:
+- content_key: practice.ar-es.es.a1.unit07.lesson01.choose.001
+  lesson_content_key: es.a1.unit07.lesson01.el_mercado
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'تتفق الصفة مع الاسم: la fruta fresca, los tomates frescos.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson01.listen.002
+  lesson_content_key: es.a1.unit07.lesson01.el_mercado
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Verdura تعني نوعًا واحدًا من الخضار؛ وفي السوق تطلب عادةً verduras.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson02.order.001
+  lesson_content_key: es.a1.unit07.lesson02.preguntar_el_precio
+  type: word_order
+  frame:
+    text: ¿Cuánto {item} el kilo de tomates?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cuánto {item} el kilo de tomates?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: كم سعر كيلو الطماطم؟ تُستعمل cuesta مع شيء واحد، وcuestan مع عدة أشياء.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson02.translate.002
+  lesson_content_key: es.a1.unit07.lesson02.preguntar_el_precio
+  type: translation
+  frame:
+    text: كم سعر البيض؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cuánto {item} los huevos?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Huevos جمع، لذا يكون الفعل cuestan؛ أما مع الخبز فيكون cuesta.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson03.order.001
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: word_order
+  frame:
+    text: Una {item} de huevos, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Una {item} de huevos, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'دزينة بيض، من فضلك. تأتي de بعد الكمية وقبل الشيء: un kilo de tomates.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson03.match.002
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Medio kilo تعني نصف كيلو؛ ولا تأتي un قبل medio.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson03.translate.003
+  lesson_content_key: es.a1.unit07.lesson03.cantidades
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: الكلمات المنتهية بـ -o تكون عادةً مذكّرة (el mercado) والمنتهية بـ -a مؤنثة (la fruta).
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson04.fill.001
+  lesson_content_key: es.a1.unit07.lesson04.una_compra_sencilla
+  type: fill_in_blank
+  frame:
+    text: ¿{item} algo más? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'يستعمل باعة السوق صيغة usted مع الزبائن: ¿Necesita algo más?'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson04.translate.002
+  lesson_content_key: es.a1.unit07.lesson04.una_compra_sencilla
+  type: translation
+  frame:
+    text: لدينا كل شيء بالفعل.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ya tenemos {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Ya تعني «بالفعل»، وتأتي عادةً قبل الفعل في الإسبانية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson05.choose.001
+  lesson_content_key: es.a1.unit07.lesson05.leer_las_etiquetas_de_precio
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Todos los días تعني «كل يوم»، وحرفيًا «كل الأيام».
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson06.order.001
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: word_order
+  frame:
+    text: Necesitamos {item} para la próxima clase.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Necesitamos {item} para la próxima clase.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: نحتاج إلى مكوّنات للدرس القادم. Necesitamos هي صيغة «نحن» من الفعل necesitar.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson06.translate.002
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ¡Qué tomates tan frescos! هي طريقة الإسبانية في قول «ما أطزج هذه الطماطم!»
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-es.es.a1.unit07.lesson06.listen.003
+  lesson_content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Vamos تعني «لنذهب» وتعني أيضًا «نحن نذهب»؛ ويحدد السياق المعنى.
+    language_code: ar
+    direction: rtl
