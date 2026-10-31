@@ -1,0 +1,419 @@
+schema_version: '1.0'
+pack_key: practice.prs-nl.a1.unit05
+source_language: prs
+target_language: nl
+unit_content_key: nl.a1.unit05.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dari (Afghanistan)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - family_member
+    - family_singular
+    - sibling
+    - extended_only
+    - extended_family_member
+    - possessive_pronoun
+    - possessive_flexible
+    - family_profile
+    - family_dialogue
+    - person_name
+    - place_name
+    - city_name
+    - country
+    register:
+    - informal
+    - polite
+slot_presets:
+  family_singular: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: family_singular
+  sibling: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sibling
+  extended_only: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: extended_only
+  possessive_flexible: &id004
+    language_code: nl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: possessive_flexible
+  person_name: &id005
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  place_name: &id006
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: place_name
+  city_name: &id007
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: city_name
+templates:
+- content_key: practice.prs-nl.nl.a1.unit05.lesson01.choose.001
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را به دری انتخاب کنید.
+      language_code: prs
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از کلمه‌های خانواده در این بخش است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson01.order.002
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} جملهٔ «من یک ... دارم» را برای این برادر یا خواهر کامل می‌کند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson01.translate.003
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: translation
+  frame:
+    text: من یک {item} دارم.
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: من یک {item} دارم.
+    slot_rendering:
+      item: english_gloss
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson02.listen.001
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} همان کلمهٔ خویشاوندی است که شنیدید.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson02.order.002
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} جملهٔ «من یک ... دارم» را برای این خویشاوند کامل می‌کند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson02.match.003
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: هر کلمهٔ خویشاوندی را با معنی دری آن جور کنید.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson03.order.001
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: word_order
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} می‌تواند نشان بدهد که این برادر از کیست.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson03.complete.002
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: fill_in_blank
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: جملهٔ هالندی را کامل کنید.
+      language_code: prs
+      direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} می‌تواند نشان بدهد که این برادر از کیست.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson03.translate.003
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: translation
+  frame:
+    text: 'با {item} ترجمه کنید: این برادر ___ است.'
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Dit is {item} broer شکل مالکیتی را که از شما خواسته شد به کار می‌برد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson04.order.001
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: word_order
+  frame:
+    text: Dit is zijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is zijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zijn نشان می‌دهد که این عضو خانواده به یک مرد تعلق دارد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson04.translate.003
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: translation
+  frame:
+    text: آن {item} او (زن) است.
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dat is haar {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: آن {item} او (زن) است.
+    slot_rendering:
+      item: english_gloss
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson05.order.001
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: word_order
+  frame:
+    text: Ik heet {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} نامی است که داده شده.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson05.translate.003
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: translation
+  frame:
+    text: نام من {item} است.
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: نام من {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson06.listen.001
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} جایی است که در گفت‌وگو نام برده شد.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson06.order.002
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: word_order
+  frame:
+    text: Mijn ouders wonen in {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} جای زندگی والدین را کامل می‌کند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-nl.nl.a1.unit05.lesson06.translate.003
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: translation
+  frame:
+    text: والدین من در {item} زندگی می‌کنند.
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: والدین من در {item} زندگی می‌کنند.
+    slot_rendering:
+      item: english_gloss
+    language_code: prs
+    direction: rtl
