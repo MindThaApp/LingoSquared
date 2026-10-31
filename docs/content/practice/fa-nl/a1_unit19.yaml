@@ -1,0 +1,392 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a1.unit19
+source_language: fa
+target_language: nl
+unit_content_key: nl.a1.unit19.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - weather_adj
+    - weather_adj_pure
+    - weather_vocab
+    - weather_vocab_pure
+    - weekday
+    - weekday_pure
+slot_presets:
+  weather_adj: &id001
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: weather_adj
+  weather_vocab:
+    language_code: nl
+    part_of_speech:
+    - verb
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: weather_vocab
+  weather_vocab_pure: &id002
+    language_code: nl
+    part_of_speech:
+    - verb
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: weather_vocab_pure
+  weekday: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  weekday_pure:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday_pure
+templates:
+- content_key: practice.fa-nl.nl.a1.unit19.lesson01.order.001
+  lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+  type: word_order
+  frame:
+    text: Het is {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} در این جمله وضع هوا را توصیف می‌کند.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson01.choose.002
+  lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های درس‌های آب‌وهواست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson01.listen.003
+  lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson01.match.004
+  lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر کلمه را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson02.translate.001
+  lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
+  type: translation
+  frame:
+    text: امروز هوا {item} است. (به هلندی بنویسید.)
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is {item} vandaag.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het is {item} vandaag.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a1.unit19.lesson02.choose.002
+  lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های درس‌های آب‌وهواست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson03.order.001
+  lesson_content_key: nl.a1.unit19.lesson03.het_weerbericht
+  type: word_order
+  frame:
+    text: Morgen is het {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Morgen is het {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} پیش‌بینی هوای فردا در این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson03.translate.002
+  lesson_content_key: nl.a1.unit19.lesson03.het_weerbericht
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: روز هفته به هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson04.choose.001
+  lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های درس‌های آب‌وهواست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson04.listen.002
+  lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson04.match.003
+  lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر کلمه را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson05.choose.001
+  lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های درس‌های آب‌وهواست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson05.translate.002
+  lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
+  type: translation
+  frame:
+    text: هوا {item} است.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a1.unit19.lesson06.listen.001
+  lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های درس‌های آب‌وهواست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit19.lesson06.order.002
+  lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
+  type: word_order
+  frame:
+    text: Het is {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} در این جمله وضع هوا را توصیف می‌کند.'
+    language_code: fa
+    direction: rtl
