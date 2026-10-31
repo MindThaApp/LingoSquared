@@ -1,0 +1,399 @@
+schema_version: '1.0'
+pack_key: practice.hi-it.a1.unit21
+source_language: hi
+target_language: it
+unit_content_key: it.a1.unit21.clothing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_blu
+    - w_giacca
+    - w_grande
+    - w_maglietta
+    - w_media
+    - w_pantaloni
+    - w_piccola
+    - w_scarpe
+    - w_taglia
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_maglietta
+      - w_pantaloni
+      - w_scarpe
+      - w_giacca
+      - w_blu
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_maglietta
+      - w_pantaloni
+      - w_scarpe
+      - w_giacca
+  pool3: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_maglietta
+      - w_giacca
+  t_pantaloni: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pantaloni
+  t_blu: &id005
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_blu
+  t_scarpe: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_scarpe
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_taglia
+      - w_piccola
+      - w_media
+      - w_grande
+  pool8: &id008
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_piccola
+      - w_media
+      - w_grande
+  t_media: &id009
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_media
+  t_taglia: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_taglia
+  t_piccola: &id011
+    language_code: it
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_piccola
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_maglietta
+      - w_pantaloni
+      - w_scarpe
+      - w_giacca
+      - w_taglia
+      - w_piccola
+      - w_media
+templates:
+- content_key: practice.hi-it.it.a1.unit21.lesson01.choose.001
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pantaloni और scarpe बहुवचन हैं; maglietta और giacca एकवचन हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.listen.002
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: I pantaloni और le scarpe बहुवचन में कपड़े हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.order.003
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: word_order
+  frame:
+    text: La {item} è blu.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} è blu.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: La स्त्रीलिंग एकवचन संज्ञाओं के साथ आता है, जैसे maglietta और giacca।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.order.004
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: word_order
+  frame:
+    text: I {item} sono per Elena.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} sono per Elena.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Pantaloni बहुवचन और पुल्लिंग है, इसलिए i और sono का प्रयोग होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.fill.005
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: fill_in_blank
+  frame:
+    text: La maglietta è {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Blu लिंग या वचन के अनुसार नहीं बदलता।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.translate.006
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: translation
+  frame:
+    text: टी-शर्ट नीली है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La maglietta è {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Blu पुल्लिंग, स्त्रीलिंग और बहुवचन संज्ञाओं के साथ वैसा ही रहता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.translate.007
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: translation
+  frame:
+    text: जूते नीले हैं।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le {item} sono blu.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Scarpe स्त्रीलिंग बहुवचन है, इसलिए इसके साथ le और sono आते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson01.translate.008
+  lesson_content_key: it.a1.unit21.lesson01.i_vestiti
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La maglietta और la giacca एकवचन हैं; i pantaloni और le scarpe बहुवचन हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.choose.001
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Piccola, media और grande taglia का आकार बताते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.order.002
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: word_order
+  frame:
+    text: Vorrei una taglia {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei una taglia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Taglia स्त्रीलिंग है, इसलिए साइज़ बताने वाला शब्द -a या -e पर समाप्त होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.fill.003
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: fill_in_blank
+  frame:
+    text: Vorrei una taglia {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Media, medio का स्त्रीलिंग रूप है, जो taglia के अनुसार आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.translate.004
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: translation
+  frame:
+    text: मुझे मध्यम साइज़ की एक नीली टी-शर्ट चाहिए।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei una maglietta blu, {item} media.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Taglia साइज़ का नाम है और स्त्रीलिंग है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.translate.005
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: translation
+  frame:
+    text: मुझे छोटा साइज़ चाहिए।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei una taglia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Piccola स्त्रीलिंग taglia के अनुसार आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-it.it.a1.unit21.lesson02.match.006
+  lesson_content_key: it.a1.unit21.lesson02.taglia_media
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Piccola और media साइज़ हैं; बाकी शब्द कपड़े हैं।
+    language_code: hi
+    direction: ltr
