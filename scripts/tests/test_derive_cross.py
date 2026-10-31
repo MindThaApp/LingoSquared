@@ -375,3 +375,41 @@ def test_dari_register_checker_covers_cross_pair_lanes():
     assert "overlays/prs-en" in rels
     assert all(r.startswith(("overlays/prs-", "practice/prs-")) or r in rels for r in rels)
     assert [r for r, _ in cdr._cross_prs_lanes() if r.endswith("prs-en")] == []
+
+
+def test_english_in_nonlatin_flags_short_english_leftovers_but_keeps_target_words():
+    f = dc.english_in_nonlatin
+    assert f("شكرا you", "es") == ["you"]                      # two tokens: english_prose would miss it
+    assert f("समुद्र तट: the beach", "es")
+    assert f("اكتب *hola* بالإسبانية", "es") == []             # quoted Spanish word stays Latin
+    assert f("اختر الترجمة الصحيحة لـ {item}", "es") == []     # placeholder
+    assert f("Good morning", "es") == []                       # pure Latin: other checks decide
+    assert f("दिन का नाम *lunes* है", "es") == []
+
+
+def test_learner_leftovers_catches_english_in_arabic_overlay(tmp_path, monkeypatch):
+    import derive_direction as dd
+    ov = tmp_path / "overlays"
+    (ov / "ar-es").mkdir(parents=True)
+    (ov / "en-es").mkdir(parents=True)
+    sib = {"exercises": {"k1": {"instruction": "Translate tomorrow."}}}
+    mine = {"exercises": {"k1": {"instruction": "ترجم الجملة. tomorrow"}}}
+    (ov / "en-es" / "u.yaml").write_text(dd.yaml.safe_dump(sib, allow_unicode=True), encoding="utf-8")
+    (ov / "ar-es" / "u.yaml").write_text(dd.yaml.safe_dump(mine, allow_unicode=True), encoding="utf-8")
+    monkeypatch.setattr(dc, "CONTENT", tmp_path)
+    assert any("English in ar text" in h for h in dc.learner_leftovers("ar-es"))
+    mine["exercises"]["k1"]["instruction"] = "ترجم الجملة."
+    (ov / "ar-es" / "u.yaml").write_text(dd.yaml.safe_dump(mine, allow_unicode=True), encoding="utf-8")
+    assert dc.learner_leftovers("ar-es") == []
+
+
+def test_english_in_nonlatin_grammar_terms_names_and_endings():
+    f = dc.english_in_nonlatin
+    assert f("هذا هو present perfect من الفعل", "es") == ["present", "perfect"]
+    assert f("स्पेनिश में बिना article के", "es") == ["article"]
+    assert f("فعل منتظم ينتهي بـ -er", "es") == []                      # verb ending
+    assert f("सुबह 9 बजे यानी 9 PM", "es") == []
+    # source-aware: a Spanish word the translator left without asterisks is not a leftover, an English one is
+    assert f("يقول ماتيو: Me has ayudado mucho.", "es", src="Mateo says: Me has ayudado mucho.") == []
+    assert f("ترجم tomorrow", "es", src="Translate tomorrow.") == ["tomorrow"]
+    assert f("ترجم tomorrow", "es", src="Translate the sentence.") == []   # not in the source: a translator-added word is not judged
