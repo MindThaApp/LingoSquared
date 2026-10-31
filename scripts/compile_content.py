@@ -1946,6 +1946,12 @@ def validate_prompt_block_localization(
                            if not (str(k).isdigit() and blocks and int(k) < len(blocks)) or not isinstance(t, str) or not t.strip()]
                     if bad:
                         report.error(location, f"prompt_blocks entries {bad!r} do not name a prompt block with non-empty text")
+                    wrong = [k for k in override if k not in bad and isinstance(blocks[int(k)], dict)
+                             and blocks[int(k)].get("language_code") != target_language]
+                    if wrong:
+                        report.error(location, f"prompt_blocks entries {wrong!r} replace a block coded "
+                                     f"{[blocks[int(k)].get('language_code') for k in wrong]!r}, not {target_language!r}; "
+                                     "the {index: text} form keeps the block's language_code, so use the list form for learner-language blocks")
                     continue
                 if override is not None:
                     if not isinstance(override, list) or not all(isinstance(t, str) and t.strip() for t in override):

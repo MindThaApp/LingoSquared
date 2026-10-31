@@ -1446,6 +1446,7 @@ def target_strings(target: str) -> frozenset:
 UNCHANGED_OK = {
     ("de", "winter in madrid"),     # German title is the same two words plus a place name
     ("fr", "football / yoga"),      # gloss of es "fútbol / yoga": French uses the same two words as English
+    ("ro", "roller coaster"),       # Romanian uses the English loanword "roller coaster" (ro-ru unit 57 gloss/match clue)
 }
 # Target-language strings (same in every pair) that read as English to the heuristic; keyed by target language.
 TARGET_UNCHANGED_OK = {
@@ -1567,7 +1568,7 @@ def cmd_cards(args):
     cargs.new = f"{args.new}-cards"
     backend = "claude" if getattr(args, "claude", False) else "codex"
     if getattr(args, "codex", False) or getattr(args, "claude", False):
-        left = cmd_translate_codex(cargs, backend=backend)
+        left = cmd_translate_codex(cargs, call=claude_call if backend == "claude" else None, backend=backend)
         if left:
             sys.exit(2)
     # write
