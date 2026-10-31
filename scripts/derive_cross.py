@@ -1222,7 +1222,7 @@ GERMAN_PROSE_PHRASES = ("wählen Sie, was ",)
 
 # Words that are also valid in a target language and so cannot count as English evidence when that language is quoted
 # in learner-language strings ("Het is half drie" is Dutch, not English).  Set by learner_leftovers() for the pair at hand.
-TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will"}}
+TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will", "past"}}
 _PROSE_TARGET = ""
 _PROSE_LEARNER = ""
 # Dutch learner-language prose shares these with the English function-word list ("Dit is een groet").
@@ -1284,6 +1284,8 @@ def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str
         prev = body[:m.start()].rstrip()[-1:]
         if w[0].isupper() and prev.isalpha():
             continue                                # capitalised mid-sentence: a name or a German noun, not English prose
+        if t in TARGET_AMBIGUOUS.get(target, ()):
+            continue                                # word shared with the target language ("is" in a quoted Dutch sentence)
         if fold(t) in tv and t not in EN_STRONG and t not in GRAMMAR_ENGLISH:
             continue                                # Spanish (or cognate) word
         out.append(w)
