@@ -121,6 +121,20 @@ PRS_LANES: list[tuple[str, str]] = [
 ]
 FA_OVERLAY = "overlays/fa-en"
 
+
+def _cross_prs_lanes() -> list[tuple[str, str]]:
+    """Cross pairs with Dari as the LEARNER language (prs-es, prs-de ...): their overlays and packs must be Dari too."""
+    out: list[tuple[str, str]] = []
+    for kind, label in (("overlays", "overlay_prs_cross"), ("practice", "practice")):
+        base = CONTENT / kind
+        if base.is_dir():
+            out += [(f"{kind}/{d.name}", label) for d in sorted(base.glob("prs-*"))
+                    if d.is_dir() and d.name != "prs-en"]
+    return out
+
+
+PRS_LANES += _cross_prs_lanes()
+
 PERSO_ARABIC = re.compile(r"[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]")
 LATIN = re.compile(r"[A-Za-z]")
 TOKEN = re.compile(r"[ء-يٰ-ۓ‌پچژکگی]+")
