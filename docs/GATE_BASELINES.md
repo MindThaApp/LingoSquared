@@ -5,10 +5,10 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | Gate | Threshold |
 |---|---|
 | `scripts/verify.sh --content-only` | pass; WARN count (lines starting `WARN`, full run) <= formula below |
-| `scripts/_answer_leakage_check.py` | <= 36 hits (31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
+| `scripts/_answer_leakage_check.py` | <= 36 hits (17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
 | practice-validate (all packs) | 0 errors |
-| `pytest scripts/tests` | pass (177 at 69aaabfdb) |
+| `pytest scripts/tests` | pass (181 at a6f9f44ec) |
 | backend pytest (repo mounted, `test_content_answer_shapes` deselected) | pass |
 | vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (461) |
 
@@ -34,3 +34,8 @@ Measured at 69aaabfdb (shipped 2026-10-30): 2542 = 740 + 3x138 + 3x112 + 3x4 + 2
 + 4x56 (nl targets) + nl/pl/ro cross pairs into de/es/fr/it + 4 (ro-fr exception). Ru cross pairs (#70-#73) were not part of this ship:
 they were not gated (leakage 95 with them) and need their own leakage fix/allowlist first.
 When a new cross pair merges, add its `en-Y` sibling count; verify no pre-existing course changed.
+
+Measured at a6f9f44ec (shipped 2026-10-31): 3000 = 2542 + 7 x 20 (de/es/fr/it/nl/pl/ro -> ru, each equals en-ru-a1's 20)
++ 318 for ru -> X (ru-es 138, ru-fr 112, ru-de 4, ru-nl 56, ru-it-a1 8). en-ru unchanged by #85 (a1 20, a2 2, b1 10, c1 2);
+no pre-existing course changed. The de/nl realization compile WARNs count (they are the en-de 4 / en-nl 56 siblings).
+Leakage 17 hits (29 allowlisted); cyrillic-latin 0; 67 practice packs 0 errors.
