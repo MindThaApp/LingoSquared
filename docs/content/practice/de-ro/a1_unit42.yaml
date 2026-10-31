@@ -1,0 +1,265 @@
+schema_version: '1.0'
+pack_key: practice.de-ro.a1.unit42
+source_language: de
+target_language: ro
+unit_content_key: ro.a1.unit42.personalitate
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_amabil
+    - w_amuzant
+    - w_asistentă
+    - w_calm
+    - w_cunoașteți
+    - w_curios
+    - w_diferiți
+    - w_noastră
+    - w_povestește
+    - w_răbdător
+    - w_timid
+    - w_venit
+    - w_întreabă
+templates:
+- content_key: practice.de-ro.ro.a1.unit42.lesson01.choose.001
+  lesson_content_key: ro.a1.unit42.lesson01.amabil_si_amuzant
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ro
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_amabil
+        - w_amuzant
+        - w_calm
+        - w_răbdător
+        - w_curios
+        - w_timid
+        - w_cunoașteți
+        - w_asistentă
+        - w_întreabă
+        - w_povestește
+        - w_diferiți
+        - w_venit
+        - w_noastră
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz dieser Einheit, aus der Lektion über nett und lustig.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson02.listen.001
+  lesson_content_key: ro.a1.unit42.lesson02.calm_si_rabdator
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz dieser Einheit, aus der Lektion über ruhig und geduldig.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson03.translate.001
+  lesson_content_key: ro.a1.unit42.lesson03.curios_si_timid
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz dieser Einheit, aus der Lektion über neugierig und schüchtern.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson04.match.001
+  lesson_content_key: ro.a1.unit42.lesson04.nina_intreaba_la_cafeneaua
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Ordnen Sie jedem rumänischen Wort seine deutsche Bedeutung zu; die Wörter stammen aus den Lektionen dieser Einheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson05.choose.001
+  lesson_content_key: ro.a1.unit42.lesson05.nina_afla_despre_toti
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion „Nina hört etwas über alle“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson06.translate.001
+  lesson_content_key: ro.a1.unit42.lesson06.nina_se_descrie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion „Nina beschreibt sich selbst“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson01.order.002
+  lesson_content_key: ro.a1.unit42.lesson01.amabil_si_amuzant
+  type: word_order
+  frame:
+    text: Andrei este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_amuzant
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Andrei este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Andrei ist lustig. amuzant bedeutet lustig (m.).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson02.order.002
+  lesson_content_key: ro.a1.unit42.lesson02.calm_si_rabdator
+  type: word_order
+  frame:
+    text: Mihai este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_calm
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mihai este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mihai ist ruhig. calm bedeutet ruhig; beruhigen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson05.order.002
+  lesson_content_key: ro.a1.unit42.lesson05.nina_afla_despre_toti
+  type: word_order
+  frame:
+    text: Toți cei de la cafeneaua lingvistică sunt {item} și e frumos.
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_diferiți
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Toți cei de la cafeneaua lingvistică sunt {item} și e frumos.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Im Sprachcafé ist jeder anders, und das ist schön. diferiți bedeutet verschieden (m. Pl.).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit42.lesson06.order.002
+  lesson_content_key: ro.a1.unit42.lesson06.nina_se_descrie
+  type: word_order
+  frame:
+    text: Bun {item} la cafeneaua noastră lingvistică!
+    language_code: ro
+    direction: ltr
+  slots:
+    item:
+      language_code: ro
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_venit
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bun {item} la cafeneaua noastră lingvistică!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Willkommen in unserem Sprachcafé! venit bedeutet gekommen (Partizip Perfekt).
+    language_code: de
+    direction: ltr
