@@ -1,0 +1,408 @@
+schema_version: '1.0'
+pack_key: practice.de-ro.a1.unit09
+source_language: de
+target_language: ro
+unit_content_key: ro.a1.unit09.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ajung
+    - w_mergeți
+    - w_înainte
+    - w_dreapta
+    - w_stânga
+    - w_aici
+    - w_acolo
+    - w_apoi
+slot_presets:
+  d_pool: &id003
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ajung
+      - w_mergeți
+      - w_înainte
+      - w_dreapta
+      - w_stânga
+      - w_aici
+      - w_acolo
+      - w_apoi
+  d1_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ajung
+      - w_mergeți
+      - w_înainte
+  d2_pool: &id002
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dreapta
+      - w_stânga
+      - w_aici
+      - w_acolo
+      - w_apoi
+      - w_înainte
+  d_words: &id010
+    language_code: ro
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_înainte
+      - w_dreapta
+      - w_stânga
+      - w_aici
+      - w_acolo
+      - w_apoi
+  t_inainte: &id004
+    language_code: ro
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_înainte
+  t_ajung: &id005
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ajung
+  t_stanga: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_stânga
+  t_aici: &id008
+    language_code: ro
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_aici
+  t_acolo: &id006
+    language_code: ro
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_acolo
+  t_apoi: &id009
+    language_code: ro
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_apoi
+templates:
+- content_key: practice.de-ro.ro.a1.unit09.lesson01.choose.001
+  lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Mergeți ist die Aufforderung für dumneavoastră; zu einem Freund sagt man mergi: Mergi înainte.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.listen.001
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: La dreapta und la stânga sind die beiden Abbiegerichtungen; aici und acolo bedeuten „hier“ und „dort“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson03.choose.001
+  lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Apoi bedeutet „dann“ und verbindet die Schritte einer Route, etwa nach Aufforderungen wie mergeți înainte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.match.002
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mergeți und ajung sind Verben; înainte, aici, acolo und apoi sind Adverbien, die sich nicht verändern.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson01.order.002
+  lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+  type: word_order
+  frame:
+    text: Mergeți {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mergeți {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mergeți înainte ist eine höfliche Aufforderung an jemanden, den man mit dumneavoastră anspricht.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson01.order.003
+  lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+  type: word_order
+  frame:
+    text: Cum pot să {item} la gară?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cum pot să {item} la gară?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Nach pot folgt im Rumänischen să und das Verb: Cum pot să ajung la gară?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.order.003
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: word_order
+  frame:
+    text: Gara este {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Gara este {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Acolo bedeutet „dort“ und aici „hier“; das Verb este bleibt gleich.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.fill.004
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: fill_in_blank
+  frame:
+    text: Mergeți la {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La stânga bedeutet „nach links“; stânga und dreapta enthalten bereits den bestimmten Artikel -a.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.fill.005
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: fill_in_blank
+  frame:
+    text: Magazinul este {item}. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aici zeigt auf den Ort, an dem Sie sind; acolo zeigt von Ihnen weg.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson03.order.002
+  lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+  type: word_order
+  frame:
+    text: Mergeți înainte, {item} la dreapta.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mergeți înainte, {item} la dreapta.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: 'Apoi verbindet die Schritte einer Route: erst geradeaus, dann nach rechts.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.translate.006
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Dreapta und stânga stehen nach la: la dreapta, la stânga.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson01.translate.004
+  lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+  type: translation
+  frame:
+    text: Gehen Sie geradeaus. (förmlich, zu jemandem, den man mit dumneavoastră anspricht)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mergeți {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Mergeți ist die Aufforderung für dumneavoastră; înainte bedeutet „geradeaus“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson01.translate.005
+  lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+  type: translation
+  frame:
+    text: Wie komme ich zum Bahnhof?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cum pot să {item} la gară?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cum pot să ajung... ist die Standardformel, um nach dem Weg zu fragen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson02.translate.007
+  lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+  type: translation
+  frame:
+    text: Gehen Sie nach links. (förmlich, zu jemandem, den man mit dumneavoastră anspricht)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mergeți la {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La stânga bedeutet „nach links“; la dreapta „nach rechts“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ro.ro.a1.unit09.lesson03.translate.003
+  lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+  type: translation
+  frame:
+    text: Gehen Sie geradeaus, dann nach rechts. (förmlich)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mergeți înainte, {item} la dreapta.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Apoi bedeutet „dann“ und verbindet zwei Schritte der Route.
+    language_code: de
+    direction: ltr
