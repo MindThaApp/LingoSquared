@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.de-pl.a1.unit06
+source_language: de
+target_language: pl
+unit_content_key: pl.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chleb
+    - w_masło
+    - w_ser
+    - w_woda
+    - w_mleko
+    - w_kawa
+    - w_herbata
+    - w_kawę
+    - w_herbatę
+    - w_wodę
+    - w_zupa
+    - w_sok
+    - w_cukier
+    - w_rachunek
+    - w_lubić
+    - w_lubię
+    - w_lubi
+    - w_zupę
+    - w_danie
+    - w_polecać
+    - w_polecam
+    - w_poleca
+    - w_co
+    - w_już
+    - w_podaję
+slot_presets:
+  u06_l1: &id001
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_chleb
+      - w_masło
+      - w_ser
+      - w_woda
+      - w_mleko
+      - w_kawa
+      - w_herbata
+  u06_ask: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_mleko
+      - w_masło
+  s_herbate: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_herbatę
+  s_wode: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_wodę
+  u06_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_zupa
+      - w_sok
+      - w_cukier
+      - w_rachunek
+      - w_lubić
+      - w_lubię
+      - w_lubi
+  u06_like: &id006
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_zupę
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_sok
+  s_lubi: &id007
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubi
+  s_zupe: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_zupę
+  u06_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - particle
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_danie
+      - w_polecać
+      - w_polecam
+      - w_poleca
+      - w_co
+      - w_już
+      - w_podaję
+  s_podaje: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_podaję
+  s_poleca: &id011
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_poleca
+templates:
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.choose.001
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Jedes polnische Nomen hat ein Genus: chleb und ser sind männlich, kawa, herbata und woda sind weiblich, und masło und mleko sind sächlich.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.listen.002
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Das Polnische hat keine Artikel, daher kann chleb „Brot“ oder „das Brot“ bedeuten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.order.003
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: word_order
+  frame:
+    text: Proszę o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Nach proszę o ändern weibliche Nomen auf -a ihre Endung zu -ę (kawa, kawę), während männliche und sächliche Nomen wie chleb und mleko gleich bleiben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.fill.004
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: fill_in_blank
+  frame:
+    text: Proszę o {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Proszę o plus die Objektform ist die höfliche Art, um etwas zu bitten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.translate.005
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: Bitte geben Sie mir Wasser.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Das Nomen nach proszę o steht in der Objektform: woda wird zu wodę.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson01.translate.006
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Masło und mleko enden auf -o, einer typischen Endung für Neutra, während chleb und ser auf einen Konsonanten enden und maskulin sind.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.choose.001
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubić ist die Grundform; lubię sagt man über sich selbst, lubi über eine andere Person.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.match.002
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Die Verbendungen zeigen die Person an: -ę für „ich“ (lubię) und -i für „er“ oder „sie“ (lubi).'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.order.003
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: word_order
+  frame:
+    text: Lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Nach lubię steht das, was man mag, in der Objektform: zupa wird zu zupę, während sok, chleb und ser unverändert bleiben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.fill.004
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: fill_in_blank
+  frame:
+    text: On {item} zupę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lubi ist die Form für „er“ oder „sie“, daher passt das Pronomen on dazu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.translate.005
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: Ich mag Suppe.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Feminine Nomen auf -a erhalten als Objekt die Endung -ę, daher wird zupa zu zupę.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson02.translate.006
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Das Paar lubię und lubi zeigt das Muster: für jede Person eine andere Endung.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.listen.001
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Polecać funktioniert wie lubić: polecam heißt „ich empfehle“, poleca heißt „er/sie empfiehlt“ oder, mit pan oder pani, „Sie empfehlen“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.match.002
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Co pan poleca? verwendet die Form poleca (er/sie), denn pan und pani stehen mit Verben in der dritten Person.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.order.003
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: word_order
+  frame:
+    text: Polecam {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Polecam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Auch polecam verlangt die Objektform des Nomens, genau wie lubię.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.fill.004
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: fill_in_blank
+  frame:
+    text: Już {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Der Kellner spricht in der Ich-Form, podaję, denn er ist es, der serviert.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.translate.005
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: Was empfehlen Sie? (zu einem Mann, formell)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Mit pan oder pani lautet das Verb poleca, dieselbe Form wie für „er“ oder „sie“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-pl.pl.a1.unit06.lesson03.translate.006
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Już kann „schon“ bedeuten oder, wie in Już podaję, „sofort“.
+    language_code: de
+    direction: ltr
