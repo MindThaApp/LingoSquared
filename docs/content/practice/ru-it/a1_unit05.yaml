@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.ru-it.a1.unit05
+source_language: ru
+target_language: it
+unit_content_key: it.a1.unit05.ask_tell_time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_alle
+    - w_cinque
+    - w_dieci
+    - w_dodici
+    - w_due
+    - w_l'una
+    - w_le
+    - w_mattina
+    - w_meno
+    - w_mezzo
+    - w_nove
+    - w_ora
+    - w_ore
+    - w_otto
+    - w_quarto
+    - w_quattro
+    - w_sera
+    - w_sette
+    - w_tre
+slot_presets:
+  l1_core: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_ore
+      - w_le
+      - w_l'una
+      - w_dodici
+  hours: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_due
+      - w_tre
+      - w_quattro
+      - w_cinque
+      - w_sette
+      - w_otto
+      - w_nove
+      - w_dieci
+      - w_dodici
+  ore: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ore
+  le: &id003
+    language_code: it
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_le
+  l2_core: &id005
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_mezzo
+      - w_quarto
+      - w_meno
+  quarto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_quarto
+  mezzo: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_mezzo
+  l3_core: &id009
+    language_code: it
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_ora
+      - w_alle
+      - w_mattina
+      - w_sera
+  ora: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ora
+  alle: &id011
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_alle
+  pairs: &id008
+    language_code: it
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+      - w_meno
+  words: &id012
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_l'una
+      - w_dodici
+      - w_mezzo
+      - w_quarto
+      - w_ora
+      - w_mattina
+      - w_sera
+templates:
+- content_key: practice.ru-it.it.a1.unit05.lesson01.choose.001
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'При указании времени используется женский род множественного числа le, потому что ore («часы») — женский род множественного числа: sono le tre.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson01.listen.002
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Час дня — исключение: l''una стоит в единственном числе, поэтому нужно è, а не sono.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson01.order.003
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: word_order
+  frame:
+    text: Che {item} sono?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Che {item} sono?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Che ore sono? буквально значит «какие часы они?», поэтому ответ начинается с sono le.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson01.fill.004
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: fill_in_blank
+  frame:
+    text: Sono {item} tre. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Le согласуется с подразумеваемым словом ore: sono le tre значит «сейчас три часа».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson01.translate.005
+  lesson_content_key: it.a1.unit05.lesson01.chiedere_lora
+  type: translation
+  frame:
+    text: Сейчас {n} ч.
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      n: english_gloss
+  slots:
+    n: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le {n}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Sono le используется для всех часов, кроме часа дня или ночи: там l''una.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.choose.001
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'E прибавляет минуты, а meno вычитает: le tre e mezzo — это 3:30, le quattro meno un quarto — 3:45.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.listen.002
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'В слове mezzo двойное z: произноси этот звук чуть дольше.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.order.003
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: word_order
+  frame:
+    text: Sono le tre e un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'E un quarto прибавляет пятнадцать минут: le tre e un quarto — это 3:15.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.fill.004
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: fill_in_blank
+  frame:
+    text: Sono le tre e {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mezzo значит «половина», поэтому e mezzo прибавляет тридцать минут.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.match.005
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mezzo — половина, quarto — четверть; сначала идёт час, затем e или meno.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.translate.006
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: Без четверти четыре.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le quattro meno un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Meno вычитает минуты из следующего часа: le quattro meno un quarto — это 3:45.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson02.translate.007
+  lesson_content_key: it.a1.unit05.lesson02.i_quarti_dora
+  type: translation
+  frame:
+    text: Половина четвёртого.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono le tre e {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: E mezzo, то есть «и половина», — обычный способ сказать «половина такого-то часа».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.choose.001
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Alle значит «в» (в женском роде множественного числа) и используется со временем на часах: alle tre — в три.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.listen.002
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ora — «час» или «время»; ore — его множественное число, поэтому вопрос звучит Che ore sono?
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.order.003
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: word_order
+  frame:
+    text: A che {item} ci vediamo?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che {item} ci vediamo?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A che ora спрашивает «во сколько»; ora здесь в единственном числе, потому что речь об одном моменте.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.fill.004
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: fill_in_blank
+  frame:
+    text: Ci vediamo {item} tre e mezzo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Alle используется со всеми часами, кроме часа дня или ночи: там говорят all''una.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.translate.005
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: Встретимся в половине четвёртого.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ci vediamo {item} tre e mezzo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ci vediamo alle плюс время — стандартный способ договориться о встрече.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-it.it.a1.unit05.lesson03.translate.006
+  lesson_content_key: it.a1.unit05.lesson03.fissare_un_orario
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Mattina и sera — это утро и вечер; по-итальянски перед ними ставится di: di mattina, di sera.'
+    language_code: ru
+    direction: ltr
