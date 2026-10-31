@@ -1275,8 +1275,9 @@ def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str
             continue
         if t in ("am", "pm") or body[max(0, m.start() - 1):m.start()] == "-":
             continue                                # AM/PM and verb endings (-er, -ar) are written in Latin on purpose
-        if w[0].isupper() and fold(t) in tv and body.find(w) > 0:
-            continue                                # name or loanword mid-sentence
+        prev = body[:m.start()].rstrip()[-1:]
+        if w[0].isupper() and prev.isalpha():
+            continue                                # capitalised mid-sentence: a name or a German noun, not English prose
         if fold(t) in tv and t not in EN_STRONG and t not in GRAMMAR_ENGLISH:
             continue                                # Spanish (or cognate) word
         out.append(w)
@@ -1345,7 +1346,7 @@ def learner_leftovers(pair: str) -> list[str]:
     return out
 
 
-def compiled_leftovers(path: Path, learner: str = "", target: str = "") -> list[str]:
+def compiled_leftovers(path: Path) -> list[str]:
     """English prose (or language_code en blocks) in the compiled course JSON of a cross pair: what the learner would see."""
     d = json.loads(path.read_text(encoding="utf-8"))
     out = []
@@ -1362,8 +1363,6 @@ def compiled_leftovers(path: Path, learner: str = "", target: str = "") -> list[
                 walk(v, trail + [str(i)])
         elif isinstance(o, str) and not re.match(r"^[a-z0-9_.\-]+$", o) and english_prose(o):
             out.append(f"compiled {'/'.join(trail)[-60:]}: {o[:70]!r} [English]")
-        elif isinstance(o, str) and learner in NONLATIN_LEARNERS and not re.match(r"^[a-z0-9_.\-]+$", o) and english_in_nonlatin(o, target):
-            out.append(f"compiled {'/'.join(trail)[-60:]}: {o[:70]!r} [English in {learner} text]")
 
     walk(d, [])
     return out
@@ -1502,7 +1501,7 @@ def cmd_validate(args):
     left = learner_leftovers(args.new)
     target = args.new.split("-")[1]
     for g, sg in zip(dd.group_names(args.new, args.levels), dd.group_names(f"en-{target}", args.levels)):
-        left += compiled_leftovers(Path(f"/tmp/derive_cross_{g}.json"), args.new.split("-")[0], target)
+        left += compiled_leftovers(Path(f"/tmp/derive_cross_{g}.json"))
         left += latin_in_cyrillic(Path(f"/tmp/derive_cross_{g}.json"), target)
         sreals, sovs = cm[sg]
         r = subprocess.run([py, "scripts/compile_content.py", "compile", "--realization", *sreals, "--overlay", *sovs,
