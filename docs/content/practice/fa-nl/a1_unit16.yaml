@@ -1,0 +1,312 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a1.unit16
+source_language: fa
+target_language: nl
+unit_content_key: nl.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - symptom_hebben
+    - symptom_hebben_pure
+    - symptom_zijn
+    - symptom_zijn_pure
+    - pharmacy_visit
+slot_presets:
+  symptom_hebben:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: symptom_hebben
+  symptom_hebben_pure: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: symptom_hebben_pure
+  symptom_zijn:
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: symptom_zijn
+  symptom_zijn_pure: &id003
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: symptom_zijn_pure
+  symptom_any_pure: &id002
+    language_code: nl
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - symptom_hebben_pure
+      - symptom_zijn_pure
+  pharmacy_noun: &id004
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: pharmacy_visit
+templates:
+- content_key: practice.fa-nl.nl.a1.unit16.lesson01.order.001
+  lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
+  type: word_order
+  frame:
+    text: Ik heb {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} نشانه‌ی بیماری در این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson01.match.003
+  lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر واژه‌ی نشانه‌ی بیماری را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson02.choose.001
+  lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از نشانه‌های بیماری در این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson02.listen.002
+  lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson02.translate.003
+  lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch (one word, no article).
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson03.order.001
+  lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
+  type: word_order
+  frame:
+    text: Ik ben {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik ben {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} بیماری یا حالتی است که در این جمله آمده.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson03.translate.003
+  lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson04.choose.001
+  lesson_content_key: nl.a1.unit16.lesson04.bij_de_apotheek
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از نشانه‌های بیماری در این درس است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson04.translate.002
+  lesson_content_key: nl.a1.unit16.lesson04.bij_de_apotheek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch (one word, no article).
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson05.listen.001
+  lesson_content_key: nl.a1.unit16.lesson05.advies_lezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson06.order.001
+  lesson_content_key: nl.a1.unit16.lesson06.lotte_checkt_omar
+  type: word_order
+  frame:
+    text: Ik heb {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} نشانه‌ی بیماری در این جمله است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a1.unit16.lesson06.listen.002
+  lesson_content_key: nl.a1.unit16.lesson06.lotte_checkt_omar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
