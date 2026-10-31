@@ -1,0 +1,486 @@
+schema_version: '1.0'
+pack_key: practice.fr-pl.a1.unit08
+source_language: fr
+target_language: pl
+unit_content_key: pl.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bank
+    - w_poczta
+    - w_apteka
+    - w_restauracja
+    - w_hotel
+    - w_park
+    - w_blisko
+    - w_daleko
+    - w_niedaleko
+    - w_obok
+    - w_naprzeciwko
+    - w_banku
+    - w_hotelu
+    - w_parku
+    - w_przepraszam
+slot_presets:
+  u08_l1: &id001
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_bank
+      - w_poczta
+      - w_apteka
+      - w_restauracja
+      - w_hotel
+      - w_park
+  u08_where: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_bank
+      - w_poczta
+      - w_apteka
+      - w_restauracja
+      - w_hotel
+      - w_park
+  s_poczta: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_poczta
+  s_apteka: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_apteka
+  u08_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - preposition
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_blisko
+      - w_daleko
+      - w_niedaleko
+      - w_obok
+      - w_naprzeciwko
+      - w_banku
+      - w_hotelu
+      - w_parku
+  u08_gen: &id006
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_banku
+      - w_hotelu
+      - w_parku
+  u08_dist: &id007
+    language_code: pl
+    part_of_speech: adverb
+    agreement_tags:
+      semantic:
+      - w_blisko
+      - w_daleko
+      - w_niedaleko
+  s_naprzeciwko: &id008
+    language_code: pl
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_naprzeciwko
+  s_banku: &id009
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_banku
+  u08_l3: &id010
+    language_code: pl
+    part_of_speech:
+    - preposition
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_przepraszam
+      - w_blisko
+      - w_daleko
+      - w_obok
+      - w_bank
+      - w_park
+      - w_hotel
+  u08_l3m: &id011
+    language_code: pl
+    part_of_speech:
+    - preposition
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_przepraszam
+      - w_blisko
+      - w_daleko
+      - w_niedaleko
+      - w_obok
+      - w_naprzeciwko
+      - w_poczta
+templates:
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.choose.001
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'En polonais, les noms de lieux s’emploient sans article : bank peut donc signifier « une banque » ou « la banque ».'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.listen.002
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Poczta, apteka et restauracja se terminent en -a et sont féminins ; bank, hotel et park sont masculins.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.match.003
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Hotel, bank et park sont tous trois masculins.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.order.004
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: word_order
+  frame:
+    text: Gdzie jest {item}?
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Gdzie jest {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Gdzie jest sert à demander où se trouve quelque chose, et le lieu reste à sa forme de base.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.fill.005
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: fill_in_blank
+  frame:
+    text: To jest {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: To jest présente une chose, et le nom qui suit reste à sa forme de base.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.translate.006
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: translation
+  frame:
+    text: Où est la pharmacie ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Gdzie jest {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Gdzie jest suivi d’un lieu est la question idéale pour trouver quelque chose.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson01.translate.007
+  lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Poczta est le mot courant et court pour désigner la poste.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.choose.001
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Obok et naprzeciwko sont suivis du génitif, c’est pourquoi bank devient banku.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.listen.002
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Les noms masculins comme bank, hotel et park prennent -u après obok, naprzeciwko et blisko.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.order.003
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: word_order
+  frame:
+    text: Apteka jest obok {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Apteka jest obok {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: La terminaison du génitif de ces noms masculins est -u, comme dans banku, hotelu et parku.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.order.004
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: word_order
+  frame:
+    text: Park jest {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Park jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Blisko, daleko et niedaleko sont des adverbes : ils ne changent pas, quel que soit le nom.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.fill.005
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: fill_in_blank
+  frame:
+    text: Restauracja jest {item} hotelu. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Naprzeciwko est suivi du génitif, c’est pourquoi hotel devient hotelu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.translate.006
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: translation
+  frame:
+    text: La pharmacie est à côté de la banque.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Apteka jest obok {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 'Après obok, le lieu prend une terminaison du génitif : bank devient donc banku.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson02.translate.007
+  lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Niedaleko est nie plus daleko, littéralement « pas loin », et signifie donc « assez près ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson03.choose.001
+  lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Przepraszam s’emploie à la fois pour dire « excusez-moi », avant de demander quelque chose à un inconnu, et pour dire « pardon ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson03.match.002
+  lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Przepraszam ouvre une question polie à un inconnu, par exemple pour demander où se trouve un lieu.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-pl.pl.a1.unit08.lesson03.translate.003
+  lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Przepraszam couvre à la fois « excusez-moi » et « je suis désolé » : c’est le contexte qui détermine le sens.'
+    language_code: fr
+    direction: ltr
