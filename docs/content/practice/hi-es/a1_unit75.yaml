@@ -1,0 +1,307 @@
+schema_version: '1.0'
+pack_key: practice.hi-es.a1.unit75
+source_language: hi
+target_language: es
+unit_content_key: es.a1.unit75.museum
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_cerrar
+    - w_concierto
+    - w_cuadro
+    - w_cuadros
+    - w_exposición
+    - w_falta
+    - w_guía
+    - w_visitar
+    - w_visito
+templates:
+- content_key: practice.hi-es.es.a1.unit75.lesson01.choose.001
+  lesson_content_key: es.a1.unit75.lesson01.quiero_ir_al_museo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: es
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_visitar
+        - w_exposición
+        - w_visito
+        - w_cerrar
+        - w_guía
+        - w_falta
+        - w_cuadro
+        - w_cuadros
+        - w_concierto
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ मुझे संग्रहालय जाना है से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson02.listen.001
+  lesson_content_key: es.a1.unit75.lesson02.quiero_comprar_una_entrada
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, जो "मैं टिकट खरीदना चाहता हूँ" वाले पाठ से लिया गया है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson03.translate.001
+  lesson_content_key: es.a1.unit75.lesson03.a_que_hora_cierra
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ संग्रहालय कितने बजे बंद होता है? से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson04.match.001
+  lesson_content_key: es.a1.unit75.lesson04.en_el_museo
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: हर स्पेनिश शब्द को उसके हिंदी अर्थ से मिलाइए; शब्द इस यूनिट के पाठों से लिए गए हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson05.choose.001
+  lesson_content_key: es.a1.unit75.lesson05.leer_el_panel_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ सूचना बोर्ड पढ़ना से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson06.translate.001
+  lesson_content_key: es.a1.unit75.lesson06.mateo_nina_y_elena
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} इस यूनिट के शब्दों में से एक है, पाठ मातेओ, नीना और एलेना संग्रहालय में से।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson01.order.002
+  lesson_content_key: es.a1.unit75.lesson01.quiero_ir_al_museo
+  type: word_order
+  frame:
+    text: Quiero {item} el museo.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_visitar
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero {item} el museo.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: मैं संग्रहालय देखना चाहता/चाहती हूँ। visitar का मतलब देखने जाना है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson02.order.002
+  lesson_content_key: es.a1.unit75.lesson02.quiero_comprar_una_entrada
+  type: word_order
+  frame:
+    text: Visito la {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_exposición
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Visito la {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: मैं प्रदर्शनी देखने जा रहा/रही हूँ। exposición का मतलब प्रदर्शनी है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson04.order.002
+  lesson_content_key: es.a1.unit75.lesson04.en_el_museo
+  type: word_order
+  frame:
+    text: Muy bien, ¿y quiere también una {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_guía
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Muy bien, ¿y quiere también una {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: बहुत अच्छा, और क्या आपको गाइड भी चाहिए? guía का मतलब गाइड है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson04.fill.003
+  lesson_content_key: es.a1.unit75.lesson04.en_el_museo
+  type: fill_in_blank
+  frame:
+    text: No, gracias, no hace {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_falta
+    hint:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_falta
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: नहीं, धन्यवाद, ज़रूरत नहीं है। falta का मतलब कमी है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson05.order.002
+  lesson_content_key: es.a1.unit75.lesson05.leer_el_panel_de
+  type: word_order
+  frame:
+    text: El {item} es bonito.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cuadro
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: El {item} es bonito.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: चित्र सुंदर है। cuadro का मतलब चित्र है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-es.es.a1.unit75.lesson06.order.002
+  lesson_content_key: es.a1.unit75.lesson06.mateo_nina_y_elena
+  type: word_order
+  frame:
+    text: Voy a un {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_concierto
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voy a un {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: मैं संगीत कार्यक्रम में जा रहा/रही हूँ। concierto का मतलब संगीत कार्यक्रम है।
+    language_code: hi
+    direction: ltr
