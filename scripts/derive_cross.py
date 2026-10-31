@@ -550,6 +550,12 @@ TM_ROLES = {"instruction", "feedback", "packtext", "title", "gloss", "example_gl
             "accepted", "correct_response", "pair_right", "accepted_note", "glosses", "prompt_block"}
 
 
+def tm_entry_ok(learner: str, english: str, translation: str) -> bool:
+    """Keep language names out of the memory: 'in Spanish' from an es pair must not reach a fr pair (_target_name_check)."""
+    import _target_name_check as tn
+    return tn.tm_entry_ok(learner, english, translation)
+
+
 def tm_path(learner: str) -> Path:
     return TM_DIR / f"{learner}.json"
 
@@ -581,7 +587,7 @@ def tm_prefill(args) -> int:
             if it[0] == "#" or it[0] in tr:
                 continue
             k = tm_key(it[1], it[2])
-            if k and k in tm:
+            if k and k in tm and tm_entry_ok(args.new.split("-")[0], it[2], tm[k]):
                 tr[it[0]] = tm[k]
                 added += 1
         if added:
@@ -603,7 +609,7 @@ def tm_harvest(args) -> int:
         tr = dd.load_tr(work, name)
         for it in json.loads(src.read_text(encoding="utf-8"))["items"]:
             k = tm_key(it[1], it[2]) if it[0] != "#" else None
-            if k and it[0] in tr and tm.get(k) != tr[it[0]]:
+            if k and it[0] in tr and tm.get(k) != tr[it[0]] and tm_entry_ok(learner, it[2], tr[it[0]]):
                 n += 1
                 tm.setdefault(k, tr[it[0]])
     if n:
