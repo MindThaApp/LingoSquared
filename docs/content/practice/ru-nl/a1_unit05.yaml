@@ -1,0 +1,419 @@
+schema_version: '1.0'
+pack_key: practice.ru-nl.a1.unit05
+source_language: ru
+target_language: nl
+unit_content_key: nl.a1.unit05.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - family_member
+    - family_singular
+    - sibling
+    - extended_only
+    - extended_family_member
+    - possessive_pronoun
+    - possessive_flexible
+    - family_profile
+    - family_dialogue
+    - person_name
+    - place_name
+    - city_name
+    - country
+    register:
+    - informal
+    - polite
+slot_presets:
+  family_singular: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: family_singular
+  sibling: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sibling
+  extended_only: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: extended_only
+  possessive_flexible: &id004
+    language_code: nl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: possessive_flexible
+  person_name: &id005
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  place_name: &id006
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: place_name
+  city_name: &id007
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: city_name
+templates:
+- content_key: practice.ru-nl.nl.a1.unit05.lesson01.choose.001
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Выбери значение на русском.
+      language_code: ru
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из этого урока о семье.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson01.order.002
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — слово, которое завершает фразу «У меня есть ...» для этого родственника.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson01.translate.003
+  lesson_content_key: nl.a1.unit05.lesson01.direct_family
+  type: translation
+  frame:
+    text: 'У меня есть: {item}.'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'У меня есть: {item}.'
+    slot_rendering:
+      item: english_gloss
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson02.listen.001
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово о дальних родственниках, которое ты услышал.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson02.order.002
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: word_order
+  frame:
+    text: Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heb een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — слово, которое завершает фразу «У меня есть ...» для этого родственника.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson02.match.003
+  lesson_content_key: nl.a1.unit05.lesson02.extended_family
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Соедини каждое слово о родственниках с его значением.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson03.order.001
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: word_order
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} может показать, чей это брат.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson03.complete.002
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: fill_in_blank
+  frame:
+    text: Dit is {item} broer.
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Дополни предложение на нидерландском.
+      language_code: ru
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} может показать, чей это брат.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson03.translate.003
+  lesson_content_key: nl.a1.unit05.lesson03.mijn_je
+  type: translation
+  frame:
+    text: 'Переведи с помощью слова {item}: Это ___ брат.'
+    language_code: ru
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is {item} broer.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: В предложении Dit is {item} broer стоит нужная притяжательная форма.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson04.order.001
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: word_order
+  frame:
+    text: Dit is zijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dit is zijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zijn показывает, что член семьи принадлежит мужчине.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson04.translate.003
+  lesson_content_key: nl.a1.unit05.lesson04.zijn_haar
+  type: translation
+  frame:
+    text: 'Это её: {item}.'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dat is haar {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Это её: {item}.'
+    slot_rendering:
+      item: english_gloss
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson05.order.001
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: word_order
+  frame:
+    text: Ik heet {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — названное имя.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson05.translate.003
+  lesson_content_key: nl.a1.unit05.lesson05.lotte_profiel
+  type: translation
+  frame:
+    text: Меня зовут {item}.
+    language_code: ru
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Меня зовут {item}.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson06.listen.001
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — это место, названное в диалоге.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson06.order.002
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: word_order
+  frame:
+    text: Mijn ouders wonen in {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} — слово, которое завершает фразу о том, где живут родители.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-nl.nl.a1.unit05.lesson06.translate.003
+  lesson_content_key: nl.a1.unit05.lesson06.taalcafe_familie_dialoog
+  type: translation
+  frame:
+    text: 'Мои родители живут: {item}.'
+    language_code: ru
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mijn ouders wonen in {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Мои родители живут: {item}.'
+    slot_rendering:
+      item: english_gloss
+    language_code: ru
+    direction: ltr
