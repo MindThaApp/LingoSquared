@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.nl-ar.a1.unit12
+source_language: nl
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_غدا
+    - w_نذهب
+    - w_جيد
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_غدا
+      - w_نذهب
+      - w_جيد
+  ghadan: &id002
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_غدا
+  nadhhab: &id003
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نذهب
+  jayyid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_جيد
+templates:
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.choose.001
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: غدا betekent morgen; نذهب is wij gaan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.listen.002
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: نذهب is de wij-vorm van gaan; de wij-vorm begint met ن.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.order.003
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل نذهب إلى المقهى {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل نذهب إلى المقهى {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'غدا (morgen) staat meestal aan het eind van de zin: Zullen we morgen naar het café gaan?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.order.004
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل {item} إلى المقهى غدا؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} إلى المقهى غدا؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل plus de wij-vorm maakt van het plan een ja-neevraag.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.fill.005
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا is morgen; het tijdstip volgt erna.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.fill.006
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: هل {item} إلى المقهى غدا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'نذهب is wij gaan en kan ook betekenen: we zijn van plan te gaan.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.translate.007
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا is morgen; نذهب is wij gaan; جيد is goed.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.translate.008
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Zullen we morgen naar het café gaan?
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} إلى المقهى {b}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Dezelfde werkwoordsvorm نذهب dekt zowel wij gaan als zullen wij gaan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.choose.001
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: جيد betekent goed; hier is het een kort antwoord waarmee je instemt met het plan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.fill.002
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: fill_in_blank
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'جيد. إلى اللقاء. betekent: goed, tot ziens: instemmen met het plan en afsluiten.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.translate.003
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد is het bijvoeglijk naamwoord goed, hier gebruikt om met het plan in te stemmen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.translate.004
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: We gaan morgen naar het café.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: De wij-vorm نذهب heeft geen voornaamwoord nodig en betekent ook we gaan binnenkort; het tijdwoord غدا staat aan het eind van de zin.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.order.005
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Het tijdwoord komt na de plaats, daarna sluit het uur de zin af.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.translate.006
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: We gaan morgen om vijf uur naar het café.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'In het Arabisch staat het tijdstip achteraan: in het vijfde uur.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.listen.007
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Luister naar de klinkers en de slotklank om de drie woorden uit elkaar te houden.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson02.order.008
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Een kort woord van instemming sluit het plan af vóór het afscheid.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit12.lesson01.translate.009
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Ja, om vijf uur. Goed. Tot straks.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Het antwoord bevestigt het uur, keurt het plan goed en zegt dan gedag.
+    language_code: nl
+    direction: ltr
