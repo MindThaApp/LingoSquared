@@ -8,6 +8,7 @@ Two detectors, both over `kind: grammar_note` teaching cards:
      every learner pair, so English words in it ("Gdzie (where) plus jest (is) ...", a whole English sentence) show up
      as English inside the target-language span in every X-<target> course. Flagged when it holds one STRONG English
      marker or two WEAK ones (see below). Learner-language explanations belong in the overlay (title/gloss/note).
+     Parenthesised-gloss cards (see localized_gloss_card) that every non-English overlay localizes are not flagged.
   2. overlay title: for every learner language X other than English, a grammar_note `title` in X-<target> overlays
      identical to the en-<target> title (i.e. never translated) and containing English words is flagged.
 
@@ -78,6 +79,45 @@ def walk(obj):
             yield from walk(v)
 
 
+# Parenthesised-gloss cards (session 20 group 3): a Arabic/Devanagari-script word list such as 'کجا (where)' whose only
+# English sits inside parentheses. For English learners the parenthesis is the learner gloss; the compiler lets every other
+# X-<target> overlay replace the whole body with `target_text` (compile_content._target_block_with_learner_gloss). Such a card
+# is not English prose in a target span as long as every existing non-English overlay of that unit does localize it.
+GLOSS_SCRIPT_TARGETS = {"ar", "fa", "prs", "hi"}
+_NONLATIN = re.compile(r"[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff\u0900-\u097f]")
+_PAREN_GLOSS = re.compile(r"\([^()]*[A-Za-z]{2}[^()]*\)")
+_overlay_cache: dict[Path, dict] = {}
+
+
+def _teaching_overlay(path: Path, key: str):
+    if path not in _overlay_cache:
+        found: dict = {}
+        for node in walk(load(path)):
+            for k, v in node.items():
+                if isinstance(k, str) and k.count(".") >= 4 and isinstance(v, dict):
+                    found[k] = v
+        _overlay_cache[path] = found
+    return _overlay_cache[path].get(key)
+
+
+def localized_gloss_card(target: str, key: str, text: str) -> bool:
+    """True for a parenthesised-gloss card whose English is only the parenthesised gloss and which every existing
+    non-English X-<target> overlay of its unit replaces with `target_text`."""
+    if target not in GLOSS_SCRIPT_TARGETS or not _NONLATIN.search(text) or not _PAREN_GLOSS.search(text):
+        return False
+    if english_hits(_PAREN_GLOSS.sub("", text), target):
+        return False
+    parts = key.split(".")  # <target>.<level>.<unit>...
+    fname = f"{parts[1]}_{parts[2]}.yaml"
+    for pair in sorted((CONTENT / "overlays").glob(f"*-{target}")):
+        if pair.name.startswith("en-") or not (pair / fname).exists():
+            continue
+        entry = _teaching_overlay(pair / fname, key)
+        if not (entry and entry.get("target_text")):
+            return False
+    return True
+
+
 def realization_hits() -> dict[str, str]:
     hits: dict[str, str] = {}
     for f in sorted((CONTENT / "realizations").glob("*/*.yaml")):
@@ -92,7 +132,7 @@ def realization_hits() -> dict[str, str]:
                 if block.get("language_code") not in (None, target):
                     continue
                 text = block.get("text", "")
-                if text and english_hits(text, target):
+                if text and english_hits(text, target) and not localized_gloss_card(target, node["content_key"], text):
                     hits[f"realization\t{node['content_key']}"] = text
     return hits
 
