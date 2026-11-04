@@ -85,3 +85,6 @@ Group 3 additions (European learner -> ar/hi/prs/fa targets, PRs #151 ar, #156 h
 +28 per de/es/fr/it-ar (en-ar 28), +4 per de/es/fr/it-hi (en-hi 4), +19 per de/es/fr/it-prs (en-prs 19), +2 per de/es/fr/it-fa (en-fa 2)
 = 4x28 + 4x4 + 4x19 + 4x2 = 212 (per-course count is the `validate` count; the compile count repeats it). en-ar/en-hi/en-prs/en-fa unchanged.
 Leakage after group 3: 13-16 hits (tip 18; 5 allowlist rows added for shared ar/hi/prs content keys, e.g. repeat-after-me speak prompts).
+
+Measured at acfde1144 (shipped 2026-11-04, second ship): 5046 = 4638 (20b648c90) + 408 (de/es/fr/it -> ar-a1 4x56, -> hi 4x8, -> prs 4x38; the formula above counts validate only, the log repeats it via compile, so double it). Per-realization-language diff versus 20b648c90: only realizations/ar (56 -> 280), hi (12 -> 44), prs (66 -> 218), every changed file 2 -> 8 (four new pairs x 2); no pre-existing course changed. fa-target pairs were not in this ship. Leakage 13 hits; leftovers, cyrillic-latin, dari, target-name 0; note-language 392 baselined, 0 new, 0 stale; practice packs 533 validations 0 errors; scripts/tests 211; vitest 489; backend pytest pass (ci_local.sh, isolated compose project); frontend lint and build pass.
+Current WARN baseline: 5046 (+ the en-Y sibling counts for any later cross pair, e.g. fa-target pairs).
