@@ -772,7 +772,7 @@ def cmd_inject(args):
             dump(py, out_pk)
             pack_paths.append(str(out_pk.relative_to(ROOT)))
 
-    update_manifests(cm_new, new_pair, pack_paths)
+    update_manifests(cm_new, new_pair, pack_paths, args.sibling)
     if dropped_templates:
         print(f"dropped {dropped_templates} pack templates that use sibling-specific lexeme tags (see docs/content/DIRECTION_PIPELINE.md)")
     print(f"injected {len(units)} overlays, {len(pack_paths)} packs for {new_pair}")
@@ -828,7 +828,7 @@ def new_direction_tags(pair: str) -> set | None:
     return tags
 
 
-def update_manifests(cm_new, new_pair, pack_paths):
+def update_manifests(cm_new, new_pair, pack_paths, sibling=None):
     """Write one file per group/pack under scripts/manifest.d/ (no shared-file appends).
 
     Content group files are overwritten (one file per group). The practice file is shared by every
@@ -847,6 +847,14 @@ def update_manifests(cm_new, new_pair, pack_paths):
                 pairs = [pr for pr in zip(*old_parts) if pr[0] not in have] + pairs
                 num = lambda pr: int(re.search(r"unit(\d+)", pr[0]).group(1)) if re.search(r"unit(\d+)", pr[0]) else 0
                 pairs.sort(key=num)
+        sib_file = MANIFEST / f"{g.replace(new_pair, sibling, 1)}.txt" if sibling else None
+        if sib_file is not None and sib_file.exists():
+            # follow the sibling's realization order (en-ar / en-hi list units out of numeric order and the
+            # validator accumulates 'taught' tokens in list order); realizations and overlays stay position-matched
+            sib_parts = read_manifest_file(sib_file).get(g.replace(new_pair, sibling, 1))
+            if sib_parts and sib_parts[0]:
+                rank = {Path(r).name: i for i, r in enumerate(sib_parts[0])}
+                pairs.sort(key=lambda pr: rank.get(Path(pr[0]).name, len(rank)))
         dest_g.write_text(f"{g}|{' '.join(r for r, _ in pairs)}|{' '.join(o for _, o in pairs)}\n", encoding="utf-8")
     if pack_paths:
         PRACTICE_MANIFEST.mkdir(parents=True, exist_ok=True)
