@@ -1,0 +1,405 @@
+schema_version: '1.0'
+pack_key: practice.pl-prs.a1.unit19
+source_language: pl
+target_language: prs
+unit_content_key: prs.a1.unit19.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - preposition
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - room_word
+    - home_room_word
+    - object_word
+    - home_description_word
+slot_presets:
+  room_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_word
+  home_room_word:
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: home_room_word
+  object_word: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: object_word
+  home_description_word: &id005
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - preposition
+    agreement_tags:
+      semantic: home_description_word
+  home_description_adjective: &id004
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: home_description_word
+  room_object_pool:
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - room_word
+      - object_word
+  unit_vocab_pool: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - room_word
+      - object_word
+      - home_description_word
+templates:
+- content_key: practice.pl-prs.prs.a1.unit19.lesson01.room_word_gloss.001
+  lesson_content_key: prs.a1.unit19.lesson01.room_words
+  type: multiple_choice
+  frame:
+    text: '{room_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    room_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: room_word
+  feedback_frame:
+    text: '{room_word} to nazwa pokoju lub części domu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson01.room_word_have_order.003
+  lesson_content_key: prs.a1.unit19.lesson01.room_words
+  type: word_order
+  frame:
+    text: '{room_word} دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    room_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{room_word} دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: [pomieszczenie] دارم (mam [pomieszczenie]).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson01.room_word_translate.004
+  lesson_content_key: prs.a1.unit19.lesson01.room_words
+  type: translation
+  frame:
+    text: '{room_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      room_word: english_gloss
+  slots:
+    room_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: room_word
+  feedback_frame:
+    text: '{room_word} to darijskie słowo oznaczające tę część domu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson02.object_word_gloss.001
+  lesson_content_key: prs.a1.unit19.lesson02.object_words
+  type: multiple_choice
+  frame:
+    text: '{object_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    object_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: object_word
+  feedback_frame:
+    text: '{object_word} to nazwa przedmiotu domowego.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson02.object_word_pair.002
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id003
+    word_two: *id003
+    word_three: *id003
+    word_four: *id003
+    word_five: *id003
+    word_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson02.object_word_have_order.003
+  lesson_content_key: prs.a1.unit19.lesson02.object_words
+  type: word_order
+  frame:
+    text: '{object_word} دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    object_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{object_word} دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: [przedmiot] دارم (mam [przedmiot]).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson02.object_word_translate.004
+  lesson_content_key: prs.a1.unit19.lesson02.object_words
+  type: translation
+  frame:
+    text: '{object_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      object_word: english_gloss
+  slots:
+    object_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: object_word
+  feedback_frame:
+    text: '{object_word} to darijskie słowo oznaczające ten przedmiot domowy.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson03.number_room_order.001
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: word_order
+  frame:
+    text: '{room_word} {home_description_word} است'
+    language_code: prs
+    direction: rtl
+  slots:
+    room_word: *id001
+    home_description_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{room_word} {home_description_word} است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: [pomieszczenie] بزرگ است ([pomieszczenie] jest duże).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson03.object_near_order.002
+  lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+  type: word_order
+  frame:
+    text: '{object_word_one} نزدیک {object_word_two} است'
+    language_code: prs
+    direction: rtl
+  slots:
+    object_word_one: *id002
+    object_word_two: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - object_word_one
+    - object_word_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{object_word_one} نزدیک {object_word_two} است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: [przedmiot] نزدیک [przedmiot] است (jeden przedmiot jest blisko drugiego).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson03.review_pair.003
+  lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id003
+    word_two: *id003
+    word_three: *id003
+    word_four: *id003
+    word_five: *id003
+    word_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson04.house_bedroom_count_order.001
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: word_order
+  frame:
+    text: این خانه {home_description_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    home_description_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این خانه {home_description_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: این خانه بزرگ است (ten dom jest duży).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson04.preference_verb_gloss.002
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '{unit_word} to jedno ze słów z tego działu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson05.home_description_word_translate.001
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: translation
+  frame:
+    text: '{home_description_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      home_description_word: english_gloss
+  slots:
+    home_description_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: home_description_word
+  feedback_frame:
+    text: '{home_description_word} to darijskie słowo oznaczające to pojęcie.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson05.object_across_order.002
+  lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
+  type: word_order
+  frame:
+    text: '{object_word_one} مقابل {object_word_two} است'
+    language_code: prs
+    direction: rtl
+  slots:
+    object_word_one: *id002
+    object_word_two: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - object_word_one
+    - object_word_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{object_word_one} مقابل {object_word_two} است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: [przedmiot] مقابل [przedmiot] است (jeden przedmiot jest naprzeciwko drugiego).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson06.person_name_gloss.001
+  lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '{unit_word} to jedno ze słów z tego działu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit19.lesson06.person_bedroom_count_order.002
+  lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
+  type: word_order
+  frame:
+    text: این آشپزخانه {home_description_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    home_description_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این آشپزخانه {home_description_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk wyrazów: این آشپزخانه بزرگ است (ta kuchnia jest duża).'
+    language_code: pl
+    direction: ltr

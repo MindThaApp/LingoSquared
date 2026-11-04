@@ -1,0 +1,329 @@
+schema_version: '1.0'
+pack_key: practice.ro-prs.a1.unit05
+source_language: ro
+target_language: prs
+unit_content_key: prs.a1.unit05.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - adverb
+  - preposition
+  agreement_tags:
+    semantic:
+    - city_place
+    - en_prs_a1_unit05_lesson04_words
+    - en_prs_a1_unit05_lesson06_words
+    - location_word
+    - volume_en_prs_a1_unit05_city_place_06_single
+    - volume_en_prs_a1_unit05_location_word_08_single
+    - direction_word
+    - sequence_word
+    - home_description_word
+slot_presets:
+  city_place: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: city_place
+  location_word: &id004
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: location_word
+  location_review:
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - location_word
+      - direction_word
+      - sequence_word
+      - home_description_word
+  location_lesson04: &id002
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: en_prs_a1_unit05_lesson04_words
+  spatial_words: &id003
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - en_prs_a1_unit05_lesson04_words
+      - en_prs_a1_unit05_lesson06_words
+templates:
+- content_key: practice.ro-prs.prs.a1.unit05.lesson01.place_gloss.001
+  lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+  type: multiple_choice
+  frame:
+    text: '{city_place}'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_place: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: city_place
+  feedback_frame:
+    text: '{city_place} denumește un loc din oraș.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson01.place_translate.003
+  lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+  type: translation
+  frame:
+    text: '{city_place}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      city_place: english_gloss
+  slots:
+    city_place: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: city_place
+  feedback_frame:
+    text: '{city_place} este cuvântul din dari pentru acest loc.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson01.place_pair.004
+  lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+  type: matching_pairs
+  frame:
+    text: '{city_place_one} — {city_place_two} — {city_place_three} — {city_place_four} — {city_place_five} — {city_place_six} — {city_place_seven}'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_place_one: *id001
+    city_place_two: *id001
+    city_place_three: *id001
+    city_place_four: *id001
+    city_place_five: *id001
+    city_place_six: *id001
+    city_place_seven: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - city_place_one
+    - city_place_two
+    - city_place_three
+    - city_place_four
+    - city_place_five
+    - city_place_six
+    - city_place_seven
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - city_place_one
+    - city_place_two
+    - city_place_three
+    - city_place_four
+    - city_place_five
+    - city_place_six
+    - city_place_seven
+  feedback_frame:
+    text: Potrivește fiecare loc cu sensul lui în română.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson01.place_order.005
+  lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+  type: word_order
+  frame:
+    text: '{city_place} این‌جا است'
+    language_code: prs
+    direction: rtl
+  slots:
+    city_place: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{city_place} این‌جا است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordinea cuvintelor: [loc] این‌جا است (locul este aici).'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson04.location_gloss.001
+  lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+  type: multiple_choice
+  frame:
+    text: '{location_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    location_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: location_word
+  feedback_frame:
+    text: '{location_word} descrie o locație.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson04.location_translate.003
+  lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+  type: translation
+  frame:
+    text: '{location_word}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      location_word: english_gloss
+  slots:
+    location_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: location_word
+  feedback_frame:
+    text: '{location_word} este cuvântul din dari pentru aceasta.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson04.location_pair.004
+  lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+  type: matching_pairs
+  frame:
+    text: '{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item_one: *id003
+    item_two: *id003
+    item_three: *id003
+    item_four: *id003
+    item_five: *id003
+    item_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+  feedback_frame:
+    text: Potrivește fiecare cuvânt cu sensul lui în română.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson04.location_order.005
+  lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+  type: word_order
+  frame:
+    text: میدان هوایی {location_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    location_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: میدان هوایی {location_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordinea cuvintelor: میدان هوایی [cuvânt] است (aeroportul este [cuvânt]).'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson06.direction_gloss.001
+  lesson_content_key: prs.a1.unit05.lesson06.finding_pharmacy_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} este un cuvânt folosit pentru a spune unde se află ceva sau cum ajungi acolo.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson06.direction_translate.002
+  lesson_content_key: prs.a1.unit05.lesson06.finding_pharmacy_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} este cuvântul dari pentru aceasta.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson01.place_order.005.volume_fill.006
+  lesson_content_key: prs.a1.unit05.lesson01.everyday_places
+  type: translation
+  frame:
+    text: '{city_place}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      city_place: english_gloss
+  slots:
+    city_place:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit05_city_place_06_single
+  answer_derivation:
+    kind: slot_text
+    slot: city_place
+  feedback_frame:
+    text: '{city_place} este cuvântul din dari pentru acest loc.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit05.lesson04.location_order.005.volume_fill.008
+  lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
+  type: translation
+  frame:
+    text: '{location_word}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      location_word: english_gloss
+  slots:
+    location_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit05_location_word_08_single
+  answer_derivation:
+    kind: slot_text
+    slot: location_word
+  feedback_frame:
+    text: '{location_word} este cuvântul din dari pentru aceasta.'
+    language_code: ro
+    direction: ltr
