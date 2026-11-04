@@ -494,6 +494,8 @@ Rules (checked by `inject`):
    item is exactly "{new_code}", and EVERY `accepted` item is the {n_en} translation of the English answer (all variants, same
    order). Never leave an English answer or the word English in such an exercise. Exception: Latin-letter transliteration
    exercises (`romanize_*`, "type a transliteration") keep answer_language_code "en" and their Latin answers as they are.
+   "Translate into {t_en}: <English word or sentence>" stays a request to translate INTO {t_en}: write "Translate into {t_en}: <that text in {n_en}>";
+   never copy the {t_en} answer into the instruction and never turn it into "translate into {n_en}".
 """
 
 
