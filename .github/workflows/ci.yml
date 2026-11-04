@@ -40,11 +40,11 @@ jobs:
           .content-venv/bin/pip install -q -r scripts/requirements-content.txt pytest
       # The slow full verify (compile + practice-validate of every course/pack) runs
       # nightly in .github/workflows/nightly-content.yml. Fast gates only here.
-      - name: Leftover checks (german, dutch, cross, target-name)
+      # _cross_leftover_check.py (~15 min) stays in the nightly verify.sh run.
+      - name: Leftover checks (german, dutch, target-name)
         run: |
           .content-venv/bin/python scripts/_german_leftover_check.py
           .content-venv/bin/python scripts/_dutch_leftover_check.py
-          .content-venv/bin/python scripts/_cross_leftover_check.py
           .content-venv/bin/python scripts/_target_name_check.py
       - name: Answer-leakage gate (max 36 hits, docs/GATE_BASELINES.md)
         run: |
