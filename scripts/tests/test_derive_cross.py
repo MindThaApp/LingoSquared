@@ -480,3 +480,12 @@ def test_prompt_block_dict_form_rejects_learner_language_blocks():
 def test_english_prose_ignores_german_quoted_target_words():
     assert not dc.english_prose("Bei „tum“ steht „the“ (statt „tha“) und „hain“ im Präsens.")
     assert dc.english_prose("Say the word and the answer is here.")
+
+
+def test_sync_pairs_takes_translated_right_side_from_accepted_dict():
+    ov = {"pairs": [{"left": "مشتری", "right": "پلو"}, {"left": "چشم", "right": "Right away, I'll bring it now."}],
+          "accepted_answers": [{"value": {"مشتری": "پلو", "چشم": "Sofort, ich bringe es gleich."}, "status": "correct"}]}
+    assert dc._sync_pairs_with_accepted(ov)
+    assert ov["pairs"][1]["right"] == "Sofort, ich bringe es gleich."
+    assert ov["pairs"][0]["right"] == "پلو"
+    assert not dc._sync_pairs_with_accepted(ov)

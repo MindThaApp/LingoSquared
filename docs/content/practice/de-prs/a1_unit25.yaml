@@ -1,0 +1,226 @@
+schema_version: '1.0'
+pack_key: practice.de-prs.a1.unit25
+source_language: de
+target_language: prs
+unit_content_key: prs.a1.unit25.emotions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - adjective
+  - adverb
+  agreement_tags:
+    semantic:
+    - emotion_word
+    - complaint_word
+    - en_prs_a1_unit25_words
+slot_presets:
+  emotion_word: &id001
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: emotion_word
+  complaint_word: &id005
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: complaint_word
+  feeling_state_pool: &id004
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - emotion_word
+      - complaint_word
+  adverb_word_pool: &id003
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: en_prs_a1_unit25_words
+  unit_word_pool: &id002
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: en_prs_a1_unit25_words
+templates:
+- content_key: practice.de-prs.prs.a1.unit25.lesson01.emotion_gloss.001
+  lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{emotion_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    emotion_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: emotion_word
+  feedback_frame:
+    text: '*{emotion_word}* bezeichnet ein Gefühl.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson01.emotion_pair.002
+  lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Ordnen Sie jedem Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson02.why_feeling_order.001
+  lesson_content_key: prs.a1.unit25.lesson02.why_and_because
+  type: word_order
+  frame:
+    text: چرا {emotion_word} استین
+    language_code: prs
+    direction: rtl
+  slots:
+    emotion_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چرا {emotion_word} استین
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Wortstellung: *چرا {emotion_word} استین* – „Warum sind Sie ...?“ Das Gefühl steht zwischen چرا und استین.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson02.adverb_translate.002
+  lesson_content_key: prs.a1.unit25.lesson02.why_and_because
+  type: translation
+  frame:
+    text: '{adverb_word}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      adverb_word: english_gloss
+  slots:
+    adverb_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: adverb_word
+  feedback_frame:
+    text: '{adverb_word} ist das dari Wort dafür.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson03.i_am_feeling_order.001
+  lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+  type: word_order
+  frame:
+    text: '{emotion_word} استم'
+    language_code: prs
+    direction: rtl
+  slots:
+    emotion_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{emotion_word} استم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Wortstellung: *{emotion_word} استم* – „Ich bin ...“ Das Gefühl steht vor استم.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson03.feeling_state_gloss.002
+  lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+  type: multiple_choice
+  frame:
+    text: '{feeling_state_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    feeling_state_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: feeling_state_word
+  feedback_frame:
+    text: '{feeling_state_word} beschreibt ein Gefühl oder einen Zustand.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson03.complaint_translate.003
+  lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+  type: translation
+  frame:
+    text: '{complaint_word}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      complaint_word: english_gloss
+  slots:
+    complaint_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: complaint_word
+  feedback_frame:
+    text: '{complaint_word} ist das dari Wort dafür.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson04.adverb_gloss.001
+  lesson_content_key: prs.a1.unit25.lesson04.feelings_dialogue
+  type: multiple_choice
+  frame:
+    text: '{adverb_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    adverb_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: adverb_word
+  feedback_frame:
+    text: '*{adverb_word}* ist ein Fragewort oder Adverb aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit25.lesson06.emotion_translate.001
+  lesson_content_key: prs.a1.unit25.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{emotion_word}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      emotion_word: english_gloss
+  slots:
+    emotion_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: emotion_word
+  feedback_frame:
+    text: '{emotion_word} ist das dari Wort dafür.'
+    language_code: de
+    direction: ltr
