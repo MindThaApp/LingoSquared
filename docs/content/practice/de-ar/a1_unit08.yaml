@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit08
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_سعر
+    - w_تفاح
+    - w_دراهم
+    - w_تفاحتين
+    - w_التفاح
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+      - w_تفاحتين
+  l01: &id002
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+  siir: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_سعر
+  darahim: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_دراهم
+  tuffah: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_التفاح
+  tufahatayn: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحتين
+templates:
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.choose.001
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سعر bedeutet Preis; كم سعر ...؟ fragt, wie viel etwas kostet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.listen.002
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاح ist ein Sammelbegriff für Äpfel im Allgemeinen; دراهم ist der Plural von Dirham.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.order.003
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: كم {item} التفاح؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item} التفاح؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'كم سعر التفاح؟ heißt: Wie viel ist der Preis der Äpfel?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.order.004
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: التفاح بعشرة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'ب vor einer Zahl gibt den Preis an: بعشرة heißt für zehn, danach folgt die Währung.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.fill.005
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: كم {item} التفاح؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: سعر ist der Preis; die Frage fragt nach dem Preis der Äpfel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.fill.006
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: التفاح بعشرة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: دراهم ist der Plural von Dirham und steht nach einer Zahl wie zehn.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.translate.007
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Das sind Nomen: سعر ist Preis und تفاح ist Äpfel.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.translate.008
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: Wie viel kosten die Äpfel?
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Der Artikel ال bei التفاح bedeutet die Äpfel, die Frage bezieht sich also auf bestimmte Äpfel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson01.translate.009
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: Die Äpfel kosten zehn Dirham.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ب vor einer Zahl gibt den Preis an.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson02.listen.001
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاحتين ist تفاحة (ein Apfel) mit der Dualendung ـين; das ة wird davor zu ت, es bedeutet also genau zwei Äpfel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson02.order.002
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Das Arabische hat eine eigene Dualform: تفاحتين bedeutet zwei Äpfel, es gibt kein eigenes Wort für „zwei“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson02.fill.003
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: fill_in_blank
+  frame:
+    text: أريد {item} من فضلك. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Die Dualendung ـين bedeutet „zwei von etwas“; davor wird das ة von تفاحة als ت geschrieben: تفاحتين.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson02.translate.004
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاح bedeutet Äpfel allgemein, تفاحتين mit der Dualendung dagegen genau zwei.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit08.lesson02.translate.005
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: Ich möchte zwei Äpfel, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Die Dualendung ـتين sagt schon „zwei“, deshalb wird kein eigenes Zahlwort verwendet.
+    language_code: de
+    direction: ltr
