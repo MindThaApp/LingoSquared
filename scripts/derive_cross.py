@@ -1237,6 +1237,9 @@ NL_MARKERS = {"ik", "je", "jij", "u", "wij", "jullie", "niet", "geen", "een", "h
 
 def english_prose(v: str) -> bool:
     """English sentence left in a learner-language string (function-word evidence; Spanish/French/Italian cognates do not count)."""
+    # quoted words are target-language words (romanised Hindi 'the', 'hain'); drop „German“, «French», "plain" and 'single' quotes
+    v = re.sub(r"\u201e[^\u201c\u201d]*[\u201c\u201d]|\u00ab[^\u00bb]*\u00bb|\"[^\"]*\"|(?<!\w)'[^']{1,40}'(?!\w)", " ", v)
+    v = v.replace("The Wanderers", " ")                              # band name in the hi A1 concert unit, left as a name by translators
     toks = norm_tokens(v)
     if len(toks) < 3 or any(ph in v for ph in GERMAN_PROSE_PHRASES):
         return False
