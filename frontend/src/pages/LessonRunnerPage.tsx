@@ -15,7 +15,7 @@ import { QuitConfirm } from "../components/QuitConfirm";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
-import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { answerDirectionForExercise, sourceTextDirection } from "@lingo/shared/lib/scripts";
 import { AlmostFeedback } from "../components/AlmostFeedback";
 import { AnswerFeedbackExtras } from "../components/AnswerFeedbackExtras";
 import { answerOutcome } from "../lib/answerOutcome";
@@ -571,7 +571,7 @@ export function LessonRunnerPage() {
                 </p>
               )}
               {reviewResult.feedback && (
-                <p dir="auto" style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                <p dir={sourceTextDirection(item.prompt.text_blocks, item.prompt.answer_language_code)} style={{ margin: "0 0 10px", fontWeight: 400 }}>
                   <EmphasizedText text={reviewResult.feedback} />
                 </p>
               )}
