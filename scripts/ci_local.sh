@@ -4,7 +4,7 @@
 #   scripts/ci_local.sh                 # all gates
 #   scripts/ci_local.sh --skip-backend  # no Docker (content + frontend only)
 #   scripts/ci_local.sh --skip-frontend
-#   scripts/ci_local.sh --skip-content
+#   scripts/ci_local.sh --skip-content  # content verify alone takes about an hour
 #   scripts/ci_local.sh --with-build    # also frontend lint + `npm run build`
 #
 # Env: CI_WARN_MAX=<n>   fail if full-run WARN lines exceed n (the baseline is a
@@ -15,7 +15,6 @@
 # Backend tests run in an isolated compose project (lsci_<pid>: own db container,
 # own network and volumes, no published ports), so the dev stack and its data are
 # never touched. Everything it created is removed on exit, even on failure.
-# Needs docker for the backend gate; ~10+ minutes in total.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$ROOT"
 RUN_CONTENT=1; RUN_BACKEND=1; RUN_FRONTEND=1; WITH_BUILD=0
@@ -32,7 +31,7 @@ cleanup() {
   [ "$COMPOSE_UP" = 1 ] && [ -z "${CI_KEEP:-}" ] && dc down -v --rmi local --remove-orphans >/dev/null 2>&1
   [ "$CREATED_ENV" = 1 ] && [ -z "${CI_KEEP:-}" ] && rm -f backend/.env
   [ "$CREATED_VENV_LINK" = 1 ] && rm -f .content-venv
-  [ -z "${CI_KEEP:-}" ] && rm -rf "$TMP" || echo "kept: $TMP project $PROJECT"
+  if [ -z "${CI_KEEP:-}" ]; then rm -rf "$TMP"; else echo "kept: $TMP project $PROJECT"; fi
 }
 trap cleanup EXIT
 gate() { # gate <name> <cmd...>; full output goes to $LOG/<name>.log
@@ -86,7 +85,6 @@ YML
     dc exec -T db createdb -U \"\${POSTGRES_USER:-lingosquared}\" lingosquared_test
     dc run --rm --no-deps api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q --deselect tests/test_content_answer_shapes.py'
   "
-  # project down happens in the trap
 fi
 
 if [ "$RUN_FRONTEND" = 1 ]; then
