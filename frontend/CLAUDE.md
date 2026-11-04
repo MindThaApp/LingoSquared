@@ -57,6 +57,11 @@ non-negotiable verification bar.
   language. `MatchingPairs.tsx` does NOT have this (two fixed columns,
   not a sequence). Detail: BUILD_LOG 2026-07-09.
 
+- **Free-text fields with no language of their own (a teaching card's `note`, an
+  answer's `feedback`/"Why?") get `dir` from their block's language via
+  `sourceTextDirection()` in `packages/shared/src/lib/scripts.ts` (rtl for ar,
+  fa, prs, he, ur) — never `dir="auto"` and never no `dir`.**
+
 ## Audio / TTS / STT (client side)
 
 - **`speak()`/`SpeakButton` priority chain: recorded asset → Google TTS →
