@@ -1,0 +1,445 @@
+schema_version: '1.0'
+pack_key: practice.fr-prs.a1.unit17
+source_language: fr
+target_language: prs
+unit_content_key: prs.a1.unit17.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - adverb
+  - particle
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - symptom_word
+    - health_feeling_word
+    - seek_help_noun
+    - health_advice_word
+    - condition_word
+    - title
+slot_presets:
+  symptom_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: symptom_word
+  health_feeling_word: &id004
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: health_feeling_word
+  seek_help_noun: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: seek_help_noun
+  health_advice_word: &id007
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: health_advice_word
+  condition_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: condition_word
+  title: &id010
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: title
+  feeling_review_pool: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - health_feeling_word
+      - condition_word
+      - symptom_word
+  advice_review_pool: &id006
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - health_advice_word
+      - seek_help_noun
+      - symptom_word
+  doctor_visit_pool: &id009
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - health_advice_word
+      - seek_help_noun
+      - condition_word
+  health_review_pool: &id011
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - symptom_word
+      - seek_help_noun
+      - health_advice_word
+      - condition_word
+      - health_feeling_word
+  advice_pair_pool: &id008
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - health_advice_word
+      - seek_help_noun
+      - symptom_word
+      - health_feeling_word
+      - condition_word
+templates:
+- content_key: practice.fr-prs.prs.a1.unit17.lesson01.symptom_word_gloss.001
+  lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+  type: multiple_choice
+  frame:
+    text: '{symptom_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    symptom_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: symptom_word
+  feedback_frame:
+    text: '{symptom_word} désigne un symptôme.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson01.symptom_word_translate.002
+  lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+  type: translation
+  frame:
+    text: '{symptom_word}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      symptom_word: english_gloss
+  slots:
+    symptom_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: symptom_word
+  feedback_frame:
+    text: '{symptom_word} est le mot dari pour cela.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson01.symptom_have_order.003
+  lesson_content_key: prs.a1.unit17.lesson01.symptom_words
+  type: word_order
+  frame:
+    text: '{symptom_word} دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    symptom_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{symptom_word} دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [symptôme] دارم (j’ai [symptôme]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson02.health_feeling_gloss.001
+  lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '{unit_word} fait partie des mots de santé de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson02.condition_state_order.002
+  lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+  type: word_order
+  frame:
+    text: '{condition_word} خوب نیست'
+    language_code: prs
+    direction: rtl
+  slots:
+    condition_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{condition_word} خوب نیست'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: حالم خوب نیست signifie « Je ne me sens pas bien ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson02.sick_state_order.003
+  lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
+  type: word_order
+  frame:
+    text: '{health_feeling_word} استم'
+    language_code: prs
+    direction: rtl
+  slots:
+    health_feeling_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{health_feeling_word} استم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [état] استم (je suis [état]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson03.seek_help_translate.001
+  lesson_content_key: prs.a1.unit17.lesson03.asking_for_help
+  type: translation
+  frame:
+    text: '{seek_help_noun}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      seek_help_noun: english_gloss
+  slots:
+    seek_help_noun: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: seek_help_noun
+  feedback_frame:
+    text: '{seek_help_noun} est le mot dari pour cela.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson03.seek_help_request_order.002
+  lesson_content_key: prs.a1.unit17.lesson03.asking_for_help
+  type: word_order
+  frame:
+    text: '{seek_help_noun} می‌خواهم'
+    language_code: prs
+    direction: rtl
+  slots:
+    seek_help_noun: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{seek_help_noun} می‌خواهم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [nom] می‌خواهم (je veux [nom]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson04.health_advice_gloss.001
+  lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '{unit_word} fait partie des mots de santé de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson04.health_advice_translate.002
+  lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+  type: translation
+  frame:
+    text: '{health_advice_word}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      health_advice_word: english_gloss
+  slots:
+    health_advice_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: health_advice_word
+  feedback_frame:
+    text: '{health_advice_word} est le mot dari pour cela.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson04.health_advice_pair.003
+  lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id008
+    word_two: *id008
+    word_three: *id008
+    word_four: *id008
+    word_five: *id008
+    word_six: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Associe chaque mot à sa signification en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson05.greeting_gloss.001
+  lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
+  type: multiple_choice
+  frame:
+    text: '{symptom_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    symptom_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: symptom_word
+  feedback_frame:
+    text: '{symptom_word} désigne un symptôme.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson05.symptom_and_word_order.002
+  lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
+  type: word_order
+  frame:
+    text: '{symptom_word_one} و {symptom_word_two} دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    symptom_word_one: *id001
+    symptom_word_two: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - symptom_word_one
+    - symptom_word_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{symptom_word_one} و {symptom_word_two} دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [symptôme] و [symptôme] دارم (j’ai [symptôme] et [symptôme]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson06.person_name_gloss.001
+  lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '{unit_word} fait partie des mots de santé de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson06.wellbeing_question_translate.002
+  lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+  type: translation
+  frame:
+    text: '{title}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      title: english_gloss
+  slots:
+    title: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: title
+  feedback_frame:
+    text: '{title} est le mot dari pour cela.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit17.lesson06.health_review_pair.003
+  lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id011
+    word_two: *id011
+    word_three: *id011
+    word_four: *id011
+    word_five: *id011
+    word_six: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Associe chaque mot à sa signification en français.
+    language_code: fr
+    direction: ltr

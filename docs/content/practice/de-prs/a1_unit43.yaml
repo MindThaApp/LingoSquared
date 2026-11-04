@@ -1,0 +1,211 @@
+schema_version: '1.0'
+pack_key: practice.de-prs.a1.unit43
+source_language: de
+target_language: prs
+unit_content_key: prs.a1.unit43.library
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - library_word
+    - give_back_verb
+slot_presets:
+  library_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: library_word
+templates:
+- content_key: practice.de-prs.prs.a1.unit43.lesson01.choose.001
+  lesson_content_key: prs.a1.unit43.lesson01.library_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Bibliotheks-Wortschatz dieser Einheit.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson02.choose.001
+  lesson_content_key: prs.a1.unit43.lesson02.asking_return_date
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - library_word
+        - give_back_verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus den Bibliothekslektionen dieser Einheit.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson03.choose.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: multiple_choice
+  frame:
+    text: این {item} است
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Der Satz این {item} است bedeutet „Das ist …“ – wählen Sie die deutsche Bedeutung des Wortes.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson03.order.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: word_order
+  frame:
+    text: می‌خواهم کتاب را پس {verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: give_back_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: می‌خواهم کتاب را پس {verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Wortstellung: می‌خواهم کتاب را پس بدهم (Ich möchte das Buch zurückgeben).'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson03.fill.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: fill_in_blank
+  frame:
+    text: می‌خواهم کتاب را پس {verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: give_back_verb
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: Das fehlende Wort ist بدهم – می‌خواهم کتاب را پس بدهم bedeutet „Ich möchte das Buch zurückgeben“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson01.order.001
+  lesson_content_key: prs.a1.unit43.lesson01.library_vocabulary
+  type: word_order
+  frame:
+    text: این {item} است
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این {item} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Wortstellung: این کتابخانه است (Das ist die Bibliothek) – این … است bedeutet „Das ist …“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson01.translate.001
+  lesson_content_key: prs.a1.unit43.lesson01.library_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Dari-Wort dafür.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson02.translate.001
+  lesson_content_key: prs.a1.unit43.lesson02.asking_return_date
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: give_back_verb
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb} ist die Dari-Form dafür.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-prs.prs.a1.unit43.lesson03.translate.001
+  lesson_content_key: prs.a1.unit43.lesson03.borrowing_and_returning
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Dari-Wort dafür.'
+    language_code: de
+    direction: ltr

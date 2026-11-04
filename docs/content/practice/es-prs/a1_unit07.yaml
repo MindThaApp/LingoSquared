@@ -1,0 +1,295 @@
+schema_version: '1.0'
+pack_key: practice.es-prs.a1.unit07
+source_language: es
+target_language: prs
+unit_content_key: prs.a1.unit07.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - person_name
+    - phone_opening
+    - message_word
+    - dialogue_word
+    - tomorrow_word
+    - appointment_word
+    - time_unit
+    - want_verb
+    - phone_action_verb
+    - work_verb_form
+    - en_prs_a1_unit07_words
+slot_presets:
+  person_name: &id006
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  phone_opening: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic: phone_opening
+  message_word: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: message_word
+  unit_vocab: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    - particle
+    agreement_tags:
+      semantic:
+      - phone_opening
+      - en_prs_a1_unit07_words
+  message_time: &id005
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - message_word
+      - tomorrow_word
+      - appointment_word
+      - time_unit
+  phone_verbs: &id004
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: en_prs_a1_unit07_words
+templates:
+- content_key: practice.es-prs.prs.a1.unit07.lesson01.phone_open_translate.002
+  lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
+  type: translation
+  frame:
+    text: '{phone_opening}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      phone_opening: english_gloss
+  slots:
+    phone_opening: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: phone_opening
+  feedback_frame:
+    text: '{phone_opening} es la palabra en dari para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson01.phone_open_pair.003
+  lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
+  type: matching_pairs
+  frame:
+    text: '{phone_opening_one} — {phone_opening_two} — {phone_opening_three} — {phone_opening_four} — {phone_opening_five} — {phone_opening_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    phone_opening_one: *id002
+    phone_opening_two: *id002
+    phone_opening_three: *id002
+    phone_opening_four: *id002
+    phone_opening_five: *id002
+    phone_opening_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - phone_opening_one
+    - phone_opening_two
+    - phone_opening_three
+    - phone_opening_four
+    - phone_opening_five
+    - phone_opening_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - phone_opening_one
+    - phone_opening_two
+    - phone_opening_three
+    - phone_opening_four
+    - phone_opening_five
+    - phone_opening_six
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson04.message_translate.002
+  lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+  type: translation
+  frame:
+    text: '{message_word}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      message_word: english_gloss
+  slots:
+    message_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: message_word
+  feedback_frame:
+    text: '{message_word} es la palabra en dari para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson04.message_pair.003
+  lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+  type: matching_pairs
+  frame:
+    text: '{message_word_one} — {message_word_two} — {message_word_three} — {message_word_four} — {message_word_five} — {message_word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    message_word_one: *id002
+    message_word_two: *id002
+    message_word_three: *id002
+    message_word_four: *id002
+    message_word_five: *id002
+    message_word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - message_word_one
+    - message_word_two
+    - message_word_three
+    - message_word_four
+    - message_word_five
+    - message_word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - message_word_one
+    - message_word_two
+    - message_word_three
+    - message_word_four
+    - message_word_five
+    - message_word_six
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson04.phone_verb_gloss.004
+  lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una forma verbal de las conversaciones telefónicas de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson05.message_time_gloss.001
+  lesson_content_key: prs.a1.unit07.lesson05.text_messages
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una palabra de mensajes o de horas.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson06.name_gloss.001
+  lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} pertenece al vocabulario de llamadas telefónicas de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson06.name_translate.003
+  lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+  type: translation
+  frame:
+    text: '{person_name}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      person_name: english_gloss
+  slots:
+    person_name: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} es la forma de escribir este nombre en dari.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit07.lesson06.name_pair.004
+  lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
+  type: matching_pairs
+  frame:
+    text: '{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item_one: *id002
+    item_two: *id002
+    item_three: *id002
+    item_four: *id002
+    item_five: *id002
+    item_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
