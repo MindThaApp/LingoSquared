@@ -1,0 +1,372 @@
+schema_version: '1.0'
+pack_key: practice.pl-ar.a1.unit10
+source_language: pl
+target_language: ar
+unit_content_key: ar.a1.unit10.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_يمين
+    - w_الأمام
+    - w_اليسار
+    - w_امش
+    - w_ثم
+    - w_يسار
+    - w_اليمين
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_يمين
+      - w_الأمام
+      - w_اليسار
+      - w_امش
+      - w_ثم
+  mcb: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_يسار
+      - w_الأمام
+      - w_اليمين
+      - w_امش
+      - w_ثم
+  dirs: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_الأمام
+      - w_اليمين
+      - w_اليسار
+  sides: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_اليمين
+      - w_اليسار
+  amam: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الأمام
+  yamin: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اليمين
+  yasar: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اليسار
+  imshi: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_امش
+  thumma: &id007
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ثم
+templates:
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.choose.001
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: يمين to rzeczownik „prawa strona”, a اليسار to „lewa strona” z dodanym ال; rodzajnik ال tworzy formę „(ta) lewa strona”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.listen.002
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الأمام znaczy „przód”, a إلى الأمام to „prosto”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.order.003
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: word_order
+  frame:
+    text: امش إلى {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'إلى („do”) stoi przed kierunkiem, który przyjmuje ال: الأمام, اليمين lub اليسار.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.fill.004
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: fill_in_blank
+  frame:
+    text: امش إلى {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: إلى الأمام to zwykły sposób, by powiedzieć „prosto”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.translate.005
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: يمين to prawa strona, przeciwieństwo يسار.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.translate.006
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: Idź prosto. (do mężczyzny)
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: امش to rozkaz skierowany do mężczyzny; إلى الأمام znaczy „naprzód”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson01.translate.007
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: Idź w prawo. (do mężczyzny)
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Kierunek po إلى przyjmuje ال: اليمين to „prawa strona”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.choose.001
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: امش to rozkaz „idź”, skierowany do mężczyzny; ثم znaczy „potem”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.listen.002
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ثم łączy dwa etapy po kolei: „potem”.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.order.003
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: word_order
+  frame:
+    text: امش إلى الأمام ثم إلى {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى الأمام ثم إلى {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ثم („potem”) łączy pierwszy etap z drugim, a każdy ma własne إلى.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.fill.004
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: fill_in_blank
+  frame:
+    text: امش إلى الأمام {item} إلى اليمين. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ثم znaczy „potem” i stoi między dwoma kierunkami.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.fill.005
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} إلى الأمام. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: امش to rozkaz skierowany do jednego mężczyzny; odpowiedź na أين المكتبة؟ wskazuje drogę.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.translate.006
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ثم znaczy „potem”; امش znaczy „idź” (do mężczyzny).
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.translate.007
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: Idź prosto, a potem w prawo. (do mężczyzny)
+    language_code: pl
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id007
+    c: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {a} {b} إلى {c}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Trasa składa się z dwóch etapów: najpierw prosto, potem w prawo.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit10.lesson02.translate.008
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: Idź w lewo. (do mężczyzny)
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: اليسار to lewa strona; przeciwieństwem jest اليمين.
+    language_code: pl
+    direction: ltr

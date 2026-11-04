@@ -1,0 +1,447 @@
+schema_version: '1.0'
+pack_key: practice.ro-ar.a1.unit14
+source_language: ro
+target_language: ar
+unit_content_key: ar.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_أحب
+    - w_القهوة
+    - w_شاي
+    - w_الماء
+    - w_ولا
+    - w_أفضل
+    - w_تفضل
+    - w_الشاي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+      - w_أفضل
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_أفضل
+      - w_تفضل
+      - w_القهوة
+      - w_الشاي
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_القهوة
+      - w_الشاي
+      - w_الماء
+  qahwa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_القهوة
+  shay: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_شاي
+  shayd:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الشاي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الماء
+  uhibb: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أحب
+  wala: &id004
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ولا
+  ufaddil: &id010
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أفضل
+  tufaddil: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تفضل
+templates:
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.choose.001
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أحب este verbul „îmi place”; după el urmează direct lucrul care îți place.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.listen.002
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ولا este و („și”) plus لا („nu”): „și nu”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.match.003
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أحب înseamnă „îmi place”, iar أفضل „prefer”; ولا („și nu”) leagă o propoziție negativă de cea dinainte.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.order.004
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Lucrul care îți place urmează după أحب, cu ال pentru sensul general: أحب القهوة înseamnă „îmi place cafeaua”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.order.005
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: لا أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: لا أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'لا înaintea verbului îl neagă: لا أحب înseamnă „nu îmi place”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.fill.006
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أحب القهوة {item} أحب الشاي. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'ولا leagă o propoziție negativă: îmi place cafeaua și nu îmi place ceaiul.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.fill.007
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أنا {item} الماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أنا („eu”) poate fi adăugat pentru accent, dar أحب singur înseamnă deja „îmi place”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.translate.008
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شاي este „ceai” fără articol, iar الماء este „apa”, cu ال; أحب înseamnă „îmi place”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.translate.009
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: Îmi place apa. (nu există un cuvânt separat pentru „eu”)
+    language_code: ro
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Araba folosește ال pentru un lucru în general după أحب, deci „îmi place apa” se spune أحب الماء.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson01.translate.010
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: Acesta este ceai.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Fără ال, شاي este pur și simplu „ceai”, iar araba nu are nevoie de un cuvânt pentru „este”: هذا شاي.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.choose.001
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أفضل înseamnă „prefer”; تفضل, cu prefixul ت, este forma masculină pentru „preferi”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.listen.002
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'تفضل înseamnă „preferi”, spus unui bărbat: ماذا تفضل يا يوسف؟'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.order.003
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: ماذا {item} يا يوسف؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Prefixul ت marchează persoana a doua; ماذا تفضل؟ întreabă un bărbat ce preferă.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.order.004
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: أفضل {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أفضل {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'După أفضل urmează lucrul preferat, cu ال: أفضل القهوة.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.fill.005
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: fill_in_blank
+  frame:
+    text: أنا {item} القهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل înseamnă „prefer”; prefixul أ marchează persoana I, ca în أحب și أريد.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.translate.006
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل înseamnă „prefer”, iar تفضل „preferi” (masculin); prefixul أ sau ت arată cine face acțiunea.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit14.lesson02.translate.007
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: Ce preferi, Yusuf?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Yusuf este bărbat, deci forma pentru „tu” este تفضل.
+    language_code: ro
+    direction: ltr

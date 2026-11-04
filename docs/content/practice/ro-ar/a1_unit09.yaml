@@ -1,0 +1,446 @@
+schema_version: '1.0'
+pack_key: practice.ro-ar.a1.unit09
+source_language: ro
+target_language: ar
+unit_content_key: ar.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مكان
+    - w_مكتبة
+    - w_سوق
+    - w_مقهى
+    - w_هنا
+    - w_قرب
+    - w_وأين
+    - w_المكتبة
+    - w_المقهى
+    - w_السوق
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+      - w_قرب
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_قرب
+      - w_وأين
+      - w_المكتبة
+      - w_المقهى
+  places: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+      - w_المقهى
+  near: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+  maktaba: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المكتبة
+  suq: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_السوق
+  maqha: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المقهى
+  hunaa: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_هنا
+  qurb: &id004
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_قرب
+  waayna: &id011
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_وأين
+templates:
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.choose.001
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مكان este cuvântul general pentru „loc”; مكتبة este o bibliotecă, iar مقهى o cafenea.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.listen.002
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هنا înseamnă „aici”; سوق este o piață.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.match.003
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: قرب („lângă”) este o prepoziție, iar هنا („aici”) este un adverb; celelalte patru sunt substantive.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.order.004
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: أين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أين întreabă „unde”; substantivul care denumește locul are ال: biblioteca, piața sau cafeneaua.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.fill.005
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: fill_in_blank
+  frame:
+    text: المكتبة {item} السوق. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: قرب („lângă”) stă înaintea locului de care este aproape, aici piața.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.translate.006
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مكتبة (bibliotecă), سوق (piață) și مقهى (cafenea) sunt locuri; مكان este cuvântul general „loc”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.translate.007
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Unde este biblioteca?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ال este articolul hotărât arab; se lipește în fața substantivului.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.translate.008
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Unde este piața?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Araba nu are nevoie de un cuvânt pentru „este”: أين السوق؟ înseamnă literal „unde piața”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson01.order.009
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: المكتبة {item} قرب السوق.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {item} قرب السوق.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'هنا („aici”) poate sta înaintea lui قرب: biblioteca este aici, lângă piață.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.choose.001
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قرب înseamnă „lângă”; după el urmează direct substantivul care denumește locul.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.listen.002
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'وأين este و („și”) lipit de أين („unde”): „și unde”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.order.003
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: المقهى قرب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'قرب nu are nevoie de niciun cuvânt în plus: المقهى قرب المكتبة înseamnă „cafeneaua este lângă bibliotecă”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.order.004
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: وأين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: وأين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'وأين المقهى؟ continuă conversația: și unde este cafeneaua?'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.fill.005
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} المقهى؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: و din وأين leagă întrebarea nouă de cea de dinainte.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.translate.006
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأين înseamnă „și unde”, o întrebare de continuare; قرب înseamnă „lângă”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.translate.007
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Biblioteca este lângă piață.
+    language_code: ro
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Substantivele de loc după قرب păstrează articolul: قرب السوق înseamnă „lângă piață”.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit09.lesson02.translate.008
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Cafeneaua este lângă bibliotecă.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Dialogul unității răspunde la وأين المقهى؟ exact cu această propoziție.
+    language_code: ro
+    direction: ltr

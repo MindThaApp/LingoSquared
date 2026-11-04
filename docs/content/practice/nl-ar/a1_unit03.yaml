@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.nl-ar.a1.unit03
+source_language: nl
+target_language: ar
+unit_content_key: ar.a1.unit03.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - ar_a1_u03_l01
+    - ar_a1_u03_l02
+    - w_واحد
+    - w_اثنان
+    - w_ثلاثة
+    - w_أربعة
+    - w_خمسة
+    - w_ستة
+    - w_سبعة
+    - w_ثمانية
+    - w_تسعة
+    - w_عشرة
+    - w_كم
+    - w_هذا
+    - w_رقم
+    - w_بخمسة
+    - w_بعشرة
+    - w_وهذا
+slot_presets:
+  n1: &id001
+    language_code: ar
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic: ar_a1_u03_l01
+  n2: &id005
+    language_code: ar
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic: ar_a1_u03_l02
+  nums: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_واحد
+      - w_اثنان
+      - w_ثلاثة
+      - w_أربعة
+      - w_خمسة
+      - w_ستة
+      - w_سبعة
+      - w_ثمانية
+      - w_تسعة
+      - w_عشرة
+  l03mc: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_بعشرة
+  l03all: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_وهذا
+      - w_بعشرة
+  l03bare: &id010
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_وهذا
+      - w_بعشرة
+  thalatha: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ثلاثة
+  ithnan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اثنان
+  ashara: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_عشرة
+  haadha: &id009
+    language_code: ar
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_هذا
+  bikhamsa: &id011
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بخمسة
+  bi_ashara:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بعشرة
+templates:
+- content_key: practice.nl-ar.ar.a1.unit03.lesson01.choose.001
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Elk telwoord lees je van rechts naar links; ثلاثة begint met ث, die klinkt als de th in het Engelse think.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson01.match.002
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: ثلاثة (drie) en ثمانية (acht) beginnen allebei met ث, de th-klank; aan de rest van het woord herken je het verschil.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson01.order.003
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: word_order
+  frame:
+    text: واحد، اثنان، {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: واحد، اثنان، {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Het woord voor drie, ثلاثة, eindigt op ة, net als veel andere Arabische zelfstandige naamwoorden.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson01.fill.004
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: fill_in_blank
+  frame:
+    text: واحد، {item}، ثلاثة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Het Arabisch heeft een speciale tweevoudsuitgang ـان voor twee van iets; اثنان is zelf het woord voor twee.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson01.translate.005
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De getallen drie tot en met tien eindigen bij het tellen op ة, zoals in ثلاثة en خمسة.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson02.listen.001
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'سبعة (zeven) en تسعة (negen) eindigen op dezelfde letters عة, dus luister naar de eerste klank: s of t.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson02.order.002
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: word_order
+  frame:
+    text: رقمي {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: رقمي {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'رقمي betekent mijn nummer: رقم is nummer en de uitgang ـي betekent mijn.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson02.fill.003
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: fill_in_blank
+  frame:
+    text: ثمانية، تسعة، {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: عشرة is tien; zoals elk telwoord van drie tot tien eindigt het op ة.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson02.translate.004
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ستة (zes) en سبعة (zeven) beginnen allebei met س; aan de eindletters zie je het verschil.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.choose.001
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: كم vraagt hoeveel, en هذا wijst naar iets dat dicht bij je is.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.match.002
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: بخمسة en بعشرة beginnen met ب, wat hier voor of tegen de prijs van betekent.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.fill.003
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: fill_in_blank
+  frame:
+    text: كم {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كم هذا vraagt naar de prijs van één ding; هذا (dit) is de mannelijke vorm.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.translate.004
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'وهذا is و (en) vastgeschreven aan هذا (dit): en dit.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.translate.005
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: Hoeveel kost dit?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'In het Arabisch staat in deze vraag geen werkwoord zijn: كم هذا is letterlijk hoeveel dit.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit03.lesson03.translate.006
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: Dit kost vijf.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Het voorzetsel ب wordt aan het getal vastgeschreven: ب + خمسة wordt بخمسة.'
+    language_code: nl
+    direction: ltr

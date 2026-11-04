@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.nl-ar.a1.unit07
+source_language: nl
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ماء
+    - w_قهوة
+    - w_خبز
+    - w_أريد
+    - w_فضلك
+    - w_وقهوة
+    - w_تريدين
+    - w_خبزا
+    - w_قطعة
+    - w_واحدة
+    - w_تفضلي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  l01m: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_وقهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تريدين
+      - w_خبزا
+      - w_قطعة
+      - w_واحدة
+      - w_تفضلي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ماء
+  qahwa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قهوة
+  wqahwa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_وقهوة
+  fadlak: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_فضلك
+  turidin: &id011
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تريدين
+  khubza: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خبزا
+  qita: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قطعة
+  wahida: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_واحدة
+  tafaddali:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_تفضلي
+templates:
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.choose.001
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'أريد betekent: ik wil; een man en een vrouw gebruiken dezelfde vorm.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.listen.002
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ماء is water en قهوة is koffie; خبز (brood) is nog iets wat je kunt bestellen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.match.003
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'و (en) wordt vastgeschreven aan het volgende woord: وقهوة is en koffie. من فضلك is het beleefde alsjeblieft.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.order.004
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أريد plus een zelfstandig naamwoord betekent: ik wil; من فضلك (alsjeblieft) sluit het verzoek af.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.fill.005
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Hier maakt و deel uit van het volgende woord: وقهوة is en koffie.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.fill.006
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء وقهوة من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: من فضلك betekent letterlijk 'van jouw gunst' en is de gewone manier om 'alsjeblieft' te zeggen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.translate.007
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أريد is een werkwoord met de betekenis 'ik wil'; de andere woorden hier zijn dingen waar je om kunt vragen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.translate.008
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Ik wil water, alsjeblieft.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'In het Arabisch staat er geen woord voor ''een'' voor een zelfstandig naamwoord: أريد ماء is ''ik wil water''.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson01.translate.009
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Ik wil koffie, alsjeblieft.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: قهوة eindigt op ة, de gewone vrouwelijke uitgang.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.listen.001
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تريدين is de vrouwelijke jij-vorm van 'willen'; een man spreek je aan met een andere uitgang.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.choose.002
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قطعة betekent 'stuk'; قطعة خبز is 'een stuk brood', en het volgende woord واحدة (één) komt ermee overeen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.order.003
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: هل تريدين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل تريدين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل maakt van een bewering een ja-neevraag; خبزا is 'brood' als datgene wat je wilt hebben.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.order.004
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: نعم، أريد قطعة خبز {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، أريد قطعة خبز {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة is vrouwelijk 'één', passend bij het vrouwelijke woord قطعة.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.fill.005
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: fill_in_blank
+  frame:
+    text: هل {item} خبزا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'تريدين is ''jij (v.) wilt'', dus هل تريدين خبزا؟ vraagt aan een vrouw: ''Wil je brood?'''
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.translate.006
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفضلي zeg je tegen een vrouw en betekent 'alsjeblieft, hier'; een man hoort een andere uitgang.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.translate.007
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: Wil je brood? (tegen een vrouw)
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: De uitgang -ين markeert de vrouwelijke jij-vorm, en 'brood' als datgene wat je wilt hebben schrijf je als خبزا.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit07.lesson02.translate.008
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: één stuk brood
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} خبز {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة staat na قطعة en komt overeen met het vrouwelijke geslacht ervan.
+    language_code: nl
+    direction: ltr

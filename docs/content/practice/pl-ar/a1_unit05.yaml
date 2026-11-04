@@ -1,0 +1,423 @@
+schema_version: '1.0'
+pack_key: practice.pl-ar.a1.unit05
+source_language: pl
+target_language: ar
+unit_content_key: ar.a1.unit05.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_الساعة
+    - w_الثالثة
+    - w_الخامسة
+    - w_صباحا
+    - w_متى
+    - w_ومتى
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+  mc: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+      - w_متى
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+      - w_متى
+      - w_ومتى
+  hours: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_الثالثة
+      - w_الخامسة
+  bare2: &id010
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_متى
+      - w_ومتى
+      - w_الساعة
+      - w_صباحا
+  saa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الساعة
+  sabaha: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_صباحا
+  wamata: &id009
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_ومتى
+  thalitha: &id005
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الثالثة
+  khamisa: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الخامسة
+templates:
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.choose.001
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الساعة to ال („the”, rodzajnik określony) plus ساعة („godzina”); oznacza zarówno godzinę, jak i czas na zegarze.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.match.002
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Liczebniki godzinowe mają rodzaj żeński, bo zgadzają się z الساعة: الثالثة i الخامسة kończą się na ة, inaczej niż liczebniki porządkowe rodzaju męskiego używane w datach.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.order.003
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: word_order
+  frame:
+    text: الساعة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Godzina następuje bezpośrednio po الساعة i zgadza się z nią w rodzaju, więc oba słowa są rodzaju żeńskiego: الساعة الثالثة.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.fill.004
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: fill_in_blank
+  frame:
+    text: كم {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كم الساعة؟ to dosłownie „ile godzina”, czyli zwykły sposób pytania o godzinę.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.translate.005
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: صباحا znaczy „rano” i stoi po godzinie; dla wieczoru w tej lekcji używamy مساء.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.translate.006
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: Jest trzecia.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Liczebnik porządkowy godziny الثالثة ma rodzaj żeński, bo zgadza się z الساعة.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.translate.007
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: Jest piąta rano.
+    language_code: pl
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Pora dnia stoi na końcu: الساعة الخامسة صباحا.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.order.008
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: word_order
+  frame:
+    text: الساعة الخامسة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة الخامسة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Dodaj صباحا („rano”) po godzinie, a po południu i wieczorem مساء.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.listen.001
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: متى to słowo pytające „kiedy”; pyta o czas.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.match.002
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'ومتى to و („i”) połączone z متى („kiedy”): „a kiedy”. Tak przechodzi się do drugiego pytania.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.order.003
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: word_order
+  frame:
+    text: الدرس في الساعة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس في الساعة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'في الساعة przed liczbą podaje czas wydarzenia: o trzeciej.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.fill.004
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: fill_in_blank
+  frame:
+    text: كم الساعة؟ الساعة الثالثة. {item} الدرس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: و w ومتى łączy pytanie z tym, co zostało właśnie powiedziane, podobnie jak „a” w pytaniu „a kiedy?”.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.translate.005
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: متى pyta „kiedy”, a ومتى pyta „a kiedy”; tylko to drugie kontynuuje poprzednie pytanie.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson02.translate.006
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: translation
+  frame:
+    text: Lekcja jest o piątej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس في الساعة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'في الساعة plus godzina oznacza „o tej godzinie”: الدرس في الساعة الخامسة.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-ar.ar.a1.unit05.lesson01.listen.009
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wspólna końcówka ة wskazuje, że الثالثة i الخامسة są liczebnikami porządkowymi rodzaju żeńskiego.
+    language_code: pl
+    direction: ltr
