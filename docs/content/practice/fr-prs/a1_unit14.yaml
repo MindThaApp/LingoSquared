@@ -1,0 +1,463 @@
+schema_version: '1.0'
+pack_key: practice.fr-prs.a1.unit14
+source_language: fr
+target_language: prs
+unit_content_key: prs.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - particle
+  - pronoun
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - preference_verb
+    - preference_topic
+    - description_adjective
+    - warm_word
+    - choice_word
+    - person_name
+    - connector_word
+    - en_prs_a1_unit14_lesson01_words
+    - en_prs_a1_unit14_lesson02_words
+    - en_prs_a1_unit14_lesson04_words
+slot_presets:
+  preference_verb:
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: preference_verb
+  preference_topic: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: preference_topic
+  description_adjective: &id008
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: description_adjective
+  warm_word: &id011
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: warm_word
+  choice_word: &id006
+    language_code: prs
+    part_of_speech:
+    - pronoun
+    - particle
+    - adjective
+    agreement_tags:
+      semantic: choice_word
+  person_name:
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  topic_and_description: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - preference_topic
+      - description_adjective
+  unit_wide_pool: &id004
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - pronoun
+    - particle
+    agreement_tags:
+      semantic:
+      - preference_topic
+      - description_adjective
+      - choice_word
+      - connector_word
+  coffee_pin: &id007
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_prs_a1_unit14_lesson01_words
+  music_pin: &id009
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_prs_a1_unit14_lesson02_words
+  interesting_pin: &id010
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: en_prs_a1_unit14_lesson04_words
+  choice_and_connector: &id005
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - choice_word
+      - connector_word
+  topic_description_choice: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - preference_topic
+      - description_adjective
+      - choice_word
+templates:
+- content_key: practice.fr-prs.prs.a1.unit14.lesson01.preference_topic_gloss.001
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: multiple_choice
+  frame:
+    text: '{preference_topic}'
+    language_code: prs
+    direction: rtl
+  slots:
+    preference_topic: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: preference_topic
+  feedback_frame:
+    text: '{preference_topic} est un mot du vocabulaire de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson01.preference_topic_translate.002
+  lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+  type: translation
+  frame:
+    text: '{preference_topic}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      preference_topic: english_gloss
+  slots:
+    preference_topic: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: preference_topic
+  feedback_frame:
+    text: '{preference_topic} est le mot dari qui correspond.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson01.topic_description_pair.003
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id003
+    word_two: *id003
+    word_three: *id003
+    word_four: *id003
+    word_five: *id003
+    word_six: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Associe chaque mot à sa signification en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson01.topic_order.004
+  lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+  type: word_order
+  frame:
+    text: '{preference_topic} را دوست دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    preference_topic: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{preference_topic} را دوست دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [chose] را دوست دارم (j’aime [chose]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson02.preference_verb_gloss.001
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: multiple_choice
+  frame:
+    text: '{preference_verb}'
+    language_code: prs
+    direction: rtl
+  slots:
+    preference_verb: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: preference_verb
+  feedback_frame:
+    text: '{preference_verb} est un mot du vocabulaire de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson02.preference_verb_translate.002
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: translation
+  frame:
+    text: '{preference_verb}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      preference_verb: english_gloss
+  slots:
+    preference_verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: preference_verb
+  feedback_frame:
+    text: '{preference_verb} est le mot dari qui correspond.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson02.choice_word_gloss.003
+  lesson_content_key: prs.a1.unit14.lesson04.giving_reasons
+  type: multiple_choice
+  frame:
+    text: '{choice_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    choice_word: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: choice_word
+  feedback_frame:
+    text: '{choice_word} est un mot du vocabulaire de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson03.choice_word_translate.001
+  lesson_content_key: prs.a1.unit14.lesson03.choosing_between_options
+  type: translation
+  frame:
+    text: '{choice_word}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      choice_word: english_gloss
+  slots:
+    choice_word: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: choice_word
+  feedback_frame:
+    text: '{choice_word} est le mot dari qui correspond.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson03.topic_or_order.002
+  lesson_content_key: prs.a1.unit14.lesson03.choosing_between_options
+  type: word_order
+  frame:
+    text: '{coffee_word} یا چای؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    coffee_word: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{coffee_word} یا چای؟'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: Propose un choix avec یا (ou) entre les deux éléments, comme dans « du café ou du thé ? ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson04.description_adjective_translate.001
+  lesson_content_key: prs.a1.unit14.lesson04.giving_reasons
+  type: translation
+  frame:
+    text: '{description_adjective}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      description_adjective: english_gloss
+  slots:
+    description_adjective: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: description_adjective
+  feedback_frame:
+    text: '{description_adjective} est le mot dari qui correspond.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson04.reason_order.002
+  lesson_content_key: prs.a1.unit14.lesson04.giving_reasons
+  type: word_order
+  frame:
+    text: '{music_word} را دوست دارم چون {interesting_word} است'
+    language_code: prs
+    direction: rtl
+  slots:
+    music_word: *id009
+    interesting_word: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{music_word} را دوست دارم چون {interesting_word} است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordre des mots : [chose] را دوست دارم چون [raison] است (j’aime [chose] parce que c’est [raison]).'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson05.warm_word_fill.001
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: fill_in_blank
+  frame:
+    text: چای را دوست دارم چون {warm_word} است.
+    language_code: prs
+    direction: rtl
+  slots:
+    warm_word: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: warm_word
+  feedback_frame:
+    text: چای را دوست دارم چون {warm_word} است signifie « J’aime le thé parce qu’il est chaud ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson05.preference_verb_pair.002
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: matching_pairs
+  frame:
+    text: '{verb_one} — {verb_two} — {verb_three} — {verb_four} — {verb_five} — {verb_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    verb_one: *id004
+    verb_two: *id004
+    verb_three: *id004
+    verb_four: *id004
+    verb_five: *id004
+    verb_six: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - verb_one
+    - verb_two
+    - verb_three
+    - verb_four
+    - verb_five
+    - verb_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - verb_one
+    - verb_two
+    - verb_three
+    - verb_four
+    - verb_five
+    - verb_six
+  feedback_frame:
+    text: Associe chaque mot à sa signification en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson06.person_name_gloss.001
+  lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+  type: multiple_choice
+  frame:
+    text: '{person_name}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} est un mot du vocabulaire de cette unité.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson06.person_name_pair.002
+  lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+  type: matching_pairs
+  frame:
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name_one: *id004
+    person_name_two: *id004
+    person_name_three: *id004
+    person_name_four: *id004
+    person_name_five: *id004
+    person_name_six: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+  feedback_frame:
+    text: Associe chaque mot à sa signification en français.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-prs.prs.a1.unit14.lesson05.warm_word_fill.001.volume_order.006
+  lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  type: word_order
+  frame:
+    text: چای را دوست دارم چون {warm_word} است.
+    language_code: prs
+    direction: rtl
+  slots:
+    warm_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: warm_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چای را دوست دارم چون {warm_word} است.
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: چای را دوست دارم چون {warm_word} است.
+    language_code: prs
+    direction: rtl

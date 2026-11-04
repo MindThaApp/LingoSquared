@@ -232,8 +232,30 @@ def foreign_teaching_targets(real_path: Path, target: str) -> dict[str, tuple]:
             for item in lesson.get("teaching", []) or []:
                 b = item.get("target") if isinstance(item, dict) else None
                 if isinstance(b, dict) and isinstance(b.get("text"), str) and b["text"].strip() \
-                        and b.get("language_code") not in (None, target):
+                        and (b.get("language_code") not in (None, target) or _english_gloss_in_nonlatin(b["text"], target)):
                     out[item["content_key"]] = (item.get("kind", "card"), b["text"])
+    return out
+
+
+def _english_gloss_in_nonlatin(text: str, target: str) -> bool:
+    """A target-coded card body in Arabic / Persian / Dari / Hindi script that carries a Latin-script English gloss, e.g.
+    'دارین (you have/like, polite)': the gloss is learner text and must be localised with `target_text`."""
+    if target not in NONLATIN_LEARNERS or not NONLATIN_LETTER.search(text):
+        return False
+    return bool(re.search(r"\([^)]*[A-Za-z]{2}[^)]*\)", text))
+
+
+def english_card_titles(real_path: Path, target: str, ov: dict, sib_ov: dict) -> dict[str, str]:
+    """teaching card content_key -> title that the cross overlay still carries verbatim from en-Y although it is Latin-script English
+    inside an Arabic / Persian / Dari / Hindi course (the title classifier keeps English-looking titles as 'target text')."""
+    out: dict[str, str] = {}
+    if target not in NONLATIN_LEARNERS:
+        return out
+    for ck, entry in (sib_ov.get("teaching") or {}).items():
+        t = entry.get("title") if isinstance(entry, dict) else None
+        if isinstance(t, str) and LATIN_WORD.search(t) and not NONLATIN_LETTER.search(t) \
+                and ((ov.get("teaching") or {}).get(ck) or {}).get("title") == t:
+            out[ck] = t
     return out
 
 
@@ -793,6 +815,29 @@ def text_map_for(work: Path, stem: str) -> dict[str, str]:
     return out
 
 
+def _sync_pairs_with_accepted(ov: dict) -> bool:
+    """A `pairs` override whose right side is still the sibling's English text (the exercise is mostly target-language text, so the
+    extractor judged the lone English meaning 'not learner text') takes the translated right side of the same left clue from the
+    accepted answer (`value` as {left: right} or [{left, right}]).  Returns True when something changed."""
+    pairs = ov.get("pairs")
+    if not isinstance(pairs, list):
+        return False
+    acc: dict[str, str] = {}
+    for a in ov.get("accepted_answers") or []:
+        v = a.get("value") if isinstance(a, dict) else None
+        if isinstance(v, dict):
+            acc.update({str(k): x for k, x in v.items() if isinstance(x, str)})
+        elif isinstance(v, list):
+            acc.update({x["left"]: x["right"] for x in v if isinstance(x, dict) and isinstance(x.get("left"), str) and isinstance(x.get("right"), str)})
+    changed = False
+    for pd in pairs:
+        new = acc.get(pd.get("left"))
+        if new and new != pd.get("right") and LATIN_WORD.search(pd.get("right", "")) and not NONLATIN_LETTER.search(pd.get("right", "")):
+            pd["right"] = new
+            changed = True
+    return changed
+
+
 def localize_pairs(args):
     """Reverse matching exercises (English clue on the left) keep a dict-form `correct_response` {clue: target word}: re-key it
     with the translated clues of the `pairs` override (original left -> translated left, by position)."""
@@ -811,7 +856,11 @@ def localize_pairs(args):
                 for lesson in unit.get("lessons", []):
                     for ex in lesson.get("exercises", []):
                         ov = (y.get("exercises") or {}).get(ex.get("content_key"))
-                        if not ov or ex.get("type") != "matching_pairs" or ov.get("localize_pair_lefts") != "yes":
+                        if not ov or ex.get("type") != "matching_pairs":
+                            continue
+                        if args.new.split("-")[1] in NONLATIN_LEARNERS and _sync_pairs_with_accepted(ov):
+                            changed = True
+                        if ov.get("localize_pair_lefts") != "yes":
                             continue
                         cr = ov.get("correct_response")
                         if not isinstance(cr, dict) or not ov.get("pairs"):
@@ -1549,6 +1598,10 @@ def cmd_cards(args):
             for ck, (kind, text) in foreign_teaching_targets(real, target).items():
                 if not (y.get("teaching", {}).get(ck) or {}).get("target_text"):
                     todo.append(("card", ck, None, text))
+            sib = ROOT / "docs/content/overlays" / f"en-{target}" / ov.name
+            if sib.exists():
+                for ck, text in english_card_titles(real, target, y, dd.load(sib)).items():
+                    todo.append(("title", ck, None, text))
             for ck, found in foreign_prompt_blocks(real, target).items():
                 have = (y.get("exercises", {}).get(ck) or {}).get("prompt_blocks")
                 if have:
@@ -1561,7 +1614,7 @@ def cmd_cards(args):
         items = []
         for n, kind, ck, i, text in rows:
             items.append(["#", f"{kind} of {ck}"])
-            items.append([f"u{n}", "target_text" if kind == "card" else "prompt_block", text])
+            items.append([f"u{n}", {"card": "target_text", "title": "title"}.get(kind, "prompt_block"), text])
         dd.write_src(work / f"{name}.src.json", {"direction": f"en-{target} -> {args.new}", "note": "retrofit: cards and hints"}, items)
     total = sum(len(r) for _, r in plan.values())
     print(f"cards: {total} item(s) in {len(plan)} file(s)")
@@ -1586,6 +1639,8 @@ def cmd_cards(args):
                 continue
             if kind == "card":
                 y.setdefault("teaching", {}).setdefault(ck, {})["target_text"] = t
+            elif kind == "title":
+                y.setdefault("teaching", {}).setdefault(ck, {})["title"] = t
             elif kind == "hint":
                 blocks_by_key.setdefault(ck, {})[str(i)] = t
             else:
