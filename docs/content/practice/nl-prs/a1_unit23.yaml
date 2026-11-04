@@ -1,0 +1,418 @@
+schema_version: '1.0'
+pack_key: practice.nl-prs.a1.unit23
+source_language: nl
+target_language: prs
+unit_content_key: prs.a1.unit23.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - phrase
+  agreement_tags:
+    semantic:
+    - money_word
+    - countable_money_word
+    - currency_word
+    - payment_verb
+    - cash_or_card_adj
+    - exchange_word
+    - exchange_noun
+    - exchange_imperative
+    - receipt_word
+    - receive_verb
+slot_presets:
+  money_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: money_word
+  countable_money_word: &id008
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: countable_money_word
+  currency_word: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: currency_word
+  payment_verb: &id003
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: payment_verb
+  cash_or_card_adj: &id004
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: cash_or_card_adj
+  exchange_word: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: exchange_word
+  exchange_imperative: &id007
+    language_code: prs
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: exchange_imperative
+  receipt_word: &id009
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: receipt_word
+  receive_verb: &id010
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: receive_verb
+  money_review_pool: &id011
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - money_word
+      - exchange_word
+      - exchange_noun
+      - receipt_word
+  money_payment_review_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - money_word
+      - payment_verb
+templates:
+- content_key: practice.nl-prs.prs.a1.unit23.lesson01.money_word_gloss.001
+  lesson_content_key: prs.a1.unit23.lesson01.money_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{money_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    money_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: money_word
+  feedback_frame:
+    text: '{money_word} is een vorm van geld of betaling.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson01.money_word_pair.002
+  lesson_content_key: prs.a1.unit23.lesson01.money_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Koppel elk woord aan de Nederlandse betekenis -- woorden over geld en betalen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson01.money_have_order.003
+  lesson_content_key: prs.a1.unit23.lesson01.money_vocabulary
+  type: word_order
+  frame:
+    text: '{money_word} دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    money_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{money_word} دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: [geldwoord] دارم (Ik heb [geldwoord]).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson02.payment_verb_gloss.001
+  lesson_content_key: prs.a1.unit23.lesson02.payment_method
+  type: multiple_choice
+  frame:
+    text: '{payment_verb}'
+    language_code: prs
+    direction: rtl
+  slots:
+    payment_verb: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: payment_verb
+  feedback_frame:
+    text: '{payment_verb} is een vorm van het werkwoord ''betalen''.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson02.pay_cash_order.002
+  lesson_content_key: prs.a1.unit23.lesson02.payment_method
+  type: word_order
+  frame:
+    text: '{cash_or_card_adj} می‌پردازم'
+    language_code: prs
+    direction: rtl
+  slots:
+    cash_or_card_adj: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{cash_or_card_adj} می‌پردازم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: hoe je betaalt (نقدی / کارتی) komt vóór het werkwoord می‌پردازم (ik betaal).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson02.cash_or_card_translate.003
+  lesson_content_key: prs.a1.unit23.lesson02.payment_method
+  type: translation
+  frame:
+    text: '{cash_or_card_adj}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      cash_or_card_adj: english_gloss
+  slots:
+    cash_or_card_adj: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: cash_or_card_adj
+  feedback_frame:
+    text: '{cash_or_card_adj} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson03.exchange_word_translate.001
+  lesson_content_key: prs.a1.unit23.lesson03.currency_exchange
+  type: translation
+  frame:
+    text: '{exchange_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      exchange_word: english_gloss
+  slots:
+    exchange_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: exchange_word
+  feedback_frame:
+    text: '{exchange_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson03.exchange_rate_order.002
+  lesson_content_key: prs.a1.unit23.lesson03.currency_exchange
+  type: word_order
+  frame:
+    text: امروز نرخ {currency_word} چند است
+    language_code: prs
+    direction: rtl
+  slots:
+    currency_word: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امروز نرخ {currency_word} چند است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: امروز نرخ دالر چند است (wat is de dollarkoers van vandaag?).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson04.exchange_imperative_translate.001
+  lesson_content_key: prs.a1.unit23.lesson04.exchange_dialogue
+  type: translation
+  frame:
+    text: '{exchange_imperative}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      exchange_imperative: english_gloss
+  slots:
+    exchange_imperative: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: exchange_imperative
+  feedback_frame:
+    text: '{exchange_imperative} is de Dari-zin hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson04.how_many_have_order.002
+  lesson_content_key: prs.a1.unit23.lesson04.exchange_dialogue
+  type: word_order
+  frame:
+    text: چند {countable_money_word} دارین
+    language_code: prs
+    direction: rtl
+  slots:
+    countable_money_word: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چند {countable_money_word} دارین
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: چند [geldwoord] دارین (hoeveel [geldwoord] heeft u?).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson04.money_word_translate.003
+  lesson_content_key: prs.a1.unit23.lesson04.exchange_dialogue
+  type: translation
+  frame:
+    text: '{money_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      money_word: english_gloss
+  slots:
+    money_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: money_word
+  feedback_frame:
+    text: '{money_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson05.receipt_word_fill.001
+  lesson_content_key: prs.a1.unit23.lesson05.reading_receipt
+  type: fill_in_blank
+  frame:
+    text: '{receipt_word} می‌گیرم'
+    language_code: prs
+    direction: rtl
+  slots:
+    receipt_word: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: receipt_word
+  feedback_frame:
+    text: 'رسید می‌گیرم betekent: Ik neem een bonnetje.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson05.receive_verb_gloss.002
+  lesson_content_key: prs.a1.unit23.lesson05.reading_receipt
+  type: multiple_choice
+  frame:
+    text: '{receive_verb}'
+    language_code: prs
+    direction: rtl
+  slots:
+    receive_verb: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: receive_verb
+  feedback_frame:
+    text: '{receive_verb} is een vorm van het werkwoord ''nemen/ontvangen''.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson06.money_review_pair.001
+  lesson_content_key: prs.a1.unit23.lesson06.wrap_up
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id011
+    word_two: *id011
+    word_three: *id011
+    word_four: *id011
+    word_five: *id011
+    word_six: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Koppel elk woord aan de Nederlandse betekenis -- geld en wisselen samen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson06.money_review_translate.002
+  lesson_content_key: prs.a1.unit23.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{money_review_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      money_review_word: english_gloss
+  slots:
+    money_review_word: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: money_review_word
+  feedback_frame:
+    text: '{money_review_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit23.lesson05.receipt_word_fill.001.volume_order.001
+  lesson_content_key: prs.a1.unit23.lesson05.reading_receipt
+  type: word_order
+  frame:
+    text: '{receipt_word} می‌گیرم'
+    language_code: prs
+    direction: rtl
+  slots:
+    receipt_word:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: receipt_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{receipt_word} می‌گیرم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: eerst het lijdend voorwerp, dan het werkwoord: {receipt_word} می‌گیرم (Ik neem een bonnetje).'
+    language_code: nl
+    direction: ltr

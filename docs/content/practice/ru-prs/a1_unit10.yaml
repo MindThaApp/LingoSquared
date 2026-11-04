@@ -1,0 +1,227 @@
+schema_version: '1.0'
+pack_key: practice.ru-prs.a1.unit10
+source_language: ru
+target_language: prs
+unit_content_key: prs.a1.unit10.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - verb
+  - particle
+  agreement_tags:
+    semantic:
+    - shop_word
+    - food_item
+    - counting_word
+slot_presets:
+  shop_word: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: shop_word
+  food_item: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: food_item
+  counting_word: &id004
+    language_code: prs
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic: counting_word
+  food_and_counting: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - food_item
+      - counting_word
+templates:
+- content_key: practice.ru-prs.prs.a1.unit10.lesson01.shop_gloss.001
+  lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{shop_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    shop_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: shop_word
+  feedback_frame:
+    text: '{shop_word} — слово по теме покупок.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson01.shop_translate.002
+  lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+  type: translation
+  frame:
+    text: '{shop_word}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      shop_word: english_gloss
+  slots:
+    shop_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: shop_word
+  feedback_frame:
+    text: '{shop_word} — это дари-слово для этого понятия.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson01.shop_pair.003
+  lesson_content_key: prs.a1.unit10.lesson01.shopping_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{shop_word_one} — {shop_word_two} — {shop_word_three} — {shop_word_four} — {shop_word_five} — {shop_word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    shop_word_one: *id001
+    shop_word_two: *id001
+    shop_word_three: *id001
+    shop_word_four: *id001
+    shop_word_five: *id001
+    shop_word_six: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - shop_word_one
+    - shop_word_two
+    - shop_word_three
+    - shop_word_four
+    - shop_word_five
+    - shop_word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - shop_word_one
+    - shop_word_two
+    - shop_word_three
+    - shop_word_four
+    - shop_word_five
+    - shop_word_six
+  feedback_frame:
+    text: Соедини каждое слово с его русским значением.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson03.food_gloss.001
+  lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — слово из области еды, напитков или количества.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson03.food_translate.002
+  lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+  type: translation
+  frame:
+    text: '{food_item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      food_item: english_gloss
+  slots:
+    food_item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: food_item
+  feedback_frame:
+    text: '{food_item} — это слово на дари для этого.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson03.counting_gloss.003
+  lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} используется, чтобы считать, измерять или называть продукт.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson03.counting_translate.004
+  lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+  type: translation
+  frame:
+    text: '{counting_word}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      counting_word: english_gloss
+  slots:
+    counting_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: counting_word
+  feedback_frame:
+    text: '{counting_word} — это слово на дари для этого.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson03.label_order.005
+  lesson_content_key: prs.a1.unit10.lesson03.reading_a_price_label
+  type: word_order
+  frame:
+    text: '{food_item} یک کیلو صد افغانی'
+    language_code: prs
+    direction: rtl
+  slots:
+    food_item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{food_item} یک کیلو صد افغانی'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Порядок слов: [item] یک کیلو صد افغانی (килограмм [item] стоит 100 афгани).'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a1.unit10.lesson04.quantity_order.001
+  lesson_content_key: prs.a1.unit10.lesson04.asking_for_a_quantity
+  type: word_order
+  frame:
+    text: یک کیلو {food_item} می‌خواهم
+    language_code: prs
+    direction: rtl
+  slots:
+    food_item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: یک کیلو {food_item} می‌خواهم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Порядок слов: یک کیلو [item] می‌خواهم (я хочу килограмм [item]).'
+    language_code: ru
+    direction: ltr

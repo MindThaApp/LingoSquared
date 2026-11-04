@@ -1,0 +1,269 @@
+schema_version: '1.0'
+pack_key: practice.pl-prs.a1.unit44
+source_language: pl
+target_language: prs
+unit_content_key: prs.a1.unit44.waste_disposal
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - waste_word
+    - waste_material_word
+    - throw_verb
+slot_presets:
+  waste_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: waste_word
+  waste_material: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: waste_material_word
+  waste_any: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - waste_word
+      - waste_material_word
+  throw_verb: &id005
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: throw_verb
+  waste_all: &id004
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - waste_word
+      - waste_material_word
+      - throw_verb
+templates:
+- content_key: practice.pl-prs.prs.a1.unit44.lesson01.choose.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} należy do słownictwa tej lekcji o wyrzucaniu odpadów.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson02.choose.001
+  lesson_content_key: prs.a1.unit44.lesson02.paper_and_glass
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to słowo z tej lekcji związane z materiałami do recyklingu.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson06.choose.001
+  lesson_content_key: prs.a1.unit44.lesson06.wrap_up
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to słowo z tej lekcji związane ze śmieciami i pojemnikami.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson03.match.001
+  lesson_content_key: prs.a1.unit44.lesson03.throwing_away_waste
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *id004
+    b: *id004
+    c: *id004
+    d: *id004
+    e: *id004
+    f: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson03.order.001
+  lesson_content_key: prs.a1.unit44.lesson03.throwing_away_waste
+  type: word_order
+  frame:
+    text: زباله را دور {verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    verb: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: زباله را دور {verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk zdania: زباله را دور + czasownik, np. زباله را دور می‌اندازم (wyrzucam śmieci).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson01.match.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *id001
+    b: *id001
+    c: *id001
+    d: *id001
+    e: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson01.translate.001
+  lesson_content_key: prs.a1.unit44.lesson01.waste_bin_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to po dari to słowo.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson02.translate.001
+  lesson_content_key: prs.a1.unit44.lesson02.paper_and_glass
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to po dari to słowo.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson05.translate.001
+  lesson_content_key: prs.a1.unit44.lesson05.reading
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb} to darijska forma tego wyrażenia.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit44.lesson06.translate.001
+  lesson_content_key: prs.a1.unit44.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} to po dari to słowo.'
+    language_code: pl
+    direction: ltr
