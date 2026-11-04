@@ -1880,3 +1880,20 @@ def test_word_count_lint_ignores_indefinite_articles():
     assert f("Scrivi due parole.") == 2
     assert f("Écris 2 mots.") == 2
     assert f("Write at least 3 words.") is None
+
+
+def test_target_text_allowed_on_target_script_card_with_english_gloss():
+    compiler = load_content_compiler()
+    block = {"text": "دارین (you have/like, polite)", "language_code": "prs", "direction": "rtl"}
+    real = {"target_language": "prs", "units": [{"lessons": [{"teaching": [{"content_key": "k1", "target": block}]}]}]}
+    ov = {"source_language": "de", "target_language": "prs", "teaching": {"k1": {"target_text": "دارین (Sie haben / mögen, höflich)"}}}
+    rep = compiler.Report()
+    compiler.validate_teaching_target_localization(real, ov, rep)
+    assert rep.errors == []
+    out = compiler.localize_teaching_target(block, ov["teaching"]["k1"]["target_text"], "de", "prs")
+    assert out["text"].startswith("دارین (Sie") and out["language_code"] == "prs" and out["direction"] == "rtl"
+    # a plain target-script card without a gloss still rejects target_text
+    plain = {"target_language": "prs", "units": [{"lessons": [{"teaching": [{"content_key": "k1", "target": {"text": "دارین", "language_code": "prs"}}]}]}]}
+    rep2 = compiler.Report()
+    compiler.validate_teaching_target_localization(plain, ov, rep2)
+    assert rep2.errors

@@ -2010,6 +2010,22 @@ def validate_prompt_block_localization(
                         )
 
 
+_GLOSS_SCRIPT_LANGUAGES = {"ar", "fa", "prs", "hi"}
+_NONLATIN_SCRIPT = re.compile(r"[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff\u0900-\u097f]")
+
+
+def _target_block_with_learner_gloss(block: Any, target_language: Any) -> bool:
+    """A target-coded card body in Arabic / Persian / Dari / Hindi script that carries a Latin-script gloss in parentheses
+    (e.g. 'دارین (you have/like, polite)'): the gloss is learner-language text the overlay may replace with `target_text`."""
+    return (
+        target_language in _GLOSS_SCRIPT_LANGUAGES
+        and isinstance(block, dict)
+        and isinstance(block.get("text"), str)
+        and _NONLATIN_SCRIPT.search(block["text"]) is not None
+        and re.search(r"\([^)]*[A-Za-z]{2}[^)]*\)", block["text"]) is not None
+    )
+
+
 def localize_teaching_target(
     target: dict[str, Any],
     override: Any,
@@ -2024,6 +2040,10 @@ def localize_teaching_target(
     if not (isinstance(override, str) and override.strip() and isinstance(target, dict)):
         return target
     if target.get("language_code") in (None, target_language):
+        if _target_block_with_learner_gloss(target, target_language):
+            out = copy.deepcopy(target)      # target-script body with an English gloss in parentheses: keep the target coding
+            out["text"] = override
+            return out
         return target  # reported by validate_teaching_target_localization
     out = copy.deepcopy(target)
     out["text"] = override
@@ -2060,13 +2080,14 @@ def validate_teaching_target_localization(
                     and block["text"].strip()
                     and block.get("language_code") not in (None, target_language)
                 )
+                mixed = _target_block_with_learner_gloss(block, target_language)
                 item_overlay = teaching_overlays.get(key, {})
                 override = item_overlay.get("target_text") if isinstance(item_overlay, dict) else None
                 location = f"overlay.teaching.{key}.target_text"
                 if override is not None:
                     if not isinstance(override, str) or not override.strip():
                         report.error(location, "target_text must be a non-empty string")
-                    elif not foreign:
+                    elif not (foreign or mixed):
                         report.error(location, "target_text is only valid on a card whose realization target block is written in a learner language")
                     continue
                 if foreign and block.get("language_code") != source_language:

@@ -1,0 +1,260 @@
+schema_version: '1.0'
+pack_key: practice.es-prs.a1.unit33
+source_language: es
+target_language: prs
+unit_content_key: prs.a1.unit33.household
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - verb
+  agreement_tags:
+    semantic:
+    - chore_word
+    - sweep_clean_word
+    - clean_word
+    - en_prs_a1_unit33_words
+slot_presets:
+  chore_match_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - chore_word
+      - en_prs_a1_unit33_words
+  chore_noun_word: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: chore_word
+  chore_word: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: chore_word
+  sweep_clean_word: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: sweep_clean_word
+templates:
+- content_key: practice.es-prs.prs.a1.unit33.lesson01.chore_gloss.001
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{chore_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    chore_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} forma parte del vocabulario de tareas del hogar de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson01.chore_pair.002
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson02.must_chore_order.001
+  lesson_content_key: prs.a1.unit33.lesson02.needing_to_do_chores
+  type: word_order
+  frame:
+    text: باید {sweep_clean_word} کنم
+    language_code: prs
+    direction: rtl
+  slots:
+    sweep_clean_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: باید {sweep_clean_word} کنم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Orden de palabras: باید [tarea] کنم (Tengo que [tarea]).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson06.chore_translate.001
+  lesson_content_key: prs.a1.unit33.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{chore_word}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      chore_word: english_gloss
+  slots:
+    chore_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} es la palabra en dari para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson03.chore_noun_gloss.001
+  lesson_content_key: prs.a1.unit33.lesson03.asking_for_help
+  type: multiple_choice
+  frame:
+    text: '{chore_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    chore_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} es uno de los sustantivos del hogar de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson01.chore_this_gloss.001
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{chore_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    chore_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} es una de las palabras del hogar de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson01.clean_room_translate.001
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: translation
+  frame:
+    text: La habitación está limpia.
+    language_code: es
+    direction: ltr
+  slots:
+    clean_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: clean_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اتاق {clean_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'El patrón que se enseña es [sustantivo] [adjetivo] است: اتاق پاک است (La habitación está limpia).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson01.chore_pair.002.volume_match.008
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: Segundo conjunto de repaso para relacionar de esta unidad.
+      language_code: es
+      direction: ltr
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit33.lesson06.chore_translate.001.volume_translate.008
+  lesson_content_key: prs.a1.unit33.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{chore_word}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      chore_word: english_gloss
+  slots:
+    chore_word:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic: chore_word
+  answer_derivation:
+    kind: slot_text
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} es la palabra en dari para esto.'
+    language_code: es
+    direction: ltr
