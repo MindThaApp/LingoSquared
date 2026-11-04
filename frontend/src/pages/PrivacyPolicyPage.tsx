@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LegalDocument } from "./LegalDocument";
 
 // DRAFT legal content, not yet reviewed by a lawyer — Ramin must have this
 // reviewed before real (non-beta) users rely on it.
@@ -22,7 +23,7 @@ import { Link } from "react-router-dom";
 //   writes/logs it (backend/app/services/stt.py's own docstring).
 export function PrivacyPolicyPage() {
   return (
-    <div className="card" style={{ maxWidth: 720, margin: "24px auto" }}>
+    <LegalDocument>
       <h1>Privacy Policy</h1>
       <p className="muted">
         Draft for the Auvel beta — last updated 10 July 2026. This policy may
@@ -182,6 +183,6 @@ export function PrivacyPolicyPage() {
       <p className="muted" style={{ marginTop: 24 }}>
         See also the <Link to="/terms">Terms of Service</Link>.
       </p>
-    </div>
+    </LegalDocument>
   );
 }
