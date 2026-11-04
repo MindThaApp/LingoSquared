@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.ru-ar.a1.unit12
+source_language: ru
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_غدا
+    - w_نذهب
+    - w_جيد
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_غدا
+      - w_نذهب
+      - w_جيد
+  ghadan: &id002
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_غدا
+  nadhhab: &id003
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نذهب
+  jayyid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_جيد
+templates:
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.choose.001
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: غدا значит «завтра»; نذهب — «мы идём».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.listen.002
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: نذهب — форма «мы» глагола «идти»; форма «мы» начинается с ن.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.order.003
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل نذهب إلى المقهى {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل نذهب إلى المقهى {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'غدا («завтра») обычно стоит в конце предложения: «Пойдём завтра в кафе?»'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.order.004
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل {item} إلى المقهى غدا؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} إلى المقهى غدا؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل и форма «мы» превращают план в вопрос с ответом «да» или «нет».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.fill.005
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا — «завтра»; после него идёт время.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.fill.006
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: هل {item} إلى المقهى غدا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نذهب — «мы идём», а также «мы собираемся идти».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.translate.007
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا — «завтра»; نذهب — «мы идём»; جيد — «хорошо».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.translate.008
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Пойдём завтра в кафе?
+    language_code: ru
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} إلى المقهى {b}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Одна и та же глагольная форма نذهب значит и «мы идём», и «пойдём ли мы».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.choose.001
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: جيد значит «хорошо»; здесь это короткий ответ, принимающий план.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.fill.002
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: fill_in_blank
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'جيد. إلى اللقاء. — «Хорошо. До свидания.»: согласие с планом и прощание.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.translate.003
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد — прилагательное «хороший»; здесь оно выражает согласие с планом.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.translate.004
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: Мы идём в кафе завтра.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Форма «мы» نذهب не требует местоимения и также значит «мы идём»; слово времени غدا стоит в конце предложения.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.order.005
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Слово со значением времени стоит после места, а час завершает предложение.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.translate.006
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: Мы идём в кафе завтра в пять часов.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'В арабском время суток ставится в конце: «в пятый час».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.listen.007
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Прислушайся к гласным и к последнему звуку, чтобы различить три слова.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson02.order.008
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Короткое слово согласия завершает план перед прощанием.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit12.lesson01.translate.009
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Да, в пять часов. Хорошо. До встречи.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Ответ подтверждает час, одобряет план, а затем звучит прощание.
+    language_code: ru
+    direction: ltr
