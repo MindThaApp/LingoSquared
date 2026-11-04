@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.ru-ar.a1.unit07
+source_language: ru
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ماء
+    - w_قهوة
+    - w_خبز
+    - w_أريد
+    - w_فضلك
+    - w_وقهوة
+    - w_تريدين
+    - w_خبزا
+    - w_قطعة
+    - w_واحدة
+    - w_تفضلي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  l01m: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_وقهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تريدين
+      - w_خبزا
+      - w_قطعة
+      - w_واحدة
+      - w_تفضلي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ماء
+  qahwa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قهوة
+  wqahwa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_وقهوة
+  fadlak: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_فضلك
+  turidin: &id011
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تريدين
+  khubza: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خبزا
+  qita: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قطعة
+  wahida: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_واحدة
+  tafaddali:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_تفضلي
+templates:
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.choose.001
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أريد означает «я хочу»; эта форма одинакова для мужчины и для женщины.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.listen.002
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ماء — «вода», قهوة — «кофе»; خبز («хлеб») — ещё одна вещь, которую можно попросить.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.match.003
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'و («и») присоединяется к следующему слову: وقهوة — «и кофе». من فضلك — вежливое «пожалуйста».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.order.004
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أريد плюс существительное означает «я хочу…»; من فضلك («пожалуйста») завершает просьбу.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.fill.005
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Здесь و входит в состав следующего слова: وقهوة — «и кофе».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.fill.006
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء وقهوة من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: من فضلك буквально значит «из твоей милости» — это обычный способ сказать «пожалуйста».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.translate.007
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أريد — глагол со значением «я хочу»; остальные слова здесь — то, что можно попросить.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.translate.008
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Я хочу воду, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'В арабском нет неопределённого артикля перед существительными: أريد ماء — «я хочу воду».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson01.translate.009
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Я хочу кофе, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: قهوة оканчивается на ة — распространённое окончание женского рода.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.listen.001
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تريدين — женская форма «ты хочешь»; к мужчине обращаются с другим окончанием.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.choose.002
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قطعة значит «кусок»; قطعة خبز — «кусок хлеба», а следующее слово واحدة («один») согласуется с ним.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.order.003
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: هل تريدين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل تريدين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل превращает утверждение в вопрос с ответом «да» или «нет»; خبزا — «хлеб» как то, что хотят получить.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.order.004
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: نعم، أريد قطعة خبز {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، أريد قطعة خبز {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة — «одна» в женском роде, как и слово قطعة.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.fill.005
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: fill_in_blank
+  frame:
+    text: هل {item} خبزا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'تريدين — «ты (ж.) хочешь», поэтому هل تريدين خبزا؟ — это вопрос к женщине: «Хочешь хлеба?»'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.translate.006
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفضلي говорят женщине, оно означает «вот, держите»; мужчина услышал бы другое окончание.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.translate.007
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: Хочешь хлеба? (вопрос к женщине)
+    language_code: ru
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Окончание -ين обозначает форму «ты» женского рода, а слово «хлеб» как желаемый предмет пишется خبزا.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit07.lesson02.translate.008
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: один кусок хлеба
+    language_code: ru
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} خبز {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة стоит после قطعة и согласуется с ним в женском роде.
+    language_code: ru
+    direction: ltr

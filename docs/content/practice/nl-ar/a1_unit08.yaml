@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.nl-ar.a1.unit08
+source_language: nl
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_سعر
+    - w_تفاح
+    - w_دراهم
+    - w_تفاحتين
+    - w_التفاح
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+      - w_تفاحتين
+  l01: &id002
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+  siir: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_سعر
+  darahim: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_دراهم
+  tuffah: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_التفاح
+  tufahatayn: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحتين
+templates:
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.choose.001
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سعر betekent 'prijs'; كم سعر ...؟ vraagt hoeveel iets kost.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.listen.002
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاح is een verzamelwoord voor appels in het algemeen; دراهم is het meervoud van dirham.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.order.003
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: كم {item} التفاح؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item} التفاح؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم سعر التفاح؟ is letterlijk 'hoeveel is de prijs van de appels?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.order.004
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: التفاح بعشرة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'ب voor een getal geeft de prijs aan: بعشرة is ''voor tien'', gevolgd door de munteenheid.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.fill.005
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: كم {item} التفاح؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: سعر is 'prijs'; de vraag gaat over de prijs van de appels.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.fill.006
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: التفاح بعشرة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: دراهم is het meervoud van dirham, gebruikt na een getal zoals tien.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.translate.007
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Dit zijn zelfstandige naamwoorden: سعر is ''prijs'' en تفاح is ''appels''.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.translate.008
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: Hoeveel kosten de appels?
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Het lidwoord ال in التفاح betekent 'de appels', dus de vraag gaat over bepaalde appels.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson01.translate.009
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: De appels kosten tien dirham.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ب voor een getal geeft de prijs aan.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson02.listen.001
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاحتين is تفاحة ('een appel') met de dualisuitgang ـين; de ة wordt ت ervoor, dus het betekent precies twee appels.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson02.order.002
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Het Arabisch heeft een aparte tweevoud (dualis): تفاحتين is ''twee appels'', zonder los woord voor ''twee''.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson02.fill.003
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: fill_in_blank
+  frame:
+    text: أريد {item} من فضلك. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'De dualisuitgang ـين betekent ''twee van iets''; ervoor schrijf je de ة van تفاحة als ت: تفاحتين.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson02.translate.004
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاح is 'appels' in het algemeen, maar تفاحتين met de dualisuitgang is precies twee.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit08.lesson02.translate.005
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: Ik wil twee appels, alsjeblieft.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: De dualisuitgang ـتين zegt al 'twee', dus er is geen los telwoord nodig.
+    language_code: nl
+    direction: ltr

@@ -1,0 +1,446 @@
+schema_version: '1.0'
+pack_key: practice.ru-ar.a1.unit09
+source_language: ru
+target_language: ar
+unit_content_key: ar.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مكان
+    - w_مكتبة
+    - w_سوق
+    - w_مقهى
+    - w_هنا
+    - w_قرب
+    - w_وأين
+    - w_المكتبة
+    - w_المقهى
+    - w_السوق
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+      - w_قرب
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_قرب
+      - w_وأين
+      - w_المكتبة
+      - w_المقهى
+  places: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+      - w_المقهى
+  near: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+  maktaba: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المكتبة
+  suq: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_السوق
+  maqha: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المقهى
+  hunaa: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_هنا
+  qurb: &id004
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_قرب
+  waayna: &id011
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_وأين
+templates:
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.choose.001
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مكان — общее слово «место»; مكتبة — «библиотека», а مقهى — «кафе».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.listen.002
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هنا значит «здесь»; سوق — «рынок».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.match.003
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: قرب («рядом») — предлог, а هنا («здесь») — наречие; остальные четыре слова — существительные.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.order.004
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: أين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أين значит «где»; существительное-место стоит с ال: библиотека, рынок или кафе.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.fill.005
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: fill_in_blank
+  frame:
+    text: المكتبة {item} السوق. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: قرب («рядом») стоит перед словом, обозначающим место, рядом с которым что-то находится, здесь — рынком.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.translate.006
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مكتبة («библиотека»), سوق («рынок») и مقهى («кафе») — места; مكان — общее слово «место».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.translate.007
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Где библиотека?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ال — арабский определённый артикль; он присоединяется к началу существительного.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.translate.008
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Где рынок?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'В арабском не нужен глагол «есть»: أين السوق؟ буквально — «где рынок?».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson01.order.009
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: المكتبة {item} قرب السوق.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {item} قرب السوق.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'هنا («здесь») может стоять перед قرب: библиотека здесь, рядом с рынком.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.choose.001
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قرب значит «рядом»; сразу за ним идёт существительное-место.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.listen.002
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'وأين — это و («и») вместе с أين («где»): «а где».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.order.003
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: المقهى قرب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'После قرب не нужны дополнительные слова: المقهى قرب المكتبة — «кафе рядом с библиотекой».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.order.004
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: وأين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: وأين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'وأين المقهى؟ продолжает разговор: «а где кафе?»'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.fill.005
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} المقهى؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Буква و в слове وأين связывает новый вопрос с предыдущим.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.translate.006
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأين значит «а где» — это уточняющий вопрос; قرب — «рядом».
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.translate.007
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Библиотека рядом с рынком.
+    language_code: ru
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Существительные-места после قرب сохраняют артикль: قرب السوق — «рядом с рынком».'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-ar.ar.a1.unit09.lesson02.translate.008
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Кафе рядом с библиотекой.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: В диалоге этого урока на вопрос وأين المقهى؟ отвечают именно этим предложением.
+    language_code: ru
+    direction: ltr

@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.ro-ar.a1.unit12
+source_language: ro
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_غدا
+    - w_نذهب
+    - w_جيد
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_غدا
+      - w_نذهب
+      - w_جيد
+  ghadan: &id002
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_غدا
+  nadhhab: &id003
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نذهب
+  jayyid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_جيد
+templates:
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.choose.001
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: غدا înseamnă „mâine”; نذهب înseamnă „mergem”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.listen.002
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: نذهب este forma pentru „noi” a verbului „a merge”; forma pentru „noi” începe cu ن.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.order.003
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل نذهب إلى المقهى {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل نذهب إلى المقهى {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'غدا („mâine”) stă de obicei la sfârșitul propoziției: Mergem mâine la cafenea?'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.order.004
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل {item} إلى المقهى غدا؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} إلى المقهى غدا؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل plus forma pentru „noi” transformă planul într-o întrebare cu da sau nu.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.fill.005
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا înseamnă „mâine”; ora urmează după el.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.fill.006
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: هل {item} إلى المقهى غدا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نذهب înseamnă „mergem” și poate însemna și „ne ducem”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.translate.007
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا înseamnă „mâine”; نذهب înseamnă „mergem”; جيد înseamnă „bine”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.translate.008
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Mergem mâine la cafenea?
+    language_code: ro
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} إلى المقهى {b}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Aceeași formă verbală, نذهب, înseamnă și „mergem”, și „să mergem?”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.choose.001
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: جيد înseamnă „bine”; aici este un răspuns scurt prin care accepți planul.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.fill.002
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: fill_in_blank
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'جيد. إلى اللقاء. înseamnă „Bine. La revedere.”: accepți planul și închei conversația.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.translate.003
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد este adjectivul „bun”; aici se folosește pentru a fi de acord cu planul.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.translate.004
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: Mergem mâine la cafenea.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Forma pentru „noi”, نذهب, nu are nevoie de pronume și poate însemna și „ne ducem”; cuvântul de timp غدا stă la sfârșitul propoziției.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.order.005
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Cuvântul de timp vine după loc, apoi ora încheie propoziția.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.translate.006
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: Mergem mâine la cafenea, la ora cinci.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Araba pune ora la sfârșit: în ora a cincea.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.listen.007
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ascultă vocalele și sunetul final ca să deosebești cele trei cuvinte.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson02.order.008
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Un cuvânt scurt de acord încheie planul înainte de rămas-bun.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit12.lesson01.translate.009
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: Da, la ora cinci. Bine. Pe curând.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Răspunsul confirmă ora, aprobă planul, apoi își ia rămas bun.
+    language_code: ro
+    direction: ltr

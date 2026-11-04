@@ -1,0 +1,459 @@
+schema_version: '1.0'
+pack_key: practice.ro-ar.a1.unit20
+source_language: ro
+target_language: ar
+unit_content_key: ar.a1.unit20.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_الجو
+    - w_مشمس
+    - w_بارد
+    - w_حار
+    - w_هيا
+    - w_نشرب
+    - w_وحار
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+  adj: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_مشمس
+      - w_بارد
+      - w_حار
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+      - w_حار
+      - w_هيا
+      - w_نشرب
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_حار
+      - w_هيا
+      - w_نشرب
+      - w_الجو
+  jaw: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الجو
+  mushmis: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_مشمس
+  barid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_بارد
+  har: &id009
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_حار
+  hayya: &id011
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_هيا
+  nashrab: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نشرب
+  wahar: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_وحار
+templates:
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.choose.001
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو înseamnă vremea; مشمس înseamnă însorit, iar بارد înseamnă rece.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.listen.002
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو مشمس اليوم înseamnă astăzi este vreme însorită; مشمس descrie cuvântul الجو.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.match.003
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: الجو (vremea) este un substantiv; مشمس, بارد și حار sunt adjective care îl descriu.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.order.004
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Adjectivul stă direct după الجو, fără un cuvânt pentru „este”: الجو بارد înseamnă vremea este rece.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.fill.005
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: الجو {item} اليوم. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بارد înseamnă rece și este la masculin, ca să se acorde cu الجو.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.fill.006
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: كيف {item} اليوم؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كيف الجو اليوم؟ înseamnă cum este vremea astăzi?
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.translate.007
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: الجو are ال și înseamnă vremea; celelalte două o descriu.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.translate.008
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: Astăzi este vreme însorită.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Adjectivul stă după substantiv: الجو مشمس.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson01.translate.009
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: Astăzi este vreme rece.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: بارد înseamnă rece și nu este nevoie de un cuvânt pentru „este”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.choose.001
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: حار înseamnă cald; descrie cuvântul masculin الجو.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.listen.002
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هيا نشرب ماء înseamnă hai să bem apă; نشرب este forma pentru „noi” a verbului „a bea”.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.order.003
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: هيا {item} ماء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {item} ماء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'După هيا (hai să) urmează verbul la forma pentru „noi”: نشرب înseamnă bem.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.order.004
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: حار înseamnă cald și stă după substantivul pe care îl descrie.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.fill.005
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو مشمس {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'و se scrie legat de cuvântul următor: وحار înseamnă și cald.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.fill.006
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو حار. {item} نشرب ماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا îi invită pe oameni să facă ceva împreună.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.translate.007
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا este o particulă pentru „hai să”, نشرب este verbul la forma pentru „noi”, iar حار este un adjectiv.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.translate.008
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: Astăzi este cald.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Adjectivul are forma masculină, deoarece الجو este masculin.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-ar.ar.a1.unit20.lesson02.translate.009
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: Hai să bem apă.
+    language_code: ro
+    direction: ltr
+  slots:
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {b} ماء
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هيا plus verbul la forma pentru „noi” exprimă o propunere.
+    language_code: ro
+    direction: ltr
