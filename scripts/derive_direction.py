@@ -112,7 +112,7 @@ def group_names(pair: str, levels: list[str]) -> list[str]:
 # YAML helpers
 # ---------------------------------------------------------------------------
 def load(path: Path):
-    return yaml.safe_load(path.read_text(encoding="utf-8"))
+    return yaml.load(path.read_text(encoding="utf-8"), Loader=getattr(yaml, "CSafeLoader", yaml.SafeLoader))  # libyaml: ~5x faster
 
 
 def dump(obj, path: Path) -> None:
