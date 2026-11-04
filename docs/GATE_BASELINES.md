@@ -68,6 +68,15 @@ Own verify run on a base worktree at 53bec4a11 gave 4230; the per-course diff vs
 every pre-existing course unchanged (including the live pairs edited by #124/#130). Leakage 24 hits (41 allowlisted).
 Cross-pair rule above extended: target nl +56 each (now also ar/fa/hi/prs-nl); target ru (A1): +20 each (ar/fa/hi/prs-ru-a1).
 
+## Measured at 20b648c90 (shipped 2026-11-04)
+
+WARN 4638 = 4534 (76a2dd9c5) + 4x16 (ar/fa/hi/prs-pl, same as en-pl) + 4x10 (ar/fa/hi/prs-ro, same as en-ro).
+Own verify run on a base worktree at 76a2dd9c5 gave 4534; the per-course diff vs the ship commit is exactly those 8 new courses,
+every pre-existing course unchanged (including the X-ru courses touched by #135). Leakage 18 hits (41 allowlisted).
+Cross-pair rule above extended: target pl +16 each and target ro +10 each (now also ar/fa/hi/prs-pl, ar/fa/hi/prs-ro).
+Other gates: german/dutch/cross leftover 0; cyrillic-latin 0; target-name 0; check_dari_register 0 (1503 files); 113 practice packs 0 errors;
+scripts/tests 201; vitest 461; backend pytest pass. Current WARN baseline: 4638.
+
 ## Running all gates locally
 
 `scripts/ci_local.sh` runs every gate above in one command (content verify, leakage, scripts pytest, backend pytest in an isolated compose project `lsci_<pid>` that is torn down on exit, vitest). Flags: `--skip-backend`, `--skip-frontend`, `--skip-content`, `--with-build`; `CI_WARN_MAX=<n>` enforces the WARN formula. Content verify takes about an hour; use `--skip-content` for code-only changes. GitHub Actions (`.github/workflows/ci.yml`) runs the same gates on pushes and PRs for the integration branch.
