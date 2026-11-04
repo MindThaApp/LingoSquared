@@ -1,0 +1,445 @@
+schema_version: '1.0'
+pack_key: practice.es-ar.a1.unit13
+source_language: es
+target_language: ar
+unit_content_key: ar.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ذهبت
+    - w_أمس
+    - w_اشتريت
+    - w_تفاحا
+    - w_فعلت
+    - w_شربت
+slot_presets:
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+      - w_فعلت
+      - w_شربت
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+  l02: &id007
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_فعلت
+      - w_شربت
+      - w_أمس
+      - w_ذهبت
+  dhahabtu: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ذهبت
+  ams: &id003
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_أمس
+  ishtaraytu: &id006
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_اشتريت
+  tuffahan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحا
+  faalta: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_فعلت
+  shariba: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_شربت
+templates:
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.choose.001
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ذهبت es «fui» y اشتريت es «compré»; ambos son verbos en pasado en primera persona.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.listen.002
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أمس significa «ayer»; los verbos en pasado van con esta palabra.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.match.003
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: La terminación de pasado -ت indica «yo» (ذهبت, اشتريت, شربت); فعلت es «hiciste» en la pregunta de la unidad.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.order.004
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: word_order
+  frame:
+    text: ذهبت إلى السوق {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ذهبت إلى السوق {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أمس («ayer») suele ir al final de la oración: «Ayer fui al mercado».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.fill.005
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق ثم اشتريت {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاحا es «manzanas» como lo que se compra, por eso termina en alif.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.translate.006
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ذهبت es «fui»; اشتريت es «compré»; تفاحا es «manzanas» como lo que se compra.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.translate.007
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: Ayer fui al mercado. (no hay una palabra aparte para «yo»)
+    language_code: es
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} إلى السوق {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: La terminación de pasado -ت ya significa «yo», así que no hace falta pronombre.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson01.translate.008
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: Compré manzanas. (no hay una palabra aparte para «yo»)
+    language_code: es
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Lo que se compra lleva la terminación alif: تفاحا.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.choose.001
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: فعلت es «hiciste», como en ماذا فعلت أمس؟ «¿Qué hiciste ayer?»
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.listen.002
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: شربت es «bebí»; compárala con ذهبت, que termina igual en -ت.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.match.003
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: La misma terminación -ت marca el pasado en ذهبت, اشتريت y شربت; فعلت («hiciste») aparece en la pregunta.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.order.004
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: word_order
+  frame:
+    text: ماذا {item} أمس؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} أمس؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ماذا más el verbo en pasado pregunta «¿qué hiciste?»; أمس lo sitúa en el día de ayer.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.fill.005
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق. اشتريت تفاحا. {item} قهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شربت es «bebí»; la terminación de pasado -ت significa «yo».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.fill.006
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ماذا {item} أمس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت es el pasado de «hacer»; la pregunta es qué hiciste ayer.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.translate.007
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت («hiciste») y شربت («bebí») son verbos en pasado con terminación -ت.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.translate.008
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: 'Yusuf le pregunta a Layla: «¿Qué hiciste ayer?»'
+    language_code: es
+    direction: ltr
+  slots:
+    a: *id008
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: فعلت es la forma de «tú» en pasado; se escribe igual para un hombre o una mujer.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit13.lesson02.translate.009
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: Bebí café. (no hay una palabra aparte para «yo»)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} قهوة'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'El pasado usa la terminación -ت para «yo»: شربت es «bebí».'
+    language_code: es
+    direction: ltr

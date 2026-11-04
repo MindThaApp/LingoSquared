@@ -1,0 +1,445 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit13
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ذهبت
+    - w_أمس
+    - w_اشتريت
+    - w_تفاحا
+    - w_فعلت
+    - w_شربت
+slot_presets:
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+      - w_فعلت
+      - w_شربت
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+  l02: &id007
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_فعلت
+      - w_شربت
+      - w_أمس
+      - w_ذهبت
+  dhahabtu: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ذهبت
+  ams: &id003
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_أمس
+  ishtaraytu: &id006
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_اشتريت
+  tuffahan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحا
+  faalta: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_فعلت
+  shariba: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_شربت
+templates:
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.choose.001
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ذهبت heißt ich bin gegangen und اشتريت heißt ich habe gekauft; beides sind Verben in der Vergangenheit, 1. Person.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.listen.002
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أمس bedeutet gestern; dazu passen die Verben in der Vergangenheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.match.003
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Die Endung -ت der Vergangenheit steht für ich (ذهبت, اشتريت, شربت); فعلت heißt du hast gemacht, wie in der Frage dieser Lektion.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.order.004
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: word_order
+  frame:
+    text: ذهبت إلى السوق {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ذهبت إلى السوق {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أمس (gestern) steht meist am Satzende: Ich bin gestern zum Markt gegangen.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.fill.005
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق ثم اشتريت {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاحا ist „Äpfel“ als das Gekaufte und endet deshalb auf Alif.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.translate.006
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ذهبت heißt ich bin gegangen; اشتريت heißt ich habe gekauft; تفاحا ist „Äpfel“ als das Gekaufte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.translate.007
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: Ich bin gestern zum Markt gegangen. (kein eigenes Wort für „ich“)
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} إلى السوق {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Die Endung -ت der Vergangenheit bedeutet schon „ich“, ein Pronomen ist daher nicht nötig.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson01.translate.008
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: Ich habe Äpfel gekauft. (kein eigenes Wort für „ich“)
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Das Gekaufte erhält die Endung -ا (Alif): تفاحا.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.choose.001
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: فعلت heißt du hast gemacht, wie in ماذا فعلت أمس؟ Was hast du gestern gemacht?
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.listen.002
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: شربت heißt ich habe getrunken; vergleichen Sie ذهبت, das auf dieselbe Endung -ت endet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.match.003
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Dieselbe Endung -ت kennzeichnet die Vergangenheit in ذهبت, اشتريت und شربت; فعلت (du hast gemacht) steht in der Frageform.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.order.004
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: word_order
+  frame:
+    text: ماذا {item} أمس؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} أمس؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ماذا plus ein Verb in der Vergangenheit fragt „Was hast du gemacht?“; أمس verlegt es auf gestern.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.fill.005
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق. اشتريت تفاحا. {item} قهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شربت heißt ich habe getrunken; die Endung -ت der Vergangenheit bedeutet ich.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.fill.006
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ماذا {item} أمس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت ist die Vergangenheit von „tun, machen“; die Frage lautet, was du gestern gemacht hast.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.translate.007
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت (du hast gemacht) und شربت (ich habe getrunken) sind Verben in der Vergangenheit mit der Endung -ت.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.translate.008
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: 'Yusuf fragt Layla: Was hast du gestern gemacht?'
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id008
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: فعلت ist die Form der Vergangenheit für „du“; geschrieben sieht sie für einen Mann und eine Frau gleich aus.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit13.lesson02.translate.009
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: Ich habe Kaffee getrunken. (kein eigenes Wort für „ich“)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} قهوة'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Die Vergangenheit verwendet für „ich“ die Endung -ت: شربت heißt ich habe getrunken.'
+    language_code: de
+    direction: ltr

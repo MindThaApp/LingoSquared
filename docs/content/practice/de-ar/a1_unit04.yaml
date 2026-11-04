@@ -1,0 +1,470 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit04
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit04.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_تاريخ
+    - w_اليوم
+    - w_مايو
+    - w_يونيو
+    - w_الخامس
+    - w_السادس
+    - w_درس
+    - w_في
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_تاريخ
+      - w_اليوم
+      - w_مايو
+      - w_يونيو
+  l02mc: &id005
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_الخامس
+      - w_السادس
+      - w_درس
+      - w_في
+  words: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_تاريخ
+      - w_اليوم
+      - w_مايو
+      - w_يونيو
+      - w_الخامس
+      - w_السادس
+      - w_درس
+      - w_في
+  months: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_مايو
+      - w_يونيو
+  ords: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_الخامس
+      - w_السادس
+  tareekh: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تاريخ
+  yawm:
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_اليوم
+  fi: &id008
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_في
+  khamis: &id009
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الخامس
+  sadis: &id011
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_السادس
+  may: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مايو
+  june: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_يونيو
+templates:
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.choose.001
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: اليوم bedeutet wörtlich „der Tag“, mit dem Artikel ال am Wortanfang; so sagt man im Arabischen „heute“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.match.002
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Die Monatsnamen مايو und يونيو entsprechen den international üblichen Namen Mai und Juni.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.order.003
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: word_order
+  frame:
+    text: اليوم الخامس من {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم الخامس من {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Datumsangaben lesen sich im Arabischen so: erst der Tag, dann من (von) und der Monat.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.fill.004
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: fill_in_blank
+  frame:
+    text: ما {item} اليوم؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ما تاريخ اليوم؟ ist die übliche Frage nach dem heutigen Datum.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.translate.005
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Monatsnamen werden in einem Wort geschrieben: مايو für Mai und يونيو für Juni.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.translate.006
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: translation
+  frame:
+    text: Welches Datum ist heute?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ما {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Die Datumsfrage besteht aus ما (was) mit تاريخ (Datum) und اليوم (heute).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.listen.001
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ordnungszahlen wie الخامس (der Fünfte) nehmen ال und sind hier männlich, weil sie sich auf يوم (Tag) beziehen, ein männliches Nomen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.match.002
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: في bedeutet „in“ oder „an“ und wird als eigenes Wort geschrieben, anders als ب, das mit dem folgenden Wort verbunden wird.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.order.003
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: word_order
+  frame:
+    text: اليوم {item} من مايو.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {item} من مايو.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Ordnungszahlen nehmen ال: الخامس ist der Fünfte und السادس der Sechste.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.fill.004
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: fill_in_blank
+  frame:
+    text: اليوم الخامس من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Der Monat folgt auf من, also bedeutet اليوم الخامس من يونيو: Heute ist der fünfte Juni.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.order.005
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: word_order
+  frame:
+    text: الدرس {item} الخامس من مايو.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس {item} الخامس من مايو.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'في vor einem Datum bedeutet „an diesem Tag“: في الخامس من مايو.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.translate.006
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Wörter nach في verhalten sich wie jedes Nomen: في الدرس bedeutet „im Unterricht“, wobei ال den bestimmten Artikel anzeigt.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.translate.007
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: Heute ist der fünfte Mai.
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id009
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {a} من {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Der Fünfte heißt الخامس und der Sechste السادس; beide sind männlich, weil sie sich auf يوم (Tag) beziehen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.translate.008
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: Heute ist der sechste Juni.
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {a} من {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Der Sechste heißt السادس; wie die anderen Ordnungszahlen wird er mit ال am Anfang gebildet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson01.listen.007
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Monate haben eigene Namen, aber Tag und Monat werden durch من (von) verbunden: الخامس من مايو.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.choose.009
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: في vor einem Datum bedeutet „an diesem Tag“, und ال kennzeichnet eine Ordnungszahl wie „der Fünfte“ oder „der Sechste“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit04.lesson02.translate.010
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: Der Unterricht ist am fünften Mai.
+    language_code: de
+    direction: ltr
+  slots:
+    f: *id008
+    d: *id009
+    m: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس {f} {d} من {m}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Beim Datum des Unterrichts steht في (am) vor der Ordnungszahl: الدرس في الخامس من مايو.'
+    language_code: de
+    direction: ltr

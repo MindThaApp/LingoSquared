@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit16
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit16.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_تذكرة
+    - w_القطار
+    - w_القاهرة
+    - w_الرصيف
+    - w_الثاني
+    - w_أي
+    - w_رصيف
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_تذكرة
+      - w_القطار
+      - w_القاهرة
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - proper_noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_تذكرة
+      - w_القطار
+      - w_القاهرة
+      - w_الرصيف
+      - w_الثاني
+      - w_أي
+  l2a: &id006
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_الرصيف
+      - w_الثاني
+      - w_أي
+      - w_القطار
+      - w_تذكرة
+  l2b: &id009
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_رصيف
+      - w_الثاني
+      - w_أي
+      - w_القطار
+      - w_تذكرة
+  tazkira: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تذكرة
+  qahira: &id004
+    language_code: ar
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_القاهرة
+  qitar: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_القطار
+  rasif: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_رصيف
+  rasifd: &id011
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الرصيف
+  thani: &id008
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الثاني
+  ayy: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_أي
+templates:
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.choose.001
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تذكرة ist eine Fahrkarte, القطار ist der Zug und القاهرة ist Kairo.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.listen.002
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: إلى bedeutet „nach/zu“, also ist إلى القاهرة „nach Kairo“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.match.003
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أي („welcher“) steht vor einem Nomen im Singular; الثاني („der zweite“) steht nach dem Nomen, das es beschreibt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.order.004
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: word_order
+  frame:
+    text: أريد {item} إلى القاهرة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} إلى القاهرة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Das Gewünschte folgt auf أريد, und إلى („nach/zu“) leitet das Reiseziel ein.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.order.005
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: word_order
+  frame:
+    text: أريد تذكرة إلى {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد تذكرة إلى {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Das Reiseziel folgt direkt auf إلى; das ال in القاهرة gehört zum Namen der Stadt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.fill.006
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: fill_in_blank
+  frame:
+    text: أريد {item} إلى القاهرة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تذكرة ist eine Fahrkarte; أريد („ich möchte“) braucht kein eigenes Wort für „ich“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.translate.007
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das sind zwei häufige Nomen und ein Städtename; das ال in القاهرة gehört zum Namen selbst.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.translate.008
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: translation
+  frame:
+    text: Ich möchte eine Fahrkarte nach Kairo, bitte. (kein eigenes Wort für „ich“)
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {a} إلى {b} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Eine Bitte um eine Fahrkarte besteht aus أريد plus Fahrkarte plus إلى und dem Reiseziel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson01.translate.009
+  lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+  type: translation
+  frame:
+    text: Ich möchte eine Fahrkarte. Der Zug fährt um fünf Uhr. (kein eigenes Wort für „ich“)
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {a}. {b} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Die Uhrzeit wird mit في الساعة plus einer femininen Ordnungszahl gebildet: الساعة الخامسة.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.choose.001
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الرصيف ist der Bahnsteig, mit ال, weil es sich um einen bestimmten Bahnsteig handelt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.listen.002
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الثاني ist die maskuline Form von „der zweite“; sie passt zum maskulinen Nomen الرصيف.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.order.003
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: word_order
+  frame:
+    text: من أي {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من أي {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Auf أي („welcher“) folgt ein Nomen ohne ال: من أي رصيف؟ heißt „Von welchem Bahnsteig?“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.order.004
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: word_order
+  frame:
+    text: من الرصيف {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من الرصيف {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Die Ordnungszahl steht nach dem Nomen und hat ebenfalls ال: الرصيف الثاني.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.fill.005
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: fill_in_blank
+  frame:
+    text: من أي {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Nach أي hat das Nomen kein ال: من أي رصيف؟'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.fill.006
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: fill_in_blank
+  frame:
+    text: من الرصيف {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Die Ordnungszahl wiederholt das ال des Nomens: الرصيف الثاني.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.translate.007
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Diese Wörter benutzt man, um über den Bahnsteig zu sprechen; أي bedeutet „welcher“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.translate.008
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: translation
+  frame:
+    text: Von welchem Bahnsteig?
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id010
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Die Frage besteht aus من plus أي plus einem Nomen ohne ال.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit16.lesson02.translate.009
+  lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+  type: translation
+  frame:
+    text: Vom zweiten Bahnsteig.
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Sowohl das Nomen als auch die Ordnungszahl haben ال: الرصيف الثاني.'
+    language_code: de
+    direction: ltr

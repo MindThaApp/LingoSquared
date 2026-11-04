@@ -1,0 +1,446 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit09
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مكان
+    - w_مكتبة
+    - w_سوق
+    - w_مقهى
+    - w_هنا
+    - w_قرب
+    - w_وأين
+    - w_المكتبة
+    - w_المقهى
+    - w_السوق
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+      - w_قرب
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_قرب
+      - w_وأين
+      - w_المكتبة
+      - w_المقهى
+  places: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+      - w_المقهى
+  near: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+  maktaba: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المكتبة
+  suq: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_السوق
+  maqha: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المقهى
+  hunaa: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_هنا
+  qurb: &id004
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_قرب
+  waayna: &id011
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_وأين
+templates:
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.choose.001
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مكان ist das allgemeine Wort für „Ort“; مكتبة ist eine Bibliothek und مقهى ein Café.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.listen.002
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هنا bedeutet „hier“; سوق ist ein Markt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.match.003
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: قرب („nahe bei“) ist eine Präposition, هنا („hier“) ein Adverb; die anderen vier sind Nomen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.order.004
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: أين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أين fragt nach dem Ort; das Ortsnomen hat ال: die Bibliothek, der Markt oder das Café.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.fill.005
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: fill_in_blank
+  frame:
+    text: المكتبة {item} السوق. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: قرب („nahe bei“) steht vor dem Ort, in dessen Nähe etwas ist, hier der Markt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.translate.006
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مكتبة (Bibliothek), سوق (Markt) und مقهى (Café) sind Orte; مكان ist das allgemeine Wort „Ort“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.translate.007
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Wo ist die Bibliothek?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ال ist der arabische bestimmte Artikel; er wird vorn an das Nomen geschrieben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.translate.008
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: Wo ist der Markt?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Das Arabische braucht kein Wort für „ist“: أين السوق؟ heißt wörtlich „Wo der Markt?“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson01.order.009
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: المكتبة {item} قرب السوق.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {item} قرب السوق.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'هنا („hier“) kann vor قرب stehen: Die Bibliothek ist hier, in der Nähe des Marktes.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.choose.001
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قرب bedeutet „nahe bei“; direkt danach folgt das Ortsnomen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.listen.002
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'وأين besteht aus و („und“), das mit أين („wo“) verbunden ist: „und wo“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.order.003
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: المقهى قرب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'قرب braucht kein weiteres Wort: المقهى قرب المكتبة heißt „Das Café ist in der Nähe der Bibliothek“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.order.004
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: وأين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: وأين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'وأين المقهى؟ setzt das Gespräch fort: „Und wo ist das Café?“'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.fill.005
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} المقهى؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das و in وأين verbindet die neue Frage mit der vorherigen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.translate.006
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأين heißt „und wo“ und ist eine Anschlussfrage; قرب heißt „nahe bei“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.translate.007
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Die Bibliothek ist in der Nähe des Marktes.
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Ortsnomen nach قرب behalten den Artikel: قرب السوق heißt „in der Nähe des Marktes“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit09.lesson02.translate.008
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: Das Café ist in der Nähe der Bibliothek.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Der Dialog der Lektion beantwortet وأين المقهى؟ genau mit diesem Satz.
+    language_code: de
+    direction: ltr
