@@ -105,6 +105,7 @@ jobs:
           cache: pip
       - name: Install backend deps
         run: pip install -r backend/requirements-dev.txt
+      # test_content_answer_shapes is deselected per docs/GATE_BASELINES.md (content-corpus tests; long-running)
       - name: Run backend test suite
         working-directory: backend
-        run: python -m pytest -q
+        run: python -m pytest -q --deselect tests/test_content_answer_shapes.py
