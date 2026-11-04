@@ -1,0 +1,272 @@
+schema_version: '1.0'
+pack_key: practice.es-prs.a1.unit45
+source_language: es
+target_language: prs
+unit_content_key: prs.a1.unit45.accommodation
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - hotel_word
+    - stay_verb
+    - dialogue_word
+    - inclusion_word
+slot_presets:
+  hotel_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hotel_word
+  stay_verb: &id004
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: stay_verb
+  hotel_or_stay: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - hotel_word
+      - stay_verb
+  dialogue_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: dialogue_word
+templates:
+- content_key: practice.es-prs.prs.a1.unit45.lesson01.choose.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} pertenece al vocabulario de alojamiento de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson04.choose.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una palabra de los diálogos de servicios del nivel A1 (hotel, tienda, clínica y similares).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson02.choose.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} pertenece al vocabulario de estancia en hoteles de esta unidad.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson04.fill.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: translation
+  frame:
+    text: El té de la mañana está incluido.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: inclusion_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چای صبح {item} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: «El té de la mañana está incluido» es چای صبح شامل است en dari (شامل significa incluido).
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson03.order.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: word_order
+  frame:
+    text: دو شب {verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دو شب {verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Orden de las palabras: دو شب می‌مانم (me quedo dos noches).'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson04.match.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *id003
+    b: *id003
+    c: *id003
+    d: *id003
+    e: *id003
+    f: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  feedback_frame:
+    text: Relaciona cada palabra con su significado en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson01.translate.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra en darí para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson02.translate.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra en darí para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson03.translate.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb} es la forma en darí para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson05.translate.001
+  lesson_content_key: prs.a1.unit45.lesson05.reading
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb} es la forma en darí para esto.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-prs.prs.a1.unit45.lesson06.translate.001
+  lesson_content_key: prs.a1.unit45.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra en darí para esto.'
+    language_code: es
+    direction: ltr
