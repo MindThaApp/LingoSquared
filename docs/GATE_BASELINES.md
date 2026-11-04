@@ -66,3 +66,7 @@ WARN 4534 = 4230 (53bec4a11) + 4x56 (ar/fa/hi/prs-nl, same as en-nl) + 4x20 (ar/
 Own verify run on a base worktree at 53bec4a11 gave 4230; the per-course diff vs the ship commit is exactly those 8 new courses,
 every pre-existing course unchanged (including the live pairs edited by #124/#130). Leakage 24 hits (41 allowlisted).
 Cross-pair rule above extended: target nl +56 each (now also ar/fa/hi/prs-nl); target ru (A1): +20 each (ar/fa/hi/prs-ru-a1).
+
+## Running all gates locally
+
+`scripts/ci_local.sh` runs every gate above in one command (content verify, leakage, scripts pytest, backend pytest in an isolated compose project `lsci_<pid>` that is torn down on exit, vitest). Flags: `--skip-backend`, `--skip-frontend`, `--skip-content`, `--with-build`; `CI_WARN_MAX=<n>` enforces the WARN formula. Content verify takes about an hour; use `--skip-content` for code-only changes. GitHub Actions (`.github/workflows/ci.yml`) runs the same gates on pushes and PRs for the integration branch.
