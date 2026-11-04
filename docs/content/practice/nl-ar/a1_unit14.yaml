@@ -1,0 +1,447 @@
+schema_version: '1.0'
+pack_key: practice.nl-ar.a1.unit14
+source_language: nl
+target_language: ar
+unit_content_key: ar.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_أحب
+    - w_القهوة
+    - w_شاي
+    - w_الماء
+    - w_ولا
+    - w_أفضل
+    - w_تفضل
+    - w_الشاي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+      - w_أفضل
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_أفضل
+      - w_تفضل
+      - w_القهوة
+      - w_الشاي
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_القهوة
+      - w_الشاي
+      - w_الماء
+  qahwa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_القهوة
+  shay: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_شاي
+  shayd:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الشاي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الماء
+  uhibb: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أحب
+  wala: &id004
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ولا
+  ufaddil: &id010
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أفضل
+  tufaddil: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تفضل
+templates:
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.choose.001
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أحب is het werkwoord ik hou van; direct daarna volgt waar je van houdt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.listen.002
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ولا is و (en) plus لا (niet): en niet.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.match.003
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أحب is ik hou van en أفضل is ik verkies; ولا (en niet) verbindt een ontkennende uitspraak met de vorige.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.order.004
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Wat je leuk vindt volgt op أحب, met ال voor de soort in het algemeen: أحب القهوة is Ik hou van koffie.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.order.005
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: لا أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: لا أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'لا voor het werkwoord ontkent het: لا أحب is ik hou niet van.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.fill.006
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أحب القهوة {item} أحب الشاي. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'ولا verbindt een ontkennende zin: Ik hou van koffie en ik hou niet van thee.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.fill.007
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أنا {item} الماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أنا (ik) kun je voor de nadruk toevoegen, maar أحب alleen betekent al ik hou van.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.translate.008
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شاي is thee zonder lidwoord, terwijl الماء het water is, met ال; أحب is ik hou van.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.translate.009
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: Ik hou van water. (geen apart woord voor ik)
+    language_code: nl
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Na أحب gebruikt het Arabisch ال voor iets in het algemeen, dus ik hou van water is أحب الماء.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson01.translate.010
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: Dit is thee.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Zonder ال is شاي gewoon thee, en het Arabisch heeft geen woord voor is nodig: هذا شاي.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.choose.001
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أفضل is ik heb liever; تفضل met het voorvoegsel ت is de mannelijke jij-vorm.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.listen.002
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'تفضل is jij hebt liever, gericht tot een man: ماذا تفضل يا يوسف؟'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.order.003
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: ماذا {item} يا يوسف؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Het voorvoegsel ت geeft jij aan; ماذا تفضل؟ vraagt een man wat hij liever heeft.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.order.004
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: أفضل {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أفضل {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Na أفضل volgt datgene wat je liever hebt, met ال: أفضل القهوة.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.fill.005
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: fill_in_blank
+  frame:
+    text: أنا {item} القهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل is ik heb liever; het voorvoegsel أ geeft ik aan, zoals in أحب en أريد.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.translate.006
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل is ik heb liever en تفضل is jij (m.) hebt liever; het voorvoegsel أ of ت geeft aan wie.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-ar.ar.a1.unit14.lesson02.translate.007
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: Wat heb je liever, Yusuf?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Yusuf is een man, dus de jij-vorm is تفضل.
+    language_code: nl
+    direction: ltr
