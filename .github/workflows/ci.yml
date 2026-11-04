@@ -38,8 +38,14 @@ jobs:
         run: |
           python -m venv .content-venv
           .content-venv/bin/pip install -q -r scripts/requirements-content.txt pytest
-      - name: Content gates (compile, practice-validate, leftover checks)
-        run: scripts/verify.sh --content-only
+      # The slow full verify (compile + practice-validate of every course/pack) runs
+      # nightly in .github/workflows/nightly-content.yml. Fast gates only here.
+      - name: Leftover checks (german, dutch, cross, target-name)
+        run: |
+          .content-venv/bin/python scripts/_german_leftover_check.py
+          .content-venv/bin/python scripts/_dutch_leftover_check.py
+          .content-venv/bin/python scripts/_cross_leftover_check.py
+          .content-venv/bin/python scripts/_target_name_check.py
       - name: Answer-leakage gate (max 36 hits, docs/GATE_BASELINES.md)
         run: |
           .content-venv/bin/python scripts/_answer_leakage_check.py 2> leak.txt || true
@@ -105,7 +111,6 @@ jobs:
           cache: pip
       - name: Install backend deps
         run: pip install -r backend/requirements-dev.txt
-      # test_content_answer_shapes is deselected per docs/GATE_BASELINES.md (content-corpus tests; long-running)
       - name: Run backend test suite
         working-directory: backend
-        run: python -m pytest -q --deselect tests/test_content_answer_shapes.py
+        run: python -m pytest -q
