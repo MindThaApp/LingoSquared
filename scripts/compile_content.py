@@ -269,10 +269,15 @@ class Report:
         )
 
 
+# CSafeLoader (libyaml) is ~10x faster than the pure-Python SafeLoader, same semantics.
+# verify.sh re-parses the whole corpus once per practice pack (113 packs x ~43s before).
+_YAML_LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     try:
         with path.open("r", encoding="utf-8") as handle:
-            value = yaml.safe_load(handle)
+            value = yaml.load(handle, Loader=_YAML_LOADER)
     except OSError as exc:
         raise ValueError(f"cannot read {path}: {exc}") from exc
     except yaml.YAMLError as exc:
@@ -1737,6 +1742,39 @@ def validate_matching_pairs_minimum_scale(
 
 def normalize_matching_pair_value(value: str) -> str:
     return " ".join(value.casefold().split())
+
+
+def _grader_like_left(value: str) -> str:
+    """Casefold + drop Unicode punctuation (keeps combining marks), like grading.normalized."""
+    import unicodedata
+    text = unicodedata.normalize("NFKC", value).casefold()
+    return " ".join("".join(c for c in text if not unicodedata.category(c).startswith("P")).split())
+
+
+def validate_matching_pairs_overlay_duplicate_lefts(overlay: dict[str, Any], report: Report):
+    """A localized overlay can turn distinct realization lefts into identical ones (derive_cross translating
+    target-language sentence clues, or a learner-language word used for two target words). The grader keys the
+    answer by normalized left, so duplicates make the exercise ungradeable (test_content_answer_shapes)."""
+    for key, ex in (overlay.get("exercises") or {}).items():
+        if not isinstance(ex, dict):
+            continue
+        candidates = [ex.get("pairs")] + [
+            a.get("value") for a in (ex.get("accepted_answers") or []) if isinstance(a, dict)
+        ]
+        for values in candidates:
+            if not isinstance(values, list):
+                continue
+            lefts = [pt[0] for v in values if (pt := _matching_pair_tuple(v)) is not None]
+            seen: dict[str, str] = {}
+            for left in lefts:
+                norm = _grader_like_left(left)
+                if norm in seen:
+                    report.error(
+                        f"overlay.exercises.{key}",
+                        f"matching_pairs overlay has duplicate left item {norm!r} ({seen[norm]!r} / {left!r}); "
+                        "the pair cannot be graded",
+                    )
+                seen.setdefault(norm, left)
 
 
 def validate_matching_pairs_confusable_lefts(
@@ -5004,6 +5042,7 @@ def validate_documents(
     validate_matching_pairs_minimum_scale(realization, report)
     validate_matching_pairs_confusable_lefts(realization, report)
     validate_matching_pairs_overlay_overrides(realization, overlay, report)
+    validate_matching_pairs_overlay_duplicate_lefts(overlay, report)
     validate_prompt_block_localization(realization, overlay, report)
     validate_teaching_target_localization(realization, overlay, report)
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
