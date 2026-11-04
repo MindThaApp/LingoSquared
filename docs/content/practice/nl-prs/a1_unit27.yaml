@@ -1,0 +1,230 @@
+schema_version: '1.0'
+pack_key: practice.nl-prs.a1.unit27
+source_language: nl
+target_language: prs
+unit_content_key: prs.a1.unit27.appearance
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  agreement_tags:
+    semantic:
+    - appearance_word
+    - have_feature_word
+    - eye_hair_color_word
+slot_presets:
+  appearance_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: appearance_word
+  have_feature_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: have_feature_word
+  eye_hair_color_word: &id005
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: eye_hair_color_word
+  appearance_match_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - appearance_word
+      - eye_hair_color_word
+  feature_color_word: &id004
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - have_feature_word
+      - eye_hair_color_word
+templates:
+- content_key: practice.nl-prs.prs.a1.unit27.lesson01.appearance_gloss.001
+  lesson_content_key: prs.a1.unit27.lesson01.appearance_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{appearance_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    appearance_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: appearance_word
+  feedback_frame:
+    text: '{appearance_word} beschrijft hoe iemand eruitziet.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson01.appearance_pair.002
+  lesson_content_key: prs.a1.unit27.lesson01.appearance_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Koppel elk woord aan de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson02.he_has_feature_order.001
+  lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+  type: word_order
+  frame:
+    text: او {have_feature_word} دارد
+    language_code: prs
+    direction: rtl
+  slots:
+    have_feature_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: او {have_feature_word} دارد
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: *او {have_feature_word} دارد* -- hij/zij heeft ... Het kenmerk komt vóór دارد.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson02.feature_color_gloss.002
+  lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+  type: multiple_choice
+  frame:
+    text: '{feature_color_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    feature_color_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: feature_color_word
+  feedback_frame:
+    text: '*{feature_color_word}* gebruik je om te beschrijven hoe iemand eruitziet.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson02.feature_translate.003
+  lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+  type: translation
+  frame:
+    text: '{have_feature_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      have_feature_word: english_gloss
+  slots:
+    have_feature_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: have_feature_word
+  feedback_frame:
+    text: '{have_feature_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson03.eye_color_order.001
+  lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+  type: word_order
+  frame:
+    text: چشم او {eye_hair_color_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    eye_hair_color_word: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چشم او {eye_hair_color_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: *چشم او {eye_hair_color_word} است* -- zijn/haar ogen zijn ... De kleur komt vóór است.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson03.appearance_mix_gloss.002
+  lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+  type: multiple_choice
+  frame:
+    text: '{appearance_match_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    appearance_match_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: appearance_match_word
+  feedback_frame:
+    text: '*{appearance_match_word}* is een uiterlijkswoord of een kleurwoord.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson03.appearance_mix_translate.003
+  lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+  type: translation
+  frame:
+    text: '{appearance_match_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      appearance_match_word: english_gloss
+  slots:
+    appearance_match_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: appearance_match_word
+  feedback_frame:
+    text: '{appearance_match_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit27.lesson06.appearance_translate.001
+  lesson_content_key: prs.a1.unit27.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{appearance_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      appearance_word: english_gloss
+  slots:
+    appearance_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: appearance_word
+  feedback_frame:
+    text: '{appearance_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr

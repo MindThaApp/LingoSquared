@@ -1,0 +1,264 @@
+schema_version: '1.0'
+pack_key: practice.ro-prs.a1.unit35
+source_language: ro
+target_language: prs
+unit_content_key: prs.a1.unit35.post
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - verb
+  agreement_tags:
+    semantic:
+    - post_word
+    - sendable_item_word
+    - en_prs_a1_unit35_lesson03_words
+    - volume_en_prs_a1_unit35_sendable_item_word_11_single
+slot_presets:
+  clean_post_word: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - sendable_item_word
+      - en_prs_a1_unit35_lesson03_words
+  post_noun_word:
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: post_word
+  post_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: post_word
+  sendable_item_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sendable_item_word
+templates:
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_gloss.001
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: multiple_choice
+  frame:
+    text: '{post_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    post_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} face parte din vocabularul unității despre poștă.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_pair.002
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+  feedback_frame:
+    text: Potrivește fiecare cuvânt cu sensul lui în română.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson02.send_item_order.001
+  lesson_content_key: prs.a1.unit35.lesson02.sending_mail
+  type: word_order
+  frame:
+    text: '{sendable_item_word} روان می‌کنم'
+    language_code: prs
+    direction: rtl
+  slots:
+    sendable_item_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{sendable_item_word} روان می‌کنم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Ordinea cuvintelor: [obiect] روان می‌کنم (trimit [obiectul]).'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_translate.001
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: translation
+  frame:
+    text: '{post_word}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      post_word: english_gloss
+  slots:
+    post_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} este cuvântul dari pentru aceasta.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_noun_gloss.001
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: multiple_choice
+  frame:
+    text: '{post_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    post_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} este unul dintre substantivele despre poștă din această unitate.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson04.post_where_gloss.001
+  lesson_content_key: prs.a1.unit35.lesson04.counter_dialogue
+  type: multiple_choice
+  frame:
+    text: '{post_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    post_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} este unul dintre cuvintele despre poștă din această unitate.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson02.send_item_translate.001
+  lesson_content_key: prs.a1.unit35.lesson02.sending_mail
+  type: translation
+  frame:
+    text: 'Trimit: {sendable_item_word}.'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      sendable_item_word: english_gloss
+  slots:
+    sendable_item_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{sendable_item_word} روان می‌کنم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '[item] روان می‌کنم înseamnă „trimit [obiectul]” — روان کردن este verbul învățat pentru a trimite corespondență.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson02.send_item_order.001.volume_fill.011
+  lesson_content_key: prs.a1.unit35.lesson02.sending_mail
+  type: fill_in_blank
+  frame:
+    text: '{sendable_item_word} روان می‌کنم'
+    language_code: prs
+    direction: rtl
+  slots:
+    sendable_item_word:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: sendable_item_word
+  answer_derivation:
+    kind: slot_text
+    slot: sendable_item_word
+    interchangeable: true
+  feedback_frame:
+    text: 'Spune ce trimiți, apoi روان می‌کنم: نامه روان می‌کنم (trimit o scrisoare), پارسل روان می‌کنم (trimit un colet).'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_pair.002.volume_match.006
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four}'
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: A doua serie de asociere pentru recapitularea acestei unități.
+      language_code: ro
+      direction: ltr
+  slots:
+    word_one: &id004
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic: post_word
+    word_two: *id004
+    word_three: *id004
+    word_four: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+  feedback_frame:
+    text: Potrivește fiecare cuvânt cu sensul lui în română.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-prs.prs.a1.unit35.lesson01.post_translate.001.volume_translate.006
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: translation
+  frame:
+    text: '{post_word}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      post_word: english_gloss
+  slots:
+    post_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} este cuvântul dari pentru aceasta.'
+    language_code: ro
+    direction: ltr

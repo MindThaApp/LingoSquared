@@ -1,0 +1,218 @@
+schema_version: '1.0'
+pack_key: practice.nl-prs.a1.unit29
+source_language: nl
+target_language: prs
+unit_content_key: prs.a1.unit29.sports
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dutch). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  agreement_tags:
+    semantic:
+    - sport_topic_word
+    - ball_sport_word
+    - sport_place_word
+slot_presets:
+  sport_topic_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sport_topic_word
+  ball_sport_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ball_sport_word
+  sport_place_word: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: sport_place_word
+  sport_game_word: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - sport_topic_word
+      - sport_place_word
+templates:
+- content_key: practice.nl-prs.prs.a1.unit29.lesson01.sport_gloss.001
+  lesson_content_key: prs.a1.unit29.lesson01.sport_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{sport_topic_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    sport_topic_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: sport_topic_word
+  feedback_frame:
+    text: '*{sport_topic_word}* is een sportwoord.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson01.sport_pair.002
+  lesson_content_key: prs.a1.unit29.lesson01.sport_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Koppel elk woord aan de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson02.twice_a_week_order.001
+  lesson_content_key: prs.a1.unit29.lesson02.frequency_question
+  type: word_order
+  frame:
+    text: من دو بار در هفته {ball_sport_word} بازی می‌کنم
+    language_code: prs
+    direction: rtl
+  slots:
+    ball_sport_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من دو بار در هفته {ball_sport_word} بازی می‌کنم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: *من دو بار در هفته {ball_sport_word} بازی می‌کنم* -- Ik speel twee keer per week ...'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson02.ball_sport_gloss.002
+  lesson_content_key: prs.a1.unit29.lesson02.frequency_question
+  type: multiple_choice
+  frame:
+    text: '{ball_sport_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    ball_sport_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: ball_sport_word
+  feedback_frame:
+    text: '{ball_sport_word} is een sport die je speelt (بازی می‌کنم).'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson02.ball_sport_translate.003
+  lesson_content_key: prs.a1.unit29.lesson02.frequency_question
+  type: translation
+  frame:
+    text: '{ball_sport_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      ball_sport_word: english_gloss
+  slots:
+    ball_sport_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: ball_sport_word
+  feedback_frame:
+    text: '{ball_sport_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson03.play_location_order.001
+  lesson_content_key: prs.a1.unit29.lesson03.location
+  type: word_order
+  frame:
+    text: در {sport_place_word} بازی می‌کنم
+    language_code: prs
+    direction: rtl
+  slots:
+    sport_place_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: در {sport_place_word} بازی می‌کنم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Woordvolgorde: *در {sport_place_word} بازی می‌کنم* -- Ik speel in/op de ...'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson03.sport_game_gloss.002
+  lesson_content_key: prs.a1.unit29.lesson03.location
+  type: multiple_choice
+  frame:
+    text: '{sport_game_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    sport_game_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: sport_game_word
+  feedback_frame:
+    text: '*{sport_game_word}* is een sport of een plek waar mensen sporten.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson03.place_translate.003
+  lesson_content_key: prs.a1.unit29.lesson03.location
+  type: translation
+  frame:
+    text: '{sport_place_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      sport_place_word: english_gloss
+  slots:
+    sport_place_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: sport_place_word
+  feedback_frame:
+    text: '{sport_place_word} is het Dari-woord voor deze plek.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-prs.prs.a1.unit29.lesson06.sport_translate.001
+  lesson_content_key: prs.a1.unit29.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{sport_topic_word}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      sport_topic_word: english_gloss
+  slots:
+    sport_topic_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: sport_topic_word
+  feedback_frame:
+    text: '{sport_topic_word} is het Dari-woord hiervoor.'
+    language_code: nl
+    direction: ltr
