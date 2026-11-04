@@ -15,8 +15,10 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, fix/wsl-handover-followups]
   pull_request:
+    branches: [main, master, fix/wsl-handover-followups]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -32,10 +34,20 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install content deps
-        run: pip install pyyaml pytest
+      - name: Install content deps (.content-venv, as scripts/verify.sh expects)
+        run: |
+          python -m venv .content-venv
+          .content-venv/bin/pip install -q -r scripts/requirements-content.txt pytest
+      - name: Content gates (compile, practice-validate, leftover checks)
+        run: scripts/verify.sh --content-only
+      - name: Answer-leakage gate (max 36 hits, docs/GATE_BASELINES.md)
+        run: |
+          .content-venv/bin/python scripts/_answer_leakage_check.py 2> leak.txt || true
+          cat leak.txt | tail -3
+          hits=$(sed -n 's/^answer-leakage: \([0-9]*\) hit.*/\1/p' leak.txt | head -1)
+          test -n "$hits" && test "$hits" -le 36
       - name: Run content test suite
-        run: python -m pytest scripts/tests -q
+        run: .content-venv/bin/python -m pytest scripts/tests -q
 
   frontend:
     name: Frontend (build + lint + test)
@@ -58,6 +70,8 @@ jobs:
         run: npm run build
       - name: Test
         working-directory: frontend
+        env:
+          VITE_API_BASE_URL: http://localhost:8000
         run: npm test
 
   backend:
