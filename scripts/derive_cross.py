@@ -281,11 +281,20 @@ def english_only_nl(text: str) -> bool:
     return len(toks) >= 2 and not set(toks) & NL_MARKERS and en_fraction(text) >= 0.99
 
 
+def latin_in_nonlatin_course(text: str, target: str) -> bool:
+    """Latin-script text in an Arabic / Persian / Dari / Hindi course is learner-language (or a romanisation) text, never target-language
+    text: the realization of these targets also holds English option strings, which would otherwise make `is_target_text` call the
+    overlay's English options 'target text' and leave them untranslated."""
+    return target in NONLATIN_LEARNERS and bool(re.search(r"[A-Za-z]", text)) and not NONLATIN_LETTER.search(text)
+
+
 def pair_text_is_learner(text: str, on_learner_side: bool, target: str) -> bool:
     """Matching-pair clue: on the exercise's learner side English is expected (weak evidence suffices); on the other side
     only unmistakable English prose counts (mixed exercises exist)."""
     if not any(c.isalpha() for c in text):
         return False
+    if latin_in_nonlatin_course(text, target):
+        return True
     if not on_learner_side and target == "nl" and english_only_nl(text):
         return True                       # nl exercises mix Dutch cognates on both sides: judge the string itself
     return looks_english(text, target) if on_learner_side else english_prose(text)
@@ -311,6 +320,12 @@ def matching_sides(real_path: Path, target: str) -> dict[str, str]:
                     sr = english_side_score([p["right"] for p in ex["pairs"]], target)
                     out[ex["content_key"]] = "reverse" if (sl >= 0.6 and sl - sr >= 0.3) else ("normal" if (sr >= 0.5 and sr > sl) else "none")
     return out
+
+
+def _tgt_text(val: str, keyt: frozenset, key, target: str) -> bool:
+    if latin_in_nonlatin_course(val, target):
+        return "romanize" in (key or "")                 # Latin answers of transliteration exercises are the tested text
+    return is_target_text(val, keyt)
 
 
 def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
@@ -412,14 +427,14 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
         elif role == "correct_response" and not isinstance(path[-1], str):
             learner = False                               # word-order tile lists are target text
         elif role == "correct_response":
-            learner = not is_target_text(val, keyt)       # match values: learner meaning or target form (decide on text)
+            learner = not _tgt_text(val, keyt, key, _TARGET)       # match values: learner meaning or target form (decide on text)
         elif role == "pair_left" or role == "accepted_word":
-            learner = not is_target_text(val, keyt)       # reverse matching exercises put the English clue on the left
+            learner = not _tgt_text(val, keyt, key, _TARGET)       # reverse matching exercises put the English clue on the left
         elif role in dd.AMBIGUOUS:
-            tgt = is_target_text(val, keyt)
+            tgt = _tgt_text(val, keyt, key, _TARGET)
             learner = (not tgt) or (ex_learner.get(path[:2], False) and en_fraction(val) >= 0.5 and tgt is False)
         else:
-            learner = not is_target_text(val, keyt)       # unknown role: decide on the text
+            learner = not _tgt_text(val, keyt, key, _TARGET)       # unknown role: decide on the text
         if not learner:
             stats["strings_invariant"] += 1
             continue
@@ -474,6 +489,11 @@ Rules (checked by `inject`):
 {"8. " + ("RTL language: logical-order text, no bidi control characters; " if new_code in dd.RTL else "") + f"{t_en} words quoted in the text stay in Latin script (inside the *asterisk* spans); never transliterate them into the {n_en} script and never leave English words in the text. Grammar terms (article, infinitive, present perfect, subject, plural...) are written in {n_en} script, never as Latin-script English words or in parentheses after the {n_en} term." if new_code in dd.NON_LATIN and target not in dd.NON_LATIN else ""}
 {"9. Dari (prs) is NOT Iranian Farsi: use Afghan Dari vocabulary, forms and the colloquial register above (no Tehrani contractions such as mikhoram/mitoonam, no Iranian-only words, no copied Farsi sentences); the Dari register checker (scripts/check_dari_register.py) must report 0 findings." if new_code == "prs" else ""}
 {"9. Farsi (fa) is Iranian Persian, not Dari: no Afghan-only vocabulary." if new_code == "fa" else ""}
+10. `translation` exercises ("Translate into English: <{t_en} text>"): the sibling asks English learners to translate into English. Here the learner
+   translates INTO {n_en}: the `instruction` says "Translate into {n_en}: <the {t_en} text unchanged>" (in {n_en}), the `answer_language_code`
+   item is exactly "{new_code}", and EVERY `accepted` item is the {n_en} translation of the English answer (all variants, same
+   order). Never leave an English answer or the word English in such an exercise. Exception: Latin-letter transliteration
+   exercises (`romanize_*`, "type a transliteration") keep answer_language_code "en" and their Latin answers as they are.
 """
 
 
@@ -799,6 +819,25 @@ def cmd_inject(args):
         t2 = t.replace("scripts/derive_direction.py", "scripts/derive_cross.py").replace("derive_direction.py", "derive_cross.py")
         if t2 != t:
             p.write_text(t2, encoding="utf-8")
+    _force_answer_language(args.new)
+
+
+def _force_answer_language(pair: str) -> int:
+    """Translation exercises of the sibling carry `answer_language_code: en`; in a cross pair the answer is written in the learner
+    language, so the code must be that language (transliteration exercises keep `en`).  Returns the number of exercises changed."""
+    learner = pair.split("-")[0]
+    n = 0
+    for p in sorted((CONTENT / "overlays" / pair).glob("*.yaml")):
+        y = dd.load(p)
+        changed = False
+        for key, ex in (y.get("exercises") or {}).items():
+            if isinstance(ex, dict) and ex.get("answer_language_code") == "en" and "romanize" not in key:
+                ex["answer_language_code"] = learner
+                changed = True
+                n += 1
+        if changed:
+            dd.dump(y, p)
+    return n
 
 
 def text_map_for(work: Path, stem: str) -> dict[str, str]:
@@ -862,15 +901,24 @@ def localize_pairs(args):
                             changed = True
                         if ov.get("localize_pair_lefts") != "yes":
                             continue
-                        cr = ov.get("correct_response")
-                        if not isinstance(cr, dict) or not ov.get("pairs"):
+                        if not ov.get("pairs"):
                             continue
                         mapping = {a["left"]: b["left"] for a, b in zip(ex["pairs"], ov["pairs"])}
-                        new_cr = {mapping.get(k, k): v for k, v in cr.items()}
-                        if list(new_cr) != list(cr):
-                            ov["correct_response"] = new_cr
-                            changed = True
-                            n += 1
+                        cr = ov.get("correct_response")
+                        if isinstance(cr, dict):
+                            new_cr = {mapping.get(k, k): v for k, v in cr.items()}
+                            if list(new_cr) != list(cr):
+                                ov["correct_response"] = new_cr
+                                changed = True
+                                n += 1
+                        for acc in ov.get("accepted_answers") or []:       # accepted answer of the same shape: {clue: target word}
+                            val = acc.get("value") if isinstance(acc, dict) else None
+                            if isinstance(val, dict):
+                                new_val = {mapping.get(k, k): v for k, v in val.items()}
+                                if list(new_val) != list(val):
+                                    acc["value"] = new_val
+                                    changed = True
+                                    n += 1
             if changed:
                 dd.dump(y, path)
     print(f"re-keyed {n} reverse-matching answer sets")
@@ -1289,6 +1337,8 @@ def english_prose(v: str) -> bool:
     # quoted words are target-language words (romanised Hindi 'the', 'hain'); drop „German“, «French», "plain" and 'single' quotes
     v = re.sub(r"\u201e[^\u201c\u201d]*[\u201c\u201d]|\u00ab[^\u00bb]*\u00bb|\"[^\"]*\"|(?<!\w)'[^']{1,40}'(?!\w)", " ", v)
     v = v.replace("The Wanderers", " ")                              # band name in the hi A1 concert unit, left as a name by translators
+    if re.fullmatch(r"[a-z0-9]+(?:_[a-z0-9]+)+", v.strip()):
+        return False                                                  # snake_case identifier (slot name), not prose
     toks = norm_tokens(v)
     if len(toks) < 3 or any(ph in v for ph in GERMAN_PROSE_PHRASES):
         return False
@@ -1355,6 +1405,20 @@ def _strip_semantic(o):
     return o
 
 
+def _positional_answer_keys(strings: dict) -> dict:
+    """Reverse matching answers are dicts {clue: target word} whose clues are translated: compare them by position, not by clue text."""
+    seen: dict[tuple, list] = {}
+    out = {}
+    for path, v in strings.items():
+        if len(path) > 5 and path[0] == "exercises" and path[2] == "accepted_answers" and path[4] == "value" and isinstance(path[5], str):
+            keys = seen.setdefault(path[:5], [])
+            if path[5] not in keys:
+                keys.append(path[5])
+            path = path[:5] + (f"#{keys.index(path[5])}",) + path[6:]
+        out[path] = v
+    return out
+
+
 def learner_leftovers(pair: str) -> list[str]:
     """Learner-role strings of a cross pair that are still English prose, or that changed target-language text."""
     learner, target = pair.split("-")
@@ -1384,6 +1448,7 @@ def learner_leftovers(pair: str) -> list[str]:
                 or k[0] == "teaching" and k[2] == "target_text")}
             ys = {k: v for k, v in ys.items() if k not in added and k[0] not in ("review", "generation_provenance", "status")}
             ss = {k: v for k, v in ss.items() if k[0] not in ("review", "generation_provenance", "status")}
+            ys, ss = _positional_answer_keys(ys), _positional_answer_keys(ss)
             if set(ys) != set(ss):
                 out.append(f"{kind}/{pair}/{p.name}: structure differs from {sib}")
                 continue
