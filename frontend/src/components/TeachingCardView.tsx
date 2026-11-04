@@ -4,6 +4,7 @@ import { TextBlockList } from "./TextBlock";
 import { EmphasizedText } from "./EmphasizedText";
 import { GlossableText } from "./GlossableText";
 import { SpeakButton } from "./SpeakButton";
+import { sourceTextDirection } from "@lingo/shared/lib/scripts";
 
 const KIND_KEY: Record<TeachingCard["kind"], string> = {
   vocabulary: "teaching_card.vocabulary",
@@ -70,7 +71,7 @@ export function TeachingCardView({ card }: { card: TeachingCard }) {
         </div>
       )}
       {card.note && (
-        <p className="muted" style={{ margin: 0 }}>
+        <p className="muted" dir={sourceTextDirection(card.text_blocks)} style={{ margin: 0 }}>
           <EmphasizedText text={card.note} />
         </p>
       )}

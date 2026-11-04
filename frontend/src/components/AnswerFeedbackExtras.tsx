@@ -5,6 +5,7 @@ import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { ExercisePrompt, GradingStatus } from "@lingo/shared/api/types";
 import { speak } from "../api/tts";
 import { playAnswerCue } from "../lib/answerCue";
+import { sourceTextDirection } from "@lingo/shared/lib/scripts";
 import { answerWhy } from "../lib/answerWhy";
 import { getAutoPlayAnswer } from "../lib/feedbackPreferences";
 
@@ -50,7 +51,7 @@ export function AnswerFeedbackExtras({
     <details className="why-expander">
       <summary>{t("feedback.why")}</summary>
       {why.map((text, i) => (
-        <p key={i} dir="auto" style={{ margin: "6px 0 0", fontWeight: 400 }}>
+        <p key={i} dir={sourceTextDirection(prompt?.text_blocks, prompt?.answer_language_code)} style={{ margin: "6px 0 0", fontWeight: 400 }}>
           {text}
         </p>
       ))}
