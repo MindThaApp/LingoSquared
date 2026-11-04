@@ -10,7 +10,7 @@ import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
-import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { answerDirectionForExercise, sourceTextDirection } from "@lingo/shared/lib/scripts";
 import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
@@ -328,7 +328,7 @@ export function CheckpointPage() {
               </p>
             )}
             {result.feedback && (
-              <p dir="auto" style={{ margin: "0 0 10px", fontWeight: 400 }}>
+              <p dir={sourceTextDirection(current.prompt.text_blocks, current.prompt.answer_language_code)} style={{ margin: "0 0 10px", fontWeight: 400 }}>
                 <EmphasizedText text={result.feedback} />
               </p>
             )}

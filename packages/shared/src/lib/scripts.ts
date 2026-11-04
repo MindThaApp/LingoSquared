@@ -247,3 +247,32 @@ export function answerDirectionForExercise(exercise: Exercise): Direction {
 export function scriptDirection(script: ScriptCode | null): Direction {
   return KEYBOARD_LAYOUTS[script ?? "latin"]?.direction ?? "ltr";
 }
+
+// Languages written right-to-left. Mirrors RTL_LANGUAGES in i18n (UI
+// languages) but also covers content-only codes (he, ur) so a text element
+// whose block carries one of them gets an explicit `dir`.
+export const RTL_LANGUAGE_CODES: ReadonlySet<string> = new Set(["ar", "fa", "prs", "he", "ur"]);
+
+/** Reading direction for a language code ("fa", "ar-EG", ...). Unknown -> ltr. */
+export function languageDirection(languageCode: string | null | undefined): Direction {
+  const base = (languageCode ?? "").split("-")[0].toLowerCase();
+  return RTL_LANGUAGE_CODES.has(base) ? "rtl" : "ltr";
+}
+
+// Free-text fields that carry no language of their own (a teaching card's
+// `note`, an answer's `feedback`) are written in the learner's source
+// language, which is the language of the card/prompt's gloss block: the last
+// text_block that is not in the target language (the target block comes
+// first by contract). Returns "auto" only when no such block exists, so the
+// browser still picks a direction rather than defaulting everything to LTR.
+export function sourceTextDirection(
+  blocks: TextBlock[] | undefined,
+  targetLanguageCode?: string | null,
+): Direction | "auto" {
+  if (!blocks || blocks.length === 0) return "auto";
+  const target = (targetLanguageCode ?? blocks[0].language_code).split("-")[0];
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    if (blocks[i].language_code.split("-")[0] !== target) return languageDirection(blocks[i].language_code);
+  }
+  return "auto";
+}
