@@ -3,7 +3,8 @@
 
 Two detectors, both over `kind: grammar_note` teaching cards:
 
-  1. realization: the `target` text of a grammar_note in realizations/<target>/ is pl/es/fr/... -coded and is shared by
+  1. realization: the `target` text of a grammar_note in realizations/<target>/ is pl/es/fr/... -coded (cards whose block
+     is coded in a learner language are skipped: overlays localize them via target_text) and is shared by
      every learner pair, so English words in it ("Gdzie (where) plus jest (is) ...", a whole English sentence) show up
      as English inside the target-language span in every X-<target> course. Flagged when it holds one STRONG English
      marker or two WEAK ones (see below). Learner-language explanations belong in the overlay (title/gloss/note).
@@ -41,13 +42,15 @@ TITLE_EN = STRONG | WEAK | set("to go by of at or if be the".split())
 # WEAK words that are also ordinary words of a target language: never counted for that target.
 WEAK_SHARED = {
     "pl": {"plus"},
-    "nl": {"is"},
-    "de": {"is"},
+    "nl": {"is", "plus"},
+    "de": {"is", "plus"},
     "es": {"plus"},
     "fr": {"plus"},
     "ro": {"plus"},
     "it": {"plus"},
 }
+# STRONG words that are also ordinary words of a target language (Romanian "prefer" = "I prefer"): never counted there.
+STRONG_SHARED = {"ro": {"prefer"}}
 
 WORD = re.compile(r"[^\W\d_]+(?:'[^\W\d_]+)*")
 
@@ -58,7 +61,7 @@ def load(path: Path):
 
 def english_hits(text: str, target: str | None) -> list[str]:
     words = [w.lower() for w in WORD.findall(re.sub(r"[*_]", "", text))]
-    strong = [w for w in words if w in STRONG]
+    strong = [w for w in words if w in STRONG and w not in STRONG_SHARED.get(target or "", set())]
     weak = [w for w in words if w in WEAK and w not in WEAK_SHARED.get(target or "", set())]
     if strong or len(weak) >= 2:
         return strong + weak
@@ -83,7 +86,12 @@ def realization_hits() -> dict[str, str]:
             continue
         for node in walk(load(f)):
             if node.get("kind") == "grammar_note" and "content_key" in node:
-                text = (node.get("target") or {}).get("text", "")
+                block = node.get("target") or {}
+                # A block coded in a learner language (language_code != target, e.g. es notes written in English) is
+                # not target-coded prose: the compiler requires every X-<target> overlay to localize it via target_text.
+                if block.get("language_code") not in (None, target):
+                    continue
+                text = block.get("text", "")
                 if text and english_hits(text, target):
                     hits[f"realization\t{node['content_key']}"] = text
     return hits
