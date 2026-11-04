@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.de-ar.a1.unit07
+source_language: de
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ماء
+    - w_قهوة
+    - w_خبز
+    - w_أريد
+    - w_فضلك
+    - w_وقهوة
+    - w_تريدين
+    - w_خبزا
+    - w_قطعة
+    - w_واحدة
+    - w_تفضلي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  l01m: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_وقهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تريدين
+      - w_خبزا
+      - w_قطعة
+      - w_واحدة
+      - w_تفضلي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ماء
+  qahwa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قهوة
+  wqahwa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_وقهوة
+  fadlak: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_فضلك
+  turidin: &id011
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تريدين
+  khubza: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خبزا
+  qita: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قطعة
+  wahida: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_واحدة
+  tafaddali:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_تفضلي
+templates:
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.choose.001
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أريد bedeutet „ich möchte“; dieselbe Form benutzen Männer und Frauen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.listen.002
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ماء heißt Wasser und قهوة heißt Kaffee; خبز (Brot) ist eine dritte Sache, um die man bitten kann.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.match.003
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'و (und) wird an das folgende Wort angehängt: وقهوة heißt und Kaffee. من فضلك ist das höfliche Bitte.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.order.004
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أريد plus Nomen heißt ich möchte; من فضلك (bitte) schließt die Bitte ab.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.fill.005
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Hier ist و Teil des nächsten Wortes: وقهوة heißt und Kaffee.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.fill.006
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء وقهوة من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: من فضلك heißt wörtlich aus deiner Gunst und ist die alltägliche Art, Bitte zu sagen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.translate.007
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أريد ist ein Verb und bedeutet ich möchte; die anderen Wörter hier sind Dinge, um die man bitten kann.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.translate.008
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Ich möchte Wasser, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Im Arabischen steht vor dem Nomen kein unbestimmter Artikel: أريد ماء heißt ich möchte Wasser.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson01.translate.009
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: Ich möchte Kaffee, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: قهوة endet auf ة, die häufige feminine Endung.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.listen.001
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تريدين ist die feminine Du-Form von „wollen“; einen Mann würde man mit einer anderen Endung ansprechen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.choose.002
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قطعة bedeutet Stück; قطعة خبز ist ein Stück Brot, und das nächste Wort واحدة (eins) richtet sich danach.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.order.003
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: هل تريدين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل تريدين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل macht aus einer Aussage eine Ja-Nein-Frage; خبزا ist Brot als das Gewünschte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.order.004
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: نعم، أريد قطعة خبز {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، أريد قطعة خبز {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة ist feminines „eins“ und passt zum femininen Wort قطعة.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.fill.005
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: fill_in_blank
+  frame:
+    text: هل {item} خبزا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'تريدين heißt du (fem.) möchtest, also fragt هل تريدين خبزا؟ eine Frau: Möchtest du Brot?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.translate.006
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفضلي sagt man zu einer Frau; es bedeutet bitte sehr. Ein Mann würde eine andere Endung hören.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.translate.007
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: Möchtest du Brot? (zu einer Frau gesagt)
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Die Endung -ين kennzeichnet die feminine Du-Form, und Brot als das Gewünschte wird خبزا geschrieben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ar.ar.a1.unit07.lesson02.translate.008
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: ein Stück Brot
+    language_code: de
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} خبز {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة folgt auf قطعة und passt sich dem femininen Geschlecht an.
+    language_code: de
+    direction: ltr

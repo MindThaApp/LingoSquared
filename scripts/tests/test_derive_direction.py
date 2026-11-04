@@ -133,6 +133,18 @@ def test_update_manifests_merges_units_incrementally(dd):
         "a1_unit01.yaml", "a1_unit02.yaml", "a1_unit03.yaml", "a1_unit15.yaml"]
 
 
+def test_update_manifests_follows_sibling_unit_order(dd):
+    """en-ar/en-hi list units out of numeric order; the new pair must keep the sibling's order (taught-token accumulation)."""
+    r = "docs/content/realizations/ar/a1_unit%02d_x.yaml"
+    dd.MANIFEST.mkdir(parents=True, exist_ok=True)
+    (dd.MANIFEST / "en-ar-a1.txt").write_text(f"en-ar-a1|{r % 1} {r % 41} {r % 2}|o1 o41 o2\n", encoding="utf-8")
+    o = "docs/content/overlays/de-ar/a1_unit%02d.yaml"
+    dd.update_manifests({"de-ar-a1": ([r % 1, r % 2, r % 41], [o % 1, o % 2, o % 41])}, "de-ar", [], "en-ar")
+    group, reals, ovs = (dd.MANIFEST / "de-ar-a1.txt").read_text(encoding="utf-8").strip().split("|")
+    assert [p.split("/")[-1] for p in reals.split()] == ["a1_unit01_x.yaml", "a1_unit41_x.yaml", "a1_unit02_x.yaml"]
+    assert [p.split("/")[-1] for p in ovs.split()] == ["a1_unit01.yaml", "a1_unit41.yaml", "a1_unit02.yaml"]
+
+
 # ---------------------------------------------------------------------------
 # Teaching-card titles: English target text vs learner-language description
 # ---------------------------------------------------------------------------
