@@ -48,7 +48,7 @@ def test_export_contains_real_values_from_each_table(client, admin, auth):
     # threshold-1 "first_steps" achievement.
     assert client.post(f"/lessons/{lesson_id}/start", headers=auth).status_code == 200
     with SessionLocal() as db:
-        exercise = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id))
+        exercise = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id).order_by(Exercise.order))
         exercise_id = exercise.id
         correct_response = exercise.correct_response
         unit_id = db.scalar(select(Lesson.unit_id).where(Lesson.id == lesson_id))

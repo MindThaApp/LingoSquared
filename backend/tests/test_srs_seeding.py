@@ -15,7 +15,7 @@ def _user_id(auth):
 def _make_lesson():
     course_id, lesson_id = create_course_with_lexemes()
     with SessionLocal() as db:
-        source = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id))
+        source = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id).order_by(Exercise.order))
         for order in range(2, 6):
             db.add(Exercise(
                 lesson_id=lesson_id,

@@ -61,6 +61,10 @@ class SocialLinkIn(SocialLoginIn):
 class SocialUnlinkIn(BaseModel):
     provider:Literal["google","apple"]
     current_password:str|None=Field(default=None,max_length=128)
+class PasswordChangeIn(BaseModel):
+    current_password:str=Field(max_length=128)
+    # Same strength rule as RegisterIn.password.
+    new_password:str=Field(min_length=8,max_length=128)
 class SocialNonceOut(BaseModel): nonce:str; expires_in:int
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel):
