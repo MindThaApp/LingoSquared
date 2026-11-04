@@ -1,0 +1,410 @@
+schema_version: '1.0'
+pack_key: practice.pl-prs.a1.unit15
+source_language: pl
+target_language: prs
+unit_content_key: prs.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - pronoun
+  - particle
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - comparative_adjective
+    - connector_word
+    - demonstrative_word
+    - height_word
+    - person_name
+    - en_prs_a1_unit15_lesson01_words
+slot_presets:
+  comparative_adjective: &id001
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: comparative_adjective
+  lesson01_comparative: &id003
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: en_prs_a1_unit15_lesson01_words
+  connector_word: &id007
+    language_code: prs
+    part_of_speech:
+    - particle
+    - adjective
+    agreement_tags:
+      semantic: connector_word
+  demonstrative_word: &id002
+    language_code: prs
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: demonstrative_word
+  height_word: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: height_word
+  person_name:
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  comparative_and_height: &id005
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - comparative_adjective
+      - height_word
+  connector_and_comparative: &id006
+    language_code: prs
+    part_of_speech:
+    - particle
+    - adjective
+    agreement_tags:
+      semantic:
+      - connector_word
+      - comparative_adjective
+templates:
+- content_key: practice.pl-prs.prs.a1.unit15.lesson01.comparative_gloss.001
+  lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+  type: multiple_choice
+  frame:
+    text: '{comparative_adjective}'
+    language_code: prs
+    direction: rtl
+  slots:
+    comparative_adjective: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: comparative_adjective
+  feedback_frame:
+    text: '{comparative_adjective} to forma stopnia wyższego przymiotnika.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson01.comparative_translate.002
+  lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+  type: translation
+  frame:
+    text: '{comparative_adjective}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      comparative_adjective: english_gloss
+  slots:
+    comparative_adjective: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: comparative_adjective
+  feedback_frame:
+    text: '{comparative_adjective} to dariańskie słowo na to.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson01.comparative_pair.003
+  lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id001
+    word_two: *id001
+    word_three: *id001
+    word_four: *id001
+    word_five: *id001
+    word_six: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Dopasuj każdą formę stopnia wyższego do jej znaczenia po polsku.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson01.demonstrative_translate.004
+  lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+  type: translation
+  frame:
+    text: '{demonstrative_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      demonstrative_word: english_gloss
+  slots:
+    demonstrative_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: demonstrative_word
+  feedback_frame:
+    text: '{demonstrative_word} to dariańskie słowo na to.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson01.compare_order.005
+  lesson_content_key: prs.a1.unit15.lesson01.basic_comparative
+  type: word_order
+  frame:
+    text: این از آن {comparative_adjective} است
+    language_code: prs
+    direction: rtl
+  slots:
+    comparative_adjective: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این از آن {comparative_adjective} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk zdania: این از آن [przymiotnik] است (to jest [przymiotnik] niż tamto, na przykład: to jest większe niż tamto).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson03.height_word_translate.001
+  lesson_content_key: prs.a1.unit15.lesson03.comparing_people
+  type: translation
+  frame:
+    text: '{height_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      height_word: english_gloss
+  slots:
+    height_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: height_word
+  feedback_frame:
+    text: '{height_word} to dariańskie słowo na to.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson03.person_name_gloss.002
+  lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+  type: multiple_choice
+  frame:
+    text: '{person_name}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} to słowo ze słownictwa porównań w tej lekcji.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson04.connector_word_gloss.001
+  lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+  type: multiple_choice
+  frame:
+    text: '{connector_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    connector_word: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: connector_word
+  feedback_frame:
+    text: '{connector_word} to słowo ze słownictwa tej lekcji.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson04.connector_word_translate.002
+  lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+  type: translation
+  frame:
+    text: '{connector_word}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      connector_word: english_gloss
+  slots:
+    connector_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: connector_word
+  feedback_frame:
+    text: '{connector_word} to dariańskie słowo na to.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson04.reason_order.003
+  lesson_content_key: prs.a1.unit15.lesson04.giving_reasons
+  type: word_order
+  frame:
+    text: این از آن بهتر است چون {comparative_adjective} است
+    language_code: prs
+    direction: rtl
+  slots:
+    comparative_adjective: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این از آن بهتر است چون {comparative_adjective} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk zdania: این از آن بهتر است چون [powód] است (to jest lepsze niż tamto, bo jest [powód], na przykład większe).'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson05.person_name_pair.001
+  lesson_content_key: prs.a1.unit15.lesson05.reading_a_comparison
+  type: matching_pairs
+  frame:
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name_one: *id005
+    person_name_two: *id005
+    person_name_three: *id005
+    person_name_four: *id005
+    person_name_five: *id005
+    person_name_six: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - person_name_one
+    - person_name_two
+    - person_name_three
+    - person_name_four
+    - person_name_five
+    - person_name_six
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson06.demonstrative_and_comparative_pair.001
+  lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+    word_two:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+    word_three:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+    word_four:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+    word_five:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+    word_six:
+      language_code: prs
+      part_of_speech:
+      - pronoun
+      - adjective
+      agreement_tags:
+        semantic:
+        - demonstrative_word
+        - comparative_adjective
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: Dopasuj każde słowo do jego polskiego znaczenia.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-prs.prs.a1.unit15.lesson06.agree_order.002
+  lesson_content_key: prs.a1.unit15.lesson06.comparisons_dialogue
+  type: word_order
+  frame:
+    text: بلی، اما آن {comparative_adjective} است
+    language_code: prs
+    direction: rtl
+  slots:
+    comparative_adjective: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: بلی، اما آن {comparative_adjective} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Szyk zdania: بلی، اما آن [przymiotnik] است (tak, ale tamto jest [przymiotnik], na przykład tańsze).'
+    language_code: pl
+    direction: ltr
