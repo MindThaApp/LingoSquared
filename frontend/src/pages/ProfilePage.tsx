@@ -16,6 +16,7 @@ import { SocialSignInButtons } from "../components/SocialSignInButtons";
 import { CrashReportSettings } from "../components/CrashReportSettings";
 import { ReportProblem } from "../components/ReportProblem";
 import { ConnectedSignIns } from "../components/ConnectedSignIns";
+import { ChangePassword } from "../components/ChangePassword";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function ProfilePage() {
@@ -129,6 +130,7 @@ export function ProfilePage() {
       )}
 
       {!isGuest && hasAnySocialProvider() && <ConnectedSignIns />}
+      {!isGuest && <ChangePassword />}
 
       <div className="stat-grid">
         <div className="stat-card">

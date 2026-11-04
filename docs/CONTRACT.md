@@ -132,7 +132,7 @@ this field existed).
 mobile app. The unprefixed root paths remain available indefinitely as a
 backward-compatible alias for the existing web frontend.
 
-Auth: `POST /auth/register`, `POST /auth/login`, `GET /auth/me`
+Auth: `POST /auth/register`, `POST /auth/login`, `POST /auth/password`, `GET /auth/me`
 
 Languages/courses: `GET /languages`, `GET /language-pairs`, `GET /courses`,
 `GET /courses/{course_id}`, `GET /courses/{course_id}/units`,
@@ -335,6 +335,21 @@ response:
 Revokes that refresh token if it exists and belongs to a still-existing
 session. Returns `204 No Content`; callers should discard both access and
 refresh tokens locally.
+
+`POST /auth/password` (added 2026-11-04) — self-serve password change.
+Requires `Authorization: Bearer <access token>`. Request:
+```json
+{ "current_password": "string (max 128)", "new_password": "string (8-128 chars, same rule as register)" }
+```
+Response `200`: identical shape to `POST /auth/login` (new access_token +
+refresh_token + user). On success EVERY refresh token of the account is
+revoked (other devices lose their session when their access token
+expires) and the response carries the caller's fresh session; clients
+must replace both stored tokens. Errors: `403 invalid_current_password`
+(wrong current password), `403 password_change_unavailable` (guest or
+passwordless/social-only account), `400 password_unchanged` (new equals
+current), `422` (strength/size), `429 login_rate_limited` (shares the
+per-IP login limiter; wrong guesses count). No schema change.
 
 `POST /auth/social` (added 2026-07-11, spec-first — implementation follows)
 request:
