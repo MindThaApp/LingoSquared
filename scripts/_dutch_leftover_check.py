@@ -81,6 +81,7 @@ SHARED = {
     "es": set("tot alle dus zin acht tafel kaart station reis spoor".split()),
     "fr": set("tot alle dus zin acht tafel kaart station reis spoor onze retour tien".split()),
     "it": set("tot alle dus zin acht tafel kaart station reis spoor".split()),
+    "ro": set("dus".split()),                       # 'm-am dus' = 'I went'
 }
 # Words that exist in the Romance / Germanic / Slavic targets too and are therefore only counted with a second hit.
 WEAK = set("""morgen dank tot alle erg zin goed nee wel toch ook veel nog heel zeer mag kan kon had waren vier acht
