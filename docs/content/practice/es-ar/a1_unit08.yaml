@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.es-ar.a1.unit08
+source_language: es
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_سعر
+    - w_تفاح
+    - w_دراهم
+    - w_تفاحتين
+    - w_التفاح
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+      - w_تفاحتين
+  l01: &id002
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+  siir: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_سعر
+  darahim: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_دراهم
+  tuffah: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_التفاح
+  tufahatayn: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحتين
+templates:
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.choose.001
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سعر significa «precio»; كم سعر ...؟ pregunta cuánto cuesta algo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.listen.002
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاح es un sustantivo colectivo para «manzanas» en general; دراهم es el plural de «dírham».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.order.003
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: كم {item} التفاح؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item} التفاح؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم سعر التفاح؟ es «¿cuánto es el precio de las manzanas?»
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.order.004
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: التفاح بعشرة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'ب antes de un número indica el precio: بعشرة es «por diez», seguido de la moneda.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.fill.005
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: كم {item} التفاح؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: سعر es «precio»; la pregunta pide el precio de las manzanas.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.fill.006
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: التفاح بعشرة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: دراهم es el plural de «dírham», que se usa después de un número como diez.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.translate.007
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Son sustantivos: سعر es «precio» y تفاح es «manzanas».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.translate.008
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: ¿Cuánto cuestan las manzanas?
+    language_code: es
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: El artículo ال en التفاح significa «las manzanas», así que la pregunta se refiere a unas manzanas concretas.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson01.translate.009
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: Las manzanas cuestan diez dírhams.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ب antes de un número indica el precio.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson02.listen.001
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاحتين es تفاحة («una manzana») con la terminación de dual ـين; la ة se convierte en ت ante ella, así que significa exactamente dos manzanas.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson02.order.002
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'El árabe tiene una forma especial de dual: تفاحتين es «dos manzanas», sin una palabra aparte para «dos».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson02.fill.003
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: fill_in_blank
+  frame:
+    text: أريد {item} من فضلك. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'La terminación de dual ـين indica dos de algo; ante ella, la ة de تفاحة se escribe ت: تفاحتين.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson02.translate.004
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاح es «manzanas» en general, pero تفاحتين, con la terminación de dual, son exactamente dos.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ar.ar.a1.unit08.lesson02.translate.005
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: Quiero dos manzanas, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: La terminación del dual ـتين ya significa «dos», por eso no se usa un número aparte.
+    language_code: es
+    direction: ltr

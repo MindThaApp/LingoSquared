@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.it-ar.a1.unit24
+source_language: it
+target_language: ar
+unit_content_key: ar.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مال
+    - w_بطاقة
+    - w_نقدا
+    - w_أدفع
+    - w_المبلغ
+    - w_أستطيع
+    - w_بالبطاقة
+    - w_سأدفع
+    - w_الدفع
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_بطاقة
+      - w_نقدا
+      - w_أدفع
+  m6: &id003
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_أدفع
+      - w_بطاقة
+      - w_نقدا
+      - w_المبلغ
+      - w_أستطيع
+  how: &id004
+    language_code: ar
+    part_of_speech:
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_بالبطاقة
+      - w_نقدا
+  tense: &id002
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_أدفع
+      - w_سأدفع
+      - w_أستطيع
+      - w_نقدا
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_المبلغ
+      - w_أستطيع
+      - w_الدفع
+      - w_مال
+  mal:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مال
+  adfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أدفع
+  bitaqa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بطاقة
+  bilbitaqa: &id005
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بالبطاقة
+  sadfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_سأدفع
+  naqdan: &id006
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_نقدا
+  mablagh: &id008
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المبلغ
+  astatii3: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أستطيع
+  dafe: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الدفع
+templates:
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.choose.001
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مال è «denaro», بطاقة è «carta» e نقدا è «in contanti»; أدفع è «pago».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.listen.002
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Il prefisso س davanti a un verbo lo rende futuro: سأدفع è «pagherò», mentre أدفع è «pago».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.match.003
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أدفع e أستطيع sono verbi alla prima persona; المبلغ ha ال, quindi è «l'importo».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.order.004
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: word_order
+  frame:
+    text: سأدفع {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'Il modo di pagare segue il verbo: بالبطاقة è «con la carta» e نقدا è «in contanti».'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.fill.005
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: سأدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La ب in بالبطاقة significa «con» o «mediante» e si attacca al nome.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.fill.006
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: أدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نقدا significa «in contanti» e segue il verbo.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.translate.007
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مال, بطاقة e نقدا riguardano il denaro e il pagamento; أدفع è il verbo «pago».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.translate.008
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: Pagherò con la carta. (non esiste una parola separata per «io»)
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Il prefisso س rende il verbo futuro, e بالبطاقة significa «con la carta».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson01.translate.009
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: Pago in contanti. (non esiste una parola separata per «io»)
+    language_code: it
+    direction: ltr
+  slots:
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أدفع {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Il verbo al presente أدفع contiene già «io».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.choose.001
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: المبلغ è «l'importo», con ال, ed è ciò che il venditore indica dopo كم.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.listen.002
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أستطيع significa «posso»; è seguito da الدفع, «il pagare».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.order.003
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: كم {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم المبلغ؟ chiede «quanto è l'importo?»
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.order.004
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل {item} الدفع بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} الدفع بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: La parola interrogativa هل viene per prima, poi il verbo «posso».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.order.005
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل أستطيع {item} بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {item} بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: الدفع è il nome «il pagare», con ال; dopo أستطيع indica ciò che puoi fare.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.fill.006
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: fill_in_blank
+  frame:
+    text: هل {item} الدفع بالبطاقة؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أستطيع significa «posso»; non serve una parola separata per «io».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.translate.007
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: المبلغ e الدفع hanno ال e sono nomi; أستطيع è «posso».
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.translate.008
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: Quanto è l'importo?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'In arabo non serve il verbo «essere» qui: كم المبلغ؟ è alla lettera «quanto l''importo?»'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-ar.ar.a1.unit24.lesson02.translate.009
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: Posso pagare con la carta? (non esiste una parola separata per «io»)
+    language_code: it
+    direction: ltr
+  slots:
+    a: *id010
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: Lo schema è هل + «posso» + il nome «il pagare».
+    language_code: it
+    direction: ltr
