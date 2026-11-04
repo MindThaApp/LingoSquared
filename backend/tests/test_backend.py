@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from sqlalchemy import delete, select
 from app.db.session import SessionLocal
-from app.models import Exercise, ReviewItem, TTSUsage
+from app.models import Exercise, ExerciseType, ReviewItem, TTSUsage
 from app.schemas.api import ImportRequest
 from app.content.service import import_content
 
@@ -346,7 +346,9 @@ def test_review_schedule_update(client, auth):
     from app.core.security import decode_token
     with SessionLocal() as db:
         user_id = decode_token(auth["Authorization"].split()[1])
-        exercise = db.scalar(select(Exercise))
+        # A translation exercise accepts any string, so the wrong answer
+        # below never depends on which exercise a random UUID sorts first.
+        exercise = db.scalar(select(Exercise).where(Exercise.type == ExerciseType.translation).order_by(Exercise.id))
         review = ReviewItem(user_id=user_id, exercise_id=exercise.id, due_at=datetime.now(timezone.utc))
         db.add(review); db.commit(); review_id = review.id
     due = client.get("/me/reviews", headers=auth).json()

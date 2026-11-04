@@ -125,6 +125,17 @@ export const AuthApi = {
       provider,
       current_password: currentPassword || undefined,
     }),
+  // POST /auth/password: change the signed-in account's password. The
+  // backend revokes every other session and answers with a fresh one,
+  // which replaces the stored tokens here.
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    const result = await post<AuthResult>("/auth/password", {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+    storeAuthTokens(result.access_token, result.refresh_token);
+    return result;
+  },
   // POST /auth/social/nonce: single-use nonce for the next Google/Apple
   // sign-in (see socialSignIn.ts).
   socialNonce: () => post<{ nonce: string; expires_in: number }>("/auth/social/nonce", {}),
