@@ -80,3 +80,8 @@ scripts/tests 201; vitest 461; backend pytest pass. Current WARN baseline: 4638.
 ## Running all gates locally
 
 `scripts/ci_local.sh` runs every gate above in one command (content verify, leakage, scripts pytest, backend pytest in an isolated compose project `lsci_<pid>` that is torn down on exit, vitest). Flags: `--skip-backend`, `--skip-frontend`, `--skip-content`, `--with-build`; `CI_WARN_MAX=<n>` enforces the WARN formula. Content verify takes about an hour; use `--skip-content` for code-only changes. GitHub Actions (`.github/workflows/ci.yml`) runs the same gates on pushes and PRs for the integration branch.
+
+Group 3 additions (European learner -> ar/hi/prs/fa targets, PRs #151 ar, #156 hi, #157 prs, fa): not yet shipped; add to the next measured baseline:
++28 per de/es/fr/it-ar (en-ar 28), +4 per de/es/fr/it-hi (en-hi 4), +19 per de/es/fr/it-prs (en-prs 19), +2 per de/es/fr/it-fa (en-fa 2)
+= 4x28 + 4x4 + 4x19 + 4x2 = 212 (per-course count is the `validate` count; the compile count repeats it). en-ar/en-hi/en-prs/en-fa unchanged.
+Leakage after group 3: 13-16 hits (tip 18; 5 allowlist rows added for shared ar/hi/prs content keys, e.g. repeat-after-me speak prompts).
