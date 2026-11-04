@@ -7,6 +7,7 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | `scripts/verify.sh --content-only` | pass; WARN count (lines starting `WARN`, full run) <= formula below |
 | `scripts/_answer_leakage_check.py` | <= 36 hits (24 at 53bec4a11, 17 at a6f9f44ec, 31 at 69aaabfdb, 26 more allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
+| `scripts/_note_language_check.py` (English in grammar-note target spans / untranslated note titles; baseline `scripts/_note_language_baseline.tsv` may only shrink) | 0 new, 0 stale |
 | `scripts/_cyrillic_latin_check.py`, `scripts/check_dari_register.py` | 0 findings |
 | `scripts/_target_name_check.py` (wrong language name in cross-pair overlays/practice; allowlist `scripts/_target_name_allowlist.tsv`) | 0 hits |
 | practice-validate (all packs) | 0 errors |

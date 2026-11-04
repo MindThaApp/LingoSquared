@@ -157,6 +157,14 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
+    # English prose inside a grammar note's target-language span (shared by every learner pair), or an untranslated
+    # English note title in an X->Y overlay. Existing hits elsewhere are baselined and may only shrink.
+    echo "-- note-language check (grammar notes: no English in target-language spans / untranslated titles) --"
+    if ! python scripts/_note_language_check.py; then
+      echo "!! note-language check FAILED"
+      CONTENT_OK=0
+    fi
+
     deactivate 2>/dev/null || true
     [ "$CONTENT_OK" = "1" ] && CONTENT_STATUS="pass" || CONTENT_STATUS="fail"
   fi
