@@ -475,3 +475,8 @@ def test_prompt_block_dict_form_rejects_learner_language_blocks():
         report = cc.Report()
         cc.validate_prompt_block_localization(real, {"source_language": "nl", "exercises": {"ru.x": {"prompt_blocks": override}}}, report)
         assert len(report.errors) == errors, report.errors
+
+
+def test_english_prose_ignores_german_quoted_target_words():
+    assert not dc.english_prose("Bei „tum“ steht „the“ (statt „tha“) und „hain“ im Präsens.")
+    assert dc.english_prose("Say the word and the answer is here.")
