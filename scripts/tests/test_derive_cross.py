@@ -489,3 +489,23 @@ def test_sync_pairs_takes_translated_right_side_from_accepted_dict():
     assert ov["pairs"][1]["right"] == "Sofort, ich bringe es gleich."
     assert ov["pairs"][0]["right"] == "پلو"
     assert not dc._sync_pairs_with_accepted(ov)
+
+
+def test_english_prose_ignores_snake_case_identifiers():
+    assert not dc.english_prose("location_or_is")
+    assert not dc.english_prose("is_location_verb")
+
+
+def test_latin_text_in_non_latin_course_is_learner_text():
+    assert dc.latin_in_nonlatin_course("Sara plays basketball and Nima swims.", "fa")
+    assert dc.latin_in_nonlatin_course("thousand", "fa")
+    assert not dc.latin_in_nonlatin_course("چلوکباب", "fa")
+    assert not dc.latin_in_nonlatin_course("Sara plays basketball", "es")
+    assert dc.pair_text_is_learner("a", True, "fa")
+    assert dc.pair_text_is_learner("thousand", False, "fa")
+
+
+def test_positional_answer_keys_ignore_translated_clue_text():
+    a = {("exercises", "k", "accepted_answers", 0, "value", "Today's weather"): "بارونیه", ("exercises", "k", "accepted_answers", 0, "value", "فکر کنم"): "ich denke"}
+    b = {("exercises", "k", "accepted_answers", 0, "value", "Das Wetter heute"): "بارونیه", ("exercises", "k", "accepted_answers", 0, "value", "فکر کنم"): "I think"}
+    assert set(dc._positional_answer_keys(a)) == set(dc._positional_answer_keys(b))
