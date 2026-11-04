@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LegalDocument } from "./LegalDocument";
 
 // DRAFT legal content, not yet reviewed by a lawyer — Ramin must have this
 // reviewed before real (non-beta) users rely on it.
@@ -16,7 +17,7 @@ import { Link } from "react-router-dom";
 //   actual pre-launch state.
 export function TermsOfServicePage() {
   return (
-    <div className="card" style={{ maxWidth: 720, margin: "24px auto" }}>
+    <LegalDocument>
       <h1>Terms of Service</h1>
       <p className="muted">
         Draft for the Auvel beta — last updated 10 July 2026. These terms may
@@ -134,6 +135,6 @@ export function TermsOfServicePage() {
       <p className="muted" style={{ marginTop: 24 }}>
         See also the <Link to="/privacy">Privacy Policy</Link>.
       </p>
-    </div>
+    </LegalDocument>
   );
 }
