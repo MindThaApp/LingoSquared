@@ -112,6 +112,7 @@ from app.schemas.api import (
     QuestsOut,
     RefreshIn,
     RefreshOut,
+    PasswordChangeIn,
     RegisterIn,
     ReviewAnswerOut,
     ReviewDueOut,
@@ -1038,6 +1039,27 @@ def unlink_social(body:SocialUnlinkIn,request:Request,user=Depends(current_user)
     db.delete(identity)
     db.commit()
     return me_payload(db,user)
+@router.post("/auth/password",response_model=AuthOut)
+def change_password(body:PasswordChangeIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
+    """Self-serve password change for a signed-in account.
+
+    Requires the current password (a bare access token is not enough), shares
+    the login limiter (failed guesses count), then revokes EVERY refresh token
+    of the account and returns a fresh session for the caller, so other
+    devices are signed out once their access token expires.
+    """
+    enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
+    if is_guest_account(user) or user.password_hash is None:
+        fail(403,"password_change_unavailable","This account has no password to change.")
+    if not verify_password(body.current_password,user.password_hash):
+        fail(403,"invalid_current_password","Your current password is incorrect.")
+    if body.new_password==body.current_password:
+        fail(400,"password_unchanged","Choose a password different from your current one.")
+    user.password_hash=hash_password(body.new_password)
+    revoke_all_refresh_tokens(db,user.id,utc_now())
+    response=auth_response(db,user)
+    db.commit()
+    return response
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     # Rate-limit before lookup, and count invalid-token probes too (same

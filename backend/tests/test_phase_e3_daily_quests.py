@@ -56,16 +56,14 @@ def _quests(client, headers):
 
 
 def _course_and_lesson(db):
-    course = db.scalar(select(Course).order_by(Course.id))
-    assert course is not None
-    lesson = db.scalar(
-        select(Lesson)
-        .join(Unit)
-        .where(Unit.course_id == course.id)
-        .order_by(Lesson.id)
-    )
-    assert lesson is not None
-    return course, lesson
+    # Deterministic: build a dedicated course + lesson. Picking "the first
+    # course by id" is a flake, because ids are random UUIDs and other test
+    # modules insert throwaway courses (some without any lesson) that can
+    # sort ahead of the seeded one.
+    from test_endless_practice import create_course_with_lexemes
+
+    course_id, lesson_id = create_course_with_lexemes()
+    return db.get(Course, course_id), db.get(Lesson, lesson_id)
 
 
 def _add_correct_practice_attempts(user_id, count):

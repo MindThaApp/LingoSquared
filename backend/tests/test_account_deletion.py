@@ -38,7 +38,7 @@ def test_delete_me_removes_user_and_linked_rows(client, admin, auth):
     assert client.post(f"/lessons/{lesson_id}/start", headers=auth).status_code == 200
 
     with SessionLocal() as db:
-        exercise = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id))
+        exercise = db.scalar(select(Exercise).where(Exercise.lesson_id == lesson_id).order_by(Exercise.order))
         exercise_id = exercise.id
         correct_response = exercise.correct_response
 
