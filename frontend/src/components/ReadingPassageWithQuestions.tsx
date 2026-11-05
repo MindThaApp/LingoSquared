@@ -5,7 +5,7 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { AnswerResponse, AnswerResult, Exercise, TeachingCard } from "@lingo/shared/api/types";
 import { TeachingCardView } from "./TeachingCardView";
-import { EmphasizedText } from "./EmphasizedText";
+import { FeedbackParagraph } from "./FeedbackParagraph";
 import { ExerciseRenderer } from "./exercises/ExerciseRenderer";
 
 // Reusable "reading passage + its comprehension questions on one screen"
@@ -88,9 +88,7 @@ export function ReadingPassageWithQuestions({
                     </p>
                   )}
                   {result.feedback && (
-                    <p style={{ margin: 0, fontWeight: 400 }}>
-                      <EmphasizedText text={result.feedback} />
-                    </p>
+                    <FeedbackParagraph text={result.feedback} prompt={question.prompt} style={{ margin: 0 }} />
                   )}
                 </div>
               )}
