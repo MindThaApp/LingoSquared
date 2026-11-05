@@ -100,7 +100,7 @@ EN_TARGET_TO_HI_GLOSS: dict[str, str] = {
     "engineer": "इंजीनियर",
     "library": "पुस्तकालय",
     "assistant": "सहायक; सहायिका",
-    "Daniel": "डेनियल",
+    "Daniel": "डैनियल",
     "welcome": "स्वागत",
     "the": "वह; यह (निश्चित)",
     "thank": "धन्यवाद देना",
