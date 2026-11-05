@@ -14,7 +14,7 @@ import type {
 } from "@lingo/shared/api/types";
 import { ReadingPassageWithQuestions } from "../components/ReadingPassageWithQuestions";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
-import { EmphasizedText } from "../components/EmphasizedText";
+import { FeedbackParagraph } from "../components/FeedbackParagraph";
 
 // Convenience fallbacks: known dev lesson ids tried first, then real
 // discovery if they don't contain what we expect (ids vary by DB).
@@ -148,9 +148,7 @@ function DictationDemo({ exercise }: { exercise: Exercise }) {
             </p>
           )}
           {result.feedback && (
-            <p style={{ margin: "6px 0 0", fontWeight: 400 }}>
-              <EmphasizedText text={result.feedback} />
-            </p>
+            <FeedbackParagraph text={result.feedback} prompt={exercise.prompt} style={{ margin: "6px 0 0" }} />
           )}
         </div>
       )}
