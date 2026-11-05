@@ -157,6 +157,13 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
+    # One Devanagari spelling per person name across the hi realization and every hi-X / X-hi overlay + pack.
+    echo "-- hindi-name check (one Devanagari spelling per name; scripts/_hindi_names.tsv) --"
+    if ! python scripts/_hindi_name_check.py; then
+      echo "!! hindi-name check FAILED"
+      CONTENT_OK=0
+    fi
+
     # English prose inside a grammar note's target-language span (shared by every learner pair), or an untranslated
     # English note title in an X->Y overlay. Existing hits elsewhere are baselined and may only shrink.
     echo "-- note-language check (grammar notes: no English in target-language spans / untranslated titles) --"
