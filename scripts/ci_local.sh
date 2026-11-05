@@ -83,7 +83,7 @@ YML
     $(declare -f dc) ; PROJECT=$PROJECT TMP=$TMP
     dc up -d --wait db
     dc exec -T db createdb -U \"\${POSTGRES_USER:-lingosquared}\" lingosquared_test
-    dc run --rm --no-deps api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q --deselect tests/test_content_answer_shapes.py'
+    dc run --rm --no-deps api sh -c 'DATABASE_URL=\$(python3 -c \"import os,re; print(re.sub(r\\\"lingosquared\$\\\", \\\"lingosquared_test\\\", os.environ[\\\"DATABASE_URL\\\"]))\") python -m pytest -q'
   "
 fi
 

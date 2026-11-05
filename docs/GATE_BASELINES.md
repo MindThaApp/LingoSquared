@@ -13,7 +13,7 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | `scripts/_hindi_name_check.py` (one Devanagari spelling per person name; table `scripts/_hindi_names.tsv`) | 0 findings |
 | practice-validate (all packs) | 0 errors |
 | `pytest scripts/tests` | pass (187 at 53bec4a11) |
-| backend pytest (repo mounted, `test_content_answer_shapes` deselected) | pass |
+| backend pytest (repo mounted, full suite including `test_content_answer_shapes`) | pass |
 | vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (461) |
 
 ## WARN baseline
