@@ -7,17 +7,23 @@
 # (securitypolicyviolation events + console errors). Exit 0 only with zero violations.
 # Needs: docker, internet (jsDelivr + Hugging Face model, ~150 MB, for the speaking step).
 # Usage: scripts/csp_browser_check.sh        Keeps nothing: stack is `down -v --rmi local`.
-#   CSP_KEEP=1 keeps the stack up; CSP_SKIP_BUILD=1 reuses $CSP_WORK/dist.
+#   CSP_KEEP=1 keeps the stack up; CSP_WORK=<dir> keeps the work dir; CSP_OUT=<dir> copies report + screenshots;
+#   CSP_SKIP_BUILD=1 reuses $CSP_WORK/dist.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PW_VERSION="${PW_VERSION:-1.56.1}"
 PROJ="lscsp$$"
-WORK="${CSP_WORK:-$(mktemp -d "${TMPDIR:-/tmp}/lscsp.XXXXXX")}"
+if [ -n "${CSP_WORK:-}" ]; then WORK="$CSP_WORK"; OWN_WORK=0; else WORK="$(mktemp -d "${TMPDIR:-/tmp}/lscsp.XXXXXX")"; OWN_WORK=1; fi
 mkdir -p "$WORK/dist" "$WORK/out"
 DC=(docker compose -p "$PROJ" -f "$WORK/compose.yml")
 cleanup() {
   [ "${CSP_KEEP:-0}" = 1 ] && { echo "kept: ${DC[*]}"; return; }
   "${DC[@]}" down -v --rmi local --remove-orphans >/dev/null 2>&1
+  # Keep out/ (report + screenshots) in $CSP_OUT if asked; node_modules are root-owned from the container.
+  if [ "$OWN_WORK" = 1 ]; then
+    [ -n "${CSP_OUT:-}" ] && { mkdir -p "$CSP_OUT"; cp -r "$WORK/out/." "$CSP_OUT/"; echo "report copied to $CSP_OUT"; }
+    docker run --rm -v "$(dirname "$WORK"):/t" alpine rm -rf "/t/$(basename "$WORK")" >/dev/null 2>&1
+  fi
 }
 trap cleanup EXIT
 
@@ -79,5 +85,5 @@ docker run --rm --network "${PROJ}_default" --ipc=host -v "$WORK:/work" -w /work
   "mcr.microsoft.com/playwright:v${PW_VERSION}-jammy" \
   sh -c "npm i --no-audit --no-fund --silent playwright@${PW_VERSION} >/dev/null 2>&1; node check.mjs"
 RC=$?
-echo "report: $WORK/out/report.json (screenshots alongside)"
+echo "report: $WORK/out/report.json (removed on exit unless CSP_OUT=<dir> or CSP_WORK is set)"
 exit $RC
