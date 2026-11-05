@@ -322,6 +322,18 @@ def matching_sides(real_path: Path, target: str) -> dict[str, str]:
     return out
 
 
+# Exercise types whose accepted answers are typed or spoken in the TARGET language. An `accepted` string of such an exercise is
+# never learner-language text, even when the sibling's variant uses a word the tested text lacks (the hi-nl write_dinner_summary
+# defect: "..., en het is ..." was not a token subset of the tested text, so it was "translated" into the learner language and
+# the learner could copy the visible prompt to pass).
+TARGET_ANSWER_TYPES = frozenset({"writing_prompt", "speak_response", "dialogue_response", "dictation", "listen_type",
+                                 "fill_in_blank", "word_order"})
+
+
+def accepted_is_target_answer(role: str, ex_type) -> bool:
+    return role == "accepted" and ex_type in TARGET_ANSWER_TYPES
+
+
 def _tgt_text(val: str, keyt: frozenset, key, target: str) -> bool:
     if latin_in_nonlatin_course(val, target):
         return "romanize" in (key or "")                 # Latin answers of transliteration exercises are the tested text
@@ -430,6 +442,8 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
             learner = not _tgt_text(val, keyt, key, _TARGET)       # match values: learner meaning or target form (decide on text)
         elif role == "pair_left" or role == "accepted_word":
             learner = not _tgt_text(val, keyt, key, _TARGET)       # reverse matching exercises put the English clue on the left
+        elif accepted_is_target_answer(role, ridx.get(key or "", {}).get("type")):
+            learner = False                               # typed/spoken target-language answer: invariant
         elif role in dd.AMBIGUOUS:
             tgt = _tgt_text(val, keyt, key, _TARGET)
             learner = (not tgt) or (ex_learner.get(path[:2], False) and en_fraction(val) >= 0.5 and tgt is False)

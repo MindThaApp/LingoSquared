@@ -509,3 +509,13 @@ def test_positional_answer_keys_ignore_translated_clue_text():
     a = {("exercises", "k", "accepted_answers", 0, "value", "Today's weather"): "بارونیه", ("exercises", "k", "accepted_answers", 0, "value", "فکر کنم"): "ich denke"}
     b = {("exercises", "k", "accepted_answers", 0, "value", "Das Wetter heute"): "بارونیه", ("exercises", "k", "accepted_answers", 0, "value", "فکر کنم"): "I think"}
     assert set(dc._positional_answer_keys(a)) == set(dc._positional_answer_keys(b))
+
+
+def test_accepted_answers_of_target_answer_types_are_never_learner_text():
+    # regression: hi-nl write_dinner_summary accepted the Hindi prompt because a Dutch variant ("..., en het is ...")
+    # was not a token subset of the tested text and got translated into the learner language
+    for t in ("writing_prompt", "speak_response", "dialogue_response", "dictation", "listen_type", "fill_in_blank", "word_order"):
+        assert dc.accepted_is_target_answer("accepted", t)
+    assert not dc.accepted_is_target_answer("accepted", "translation")        # translate-into-learner answers stay learner text
+    assert not dc.accepted_is_target_answer("accepted", "multiple_choice")
+    assert not dc.accepted_is_target_answer("correct_option", "writing_prompt")
