@@ -8,6 +8,7 @@ import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
+import { FeedbackParagraph } from "../components/FeedbackParagraph";
 import { setReportContext } from "../lib/reportContext";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
@@ -362,9 +363,7 @@ export function LessonRunnerPage() {
             spoken={options?.spoken}
           />
           {bannerResult.feedback && (
-            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-              <EmphasizedText text={bannerResult.feedback} />
-            </p>
+            <FeedbackParagraph text={bannerResult.feedback} prompt={options?.exercise?.prompt} style={{ margin: "0 0 10px" }} />
           )}
           {options?.footer}
         </div>
@@ -390,9 +389,7 @@ export function LessonRunnerPage() {
           </p>
         )}
         {bannerResult.feedback && (
-          <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
-            <EmphasizedText text={bannerResult.feedback} />
-          </p>
+          <FeedbackParagraph text={bannerResult.feedback} prompt={options?.exercise?.prompt} style={{ margin: "0 0 10px" }} />
         )}
         {options?.footer}
       </div>
