@@ -5,7 +5,7 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | Gate | Threshold |
 |---|---|
 | `scripts/verify.sh --content-only` | pass; WARN line count (full run) <= baseline below |
-| `scripts/_answer_leakage_check.py` | <= 13 hits (ci_local.sh hard limit 36; 92 allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
+| `scripts/_answer_leakage_check.py` | <= 13 hits (ci_local.sh hard limit 36; 91 allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
 | `scripts/_note_language_check.py` (English in grammar-note target spans / untranslated note titles; baseline `scripts/_note_language_baseline.tsv` may only shrink) | 0 new, 0 stale |
 | `scripts/_cyrillic_latin_check.py`, `scripts/check_dari_register.py` | 0 findings |
@@ -44,7 +44,7 @@ History (lines): 740 pre-existing courses at 1cca942a0; 2542 at 69aaabfdb; 3000 
 4230 at 53bec4a11; 4534 at 76a2dd9c5; 4638 at 20b648c90; 5046 at acfde1144 (de/es/fr/it -> ar-a1 4x56, -> hi 4x8, -> prs 4x38);
 5486 at e7eaf91c4 + #172/#173 (5494 before #173).
 
-Other gates at e7eaf91c4: leakage 13 hits (92 allowlisted); german/dutch/cross leftover, cyrillic-latin, target-name, hindi-name,
+Other gates at e7eaf91c4: leakage 13 hits (91 allowlisted); german/dutch/cross leftover, cyrillic-latin, target-name, hindi-name,
 check_dari_register 0; note-language 0 hit(s) (baseline emptied); practice packs 0 errors; scripts/tests 217; vitest 492;
 backend pytest full suite pass (test_content_answer_shapes included, deselect removed in #172); frontend lint and build pass.
 
