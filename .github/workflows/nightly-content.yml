@@ -1,0 +1,30 @@
+name: Nightly content verify
+
+# The full content gate (scripts/verify.sh --content-only: validate + compile of
+# every course, practice-validate of every pack, leftover checks) takes a long
+# time, so it is not on the push/PR path (see ci.yml for the fast gates).
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  verify-content:
+    name: verify.sh --content-only
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      # master does not carry scripts/verify.sh yet, so always validate the integration branch.
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/wsl-handover-followups
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install content deps
+        run: |
+          python -m venv .content-venv
+          .content-venv/bin/pip install -q -r scripts/requirements-content.txt pytest
+      - name: Full content verify
+        run: scripts/verify.sh --content-only
