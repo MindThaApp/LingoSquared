@@ -2,12 +2,11 @@
 # Full-stack browser e2e of the main learner journeys (e2e/tests/journeys.spec.ts).
 # Builds the frontend, serves it through backend/nginx.web.conf next to the
 # API + Postgres in an ISOLATED compose project, seeds the demo courses plus a small de->ar cross
-# pair (e2e/fixtures/de-ar.json), runs Playwright in the official image, tears everything down
+# pair (e2e/fixtures/de-ar.json) and a two-unit en->prs course (en-prs.json), runs Playwright in the official image, tears everything down
 # with `down -v --rmi local`. Same setup as scripts/csp_browser_check.sh.
 # Sentry is not initialised (no DSN is built in) and TTS/audio requests are stubbed in the tests.
-# The older e2e/tests specs (dari-course, refresh-tokens, desktop-layout) are not run by default.
 # Needs: docker, internet (npm + Playwright image).
-# Usage: scripts/e2e.sh [playwright args]   (default: tests/journeys.spec.ts; no retries, so flakes show)
+# Usage: scripts/e2e.sh [playwright args]   (default: every spec in e2e/tests; no retries, so flakes show)
 #   E2E_KEEP=1 keeps the stack; E2E_WORK=<dir> keeps the work dir; E2E_OUT=<dir> copies the report;
 #   E2E_SKIP_BUILD=1 reuses $E2E_WORK/dist.
 set -uo pipefail
@@ -74,7 +73,7 @@ YML
 
 # 4. Run Playwright (same compose network, so the origin is http://web). The e2e dir is copied so
 #    the repo stays free of root-owned node_modules.
-ARGS="tests/journeys.spec.ts"; [ $# -gt 0 ] && ARGS="$*"
+ARGS=""; [ $# -gt 0 ] && ARGS="$*"
 mkdir -p "$WORK/e2e"
 tar -C "$ROOT/e2e" --exclude=node_modules --exclude=test-results --exclude=playwright-report -cf - . | tar -C "$WORK/e2e" -xf -
 docker run --rm --network "${PROJ}_default" --ipc=host -v "$WORK/e2e:/work" -w /work \

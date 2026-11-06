@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { COURSE, enBlock, mockedApp, openLessonViaCourseMap, unit, type LessonFixture } from "./mocks";
+import { ACTIVE_COURSE_KEY, COURSE, enBlock, mockedApp, openLessonViaCourseMap, unit, type LessonFixture } from "./mocks";
 
 // Responsive shell: >= 1024px gets the left side rail + right "Your
 // progress" sidebar; phones keep the bottom tab bar. At every width the
@@ -41,7 +41,9 @@ test.describe("desktop 1280x800", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
   test("home and course map show the side rail + sidebar without horizontal scroll", async ({ page, baseURL }) => {
-    await mockedApp(page, baseURL, { units, lessons: [lesson] });
+    // A brand-new user is sent to the guided /welcome first start (no sidebar there),
+    // so mark the learner as past it: active course set, as after picking a course.
+    await mockedApp(page, baseURL, { units, lessons: [lesson], storage: { [ACTIVE_COURSE_KEY]: COURSE.id } });
     const rail = page.getByRole("navigation", { name: "Main navigation" });
     const sidebar = page.getByRole("complementary", { name: "Your progress" });
 
