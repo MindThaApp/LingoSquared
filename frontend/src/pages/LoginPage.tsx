@@ -83,7 +83,7 @@ export function LoginPage() {
   // must not flash the guest button at someone who is signed in.
   if (status === "unverified") return <SessionUnavailableScreen />;
   if (status === "authenticated") return <Navigate to={redirectTo} replace />;
-  if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
+  if (status === "loading") return <div className="page-loading" role="status">{t("common.loading")}</div>;
 
   return (
     <div className="auth-page">

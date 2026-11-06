@@ -92,7 +92,7 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { user, status } = useAuth();
   const location = useLocation();
-  if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
+  if (status === "loading") return <div className="page-loading" role="status">{t("common.loading")}</div>;
   // A session we couldn't verify is NOT a logged-out session. Redirecting
   // to /login here is what let a transient backend blip turn into a
   // duplicate account and an orphaned one.

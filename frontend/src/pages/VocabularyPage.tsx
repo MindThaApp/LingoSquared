@@ -135,7 +135,7 @@ export function VocabularyPage() {
     enabled: !!activeCourseId && tab === "mistakes",
   });
 
-  if (progressQuery.isLoading) return <p className="muted">{t("vocabulary.loading")}</p>;
+  if (progressQuery.isLoading) return <p className="muted" role="status">{t("vocabulary.loading")}</p>;
 
   // Without this, a failed progress fetch falls into the "start learning"
   // empty state below -- misleading for a user who has real progress.
@@ -290,10 +290,11 @@ export function VocabularyPage() {
       )}
 
       {tab === "words" && (
-        <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+        <div className="vocab-controls" style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
           <input
             type="text"
             placeholder={t("vocabulary.search_placeholder") ?? undefined}
+            aria-label={t("vocabulary.search_placeholder")}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -302,6 +303,7 @@ export function VocabularyPage() {
             style={{ flex: 1, minWidth: 160 }}
           />
           <select
+            aria-label={t("vocabulary.sort_label")}
             value={sort}
             onChange={(e) => {
               setSort(e.target.value as LexemeSort);
@@ -317,7 +319,7 @@ export function VocabularyPage() {
         </div>
       )}
 
-      {activeQuery.isLoading && <p className="muted">{t("vocabulary.loading")}</p>}
+      {activeQuery.isLoading && <p className="muted" role="status">{t("vocabulary.loading")}</p>}
 
       {/* Without this, a failed words/mistakes fetch renders nothing at all
           under the tabs -- no list, no error. */}

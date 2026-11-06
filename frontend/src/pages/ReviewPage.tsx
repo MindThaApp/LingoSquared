@@ -221,7 +221,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
     setIndex((i) => i + 1);
   }
 
-  if (dueQuery.isLoading) return <p className="muted">{t("review.loading")}</p>;
+  if (dueQuery.isLoading) return <p className="muted" role="status">{t("review.loading")}</p>;
 
   if (dueQuery.isError) {
     return (
@@ -265,7 +265,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
             </button>
           </div>
         ) : titlesQuery.data === undefined ? (
-          <p className="muted">{t("review.loading")}</p>
+          <p className="muted" role="status">{t("review.loading")}</p>
         ) : (
           titlesQuery.data.map((c) => (
             <button
@@ -298,7 +298,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
     );
   }
 
-  if (items === null) return <p className="muted">{t("review.loading")}</p>;
+  if (items === null) return <p className="muted" role="status">{t("review.loading")}</p>;
 
   if (!current) {
     return (

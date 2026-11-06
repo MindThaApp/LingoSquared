@@ -146,7 +146,7 @@ export function CheckpointPage() {
   }
 
   if (phase === "loading" || phase === "scoring") {
-    return <div className="page-loading">{t("checkpoint.loading")}</div>;
+    return <div className="page-loading" role="status">{t("checkpoint.loading")}</div>;
   }
 
   if (phase === "scoring_error") {

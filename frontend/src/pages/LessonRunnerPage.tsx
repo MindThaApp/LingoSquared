@@ -494,7 +494,7 @@ export function LessonRunnerPage() {
   }
 
   if (lessonQuery.isLoading || reviewItems === null) {
-    return <div className="page-loading">{t("lesson_runner.loading")}</div>;
+    return <div className="page-loading" role="status">{t("lesson_runner.loading")}</div>;
   }
 
   // Review warm-up phase (B2) — up to 2 items, before teaching cards.
