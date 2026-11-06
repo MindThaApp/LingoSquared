@@ -135,7 +135,7 @@ from app.schemas.api import (
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
 from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
-from app.review.sm2 import schedule
+from app.review.scheduler import schedule
 from app.review.events import apply_self_grade, schedule_and_log, schedule_practice_srs
 from app.review.grading import (
     decode_feedback,

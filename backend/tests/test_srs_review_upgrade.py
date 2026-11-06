@@ -6,7 +6,7 @@ from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.models import PracticeItem, ReviewEvent, User, UserLexemeSRS
-from app.review.sm2 import (
+from app.review.scheduler import (
     LEECH_THRESHOLD,
     due_at_for,
     fuzz_factor,
@@ -44,7 +44,7 @@ def test_fuzz_is_deterministic_bounded_and_skips_short_intervals():
 def test_schedule_fuzzes_due_but_keeps_stored_interval_exact():
     a = schedule(item(), "correct", now=NOW, fuzz_key="a")
     b = schedule(item(), "correct", now=NOW, fuzz_key="a")
-    assert a.interval_days == 25 and a.due_at == b.due_at
+    assert a.interval_days > 10 and a.due_at == b.due_at
     plain = schedule(item(), "correct", now=NOW)
     assert abs((a.due_at - plain.due_at).days) <= 2
 
@@ -93,14 +93,15 @@ def test_success_does_not_count_a_lapse_and_almost_is_success():
 
 def test_self_grade_mapping():
     again = schedule(item(), "correct", now=NOW, self_grade="again")
-    assert again.lapses == 1 and again.interval_days == 3  # lapse softening kept
+    assert again.lapses == 1 and 1 <= again.interval_days < 10
     hard = schedule(item(), "correct", now=NOW, self_grade="hard")
     good = schedule(item(), "correct", now=NOW, self_grade="good")
     easy = schedule(item(), "correct", now=NOW, self_grade="easy")
-    assert hard.interval_days == 12
+    assert again.interval_days < hard.interval_days
     assert hard.interval_days < good.interval_days < easy.interval_days
-    assert hard.ease_factor < good.ease_factor < easy.ease_factor
+    assert again.ease_factor < hard.ease_factor < good.ease_factor < easy.ease_factor
     assert easy.last_schedule["self_grade"] == "easy"
+    assert [x.last_schedule["rating"] for x in (again, hard, good, easy)] == [1, 2, 3, 4]
 
 
 def _review_item(client, admin, auth):
