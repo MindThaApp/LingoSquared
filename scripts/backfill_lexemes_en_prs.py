@@ -506,6 +506,40 @@ UNIT_FILES_B1 = (
         REPO_ROOT / "docs/content/realizations/prs/b1_unit11_communication.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/b1_unit11.yaml",
     ),
+    # Units 12-19 (debate, workplace updates, narrative, advice, complaint,
+    # regrets, future plans, summarize), added 2026-11-06 to fill the B1 slots.
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit12_debate.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit12.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit13_workplace.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit13.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit14_narrative.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit14.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit15_advice.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit15.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit16_complaint.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit16.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit17_regrets.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit18_future_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b1_unit19_summarize.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b1_unit19.yaml",
+    ),
 )
 
 # B2 units 01-08 (argumentation, speculation, nuance, narrative, register,
@@ -2272,6 +2306,71 @@ PRS_B2_NEW: dict[str, tuple[str, str]] = {
 }
 PRS_GLOSSES.update({token: gloss for token, (gloss, _pos) in PRS_B2_NEW.items()})
 PRS_POS.update({token: pos for token, (_gloss, pos) in PRS_B2_NEW.items()})
+
+# B1 units 12-19 (debate, workplace, narrative, advice, complaint, regrets,
+# future plans, summarize), added 2026-11-06. Only tokens no earlier level
+# already glossed.
+PRS_B1_FILL_NEW = {
+    "بچه‌ها": ("children", "noun"),
+    "دری": ("Dari", "noun"),
+    "مسئول": ("responsible", "adjective"),
+    "گزارش": ("report", "noun"),
+    "شرکت": ("company", "noun"),
+    "نشده": ("not been (finished)", "verb"),
+    "بخش": ("section", "noun"),
+    "بلی": ("yes", "particle"),
+    "حتماً": ("certainly", "adverb"),
+    "خواست": ("asked for; wanted", "verb"),
+    "آمدم": ("I came", "verb"),
+    "موترم": ("my car", "noun"),
+    "مکانیک": ("mechanic", "noun"),
+    "موترش": ("his/her car", "noun"),
+    "می‌رفت": ("he/she was going", "verb"),
+    "مشوره": ("advice", "noun"),
+    "بخوابین": ("(that) you sleep", "verb"),
+    "جای": ("place", "noun"),
+    "بودم": ("I was", "verb"),
+    "نمی‌روین": ("you (polite) don't go", "verb"),
+    "تیلفون": ("phone", "noun"),
+    "نمی‌گیرین": ("you (polite) don't take; don't make", "verb"),
+    "بخوابد": ("(that) he/she sleep", "verb"),
+    "تیلفونی": ("a phone (that)", "noun"),
+    "شکسته": ("broken", "adjective"),
+    "هیچ": ("no; none", "pronoun"),
+    "کس": ("person", "noun"),
+    "جواب": ("answer", "noun"),
+    "نداد": ("did not give", "verb"),
+    "می‌خواندم": ("I was studying; I used to study", "verb"),
+    "کاش": ("I wish; if only", "particle"),
+    "خوانده": ("studied; read (past participle)", "verb"),
+    "آمده": ("come (past participle)", "verb"),
+    "می‌گذراندم": ("I would pass", "verb"),
+    "نگذراندم": ("I did not pass", "verb"),
+    "نگذراند": ("he/she did not pass", "verb"),
+    "متأسفانه": ("unfortunately", "adverb"),
+    "دفعهٔ": ("time (of)", "noun"),
+    "افسوس": ("regret", "noun"),
+    "می‌خورد": ("eats; takes", "verb"),
+    "می‌گذراند": ("he/she would pass", "verb"),
+    "قصد": ("intention", "noun"),
+    "پغمان": ("Paghman", "proper_noun"),
+    "احتمالاً": ("probably", "adverb"),
+    "مقاله": ("article", "noun"),
+    "خواندم": ("I read", "verb"),
+    "نکتهٔ": ("point (of)", "noun"),
+    "نویسنده": ("writer", "noun"),
+    "می‌گوید": ("says", "verb"),
+    "طور": ("way; manner", "noun"),
+    "خلاصه": ("summary", "noun"),
+    "مثلاً": ("for example", "adverb"),
+    "لغت": ("word", "noun"),
+    "می‌گیرند": ("they take; they learn", "verb"),
+    "جزئیات": ("details", "noun"),
+    "خواند": ("he/she read", "verb"),
+}
+for _tok, (_gloss, _pos) in PRS_B1_FILL_NEW.items():
+    PRS_GLOSSES.setdefault(_tok, _gloss)
+    PRS_POS.setdefault(_tok, _pos)
 
 # B2 per-course sense overrides: tokens an earlier level already glossed in a
 # sense the B2 card does NOT teach. B2 is its own course, so these apply only
@@ -4221,6 +4320,14 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "prs.b1.unit09.lesson04.dialogue_meeting",
         "prs.b1.unit10.lesson04.dialogue_new_car_job",
         "prs.b1.unit11.lesson04.dialogue_doctor_visit",
+        "prs.b1.unit12.lesson04.dialogue_english_early",
+        "prs.b1.unit13.lesson04.dialogue_report_help",
+        "prs.b1.unit14.lesson04.dialogue_late",
+        "prs.b1.unit15.lesson04.dialogue_advice",
+        "prs.b1.unit16.lesson04.dialogue_shop",
+        "prs.b1.unit17.lesson04.dialogue_exam",
+        "prs.b1.unit18.lesson04.dialogue_weekend",
+        "prs.b1.unit19.lesson04.dialogue_article",
     }:
         semantics.append("dialogue_word")
 
