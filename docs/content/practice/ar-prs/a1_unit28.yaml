@@ -1,0 +1,222 @@
+schema_version: '1.0'
+pack_key: practice.ar-prs.a1.unit28
+source_language: ar
+target_language: prs
+unit_content_key: prs.a1.unit28.animals
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - verb
+  agreement_tags:
+    semantic:
+    - animal_topic_word
+    - animal_word
+    - pet_animal
+    - en_prs_a1_unit28_words
+slot_presets:
+  animal_topic_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: animal_topic_word
+  animal_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: pet_animal
+  pet_vocab_word: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_prs_a1_unit28_words
+  animal_review_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - verb
+    agreement_tags:
+      semantic: en_prs_a1_unit28_words
+templates:
+- content_key: practice.ar-prs.prs.a1.unit28.lesson01.animal_gloss.001
+  lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{animal_topic_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    animal_topic_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: animal_topic_word
+  feedback_frame:
+    text: '{animal_topic_word} من مفردات الحيوانات في هذه الوحدة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson01.animal_pair.002
+  lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: طابق كل كلمة مع معناها بالعربية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson01.pet_gloss.003
+  lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{animal_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    animal_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: animal_word
+  feedback_frame:
+    text: '{animal_word} حيوان يمكن تربيته كحيوان أليف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson01.pet_translate.004
+  lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+  type: translation
+  frame:
+    text: '{animal_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      animal_word: english_gloss
+  slots:
+    animal_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: animal_word
+  feedback_frame:
+    text: '{animal_word} هي الكلمة الدارية لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson02.have_animal_order.001
+  lesson_content_key: prs.a1.unit28.lesson02.have_a_pet
+  type: word_order
+  frame:
+    text: یک {animal_word} دارم
+    language_code: prs
+    direction: rtl
+  slots:
+    animal_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: یک {animal_word} دارم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: *یک {animal_word} دارم* -- عندي ...'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson03.pet_ownership_order.001
+  lesson_content_key: prs.a1.unit28.lesson03.describe_pet
+  type: word_order
+  frame:
+    text: '{animal_word} حیوان خانگی من است'
+    language_code: prs
+    direction: rtl
+  slots:
+    animal_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{animal_word} حیوان خانگی من است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: *{animal_word} حیوان خانگی من است* -- ... هو حيواني الأليف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson04.pet_food_gloss.001
+  lesson_content_key: prs.a1.unit28.lesson04.pet_dialogue
+  type: multiple_choice
+  frame:
+    text: '{pet_vocab_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    pet_vocab_word: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: pet_vocab_word
+  feedback_frame:
+    text: '*{pet_vocab_word}* كلمة من دروس الحيوانات الأليفة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson04.pet_food_translate.002
+  lesson_content_key: prs.a1.unit28.lesson04.pet_dialogue
+  type: translation
+  frame:
+    text: '{pet_vocab_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      pet_vocab_word: english_gloss
+  slots:
+    pet_vocab_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: pet_vocab_word
+  feedback_frame:
+    text: '{pet_vocab_word} هي الكلمة الدارية لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit28.lesson06.animal_translate.001
+  lesson_content_key: prs.a1.unit28.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{animal_topic_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      animal_topic_word: english_gloss
+  slots:
+    animal_topic_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: animal_topic_word
+  feedback_frame:
+    text: '{animal_topic_word} هي الكلمة الدارية لهذا.'
+    language_code: ar
+    direction: rtl

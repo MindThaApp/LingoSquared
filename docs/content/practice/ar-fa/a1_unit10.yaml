@@ -1,0 +1,511 @@
+schema_version: '1.0'
+pack_key: practice.ar-fa.a1.unit10
+source_language: ar
+target_language: fa
+unit_content_key: fa.a1.unit10.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fa by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - phrase
+  - adverb
+  - verb
+  agreement_tags:
+    semantic:
+    - weekday
+    - month_name
+    - ordinal_date_word
+    - calendar_word
+    - date_phrase
+    - en_fa_a1_unit10_lesson01_words
+    - en_fa_a1_unit10_lesson02_words
+    - en_fa_a1_unit10_lesson03_words
+    - en_fa_a1_unit10_lesson04_words
+    - en_fa_a1_unit10_lesson05_words
+    - en_fa_a1_unit10_lesson06_words
+slot_presets:
+  weekday: &id001
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  month_name: &id002
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: month_name
+  ordinal_date_word: &id005
+    language_code: fa
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: ordinal_date_word
+  calendar_word: &id007
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: calendar_word
+  date_phrase: &id008
+    language_code: fa
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: date_phrase
+  month_lesson_word: &id003
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: en_fa_a1_unit10_lesson02_words
+  date_lesson_word: &id004
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - en_fa_a1_unit10_lesson04_words
+      - en_fa_a1_unit10_lesson05_words
+      - en_fa_a1_unit10_lesson06_words
+  date_lesson_word_or_contraction: &id006
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - en_fa_a1_unit10_lesson03_words
+      - en_fa_a1_unit10_lesson04_words
+      - en_fa_a1_unit10_lesson05_words
+      - en_fa_a1_unit10_lesson06_words
+  date_or_dialogue_phrase: &id009
+    language_code: fa
+    part_of_speech: phrase
+    agreement_tags:
+      semantic:
+      - date_phrase
+      - en_fa_a1_unit10_lesson06_words
+  unit_word: &id010
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - en_fa_a1_unit10_lesson01_words
+      - en_fa_a1_unit10_lesson02_words
+      - en_fa_a1_unit10_lesson04_words
+      - en_fa_a1_unit10_lesson05_words
+      - en_fa_a1_unit10_lesson06_words
+templates:
+- content_key: practice.ar-fa.fa.a1.unit10.lesson01.weekday_choice.001
+  lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+  type: multiple_choice
+  frame:
+    text: '{weekday}'
+    language_code: fa
+    direction: rtl
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: weekday
+  feedback_frame:
+    text: '{weekday} من أيام الأسبوع السبعة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson01.weekday_match.002
+  lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+  type: matching_pairs
+  frame:
+    text: طابق كل يوم فارسي مع معناه بالعربية.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: يبدأ الأسبوع الفارسي يوم السبت (شنبه) وينتهي يوم الجمعة (جمعه).
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson01.weekday_translate.003
+  lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+  type: translation
+  frame:
+    text: '{weekday}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      weekday: english_gloss
+  slots:
+    weekday: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: weekday
+  feedback_frame:
+    text: الكلمة الفارسية هي {weekday}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson01.weekday_word_order.004
+  lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
+  type: word_order
+  frame:
+    text: '{weekday_one} و {weekday_two}'
+    language_code: fa
+    direction: rtl
+  slots:
+    weekday_one: *id001
+    weekday_two: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - weekday_one
+    - weekday_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{weekday_one} و {weekday_two}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: و تربط بين يومين من أيام الأسبوع، مثل شنبه و یکشنبه.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson02.month_choice.005
+  lesson_content_key: fa.a1.unit10.lesson02.months
+  type: multiple_choice
+  frame:
+    text: '{month_name}'
+    language_code: fa
+    direction: rtl
+  slots:
+    month_name: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: month_name
+  feedback_frame:
+    text: '{month_name} من أشهر السنة الشمسية الإيرانية.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson02.month_match.006
+  lesson_content_key: fa.a1.unit10.lesson02.months
+  type: matching_pairs
+  frame:
+    text: طابق كل كلمة مع معناها.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: فروردين وأرديبهشت وخرداد هي الأشهر الثلاثة الأولى من السنة الشمسية الإيرانية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson02.month_translate.007
+  lesson_content_key: fa.a1.unit10.lesson02.months
+  type: translation
+  frame:
+    text: '{month_name}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      month_name: english_gloss
+  slots:
+    month_name: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: month_name
+  feedback_frame:
+    text: الكلمة الفارسية هي {month_name}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson02.month_word_order.008
+  lesson_content_key: fa.a1.unit10.lesson02.months
+  type: word_order
+  frame:
+    text: '{month_name_one} و {month_name_two}'
+    language_code: fa
+    direction: rtl
+  slots:
+    month_name_one: *id002
+    month_name_two: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - month_name_one
+    - month_name_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{month_name_one} و {month_name_two}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: و تربط بين شهرين، مثل فروردین و خرداد.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.ordinal_date_match.009
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: matching_pairs
+  frame:
+    text: طابق كل كلمة مع معناها.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: تأتي التواريخ الترتيبية مثل دهم (العاشر) وهشتم (الثامن) قبل اسم الشهر.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.ordinal_date_translate.010
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: translation
+  frame:
+    text: '{ordinal_date_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      ordinal_date_word: english_gloss
+  slots:
+    ordinal_date_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: ordinal_date_word
+  feedback_frame:
+    text: الكلمة الفارسية هي {ordinal_date_word}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson05.calendar_word_match.011
+  lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
+  type: matching_pairs
+  frame:
+    text: طابق كل كلمة مع معناها.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: طابق كل كلمة مع معناها بالعربية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson05.calendar_word_translate.012
+  lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
+  type: translation
+  frame:
+    text: '{calendar_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      calendar_word: english_gloss
+  slots:
+    calendar_word: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: calendar_word
+  feedback_frame:
+    text: الكلمة الفارسية هي {calendar_word}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.date_phrase_choice.013
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: multiple_choice
+  frame:
+    text: '{date_phrase}'
+    language_code: fa
+    direction: rtl
+  slots:
+    date_phrase: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: date_phrase
+  feedback_frame:
+    text: '{date_phrase} من عبارات التاريخ الأساسية في هذه الوحدة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.date_phrase_match.014
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: matching_pairs
+  frame:
+    text: طابق كل عبارة مع معناها.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: طابق كل عبارة مع معناها بالعربية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.date_phrase_translate.015
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: translation
+  frame:
+    text: '{date_phrase}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      date_phrase: english_gloss
+  slots:
+    date_phrase: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: date_phrase
+  feedback_frame:
+    text: العبارة الفارسية هي {date_phrase}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-fa.fa.a1.unit10.lesson06.unit_review_match.016
+  lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
+  type: matching_pairs
+  frame:
+    text: طابق كل كلمة مع معناها.
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id010
+    second: *id010
+    third: *id010
+    fourth: *id010
+    fifth: *id010
+    sixth: *id010
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: تراجع هذه التمارين كلمات من الوحدة كلها.
+    language_code: ar
+    direction: rtl
