@@ -15,6 +15,9 @@ export async function registerAndLand(page: Page, email: string, password = "e2e
   await page.getByLabel("Password", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Register" }).click();
   await page.waitForURL("/");
+  // A brand-new account is redirected from Home to the guided /welcome start once its progress
+  // queries resolve. Wait for that redirect so a following click is not swallowed by it.
+  await page.waitForURL(/\/welcome$/);
 }
 
 /**
