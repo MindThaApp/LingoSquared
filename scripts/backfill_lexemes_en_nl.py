@@ -1057,6 +1057,12 @@ NL_GLOSSES.update({
     "verhaal": "the story", "grappig": "funny",
 })
 
+# B1 unit 12, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Zodra': 'as soon as',
+    'droog': 'dry',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1440,6 +1446,10 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 12 (see the NL_GLOSSES block above).
+PARTICLES.update({'Zodra'})
+ADJECTIVES.update({'droog'})
 
 
 # ---------------------------------------------------------------------------
@@ -3644,6 +3654,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "toen_opnam": "past_narrative_toen",
         "sara_dialoog": "storytelling_dialogue",
         "verhaal_lezen": "storytelling_reading",
+        # B1 unit 12, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "als_ik_tijd_heb": "als_ik_tijd_heb",
+        "zodra_ik_thuis_ben": "zodra_ik_thuis_ben",
+        "tenzij_ik_moet_werken": "tenzij_ik_moet_werken",
+        "weekend_fietsen": "weekend_fietsen",
+        "weekendregels_lezen": "weekendregels_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
@@ -5057,6 +5073,8 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b2_unit02_speculatie", "spreken"): "to speak",  # "vanochtend sprak ... spreken"
     ("b2_unit04_verhaal", "was"): "was (past tense of 'to be')",  # "ik was moe", not afwassen
     ("b2_unit07_onderhandelen", "alleen"): "only; alone",  # "maar alleen als"
+    # b1 unit 12: senses that differ from the global gloss.
+    ("b1_unit12_voorwaarden", "hardlopen"): "to go running",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
@@ -5065,6 +5083,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit12_voorwaarden", "hardlopen"): "verb",
     ("b1_unit06_verplichtingen", "regel"): "noun",
     ("a1_unit54_zwembad", "regel"): "noun",
     ("b1_unit05_indirecte_rede", "vroeg"): "verb",
