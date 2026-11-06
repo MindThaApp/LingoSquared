@@ -145,6 +145,12 @@ def load_allowlist() -> set[tuple[str, str]]:
     return out
 
 
+# Persian and Dari are near-identical in everyday vocabulary, so the learner-language prompt of an fa-prs / prs-fa exercise
+# very often equals the target answer ("صبح بخیر" -> "صبح بخیر").  That is a property of the language pair, not a
+# reviewable authoring slip: counted and reported separately, never against the leakage threshold.
+SAME_LANGUAGE_PAIRS = {"fa-prs", "prs-fa"}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strip-accents", action="store_true")
@@ -154,6 +160,7 @@ def main() -> int:
     rows = []
     allow = load_allowlist()
     skipped = 0
+    shared_language = Counter()
     for f in sorted((CONTENT / "overlays").glob("*/*.yaml")):
         course = f.parent.name
         for key, ex in (_load(f).get("exercises") or {}).items():
@@ -163,6 +170,9 @@ def main() -> int:
             for field, ans in check_item(ex, real, args.strip_accents):
                 if (key, ans) in allow:
                     skipped += 1
+                    continue
+                if course in SAME_LANGUAGE_PAIRS:
+                    shared_language[course] += 1
                     continue
                 rows.append((course, str(f.relative_to(REPO_ROOT)), key, field, ans))
     lines = ["course\tfile\titem_id\tfield\tmatched_answer"] + ["\t".join(r) for r in rows]
@@ -176,6 +186,8 @@ def main() -> int:
     print(f"answer-leakage: {len(rows)} hit(s) ({skipped} allowlisted)", file=sys.stderr)
     for k, v in sorted(c.items()):
         print(f"  {k}\t{v}", file=sys.stderr)
+    for k, v in sorted(shared_language.items()):
+        print(f"  (not counted: Persian/Dari prompt equals answer by language) {k}\t{v}", file=sys.stderr)
     return 0
 
 
