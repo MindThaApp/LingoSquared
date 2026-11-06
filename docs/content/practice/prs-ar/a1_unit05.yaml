@@ -1,0 +1,423 @@
+schema_version: '1.0'
+pack_key: practice.prs-ar.a1.unit05
+source_language: prs
+target_language: ar
+unit_content_key: ar.a1.unit05.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Dari (Afghanistan)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_الساعة
+    - w_الثالثة
+    - w_الخامسة
+    - w_صباحا
+    - w_متى
+    - w_ومتى
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+  mc: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+      - w_متى
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_الساعة
+      - w_الثالثة
+      - w_الخامسة
+      - w_صباحا
+      - w_متى
+      - w_ومتى
+  hours: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_الثالثة
+      - w_الخامسة
+  bare2: &id010
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_متى
+      - w_ومتى
+      - w_الساعة
+      - w_صباحا
+  saa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الساعة
+  sabaha: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_صباحا
+  wamata: &id009
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_ومتى
+  thalitha: &id005
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الثالثة
+  khamisa: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الخامسة
+templates:
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.choose.001
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الساعة از ال (حرف تعریف) و ساعة (ساعت) ساخته شده؛ هم به معنای ساعت است و هم وقت روی ساعت.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.match.002
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'عددهای ساعت مؤنث‌اند تا با الساعة مطابقت کنند: الثالثة و الخامسة به ة ختم می‌شوند، برخلاف عددهای ترتیبی مذکر که برای تاریخ استفاده می‌شوند.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.order.003
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: word_order
+  frame:
+    text: الساعة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'ساعت بلافاصله بعد از الساعة می‌آید و با آن مطابقت می‌کند، پس هر دو مؤنث‌اند: الساعة الثالثة.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.fill.004
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: fill_in_blank
+  frame:
+    text: كم {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كم الساعة؟ در اصل یعنی «ساعت چقدر است»؛ راه معمول پرسیدن وقت همین است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.translate.005
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: صباحا یعنی صبح و بعد از وقت می‌آید؛ برای شام و شب در این درس مساء استفاده شده است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.translate.006
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: ساعت سه است.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: عدد ترتیبی الثالثة مؤنث است تا با الساعة مطابقت کند.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.translate.007
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: translation
+  frame:
+    text: ساعت پنج صبح است.
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *id006
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'وقت روز در آخر می‌آید: الساعة الخامسة صباحا.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.order.008
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: word_order
+  frame:
+    text: الساعة الخامسة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الساعة الخامسة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: بعد از وقت، صباحا (صبح) را اضافه کنید، یا مساء را برای بعد از ظهر و شام.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.listen.001
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: متى کلمهٔ پرسشی «کی» است؛ دربارهٔ وقت می‌پرسد.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.match.002
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'ومتى از و (و) و متى (کی) ساخته شده: «و کی». گوینده با آن سراغ سؤال دوم می‌رود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.order.003
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: word_order
+  frame:
+    text: الدرس في الساعة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس في الساعة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'في الساعة پیش از یک عدد، وقت یک رویداد را می‌گوید: ساعت سه.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.fill.004
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: fill_in_blank
+  frame:
+    text: كم الساعة؟ الساعة الثالثة. {item} الدرس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: و در ومتى سؤال را به حرفی که تازه گفته شده وصل می‌کند، مثل «و» در دری.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.translate.005
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: متى یعنی «کی» و ومتى یعنی «و کی»؛ فقط دومی ادامهٔ سؤال قبلی است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson02.translate.006
+  lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+  type: translation
+  frame:
+    text: درس ساعت پنج است.
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس في الساعة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'في الساعة با ساعت یعنی «در آن ساعت»: الدرس في الساعة الخامسة.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-ar.ar.a1.unit05.lesson01.listen.009
+  lesson_content_key: ar.a1.unit05.lesson01.ask_time
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: پایانهٔ مشترک ة نشان می‌دهد که الثالثة و الخامسة عددهای ترتیبی مؤنث‌اند.
+    language_code: prs
+    direction: rtl

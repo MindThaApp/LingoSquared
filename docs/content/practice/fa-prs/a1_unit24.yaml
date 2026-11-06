@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.fa-prs.a1.unit24
+source_language: fa
+target_language: prs
+unit_content_key: prs.a1.unit24.transportation
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - adverb
+  agreement_tags:
+    semantic:
+    - transport_mode_word
+    - on_foot_word
+    - go_verb_present
+    - you_go_verb
+    - go_verb_third
+    - speed_adjective
+    - speed_comparative_only
+    - ticket_word
+    - ticket_only
+slot_presets:
+  transport_mode_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: transport_mode_word
+  on_foot_word: &id003
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: on_foot_word
+  go_verb_present:
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: go_verb_present
+  you_go_verb: &id004
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: you_go_verb
+  go_verb_third: &id011
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: go_verb_third
+  speed_adjective: &id007
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: speed_adjective
+  speed_comparative_only: &id008
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: speed_comparative_only
+  ticket_word: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ticket_word
+  ticket_only: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ticket_only
+  transport_ticket_pool: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - transport_mode_word
+      - on_foot_word
+      - ticket_word
+  commute_review_pool: &id009
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - speed_adjective
+      - go_verb_present
+      - ticket_word
+  unit_vocab_pool: &id010
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adverb
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - transport_mode_word
+      - on_foot_word
+      - ticket_word
+      - speed_adjective
+      - go_verb_present
+templates:
+- content_key: practice.fa-prs.prs.a1.unit24.lesson01.transport_word_gloss.001
+  lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{transport_mode_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    transport_mode_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: transport_mode_word
+  feedback_frame:
+    text: '{transport_mode_word} یک راه برای رفت‌وآمد در شهر را نشان می‌دهد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson01.transport_word_pair.002
+  lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: هر واژه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson01.go_by_order.003
+  lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+  type: word_order
+  frame:
+    text: با {transport_mode_word} می‌روم
+    language_code: prs
+    direction: rtl
+  slots:
+    transport_mode_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: با {transport_mode_word} می‌روم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: *با {transport_mode_word} می‌روم* -- «با» + وسیلهٔ نقلیه، بعد فعل.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson02.on_foot_translate.001
+  lesson_content_key: prs.a1.unit24.lesson02.how_you_go
+  type: translation
+  frame:
+    text: '{on_foot_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      on_foot_word: english_gloss
+  slots:
+    on_foot_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: on_foot_word
+  feedback_frame:
+    text: '{on_foot_word} واژهٔ دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson02.how_go_order.002
+  lesson_content_key: prs.a1.unit24.lesson02.how_you_go
+  type: word_order
+  frame:
+    text: چطور {you_go_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    you_go_verb: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چطور {you_go_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: چطور می‌روی (چطوری می‌روی؟).'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson03.ticket_word_translate.001
+  lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+  type: translation
+  frame:
+    text: '{ticket_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      ticket_word: english_gloss
+  slots:
+    ticket_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: ticket_word
+  feedback_frame:
+    text: '{ticket_word} واژهٔ دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson03.ticket_price_order.002
+  lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+  type: word_order
+  frame:
+    text: '{ticket_only} چند است'
+    language_code: prs
+    direction: rtl
+  slots:
+    ticket_only: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{ticket_only} چند است'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: تکت چند است (بلیت چند است؟).'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson03.travel_vocab_gloss.003
+  lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+  type: multiple_choice
+  frame:
+    text: '{travel_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    travel_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: travel_word
+  feedback_frame:
+    text: '*{travel_word}* واژه‌ای از درس‌های رفت‌وآمد است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson04.speed_adjective_translate.001
+  lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+  type: translation
+  frame:
+    text: '{speed_adjective}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      speed_adjective: english_gloss
+  slots:
+    speed_adjective: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: speed_adjective
+  feedback_frame:
+    text: '{speed_adjective} واژهٔ دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson04.taxi_faster_order.002
+  lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+  type: word_order
+  frame:
+    text: تکسی {speed_comparative_only} است
+    language_code: prs
+    direction: rtl
+  slots:
+    speed_comparative_only: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: تکسی {speed_comparative_only} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: تکسی تیزتر است (تاکسی سریع‌تر است).'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson04.speed_pair.003
+  lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id009
+    word_two: *id009
+    word_three: *id009
+    word_four: *id009
+    word_five: *id009
+    word_six: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: هر واژه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson05.unit_vocab_gloss.001
+  lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+  type: multiple_choice
+  frame:
+    text: '{unit_vocab_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_vocab_word: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_vocab_word
+  feedback_frame:
+    text: '*{unit_vocab_word}* واژه‌ای از درس‌های رفت‌وآمد است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson05.commute_go_order.002
+  lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+  type: word_order
+  frame:
+    text: با {transport_mode_word} {go_verb_third}
+    language_code: prs
+    direction: rtl
+  slots:
+    transport_mode_word: *id001
+    go_verb_third: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: با {transport_mode_word} {go_verb_third}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: *با {transport_mode_word} {go_verb_third}* -- «با» + وسیلهٔ نقلیه، بعد فعل.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson05.transport_word_translate.003
+  lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+  type: translation
+  frame:
+    text: '{transport_mode_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      transport_mode_word: english_gloss
+  slots:
+    transport_mode_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: transport_mode_word
+  feedback_frame:
+    text: '{transport_mode_word} واژهٔ دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson06.transport_review_pair.001
+  lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id010
+    word_two: *id010
+    word_three: *id010
+    word_four: *id010
+    word_five: *id010
+    word_six: *id010
+    word_seven: *id010
+    word_eight: *id010
+    word_nine: *id010
+    word_ten: *id010
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+    - word_nine
+    - word_ten
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+    - word_nine
+    - word_ten
+  feedback_frame:
+    text: هر واژه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson06.daily_commute_order.002
+  lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+  type: word_order
+  frame:
+    text: من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم
+    language_code: prs
+    direction: rtl
+  slots:
+    on_foot_word: *id003
+    transport_mode_word: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: *من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم* -- من هر روز پیاده یا با وسیله می‌روم.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit24.lesson06.ticket_word_translate.003
+  lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{ticket_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      ticket_word: english_gloss
+  slots:
+    ticket_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: ticket_word
+  feedback_frame:
+    text: '{ticket_word} واژهٔ دری برای این است.'
+    language_code: fa
+    direction: rtl

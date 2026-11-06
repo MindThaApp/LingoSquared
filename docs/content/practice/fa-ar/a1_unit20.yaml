@@ -1,0 +1,459 @@
+schema_version: '1.0'
+pack_key: practice.fa-ar.a1.unit20
+source_language: fa
+target_language: ar
+unit_content_key: ar.a1.unit20.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_الجو
+    - w_مشمس
+    - w_بارد
+    - w_حار
+    - w_هيا
+    - w_نشرب
+    - w_وحار
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+  adj: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_مشمس
+      - w_بارد
+      - w_حار
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+      - w_حار
+      - w_هيا
+      - w_نشرب
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_حار
+      - w_هيا
+      - w_نشرب
+      - w_الجو
+  jaw: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الجو
+  mushmis: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_مشمس
+  barid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_بارد
+  har: &id009
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_حار
+  hayya: &id011
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_هيا
+  nashrab: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نشرب
+  wahar: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_وحار
+templates:
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.choose.001
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو یعنی «هوا»؛ مشمس یعنی «آفتابی» و بارد یعنی «سرد».
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.listen.002
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو مشمس اليوم یعنی «امروز هوا آفتابی است»؛ مشمس الجو را توصیف می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.match.003
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: الجو (هوا) اسم است؛ مشمس، بارد و حار صفت‌اند و آن را توصیف می‌کنند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.order.004
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'صفت مستقیم بعد از الجو می‌آید و کلمه‌ای برای «است» نیست: الجو بارد یعنی «هوا سرد است».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.fill.005
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: الجو {item} اليوم. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بارد یعنی «سرد» و مذکر است تا با الجو مطابقت کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.fill.006
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: كيف {item} اليوم؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كيف الجو اليوم؟ یعنی «امروز هوا چطور است؟»
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.translate.007
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: الجو «ال» دارد و یعنی «هوا»؛ دو کلمهٔ دیگر آن را توصیف می‌کنند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.translate.008
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: امروز هوا آفتابی است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'صفت بعد از اسم می‌آید: الجو مشمس.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson01.translate.009
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: امروز هوا سرد است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: بارد یعنی «سرد» و به کلمه‌ای برای «است» نیازی نیست.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.choose.001
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: حار یعنی «گرم»؛ الجوِ مذکر را توصیف می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.listen.002
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هيا نشرب ماء یعنی «بیایید آب بنوشیم»؛ نشرب شکل «ما»ی فعل «نوشیدن» است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.order.003
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: هيا {item} ماء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {item} ماء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'بعد از هيا («بیایید») فعلِ «ما» می‌آید: نشرب یعنی «می‌نوشیم».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.order.004
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: حار یعنی «گرم» و بعد از اسمی که توصیف می‌کند می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.fill.005
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو مشمس {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'و به کلمهٔ بعدی چسبیده می‌شود: وحار یعنی «و گرم».'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.fill.006
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو حار. {item} نشرب ماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا دیگران را دعوت می‌کند که کاری را با هم انجام دهند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.translate.007
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا ادات «بیایید» است و نشرب فعلِ «ما»؛ حار صفت است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.translate.008
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: امروز هوا گرم است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: صفت به شکل مذکر می‌آید، چون الجو مذکر است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit20.lesson02.translate.009
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: بیایید آب بنوشیم.
+    language_code: fa
+    direction: rtl
+  slots:
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {b} ماء
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هيا به‌اضافهٔ فعل «ما» (ما = ما، صیغهٔ اول شخص جمع) یک پیشنهاد می‌سازد.
+    language_code: fa
+    direction: rtl
