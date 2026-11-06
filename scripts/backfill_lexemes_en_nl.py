@@ -1072,6 +1072,15 @@ NL_GLOSSES.update({
     'vertrek': 'leave (with ik)',
 })
 
+# B1 unit 14, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'spaar': 'save (with ik)',
+    'zodat': 'so that',
+    'zoveel': 'so much',
+    'sneller': 'faster',
+    'bereiken': 'to reach; to achieve',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1455,6 +1464,11 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 14 (see the NL_GLOSSES block above).
+VERBS.update({'spaar', 'bereiken'})
+PARTICLES.update({'zodat'})
+ADVERBS.update({'zoveel', 'sneller'})
 
 # B1 unit 13 (see the NL_GLOSSES block above).
 PARTICLES.update({'Voordat', 'Nadat'})
@@ -3680,6 +3694,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "tot_de_trein_komt": "tot_de_trein_komt",
         "een_rustige_dag": "een_rustige_dag",
         "mijn_dag_lezen": "mijn_dag_lezen",
+        # B1 unit 14, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "om_een_huis_te_kopen": "om_een_huis_te_kopen",
+        "zodat_ik_meer_kan_sparen": "zodat_ik_meer_kan_sparen",
+        "om_nederlands_te_leren": "om_nederlands_te_leren",
+        "sparen_voor_een_huis": "sparen_voor_een_huis",
+        "mijn_doel_lezen": "mijn_doel_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
