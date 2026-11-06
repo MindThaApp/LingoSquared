@@ -438,6 +438,14 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/prs/a2_unit19_last_weekend.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a2_unit19.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit20_vakantieplannen.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit20.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit21_afspraak_verzetten.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit21.yaml",
+    ),
 )
 
 # B1 units 01-06 (abilities, necessity, conditions, sequencing, reported
@@ -2968,6 +2976,46 @@ for _group, _tokens in _U19_POOLS.items():
     for _t in _tokens:
         PRS_A2U19_EXTRA_TAGS.setdefault(_t, []).append(_U19 + _group)
 
+# A2 units 20-21 (holiday plans; rescheduling an appointment), added 2026-11-06.
+# English-only glosses; person forms carry the person so two forms of one
+# lemma never share a gloss.
+PRS_A2U20_NEW = {
+    "اگست": ("August", "noun"),
+    "جولای": ("July", "noun"),
+    "به‌زودی": ("soon", "adverb"),
+    "بلجیم": ("Belgium", "proper_noun"),
+    "ماندن": ("to stay (infinitive)", "verb"),
+    "کمپ": ("campsite", "noun"),
+    "می‌خوابیم": ("we sleep", "verb"),
+    "آلمان": ("Germany", "proper_noun"),
+    "گرفتن": ("to take (infinitive)", "verb"),
+    "کوچ": ("moving house", "noun"),
+    "بایسکل": ("bicycle", "noun"),
+    "قصد": ("intention", "noun"),
+    "نمی‌روم": ("I don't go", "verb"),
+    "می‌مانی": ("you stay (informal)", "verb"),
+    "والدینم": ("my parents", "noun"),
+    "آن‌وقت": ("then, at that time", "adverb"),
+    "قرارم": ("my appointment", "noun"),
+    "متأسفانه": ("unfortunately", "adverb"),
+    "آمدم": ("I came", "verb"),
+    "برایم": ("for me", "phrase"),
+    "زحمت": ("trouble, inconvenience", "noun"),
+    "بابت": ("on account of, for", "preposition"),
+    "گذاشتن": ("to set, to arrange (infinitive)", "verb"),
+    "قبل": ("before, in advance", "adverb"),
+    "بگذاریم": ("let us arrange", "verb"),
+    "می‌گذارم": ("I arrange", "verb"),
+    "عزیز": ("dear", "adjective"),
+    "داده": ("given", "adjective"),
+    "جدیدتان": ("your new (polite)", "adjective"),
+    "می‌گذاریم": ("we arrange", "verb"),
+    "آریانا": ("Ariana (barbershop name)", "proper_noun"),
+}
+for _tok, (_gloss, _pos) in PRS_A2U20_NEW.items():
+    PRS_GLOSSES.setdefault(_tok, _gloss)
+    PRS_POS.setdefault(_tok, _pos)
+
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
 VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_prs_a1_unit38_color_word_05_single'], 'آرزو': ['volume_en_prs_a1_unit02_person_name_04_single'], 'بانک': ['volume_en_prs_a1_unit05_city_place_06_single'], 'بهار': ['volume_en_prs_a1_unit39_specific_season_word_03_single'], 'جمعه': ['volume_en_prs_a1_unit09_weekday_name_10_single'], 'دور': ['volume_en_prs_a1_unit05_location_word_08_single'], 'سند': ['volume_en_prs_a2_unit09_office_word_12_single'], 'شریف': ['volume_en_prs_a1_unit02_city_name_02_single'], 'شوخ': ['volume_en_prs_a1_unit37_personality_word_07_single'], 'غذا': ['volume_en_prs_a1_unit36_cook_object_word_09_single'], 'نامه': ['volume_en_prs_a1_unit35_sendable_item_word_11_single'], 'پولیس': ['volume_en_prs_a1_unit40_emergency_service_word_01_single']}
@@ -4789,6 +4837,9 @@ def _classify(files, level, specs, derive_phrases=False):
                         )
                         if lesson_key.startswith("prs.a2.unit19."):
                             unit_tags = unit_tags + PRS_A2U19_EXTRA_TAGS.get(token, [])
+                        if unit_tags and lesson_key.startswith(("prs.a2.unit20.", "prs.a2.unit21.")):
+                            # single-member anchor per token (derive_target.py packs builds its templates over these)
+                            unit_tags = unit_tags + [f"w_{token}"]
                         if unit_tags:
                             semantic = tags.setdefault("semantic", [])
                             semantic.extend(t for t in unit_tags if t not in semantic)
