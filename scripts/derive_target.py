@@ -234,6 +234,25 @@ CFG = {
               "an accepted alternate (#alt). Cast: Layla ليلى and Nour نور are women, Yusuf يوسف and Karim كريم are men. Prices in dirhams or dinars as the "
               "existing units do. Notes quote Arabic followed by a transliteration in parentheses: مال (māl) means money."),
     ),
+    "prs": dict(
+        name="Dari",
+        persian=True,                        # Persian letters (ک ی گ پ چ ژ) are the norm here: the Arabic-only SCRIPT lint is skipped
+        script="arabic",                     # RTL Perso-Arabic script, tokens use \w (same machinery as ar); no gender mode: Dari has no grammatical gender
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        arabic_punct=True,
+        formal=r"(?!)",
+        informal=r"(?!)",
+        note=("Formal written Kabul (Afghan) Dari exactly as the existing prs A2 units (a2_unit09..19): copula است/استم/استی/استیم/استین/استند, "
+              "2pl verb ending -ین, NO Tehrani colloquialisms (no contracted -ه for است, no -ین for -ید in Iranian style beyond what the course uses). "
+              "Afghan vocabulary: ګ is written گ, use Afghan words (کاکا, خاله, بازار, دفتر, موتر for car, بس, رخصتی/تعطیلی). Write without diacritics. "
+              "Persian-Arabic letters: ی ک گ پ چ ژ (never Arabic ي ك). Punctuation: ، ؟ ؛ and full stop '.'. Western digits. "
+              "Cast: زرمینه (woman) and همایون (man), a friend pair using informal تو-register. Dari has no grammatical gender, so no gender alternates are needed. "
+              "Future: the plan is said with می‌خواهم + short infinitive / or present with future time word; past: stem + -م/-ی/-/-یم/-ین/-ند; negative ن + verb. "
+              "Notes quote Dari followed by a transliteration is NOT used in this course: notes wrap Dari in single asterisks inside English text (AUTHORING_GUIDE section 15)."),
+    ),
     "hi": dict(
         name="Hindi",
         script="devanagari",                 # tokens / tiles / norm keys keep the vowel signs (DEV); slugs transliterate (translit_hi); no Latin letters in Hindi text
@@ -1892,13 +1911,13 @@ class UnitDeriver:
             self.flag(key, "HARAKAT", f"{text!r}: no harakat / tatweel in A1 Arabic text (the course is unvocalised; \\w tokenisation splits a word at a haraka; give the vowels in the note's transliteration)")
         if re.search(r"[A-Za-z]", plain):
             self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Arabic text (write it in Arabic script, or acknowledge a real exception in ack.json)")
-        if AR_PERSIAN.search(plain):
+        if AR_PERSIAN.search(plain) and not CFG.get(self.p.tgt, {}).get("persian"):
             self.flag(key, "SCRIPT", f"{text!r}: Persian / Urdu letter in Arabic text (use Arabic yeh ي, kaf ك, heh ه / teh marbuta ة)")
         if re.search("[\u0660-\u0669\u06f0-\u06f9]", plain):
             self.flag(key, "ARDIGIT", f"{text!r}: the en-ar course writes Western digits (5), not Arabic-Indic digits")
         if re.search(r"[?;]", plain) or re.search(r"[\u0621-\u064a],", plain):
             self.flag(key, "PUNCT", f"{text!r}: Arabic punctuation in Arabic text (؟ ، ؛ instead of ? , ;)")
-        if re.search(r"(?:^|\s)[وفبلك]\s+(?=[\u0621-\u064a])", plain):
+        if not CFG.get(self.p.tgt, {}).get("persian") and re.search(r"(?:^|\s)[وفبلك]\s+(?=[\u0621-\u064a])", plain):
             self.flag(key, "CLITIC", f"{text!r}: a detached و ف ب ل ك; the particle is written joined to the next word and is one token / tile")
         if re.search(r"(?<![\u0621-\u064a])[وف]?لال(?=[\u0621-\u064a])", plain):
             self.flag(key, "ARTICLE", f"{text!r}: ل + ال contracts to لل (للمدرسة, not لالمدرسة)")
@@ -2569,8 +2588,10 @@ def cmd_inject(args):
     if errs and not args.force:
         raise SystemExit(f"{len(errs)} lint errors; fix them or acknowledge in ack.json (or --force)")
     # lexemes
-    toks, _mod = new_tokens(plan, built)
-    lex = load_json(plan.work / "lexemes.tr.json")
+    toks, lex = {}, {}
+    if not args.skip_lexemes:
+        toks, _mod = new_tokens(plan, built)
+        lex = load_json(plan.work / "lexemes.tr.json")
     missing_lex = [t for t in toks if t not in lex]
     if missing_lex and not args.skip_lexemes:
         raise SystemExit(f"{len(missing_lex)} tokens lack a gloss (run `lexemes`, fill lexemes.tr.json): {missing_lex[:10]}")
