@@ -519,3 +519,10 @@ def test_accepted_answers_of_target_answer_types_are_never_learner_text():
     assert not dc.accepted_is_target_answer("accepted", "translation")        # translate-into-learner answers stay learner text
     assert not dc.accepted_is_target_answer("accepted", "multiple_choice")
     assert not dc.accepted_is_target_answer("correct_option", "writing_prompt")
+
+
+def test_english_in_nonlatin_accepts_romanised_arabic_transliteration():
+    f = dc.english_in_nonlatin
+    assert f("سعدت بلقائك (saʿidtu bi-liqāʾik) از تشرفنا گرم‌تر است", "ar") == []
+    assert f("أحب (uḥibbu) و واحد (wāḥid) در جواب «چند تا؟»", "ar") == []
+    assert f("با درس (lesson) هم‌ریشه است", "ar") == ["lesson"]
