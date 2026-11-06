@@ -435,6 +435,14 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit19_last_weekend.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit19.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit20_holiday_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit20.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit21_reschedule_appointment.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit21.yaml",
+    ),
 )
 
 # B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
@@ -1514,6 +1522,30 @@ FA_GLOSSES.update({
     "نکردم": "I didn't do (it)", "نکرد": "he/she didn't do (it)",
 })
 
+# A2 units 20 and 21 (holiday plans; rescheduling an appointment), added
+# 2026-11-06. English-only glosses (no Persian script). Person forms carry the
+# person and register so two forms of one lemma never share a gloss.
+FA_GLOSSES.update({
+    "تعطیلات": "holiday; vacation", "تابستون": "summer (spoken)",
+    "مرداد": "Mordad (Iranian month, about late July to August)",
+    "تیر": "Tir (Iranian month, about late June to July)",
+    "سفر": "trip; travel", "شمال": "north (also the Caspian coast region)",
+    "خواهرم": "my sister", "دوره": "course; period",
+    "دوره‌ی": "course of (linked form)", "بعدا": "later",
+    "قصد": "intention (as in 'I intend to')",
+    "نمی‌خوام": "I don't want to", "نمی‌کنم": "I don't do",
+    "می‌مونی": "you stay (spoken)", "می‌مونیم": "we stay (spoken)",
+    "ترکیه": "Turkey", "بگیره": "(that) he/she take / get (subjunctive)",
+    "مامانش": "his/her mom", "آرایشگاه": "hairdresser's; beauty salon",
+    "کنسل": "cancellation (as in 'to cancel')",
+    "وقتم": "my appointment; my time",
+    "متأسفانه": "unfortunately", "براتون": "for you (polite)",
+    "مناسبه": "is suitable (spoken)", "مریضم": "I'm ill",
+    "نمی‌تونی": "you can't (spoken)", "نمی‌تونه": "he/she can't (spoken)",
+    "بابت": "for; on account of (as in 'sorry for the trouble')",
+    "می‌گیریم": "we get / we make (an appointment)",
+})
+
 # --- 2026-10-19: Farsi B2 tier (units 01-08) ---------------------------------
 # Every B2 introduced token absent from FA_GLOSSES above (364 of the 573
 # distinct B2 tokens). Each gloss is the atomic English meaning of the sense
@@ -2155,6 +2187,7 @@ FA_B2_GLOSS_OVERRIDES = {
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
 FA_PROPER_NOUNS = set(
+    "ترکیه "
     "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش "
     "مریم نیما".split()
     # A2 units 11-18, added 2026-07-11.
@@ -2191,6 +2224,7 @@ FA_PRONOUNS = set(
     + ["همدیگه", "هیچ‌کدوم", "کسی", "کِی", "خودش", "کیا"]
 )
 FA_PREPOSITIONS = set(
+    "براتون بابت "
     "به از با اهل بهت مثل کنار برای برات پیش در بالای".split()
     # A2 units 11-18, added 2026-07-11: به خاطر (because of, + noun,
     # distinct from چون which takes a full clause), روی (on top of/onto),
@@ -2237,6 +2271,7 @@ FA_PARTICLES = set(
     + ["کاش", "هرچند", "اما", "اینکه", "آیا"]
 )
 FA_ADVERBS = set(
+    "بعدا متأسفانه "
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
     "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا "
     "یکم دیر چندم بعدش یه‌کم دیرتر چیکار معمولاً شب‌ها دیروز "
@@ -2280,6 +2315,7 @@ FA_ADVERBS = set(
     + ["پیاده", "قبل", "عقب", "آخرش", "بیرون"]
 )
 FA_ADJECTIVES = set(
+    "مریضم "
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
     "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق "
     "تعطیل هجری شمسی دهم هشتم بیدار هر خوب "
@@ -2361,6 +2397,9 @@ FA_NUMBERS = set(
     + ["نُه"]
 )
 FA_VERBS = {
+    # A2 units 20-21 (holiday plans; rescheduling), added 2026-11-06.
+    "نمی‌خوام", "نمی‌کنم", "می‌مونی", "می‌مونیم", "بگیره", "مناسبه",
+    "نمی‌تونی", "نمی‌تونه", "می‌گیریم",
     "می‌کنم", "حالتون", "چطوره", "خوبم", "آمدید", "داشته", "باشید",
     "چطوری", "نیستم", "بفرمایید", "دارید", "نکشید", "هستم", "خوشوقتم",
     "باید", "بروم", "است", "ساراست", "چیه", "هستی", "هست",
@@ -2630,6 +2669,8 @@ TOO_PREPOSITION_LESSONS = {
 # collision, but these three lessons' negation still collides with the
 # long-established plain "نه" = "nine" entry without this split.
 NO_NEGATION_LESSONS = {
+    # A2 unit21 (added 2026-11-06): "نه، متأسفانه نه" = no.
+    "fa.a2.unit21.lesson02.another_day",
     # A2 unit19 (added 2026-10-25): "نه، ورزش نکردم" / "نه، نرفتم" = no.
     "fa.a2.unit19.lesson03.negative_past",
     # B2 (added 2026-10-19): "نه کاملا ... نه کاملا" (neither ... nor),
@@ -4486,6 +4527,53 @@ for _t, _name in _U19_SINGLE.items():
     FA_A2U19_EXTRA_TAGS.setdefault(_t, []).append(_U19 + "single_" + _name)
 
 
+# A2 unit20 (holiday plans) and unit21 (rescheduling an appointment) curated
+# practice pools (added 2026-11-06). Tags apply only to the first-introduction
+# row of each token in these units and keep practice slots to same-kind sets.
+# The *_single_* tags are one-member anchors for fixed-sentence items.
+_U20 = "en_fa_a2_unit20_"
+_U21 = "en_fa_a2_unit21_"
+_U20_GROUPS = {
+    "nouns": ("تعطیلات", "تابستون", "مرداد", "تیر", "سفر", "شمال", "هتل", "خواهرم", "مامانم", "برادرم", "دوره", "پول"),
+    "family": ("خواهرم", "مامانم", "برادرم"),
+    "seasons": ("تابستون", "مرداد", "تیر"),
+    "adverbs": ("بعدا", "شاید", "حتما", "امسال", "کجا", "اونجا"),
+    "verbs": ("برم", "نمی‌خوام", "نمی‌کنم", "می‌مونیم", "می‌مونه", "می‌خواد", "بگیره", "بره", "می‌ری", "می‌مونی", "می‌خوای", "کنی", "بری"),
+    "you_forms": ("می‌ری", "می‌مونی", "می‌خوای", "کنی", "بری"),
+    "plan_words": ("دوره", "پول", "بعدا", "قصد", "برم"),
+    "convo": ("تیر", "ترکیه", "می‌مونه", "می‌خواد", "بگیره", "بره", "مامانش"),
+    "phrases": ("تابستون چیکار می‌کنی؟", "می‌خوام یه دوره بگیرم.", "می‌خوام خونه عوض کنم.", "می‌خوام پول جمع کنم.", "شاید بعدا برم سینما.", "کجا می‌ری؟", "با کی می‌ری؟", "چند هفته می‌مونی؟",),
+}
+_U20_SINGLE = {
+    "شاید": "maybe", "کجا": "where", "قصد": "intend", "می‌مونیم": "stay_we",
+    "ترکیه": "turkey", "نمی‌خوام": "not_want", "شمال": "north",
+}
+_U21_GROUPS = {
+    "nouns": ("آرایشگاه", "وقتم", "زحمت", "زنگ", "آقای", "لطفا", "البته"),
+    "verbs": ("نمی‌تونم", "نمی‌تونی", "نمی‌تونه", "می‌گه", "می‌گیریم", "می‌زنم", "بزنید", "بیاد", "مناسبه", "کرد"),
+    "function": ("متأسفانه", "قبل", "اگه", "براتون", "برات", "بابت"),
+    "cant_forms": ("نمی‌تونم", "نمی‌تونی", "نمی‌تونه"),
+    "reasons": ("مریضم", "زحمت", "نمی‌تونی", "بابت", "مناسبه"),
+    "phrases": ("متأسفانه پنجشنبه نمی‌تونم بیام.", "می‌تونم وقتم رو عوض کنم؟", "می‌شه دوشنبه باشه؟", "شنبه براتون مناسبه؟", "بله، خوبه.", "نه، متأسفانه نه.", "چون باید کار کنم.", "چون یه وقت دیگه دارم.", "ببخشید بابت زحمت.", "دوشنبه ساعت ده خوبه.", "می‌تونید دوشنبه ساعت ده بیاید؟", "پس دوشنبه می‌بینمتون.", "یه وقت جدید می‌گیرم.",),
+}
+_U21_SINGLE = {
+    "متأسفانه": "unfortunately", "مناسبه": "suits", "زحمت": "trouble",
+    "مریضم": "ill", "نمی‌تونم": "cant_i", "زنگ": "call",
+}
+FA_A2U20_EXTRA_TAGS: dict[str, list[str]] = {}
+for _group, _tokens in _U20_GROUPS.items():
+    for _t in _tokens:
+        FA_A2U20_EXTRA_TAGS.setdefault(_t, []).append(_U20 + _group)
+for _t, _name in _U20_SINGLE.items():
+    FA_A2U20_EXTRA_TAGS.setdefault(_t, []).append(_U20 + "single_" + _name)
+FA_A2U21_EXTRA_TAGS: dict[str, list[str]] = {}
+for _group, _tokens in _U21_GROUPS.items():
+    for _t in _tokens:
+        FA_A2U21_EXTRA_TAGS.setdefault(_t, []).append(_U21 + _group)
+for _t, _name in _U21_SINGLE.items():
+    FA_A2U21_EXTRA_TAGS.setdefault(_t, []).append(_U21 + "single_" + _name)
+
+
 def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
     if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
         return []
@@ -4691,6 +4779,16 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         english_gloss = "he / she / that (spoken)"
                     if token == "دیدن" and lesson_key.startswith("fa.a2.unit19."):
                         english_gloss = "to see; to visit (in 'visit a friend')"
+                    # A2 units 20-21 (2026-11-06): first A2 rows for tokens whose
+                    # inherited A1 glosses hid the sense these units teach.
+                    # Gloss-only, per level, so A1 rows are untouched.
+                    if lesson_key.startswith("fa.a2.unit2"):
+                        if token == "بیاد":
+                            english_gloss = "(that) he/she come (subjunctive)"
+                        if token == "قبل":
+                            english_gloss = "before (as in 'a day before')"
+                        if token == "خواهش":
+                            english_gloss = "you're welcome (as in 'don't mention it')"
                     if token == "تا" and lesson_key in TA_UNTIL_LESSONS:
                         key = (level, token, "until_prep")
                         part_of_speech = "preposition"
@@ -4720,6 +4818,10 @@ def _classify_fa(files, level, fa_specs, seen_en):
                             unit_tags = unit_tags + FA_B2_EXTRA_TAGS.get(token, [])
                         if lesson_key.startswith("fa.a2.unit19."):
                             unit_tags = unit_tags + FA_A2U19_EXTRA_TAGS.get(token, [])
+                        if lesson_key.startswith("fa.a2.unit20."):
+                            unit_tags = unit_tags + FA_A2U20_EXTRA_TAGS.get(token, [])
+                        if lesson_key.startswith("fa.a2.unit21."):
+                            unit_tags = unit_tags + FA_A2U21_EXTRA_TAGS.get(token, [])
                         if unit_tags:
                             semantic = tags.setdefault("semantic", [])
                             semantic.extend(t for t in unit_tags if t not in semantic)
@@ -4801,6 +4903,10 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     phrase_unit_tags = _unit_semantic_tags(
                         unit_stem, lesson_order, target_text, "phrase"
                     )
+                    if lesson_key.startswith("fa.a2.unit20."):
+                        phrase_unit_tags = phrase_unit_tags + FA_A2U20_EXTRA_TAGS.get(target_text, [])
+                    if lesson_key.startswith("fa.a2.unit21."):
+                        phrase_unit_tags = phrase_unit_tags + FA_A2U21_EXTRA_TAGS.get(target_text, [])
                     if phrase_unit_tags:
                         semantic = tags.setdefault("semantic", [])
                         semantic.extend(t for t in phrase_unit_tags if t not in semantic)
