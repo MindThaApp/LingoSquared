@@ -6,6 +6,21 @@ convert flows that have already been manually verified in a live browser
 check, instead of re-driving the browser interactively for every
 regression pass.
 
+## Learner journeys on a seeded stack: `scripts/e2e.sh`
+
+`tests/journeys.spec.ts` covers, against a real isolated stack (db + api + nginx with the enforcing
+CSP conf, demo courses plus `fixtures/de-ar.json`): sign up -> onboarding -> first lesson with a
+wrong then a right answer -> completion XP -> profile XP -> "Fix your mistakes" review session;
+password change -> logout -> login with the new password; a Farsi UI + Farsi course rendering
+`dir=rtl`; a de-ar cross pair with German instructions; data export then account deletion.
+Run `scripts/e2e.sh` (needs only docker). It builds, seeds, runs with no retries and tears down with
+`down -v --rmi local`. Review items come due 10 minutes after a miss, so the review journey moves
+them into the past in the throwaway DB via `pg` (`E2E_DATABASE_URL`). TTS/STT/audio and Sentry
+requests are stubbed (`stubExternals`); the build has no Sentry DSN. Selectors are roles/labels
+plus a few `data-testid`s (`teaching-next`, `lesson-xp-earned`, `profile-total-xp`).
+The older specs below are not part of this script; `dari-course`, `refresh-tokens` and
+`desktop-layout` are currently stale (see the PR notes).
+
 ## Preconditions (this suite does NOT provision these)
 
 1. The local Docker stack is up and seeded: start Docker (Docker Desktop / `sudo service docker start` on
