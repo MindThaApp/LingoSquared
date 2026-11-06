@@ -1,0 +1,446 @@
+schema_version: '1.0'
+pack_key: practice.hi-ar.a1.unit09
+source_language: hi
+target_language: ar
+unit_content_key: ar.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مكان
+    - w_مكتبة
+    - w_سوق
+    - w_مقهى
+    - w_هنا
+    - w_قرب
+    - w_وأين
+    - w_المكتبة
+    - w_المقهى
+    - w_السوق
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_مكان
+      - w_مكتبة
+      - w_سوق
+      - w_مقهى
+      - w_هنا
+      - w_قرب
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_قرب
+      - w_وأين
+      - w_المكتبة
+      - w_المقهى
+  places: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+      - w_المقهى
+  near: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_المكتبة
+      - w_السوق
+  maktaba: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المكتبة
+  suq: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_السوق
+  maqha: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المقهى
+  hunaa: &id007
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_هنا
+  qurb: &id004
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_قرب
+  waayna: &id011
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_وأين
+templates:
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.choose.001
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مكان का अर्थ 'जगह' है, यह सामान्य शब्द है; مكتبة पुस्तकालय है और مقهى कैफ़े।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.listen.002
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هنا का अर्थ 'यहाँ' है; سوق का अर्थ 'बाज़ार' है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.match.003
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: قرب (के पास) एक संबंधबोधक है, जबकि هنا (यहाँ) क्रियाविशेषण है; बाकी चार संज्ञाएँ हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.order.004
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: أين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أين का अर्थ ''कहाँ'' है; जगह वाली संज्ञा के साथ ال आता है: पुस्तकालय, बाज़ार या कैफ़े।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.fill.005
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: fill_in_blank
+  frame:
+    text: المكتبة {item} السوق. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: قرب (के पास) उस जगह से पहले आता है जिसके पास की बात हो, यहाँ बाज़ार।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.translate.006
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مكتبة (पुस्तकालय), سوق (बाज़ार) और مقهى (कैफ़े) जगहें हैं; مكان सामान्य शब्द 'जगह' है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.translate.007
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: पुस्तकालय कहाँ है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ال अरबी में 'वह' जैसा निश्चयबोधक है; यह संज्ञा के आगे जुड़ता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.translate.008
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: translation
+  frame:
+    text: बाज़ार कहाँ है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'अरबी में ''है'' के लिए शब्द नहीं चाहिए: أين السوق؟ का शाब्दिक रूप है ''कहाँ बाज़ार''।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson01.order.009
+  lesson_content_key: ar.a1.unit09.lesson01.common_places
+  type: word_order
+  frame:
+    text: المكتبة {item} قرب السوق.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {item} قرب السوق.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'هنا (यहाँ) قرب से पहले आ सकता है: पुस्तकालय यहाँ है, बाज़ार के पास।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.choose.001
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قرب का अर्थ 'के पास' है; इसके तुरंत बाद जगह वाली संज्ञा आती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.listen.002
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'وأين में و (और) أين (कहाँ) से जुड़ा है: और कहाँ।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.order.003
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: المقهى قرب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'قرب के साथ अतिरिक्त शब्द नहीं चाहिए: المقهى قرب المكتبة का अर्थ है कैफ़े पुस्तकालय के पास है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.order.004
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: word_order
+  frame:
+    text: وأين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: وأين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'وأين المقهى؟ बातचीत को आगे बढ़ाता है: और कैफ़े कहाँ है?'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.fill.005
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} المقهى؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأين में و नए प्रश्न को पिछले प्रश्न से जोड़ता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.translate.006
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأين का अर्थ 'और कहाँ' है, यह अगला प्रश्न पूछने के लिए है; قرب का अर्थ 'के पास' है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.translate.007
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: पुस्तकालय बाज़ार के पास है।
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المكتبة {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'قرب के बाद जगह की संज्ञा ال के साथ रहती है: قرب السوق का अर्थ है बाज़ार के पास।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit09.lesson02.translate.008
+  lesson_content_key: ar.a1.unit09.lesson02.locate_places
+  type: translation
+  frame:
+    text: कैफ़े पुस्तकालय के पास है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى قرب {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: इस इकाई के संवाद में وأين المقهى؟ का उत्तर ठीक इसी वाक्य से दिया गया है।
+    language_code: hi
+    direction: ltr
