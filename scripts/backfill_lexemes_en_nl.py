@@ -1099,6 +1099,14 @@ NL_GLOSSES.update({
     'oplossing': 'solution',
 })
 
+# B1 unit 17, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Had': "had (as in 'Had ik maar...': if only I had)",
+    'gespaard': 'saved (past participle of sparen)',
+    'gebeld': 'called (past participle of bellen)',
+    'wens': 'wish',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1482,6 +1490,10 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 17 (see the NL_GLOSSES block above).
+VERBS.update({'Had', 'gespaard', 'gebeld'})
+NOUNS.update({'wens'})
 
 # B1 unit 16 (see the NL_GLOSSES block above).
 NOUNS.update({'klacht', 'bestelling', 'oplossing'})
@@ -3738,6 +3750,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "kunt_u_het_oplossen": "kunt_u_het_oplossen",
         "in_de_winkel": "in_de_winkel",
         "een_e_mail_lezen": "een_e_mail_lezen",
+        # B1 unit 17, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "ik_had_moeten": "ik_had_moeten",
+        "had_ik_maar": "had_ik_maar",
+        "het_spijt_me_dat": "het_spijt_me_dat",
+        "de_trein_gemist": "de_trein_gemist",
+        "een_spijtig_weekend_lezen": "een_spijtig_weekend_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
