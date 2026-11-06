@@ -102,7 +102,7 @@ export function AdminContentPage() {
 
       <div className="card">
         <h2 style={{ marginTop: 0 }}>{t("admin.coverage_title")}</h2>
-        {coverageQuery.isLoading && <p className="muted">{t("admin.loading")}</p>}
+        {coverageQuery.isLoading && <p className="muted" role="status">{t("admin.loading")}</p>}
         {coverageQuery.data && (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
@@ -155,7 +155,7 @@ export function AdminContentPage() {
           </select>
         </div>
         {updateError && <p className="feedback-banner error">{updateError}</p>}
-        {issuesQuery.isLoading && <p className="muted">{t("admin.loading")}</p>}
+        {issuesQuery.isLoading && <p className="muted" role="status">{t("admin.loading")}</p>}
         {issuesQuery.data?.length === 0 && <p className="muted">{t("admin.no_issues")}</p>}
         {issuesQuery.data?.map((issue) => (
           <IssueCard

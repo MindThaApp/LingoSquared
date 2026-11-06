@@ -226,7 +226,7 @@ export function CoursePickerPage({ onPickCourse }: { onPickCourse?: (course: Cou
       <div className="picker-steps">
         <span>{step > 1 ? "✓" : "1."} {t("course_picker.step_speak")}</span>
         <span>›</span>
-        <span style={step < 2 ? { opacity: 0.5 } : undefined}>
+        <span style={step < 2 ? { fontWeight: 400 } : undefined}>
           {step > 2 ? "✓" : "2."} {t("course_picker.step_learn")}
         </span>
       </div>
