@@ -1897,3 +1897,15 @@ def test_target_text_allowed_on_target_script_card_with_english_gloss():
     rep2 = compiler.Report()
     compiler.validate_teaching_target_localization(plain, ov, rep2)
     assert rep2.errors
+
+
+def test_script_purity_skips_arabic_learner_text_for_persian_targets():
+    compiler = load_content_compiler()
+    doc = {"title": "مرحبا يا كل"}   # Arabic Yeh/Kaf in learner text
+    for source, expect_errors in (("ar", False), ("en", True), (None, True)):
+        report = compiler.Report()
+        compiler.validate_script_purity(doc, "fa", "overlay", report, source_language=source)
+        assert bool(report.errors) is expect_errors
+    report = compiler.Report()
+    compiler.validate_script_purity(doc, "prs", "overlay", report, source_language="fa")   # fa learner writes Persian letters
+    assert report.errors

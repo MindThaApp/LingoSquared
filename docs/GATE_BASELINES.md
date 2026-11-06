@@ -53,3 +53,5 @@ backend pytest full suite pass (test_content_answer_shapes included, deselect re
 ## Running all gates locally
 
 `scripts/ci_local.sh` runs every gate above in one command (content verify, leakage, scripts pytest, backend pytest in an isolated compose project `lsci_<pid>` that is torn down on exit, vitest). Flags: `--skip-backend`, `--skip-frontend`, `--skip-content`, `--with-build`; `CI_WARN_MAX=<n>` enforces the WARN formula. Content verify takes about an hour; use `--skip-content` for code-only changes. GitHub Actions (`.github/workflows/ci.yml`) runs the same gates on pushes and PRs for the integration branch.
+
+Group D (ar/fa/hi/prs among themselves): each new X-Y pair adds its en-Y sibling count (ar 28, fa 2, hi 4, prs 19). Batch 1: ar-fa +2, ar-hi +4, ar-prs +19 = +25.
