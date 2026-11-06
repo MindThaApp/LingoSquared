@@ -40,7 +40,7 @@ es 138, fr 112, de 4, it-a1 8, nl 56, ru-a1 20, pl 16, ro 10, ar-a1 56, hi 8, pr
 Known exceptions: es-it-a1 +2 (cognate false positives), ro-fr +4. A new cross pair adds its `en-Y` sibling count;
 verify with a per-course diff against a verify run of the previous shipped commit that no pre-existing course changed.
 
-C1 tiers (en-fa-c1; 8 units, built from the same discourse-move template as en-ar-c1): validates and compiles with 0 errors and 0 warnings, as does its sibling en-ar-c1, so the WARN baseline does not move (5486 stays). A new course adds 0 lines; no pre-existing course changed.
+C1 tiers (en-fa-c1 and en-prs-c1; 8 units each, built from the same discourse-move template as en-ar-c1): each validate and compile with 0 errors and 0 warnings, as does its sibling en-ar-c1, so the WARN baseline does not move (5486 stays). A new course adds 0 lines; no pre-existing course changed.
 
 History (lines): 740 pre-existing courses at 1cca942a0; 2542 at 69aaabfdb; 3000 at a6f9f44ec; 3060 at d9d564b64; 3750 at 294b3618b;
 4230 at 53bec4a11; 4534 at 76a2dd9c5; 4638 at 20b648c90; 5046 at acfde1144 (de/es/fr/it -> ar-a1 4x56, -> hi 4x8, -> prs 4x38);
