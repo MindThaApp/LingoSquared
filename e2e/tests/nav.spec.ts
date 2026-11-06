@@ -12,7 +12,7 @@ import { freshEmail, registerAndLand } from "./helpers";
 // RUNNER_PATTERNS), which deliberately hide the NavBar, so the shell
 // check differs there and the test steps back to the tabbed shell after.
 const TABS: Array<{ name: string; urlPattern: RegExp; runner?: boolean }> = [
-  { name: "Home", urlPattern: /\/$/ },
+  { name: "Home", urlPattern: /\/(welcome)?$/ },
   { name: "Practice", urlPattern: /\/practice$/ },
   { name: "Review", urlPattern: /\/review$/, runner: true },
   { name: "Profile", urlPattern: /\/profile$/ },

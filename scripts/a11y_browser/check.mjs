@@ -10,6 +10,7 @@ const AXE_SRC = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const BASE = process.env.BASE, API = process.env.API, OUT = process.env.OUT || ".";
 const CONFIGS = [
   { name: "desktop-light", viewport: { width: 1100, height: 900 }, scheme: "light" },
+  { name: "desktop-dark", viewport: { width: 1100, height: 900 }, scheme: "dark" },
   { name: "mobile360-dark", viewport: { width: 360, height: 740 }, scheme: "dark", isMobile: true, hasTouch: true },
 ];
 const ONLY = process.env.A11Y_ONLY; // optional: substring filter on config name
@@ -20,7 +21,11 @@ const notes = [];
 let cfgName = "", label = "";
 const note = (m) => { notes.push(`[${cfgName}/${label}] ${m}`); console.log(`[${cfgName}/${label}] ${m}`); };
 
-const browser = await chromium.launch({ channel: "chromium", args: ["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"] });
+const browser = await chromium.launch({ channel: "chromium", args: [
+  "--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream",
+  // The stack is plain http://web: treat it as a secure context so getUserMedia / MediaRecorder exist and the mic UI renders.
+  "--unsafely-treat-insecure-origin-as-secure=http://web",
+] });
 
 async function api(path, token, init = {}) {
   const r = await fetch(API + path, { ...init, headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), "Content-Type": "application/json" } });
@@ -87,6 +92,36 @@ async function tabAudit(page, n = 14, tag = "keyboard") {
   }
 }
 
+// Audio and mic are stubbed: TTS / recorded clips answer with an empty 204, the STT endpoint with a fixed transcript,
+// and the browser's fake capture device stands in for the microphone (see launch args). The wasm Whisper worker is
+// disabled so the app falls back to the stubbed server transcription instead of downloading a model.
+async function stubAudio(ctx) {
+  await ctx.addInitScript(() => { window.Worker = undefined; });
+  await ctx.route((u) => /\/(tts|media)(\/|$)|\/media\/audio\//.test(u.pathname), (r) => r.fulfill({ status: 204, body: "" }));
+  await ctx.route((u) => u.pathname === "/stt/transcribe", (r) => r.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ transcript: "مرحبا", words: [{ word: "مرحبا", start: 0, end: 0.6, probability: 0.92 }] }),
+  }));
+}
+
+// Mic flow on a speak_repeat / speak_response step: voice mode, recording (level meter), transcribing, result.
+async function micAudit(page) {
+  const voiceToggle = page.getByRole("button", { name: /speak instead/i });
+  if (!(await voiceToggle.count())) { issues.push({ page: `${cfgName}/${label}`, kind: "mic-ui-missing", detail: "no voice toggle on a speaking exercise" }); return; }
+  await voiceToggle.first().click(); await settle(page, 400);
+  await runAxe(page, "mic-voice-mode"); await layoutChecks(page, "mic-voice-mode");
+  await page.screenshot({ path: `${OUT}/${cfgName}-${label}-mic-voice.png` }).catch(() => {});
+  await page.getByRole("button", { name: /tap to speak/i }).first().click(); await settle(page, 700);
+  await runAxe(page, "mic-recording"); await layoutChecks(page, "mic-recording");
+  await page.screenshot({ path: `${OUT}/${cfgName}-${label}-mic-recording.png` }).catch(() => {});
+  await page.getByRole("button", { name: /tap to stop/i }).first().click().catch(() => {});
+  await settle(page, 1500);
+  await runAxe(page, "mic-result"); await layoutChecks(page, "mic-result");
+  await page.screenshot({ path: `${OUT}/${cfgName}-${label}-mic-result.png` }).catch(() => {});
+  const typeToggle = page.getByRole("button", { name: /type instead/i });
+  if (await typeToggle.count()) { await typeToggle.first().click(); await settle(page, 300); }
+}
+
 const settle = (page, ms = 700) => page.waitForTimeout(ms);
 async function visit(page, path, name, { keyboard = false } = {}) {
   label = name;
@@ -121,6 +156,7 @@ async function advance(page) {
 
 async function lessonWalk(page, lessonId, name, maxSteps = 16) {
   label = name;
+  let micDone = false;
   await page.goto(`${BASE}/lessons/${lessonId}`); await settle(page, 1500);
   const seen = new Set();
   for (let i = 0; i < maxSteps; i++) {
@@ -129,6 +165,7 @@ async function lessonWalk(page, lessonId, name, maxSteps = 16) {
       seen.add(sig);
       await runAxe(page, `step${i}`); await layoutChecks(page, `step${i}`);
       if (i === 1) await tabAudit(page, 12, "keyboard-step1");
+      if (!micDone && (await page.locator(".voice-capture").count())) { micDone = true; await micAudit(page); }
       await page.screenshot({ path: `${OUT}/${cfgName}-${name}-step${i}.png` }).catch(() => {});
     }
     if (/\/lessons\/[^/]+\/done/.test(page.url())) break;
@@ -147,6 +184,7 @@ async function main() {
     if (ONLY && !cfg.name.includes(ONLY)) continue;
     cfgName = cfg.name;
     const ctx = await browser.newContext({ viewport: cfg.viewport, colorScheme: cfg.scheme, isMobile: cfg.isMobile, hasTouch: cfg.hasTouch, bypassCSP: true });
+    await stubAudio(ctx);
     const page = await ctx.newPage();
     page.on("pageerror", (e) => issues.push({ page: `${cfgName}/${label}`, kind: "pageerror", detail: String(e).slice(0, 200) }));
 
@@ -208,6 +246,7 @@ async function main() {
       await page.goto(BASE + p); await settle(page, 9000);
       const txt = (await page.locator("main").innerText().catch(() => "")).trim();
       if (txt.length < 15 || /undefined|\[object|NaN|Traceback|boom/.test(txt)) issues.push({ page: `${cfgName}/${label}`, kind: "bad-error-state", detail: JSON.stringify(txt.slice(0, 120)) });
+      if (n === "review" && !(await page.getByRole("button", { name: /back to home/i }).count())) issues.push({ page: `${cfgName}/${label}`, kind: "error-screen-no-way-back", detail: "review error state has no Back to home button" });
       await runAxe(page); await page.screenshot({ path: `${OUT}/${cfgName}-${label}.png` }).catch(() => {});
       await page.unrouteAll({ behavior: "ignoreErrors" }).catch(() => {});
       label = `offline-${n}`;
