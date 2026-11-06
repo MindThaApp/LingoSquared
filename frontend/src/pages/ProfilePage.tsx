@@ -134,7 +134,7 @@ export function ProfilePage() {
 
       <div className="stat-grid">
         <div className="stat-card">
-          <span className="stat-value"><span aria-hidden="true">⭐</span> {xpQuery.data?.total_xp ?? "—"}</span>
+          <span className="stat-value" data-testid="profile-total-xp"><span aria-hidden="true">⭐</span> {xpQuery.data?.total_xp ?? "—"}</span>
           <span className="stat-label">{t("profile.total_xp")}</span>
         </div>
         <div className="stat-card">
