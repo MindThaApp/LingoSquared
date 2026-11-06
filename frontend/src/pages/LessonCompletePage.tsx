@@ -159,7 +159,7 @@ export function LessonCompletePage() {
       {state ? (
         <div className="stat-grid" style={{ maxWidth: 360, margin: "20px auto" }}>
           <div className="stat-card">
-            <span className={celebrate ? "stat-value xp-pop-value" : "stat-value"}>⭐ {xp}</span>
+            <span className={celebrate ? "stat-value xp-pop-value" : "stat-value"} data-testid="lesson-xp-earned">⭐ {xp}</span>
             <span className="stat-label">{t("lesson_complete.xp_earned")}</span>
           </div>
           <div className="stat-card">

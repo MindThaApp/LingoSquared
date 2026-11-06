@@ -702,6 +702,7 @@ export function LessonRunnerPage() {
         <TeachingCardView card={card} />
         <button
           className="btn btn-block"
+          data-testid="teaching-next"
           onClick={() => {
             setHistory((h) => [...h, { kind: "teaching", card }]);
             setTeachingIndex((i) => i + 1);
