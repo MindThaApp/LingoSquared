@@ -163,7 +163,7 @@ export function PlacementTestPage() {
   }
 
   if (phase === "loading" || phase === "scoring") {
-    return <div className="page-loading">{t("placement.loading")}</div>;
+    return <div className="page-loading" role="status">{t("placement.loading")}</div>;
   }
 
   if (phase === "scoring_error") {
