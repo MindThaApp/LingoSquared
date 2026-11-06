@@ -69,7 +69,7 @@ FARSI={
                 teach("vocabulary","سلام","fa","hello","en"),teach("vocabulary","ممنون","fa","thank you","en"),teach("vocabulary","خداحافظ","fa","goodbye","en"),teach("phrase","من سارا هستم","fa","I am Sara","en",note="هستم is the first-person form of ‘to be’."),
             ],"exercises":[
                 {"type":"multiple_choice","order":1,"prompt":{"text_blocks":[block("Choose the Farsi word for hello.","en")],"options":["سلام","خداحافظ","ممنون"]},"correct_response":"سلام","feedback":"سلام (salâm) is a common greeting.","xp":10},
-                {"type":"translation","order":2,"prompt":{"text_blocks":[block("Thank you","en")]},"correct_response":"ممنون","feedback":"ممنون means thank you.","xp":10},
+                {"type":"translation","order":2,"prompt":{"text_blocks":[block("Thank you","en")],"answer_language_code":"fa"},"correct_response":"ممنون","feedback":"ممنون means thank you.","xp":10},
                 {"type":"word_order","order":3,"prompt":{"text_blocks":[block("Arrange: I am Sara.","en")],"word_bank":["من","سارا","هستم"]},"correct_response":["من","سارا","هستم"],"xp":10},
             ]},
             {"title":"Meeting someone","order":2,"teaching":[
