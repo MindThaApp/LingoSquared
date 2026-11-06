@@ -1117,6 +1117,13 @@ NL_GLOSSES.update({
     'Naar': 'to; toward',
 })
 
+# B1 unit 19, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Kort': 'in short; briefly',
+    'nuttig': 'useful',
+    'samenvatting': 'summary',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1500,6 +1507,11 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 19 (see the NL_GLOSSES block above).
+ADVERBS.update({'Kort'})
+ADJECTIVES.update({'nuttig'})
+NOUNS.update({'samenvatting'})
 
 # B1 unit 18 (see the NL_GLOSSES block above).
 ADJECTIVES.update({'drukker', 'rustiger', 'slimme'})
@@ -3777,6 +3789,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "ik_weet_nog_niet_of": "ik_weet_nog_niet_of",
         "plannen_voor_volgend_jaar": "plannen_voor_volgend_jaar",
         "plannen_lezen": "plannen_lezen",
+        # B1 unit 19, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "het_artikel_gaat_over": "het_artikel_gaat_over",
+        "kort_gezegd": "kort_gezegd",
+        "volgens_de_schrijver": "volgens_de_schrijver",
+        "het_artikel_samenvatten": "het_artikel_samenvatten",
+        "korte_samenvatting_lezen": "korte_samenvatting_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
@@ -5201,6 +5219,9 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit16_een_klacht_indienen", "zoek"): "look into (zoek ... uit)",
     # b1 unit 18: senses that differ from the global gloss.
     ("b1_unit18_plannen_en_voorspellingen", "Laat"): "let (laat het me weten)",
+    # b1 unit 19: senses that differ from the global gloss.
+    ("b1_unit19_samenvatten_en_navertellen", "kort"): "short; briefly",
+    ("b1_unit19_samenvatten_en_navertellen", "artikel"): "article (a text)",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
