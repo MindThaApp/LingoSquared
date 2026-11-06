@@ -10,7 +10,7 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | `scripts/_note_language_check.py` (English in grammar-note target spans / untranslated note titles; baseline `scripts/_note_language_baseline.tsv` may only shrink) | 0 new, 0 stale |
 | `scripts/_cyrillic_latin_check.py`, `scripts/check_dari_register.py` | 0 findings |
 | `scripts/_target_name_check.py` (wrong language name in cross-pair overlays/practice; allowlist `scripts/_target_name_allowlist.tsv`) | 0 hits |
-| `scripts/_hindi_name_check.py` (one Devanagari spelling per person name; table `scripts/_hindi_names.tsv`) | 0 findings |
+| `scripts/_hindi_name_check.py` (one Devanagari spelling per person name, and no Latin-script person name inside Hindi text; table `scripts/_hindi_names.tsv`, exceptions `scripts/_hindi_latin_name_allowlist.tsv`; `scripts/_hindi_latin_names_fix.py` converts new content) | 0 findings |
 | practice-validate (all packs) | 0 errors |
 | `pytest scripts/tests` | pass (217 at e7eaf91c4) |
 | backend pytest (repo mounted, full suite including `test_content_answer_shapes`) | pass |

@@ -157,8 +157,8 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
-    # One Devanagari spelling per person name across the hi realization and every hi-X / X-hi overlay + pack.
-    echo "-- hindi-name check (one Devanagari spelling per name; scripts/_hindi_names.tsv) --"
+    # One Devanagari spelling per person name, and no Latin-script person name inside Hindi text, across the hi realization and every hi-X / X-hi overlay + pack.
+    echo "-- hindi-name check (one Devanagari spelling per name, no Latin names inside Hindi text; scripts/_hindi_names.tsv) --"
     if ! python scripts/_hindi_name_check.py; then
       echo "!! hindi-name check FAILED"
       CONTENT_OK=0
