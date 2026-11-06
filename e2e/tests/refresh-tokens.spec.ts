@@ -214,7 +214,7 @@ test("app silently refreshes an expired access token and the user stays logged i
   // refresh-and-retry. If that path is broken, ProtectedRoute redirects
   // to /login instead of staying on "/".
   await page.reload();
-  await page.waitForURL("/", { timeout: 10000 });
+  await page.waitForURL(/\/(welcome)?$/, { timeout: 10000 });
   // A real authenticated page element, not just the URL -- confirms the
   // app is actually rendered as logged-in, not mid-redirect.
   await page.getByRole("link", { name: "Learn" }).first().waitFor({ state: "visible" });
@@ -288,7 +288,7 @@ test("reloading while a refresh is in flight keeps the user logged in", async ({
 
   // Next load: still logged in, now holding the successor the server issued.
   await page.reload();
-  await page.waitForURL("/", { timeout: 10000 });
+  await page.waitForURL(/\/(welcome)?$/, { timeout: 10000 });
   await page.getByRole("link", { name: "Learn" }).first().waitFor({ state: "visible" });
   await expect
     .poll(() => page.evaluate(() => localStorage.getItem("refresh_token")))
