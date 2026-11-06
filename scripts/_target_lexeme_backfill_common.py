@@ -237,10 +237,13 @@ def run(
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback()
                 return 1
+            # Specs may carry their own language_code (e.g. English tokens inside
+            # an X-fa course); the lookups must use it or a rerun re-inserts them.
+            spec_lang = spec.get("language_code", target_language)
             existing = db.scalar(
                 select(Lexeme).where(
                     Lexeme.course_id == course.id,
-                    Lexeme.language_code == target_language,
+                    Lexeme.language_code == spec_lang,
                     Lexeme.token == spec["token"],
                     Lexeme.part_of_speech == spec["part_of_speech"],
                 )
@@ -253,7 +256,7 @@ def run(
             others = db.scalars(
                 select(Lexeme).where(
                     Lexeme.course_id == course.id,
-                    Lexeme.language_code == target_language,
+                    Lexeme.language_code == spec_lang,
                     Lexeme.token == spec["token"],
                 )
             ).all()
