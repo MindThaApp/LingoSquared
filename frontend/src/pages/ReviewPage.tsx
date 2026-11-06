@@ -230,6 +230,9 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         <button className="btn btn-block" onClick={() => dueQuery.refetch()}>
           {t("common.retry")}
         </button>
+        <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }} onClick={() => navigate("/")}>
+          {t("common.back_home")}
+        </button>
       </div>
     );
   }
@@ -263,6 +266,9 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
             <button className="btn btn-block" onClick={() => titlesQuery.refetch()}>
               {t("common.retry")}
             </button>
+        <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }} onClick={() => navigate("/")}>
+          {t("common.back_home")}
+        </button>
           </div>
         ) : titlesQuery.data === undefined ? (
           <p className="muted" role="status">{t("review.loading")}</p>
@@ -293,6 +299,9 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         <p style={{ margin: "0 0 10px" }}>{t("review.session_fetch_error")}</p>
         <button className="btn btn-block" onClick={handleSessionRetry}>
           {t("common.retry")}
+        </button>
+        <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }} onClick={() => navigate("/")}>
+          {t("common.back_home")}
         </button>
       </div>
     );

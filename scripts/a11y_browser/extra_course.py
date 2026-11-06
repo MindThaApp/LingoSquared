@@ -23,6 +23,17 @@ COURSE = {"courses": [{
             {"type": "multiple_choice", "order": 2, "prompt": {"text_blocks": [block("Choose the Arabic word for hello.", "en")], "options": ["مرحبا", "شكرا"]}, "correct_response": "مرحبا", "xp": 10},
             {"type": "word_order", "order": 3, "prompt": {"text_blocks": [block("Arrange: thank you hello", "en")], "word_bank": ["مرحبا", "شكرا"]}, "correct_response": ["شكرا", "مرحبا"], "xp": 10},
             {"type": "fill_in_blank", "order": 4, "prompt": {"text_blocks": [block("___ يا صديقي", "ar")]}, "correct_response": "مرحبا", "xp": 10},
+        ]}, {
+        "title": "Listening and speaking", "order": 2,
+        "teaching": [teach("vocabulary", "مرحبا", "ar", "hello", "en")],
+        "exercises": [
+            {"type": "listen_select", "order": 1, "prompt": {"text_blocks": [block("Which word do you hear?", "en")], "options": ["مرحبا", "شكرا"], "audio_text": "مرحبا", "audio_language_code": "ar"}, "correct_response": "مرحبا", "xp": 10},
+            {"type": "listen_type", "order": 2, "prompt": {"text_blocks": [block("Type what you hear.", "en")], "audio_text": "شكرا", "audio_language_code": "ar", "answer_language_code": "ar"}, "correct_response": "شكرا", "xp": 10},
+            {"type": "listen_order", "order": 3, "prompt": {"text_blocks": [block("Put the words in the order you hear them.", "en")], "word_bank": ["مرحبا", "شكرا"], "audio_text": "شكرا مرحبا", "audio_language_code": "ar"}, "correct_response": ["شكرا", "مرحبا"], "xp": 10},
+            {"type": "dictation", "order": 4, "prompt": {"text_blocks": [], "media_asset_key": "a11y-fixture-dictation", "audio_text": "مرحبا", "audio_language_code": "ar", "answer_language_code": "ar"}, "correct_response": "مرحبا", "xp": 10},
+            {"type": "dialogue_comprehension", "order": 5, "prompt": {"text_blocks": [block("What did the speaker say?", "en")], "options": ["hello", "thank you"], "audio_text": "مرحبا", "audio_language_code": "ar"}, "correct_response": "hello", "xp": 10},
+            {"type": "speak_repeat", "order": 6, "prompt": {"text_blocks": [block("مرحبا", "ar")], "answer_language_code": "ar"}, "correct_response": "مرحبا", "xp": 10},
+            {"type": "speak_response", "order": 7, "prompt": {"text_blocks": [block("Say hello in Arabic.", "en")], "answer_language_code": "ar"}, "correct_response": "مرحبا", "xp": 10},
         ]}]}],
     "content_items": [],
 }]}

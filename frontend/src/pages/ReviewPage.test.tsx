@@ -74,3 +74,22 @@ describe("ReviewPage empty state", () => {
     expect(await screen.findByText("course page")).toBeInTheDocument();
   });
 });
+
+describe("ReviewPage error screen", () => {
+  it("offers a way back home next to Retry when the due list fails to load", async () => {
+    vi.mocked(ReviewApi.due).mockRejectedValue(new Error("offline"));
+    render(
+      <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <MemoryRouter initialEntries={["/review"]}>
+          <Routes>
+            <Route path="/review" element={<ReviewPage />} />
+            <Route path="/" element={<div>home page</div>} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    expect(await screen.findByRole("button", { name: "common.retry" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "common.back_home" }));
+    expect(await screen.findByText("home page")).toBeInTheDocument();
+  });
+});

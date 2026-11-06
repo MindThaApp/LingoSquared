@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { freshEmail, registerAndLand, goToCourseUnits, LAUNCH_COURSES } from "./helpers";
+import { freshEmail, registerAndLand, goToCourseUnits } from "./helpers";
+
+// The picker hides single-unit courses (CoursePickerPage MIN_REAL_COURSE_UNITS), and
+// the seeded demo "Dari Foundations" has one unit, so this runs against the two-unit
+// fixture e2e/fixtures/en-prs.json, which scripts/e2e.sh imports.
+const DARI = { speak: /English/, learn: /Dari/, title: "Dari Fixture Course" };
 
 // Dari (prs) is one of the three publish-gate launch pairs per the
 // 2026-07-05 scope decision in CLAUDE.md ("publish-gate language set:
@@ -9,17 +14,17 @@ import { freshEmail, registerAndLand, goToCourseUnits, LAUNCH_COURSES } from "./
 // prs get separate content/RTL/script/keyboard code paths -- fa passing
 // doesn't prove prs works.
 
-test("two-step picker reaches Dari Foundations and its unit path", async ({ page }) => {
+test("two-step picker reaches the Dari course and its unit path", async ({ page }) => {
   await registerAndLand(page, freshEmail("e2e-dari-picker"));
-  const c = LAUNCH_COURSES.dariFoundations;
+  const c = DARI;
   await goToCourseUnits(page, c.speak, c.learn, c.title);
 
   await expect(page.locator(".path-node").first()).toBeVisible();
 });
 
-test("Dari Foundations: teaching cards advance into the exercise phase", async ({ page }) => {
+test("Dari course: teaching cards advance into the exercise phase", async ({ page }) => {
   await registerAndLand(page, freshEmail("e2e-dari-lesson"));
-  const c = LAUNCH_COURSES.dariFoundations;
+  const c = DARI;
   await goToCourseUnits(page, c.speak, c.learn, c.title);
 
   await page.locator(".path-bubble").first().click();
