@@ -350,7 +350,29 @@ def load_lane(rel: str) -> dict[Path, list[tuple[str, str]]]:
         strings: list[tuple[str, str]] = []
         _walk(document, [], strings)
         result[path] = [(p, s) for p, s in strings if is_learner_facing(p)]
+    if rel.startswith(("overlays/prs-", "practice/prs-")) and rel.endswith("-fa"):
+        result = _drop_persian_target_text(rel, result)
     return result
+
+
+QUOTED_SPAN = re.compile(r"\*[^*]*\*|\u00ab[^\u00bb]*\u00bb|\"[^\"]*\"")
+
+
+def _drop_persian_target_text(rel: str, lane: dict[Path, list[tuple[str, str]]]) -> dict[Path, list[tuple[str, str]]]:
+    """prs-fa: Dari is the LEARNER language, the target text is Iranian Persian by design. Strings that equal a
+    string of the en-fa sibling are the byte-copied target text; quoted spans in the rest quote Persian words."""
+    kind = rel.split("/")[0]
+    sibling = {text for strings in load_lane(f"{kind}/en-fa").values() for _, text in strings}
+    # Only task instructions are pure learner metalanguage ("جواب بدهید"); notes, glosses, feedback and titles discuss
+    # the Persian target (formal vs colloquial endings, tomans) and legitimately contain Iranian forms.
+    def learner_part(text: str) -> str:
+        # "به دری ترجمه کنید: <Persian sentence>" -- the payload after the colon is target text
+        head, sep, _ = text.partition(":")
+        return QUOTED_SPAN.sub(" ", head if "ترجمه" in head else text)
+
+    return {path: [(loc, learner_part(text)) for loc, text in strings
+                   if text not in sibling and loc.rsplit(".", 1)[-1] == "instruction"]
+            for path, strings in lane.items()}
 
 
 def is_suppressed(text: str) -> bool:

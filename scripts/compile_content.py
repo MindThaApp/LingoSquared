@@ -1171,6 +1171,13 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
     overlay: dict[str, Any],
     report: Report,
 ):
+    # Persian learner into Dari or the reverse: option text (person names, everyday words) is spelled exactly like the
+    # audio transcript, so this comparison cannot tell a distractor from the dialogue.  Same script and same spelling.
+    if (
+        overlay.get("source_language") in PERSIAN_SCRIPT_LANGUAGES
+        and realization.get("target_language") in PERSIAN_SCRIPT_LANGUAGES
+    ):
+        return
     assets = _media_assets_by_key(realization)
     exercise_overlays = overlay.get("exercises", {})
     if not isinstance(exercise_overlays, dict):
