@@ -2318,7 +2318,7 @@ PRS_B1_FILL_NEW = {
     "شرکت": ("company", "noun"),
     "نشده": ("not been (finished)", "verb"),
     "بخش": ("section", "noun"),
-    "بله": ("yes", "particle"),
+    "بلی": ("yes", "particle"),
     "حتماً": ("certainly", "adverb"),
     "خواست": ("asked for; wanted", "verb"),
     "آمدم": ("I came", "verb"),
