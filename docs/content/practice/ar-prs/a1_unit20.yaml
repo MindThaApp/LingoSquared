@@ -1,0 +1,400 @@
+schema_version: '1.0'
+pack_key: practice.ar-prs.a1.unit20
+source_language: ar
+target_language: prs
+unit_content_key: prs.a1.unit20.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  - adverb
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - past_verb_first
+    - go_verb
+    - eat_verb
+    - work_past_verb
+    - tired_word
+    - past_verb_second
+    - past_verb_third
+    - time_reference
+slot_presets:
+  past_verb_first: &id007
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: past_verb_first
+  go_verb: &id002
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: go_verb
+  eat_verb: &id003
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: eat_verb
+  work_past_verb: &id004
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: work_past_verb
+  tired_word: &id006
+    language_code: prs
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: tired_word
+  past_verb_second: &id010
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: past_verb_second
+  past_verb_third: &id008
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: past_verb_third
+  past_verb_pool: &id009
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic:
+      - past_verb_first
+      - past_verb_second
+      - past_verb_third
+  time_reference_review_pool: &id001
+    language_code: prs
+    part_of_speech:
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - time_reference
+      - past_verb_first
+  time_reference: &id005
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: time_reference
+templates:
+- content_key: practice.ar-prs.prs.a1.unit20.lesson01.time_reference_gloss.001
+  lesson_content_key: prs.a1.unit20.lesson01.yesterday_went
+  type: multiple_choice
+  frame:
+    text: '{unit_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_word
+  feedback_frame:
+    text: '*{unit_word}* كلمة تدل على الزمان أو فعل ماضٍ من دروس «أمس».'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson01.yesterday_went_order.002
+  lesson_content_key: prs.a1.unit20.lesson01.yesterday_went
+  type: word_order
+  frame:
+    text: دیروز {go_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    go_verb: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دیروز {go_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: دیروز رفتم (أمس ذهبتُ).'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson02.routine_word_translate.001
+  lesson_content_key: prs.a1.unit20.lesson02.i_ate
+  type: translation
+  frame:
+    text: '{eat_verb}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      eat_verb: english_gloss
+  slots:
+    eat_verb: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: eat_verb
+  feedback_frame:
+    text: '{eat_verb} هي الكلمة الداريّة المقابلة لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson02.ate_breakfast_order.002
+  lesson_content_key: prs.a1.unit20.lesson02.i_ate
+  type: word_order
+  frame:
+    text: دیروز صبحانه {eat_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    eat_verb: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دیروز صبحانه {eat_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: دیروز صبحانه خوردم (أمس تناولتُ الفطور).'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson03.work_noun_translate.001
+  lesson_content_key: prs.a1.unit20.lesson03.i_worked
+  type: translation
+  frame:
+    text: '{work_past_verb}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      work_past_verb: english_gloss
+  slots:
+    work_past_verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: work_past_verb
+  feedback_frame:
+    text: '{work_past_verb} هي الكلمة الداريّة المقابلة لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson03.worked_order.002
+  lesson_content_key: prs.a1.unit20.lesson03.i_worked
+  type: word_order
+  frame:
+    text: دیروز کار {work_past_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    work_past_verb: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دیروز کار {work_past_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: دیروز کار کردم (أمس عملتُ).'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson04.time_reference_translate.001
+  lesson_content_key: prs.a1.unit20.lesson04.reading_yesterday
+  type: translation
+  frame:
+    text: '{time_reference}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      time_reference: english_gloss
+  slots:
+    time_reference: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: time_reference
+  feedback_frame:
+    text: '{time_reference} هي الكلمة الداريّة المقابلة لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson04.office_order.002
+  lesson_content_key: prs.a1.unit20.lesson04.reading_yesterday
+  type: word_order
+  frame:
+    text: دیروز به دفتر {go_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    go_verb: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دیروز به دفتر {go_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: دیروز به دفتر رفتم (أمس ذهبتُ إلى المكتب).'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson05.tired_fill.001
+  lesson_content_key: prs.a1.unit20.lesson05.reading_longer_yesterday
+  type: fill_in_blank
+  frame:
+    text: دیروز کار کردم و {tired_word} شدم
+    language_code: prs
+    direction: rtl
+  slots:
+    tired_word: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: tired_word
+  feedback_frame:
+    text: '*خسته شدم* تعني: تعبتُ.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson05.past_verb_first_gloss.002
+  lesson_content_key: prs.a1.unit20.lesson05.reading_longer_yesterday
+  type: multiple_choice
+  frame:
+    text: '{past_verb_first}'
+    language_code: prs
+    direction: rtl
+  slots:
+    past_verb_first: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: past_verb_first
+  feedback_frame:
+    text: '{past_verb_first} فعل في الماضي البسيط بصيغة المتكلم.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson05.seven_oclock_order.003
+  lesson_content_key: prs.a1.unit20.lesson05.reading_longer_yesterday
+  type: word_order
+  frame:
+    text: ساعت هفت {go_verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    go_verb: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ساعت هفت {go_verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتيب الكلمات: ساعت هفت رفتم (ذهبتُ في الساعة السابعة).'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson06.past_verb_third_gloss.001
+  lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
+  type: multiple_choice
+  frame:
+    text: '{past_verb_third}'
+    language_code: prs
+    direction: rtl
+  slots:
+    past_verb_third: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: past_verb_third
+  feedback_frame:
+    text: '{past_verb_third} فعل في الماضي البسيط بصيغة الغائب.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson06.past_verb_third_translate.002
+  lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
+  type: translation
+  frame:
+    text: '{past_verb_third}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      past_verb_third: english_gloss
+  slots:
+    past_verb_third: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: past_verb_third
+  feedback_frame:
+    text: '*{past_verb_third}* هي الكلمة الداريّة المقابلة لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson06.past_verb_pool_pair.003
+  lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id009
+    word_two: *id009
+    word_three: *id009
+    word_four: *id009
+    word_five: *id009
+    word_six: *id009
+    word_seven: *id009
+    word_eight: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+    - word_seven
+    - word_eight
+  feedback_frame:
+    text: صِل كل صيغة فعل ماضٍ بمعناها.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson06.past_verb_second_translate.004
+  lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
+  type: translation
+  frame:
+    text: '{past_verb_second}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      past_verb_second: english_gloss
+  slots:
+    past_verb_second: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: past_verb_second
+  feedback_frame:
+    text: '{past_verb_second} هي الكلمة الداريّة المقابلة لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit20.lesson05.tired_fill.001.volume_order.002
+  lesson_content_key: prs.a1.unit20.lesson05.reading_longer_yesterday
+  type: word_order
+  frame:
+    text: '{tired_word} شدم'
+    language_code: prs
+    direction: rtl
+  slots:
+    tired_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: tired_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{tired_word} شدم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '*{tired_word} شدم* تعني: تعبتُ.'
+    language_code: ar
+    direction: rtl
