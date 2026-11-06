@@ -779,8 +779,13 @@ def validate_script_purity(
     target_language: str,
     document_name: str,
     report: Report,
+    source_language: str | None = None,
 ):
     if target_language not in PERSIAN_SCRIPT_LANGUAGES:
+        return
+    # An Arabic learner (ar-fa, ar-prs) legitimately writes Arabic Yeh/Kaf in learner-language strings; the target text
+    # in those documents is copied byte for byte from the fa/prs realization, which is checked on its own.
+    if source_language == "ar":
         return
 
     for location, value in walk(document, document_name):
@@ -3278,6 +3283,7 @@ def validate_practice_packs(
             pack.get("target_language"),
             str(path),
             report,
+            source_language=pack.get("source_language"),
         )
         validate_text_block_directions(pack, str(path), report)
 
@@ -3769,6 +3775,14 @@ def validate_untaught_vocabulary(
                         exercise,
                         exercise_overlay,
                     )
+                # Learner and target share a script (ar/fa/prs): script cannot tell the learner-language
+                # description from target text, so this heuristic would flag every Arabic-script description.
+                if (
+                    source_language in NON_LATIN_TARGET_SCRIPTS
+                    and NON_LATIN_TARGET_SCRIPTS.get(source_language)
+                    == NON_LATIN_TARGET_SCRIPTS.get(target_language)
+                ):
+                    effective_pairs = []
                 validate_matching_pairs_untaught_descriptions(
                     exercise,
                     pair_location,
@@ -5046,6 +5060,7 @@ def validate_documents(
         target_language,
         "overlay",
         report,
+        source_language=overlay.get("source_language"),
     )
     validate_text_block_directions(realization, "realization", report)
     validate_text_block_directions(overlay, "overlay", report)
