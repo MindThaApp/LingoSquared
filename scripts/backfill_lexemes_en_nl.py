@@ -1089,6 +1089,16 @@ NL_GLOSSES.update({
     'raadt': 'advises (raadt ... aan)',
 })
 
+# B1 unit 16, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'klacht': 'complaint',
+    'bestelling': 'order (a purchase)',
+    'aangekomen': 'arrived (past participle of aankomen)',
+    'oplossen': 'to solve',
+    'besteld': 'ordered (past participle)',
+    'oplossing': 'solution',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1472,6 +1482,10 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 16 (see the NL_GLOSSES block above).
+NOUNS.update({'klacht', 'bestelling', 'oplossing'})
+VERBS.update({'aangekomen', 'oplossen', 'besteld'})
 
 # B1 unit 15 (see the NL_GLOSSES block above).
 NOUNS.update({'bed', 'advies'})
@@ -3718,6 +3732,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "waarom_vraag_je_het_niet": "waarom_vraag_je_het_niet",
         "slecht_slapen": "slecht_slapen",
         "een_advies_lezen": "een_advies_lezen",
+        # B1 unit 16, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "ik_heb_een_klacht": "ik_heb_een_klacht",
+        "nog_niet_aangekomen": "nog_niet_aangekomen",
+        "kunt_u_het_oplossen": "kunt_u_het_oplossen",
+        "in_de_winkel": "in_de_winkel",
+        "een_e_mail_lezen": "een_e_mail_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
@@ -5138,6 +5158,8 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # b1 unit 15: senses that differ from the global gloss.
     ("b1_unit15_advies_geven", "raad"): "advise (raad ... aan)",
     ("b1_unit15_advies_geven", "vraag"): "ask (with je/ik)",
+    # b1 unit 16: senses that differ from the global gloss.
+    ("b1_unit16_een_klacht_indienen", "zoek"): "look into (zoek ... uit)",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
