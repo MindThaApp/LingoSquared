@@ -115,3 +115,23 @@ jobs:
       - name: Run backend test suite
         working-directory: backend
         run: python -m pytest -q
+
+  e2e:
+    name: E2E learner journeys (Playwright + Docker stack)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      # Builds the frontend, starts an isolated db + api + nginx stack, seeds, runs
+      # e2e/tests in the Playwright image and tears everything down (down -v --rmi local).
+      - name: Run scripts/e2e.sh
+        env:
+          E2E_OUT: ${{ github.workspace }}/e2e-results
+        run: scripts/e2e.sh
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: e2e-results
+          if-no-files-found: ignore
