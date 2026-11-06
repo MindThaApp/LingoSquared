@@ -1057,6 +1057,73 @@ NL_GLOSSES.update({
     "verhaal": "the story", "grappig": "funny",
 })
 
+# B1 unit 12, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Zodra': 'as soon as',
+    'droog': 'dry',
+})
+
+# B1 unit 13, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Voordat': 'before (conjunction)',
+    'Nadat': 'after (conjunction)',
+    'wacht': 'wait (with ik/hij)',
+    'rustige': 'quiet (before a de-word)',
+    'vertrek': 'leave (with ik)',
+})
+
+# B1 unit 14, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'spaar': 'save (with ik)',
+    'zodat': 'so that',
+    'zoveel': 'so much',
+    'sneller': 'faster',
+    'bereiken': 'to reach; to achieve',
+})
+
+# B1 unit 15, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'bed': 'bed',
+    'geprobeerd': 'tried (past participle)',
+    'advies': 'advice; a piece of advice',
+    'raadt': 'advises (raadt ... aan)',
+})
+
+# B1 unit 16, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'klacht': 'complaint',
+    'bestelling': 'order (a purchase)',
+    'aangekomen': 'arrived (past participle of aankomen)',
+    'oplossen': 'to solve',
+    'besteld': 'ordered (past participle)',
+    'oplossing': 'solution',
+})
+
+# B1 unit 17, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Had': "had (as in 'Had ik maar...': if only I had)",
+    'gespaard': 'saved (past participle of sparen)',
+    'gebeld': 'called (past participle of bellen)',
+    'wens': 'wish',
+})
+
+# B1 unit 18, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'drukker': 'busier',
+    'rustiger': 'quieter',
+    'veranderingen': 'changes',
+    'voorspelling': 'prediction',
+    'slimme': 'clever (before a de-word)',
+    'Naar': 'to; toward',
+})
+
+# B1 unit 19, added 2026-11-06 (en-nl B1 fill). Only tokens no earlier round glossed.
+NL_GLOSSES.update({
+    'Kort': 'in short; briefly',
+    'nuttig': 'useful',
+    'samenvatting': 'summary',
+})
+
 # A1 units 43-48 (seasons, emergencies, lost items, appointments, library
 # borrowing, waste sorting), added 2026-07-12 alongside UNIT_FILES' extended
 # range above.
@@ -1440,6 +1507,42 @@ VERBS.update({"nam", "opnam", "deed", "gebeurde", "lachten"})
 ADJECTIVES.update({"jammer", "grappigs", "grappig"})
 ADVERBS.update({"Uiteindelijk"})
 NOUNS.update({"verhaal"})
+
+# B1 unit 19 (see the NL_GLOSSES block above).
+ADVERBS.update({'Kort'})
+ADJECTIVES.update({'nuttig'})
+NOUNS.update({'samenvatting'})
+
+# B1 unit 18 (see the NL_GLOSSES block above).
+ADJECTIVES.update({'drukker', 'rustiger', 'slimme'})
+NOUNS.update({'veranderingen', 'voorspelling'})
+PREPOSITIONS.update({'Naar'})
+
+# B1 unit 17 (see the NL_GLOSSES block above).
+VERBS.update({'Had', 'gespaard', 'gebeld'})
+NOUNS.update({'wens'})
+
+# B1 unit 16 (see the NL_GLOSSES block above).
+NOUNS.update({'klacht', 'bestelling', 'oplossing'})
+VERBS.update({'aangekomen', 'oplossen', 'besteld'})
+
+# B1 unit 15 (see the NL_GLOSSES block above).
+NOUNS.update({'bed', 'advies'})
+VERBS.update({'geprobeerd', 'raadt'})
+
+# B1 unit 14 (see the NL_GLOSSES block above).
+VERBS.update({'spaar', 'bereiken'})
+PARTICLES.update({'zodat'})
+ADVERBS.update({'zoveel', 'sneller'})
+
+# B1 unit 13 (see the NL_GLOSSES block above).
+PARTICLES.update({'Voordat', 'Nadat'})
+VERBS.update({'wacht', 'vertrek'})
+ADJECTIVES.update({'rustige'})
+
+# B1 unit 12 (see the NL_GLOSSES block above).
+PARTICLES.update({'Zodra'})
+ADJECTIVES.update({'droog'})
 
 
 # ---------------------------------------------------------------------------
@@ -3644,6 +3747,54 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "toen_opnam": "past_narrative_toen",
         "sara_dialoog": "storytelling_dialogue",
         "verhaal_lezen": "storytelling_reading",
+        # B1 unit 12, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "als_ik_tijd_heb": "als_ik_tijd_heb",
+        "zodra_ik_thuis_ben": "zodra_ik_thuis_ben",
+        "tenzij_ik_moet_werken": "tenzij_ik_moet_werken",
+        "weekend_fietsen": "weekend_fietsen",
+        "weekendregels_lezen": "weekendregels_lezen",
+        # B1 unit 13, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "voordat_ik_vertrek": "voordat_ik_vertrek",
+        "nadat_ik_gegeten_heb": "nadat_ik_gegeten_heb",
+        "tot_de_trein_komt": "tot_de_trein_komt",
+        "een_rustige_dag": "een_rustige_dag",
+        "mijn_dag_lezen": "mijn_dag_lezen",
+        # B1 unit 14, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "om_een_huis_te_kopen": "om_een_huis_te_kopen",
+        "zodat_ik_meer_kan_sparen": "zodat_ik_meer_kan_sparen",
+        "om_nederlands_te_leren": "om_nederlands_te_leren",
+        "sparen_voor_een_huis": "sparen_voor_een_huis",
+        "mijn_doel_lezen": "mijn_doel_lezen",
+        # B1 unit 15, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "je_kunt_beter": "je_kunt_beter",
+        "ik_raad_je_aan": "ik_raad_je_aan",
+        "waarom_vraag_je_het_niet": "waarom_vraag_je_het_niet",
+        "slecht_slapen": "slecht_slapen",
+        "een_advies_lezen": "een_advies_lezen",
+        # B1 unit 16, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "ik_heb_een_klacht": "ik_heb_een_klacht",
+        "nog_niet_aangekomen": "nog_niet_aangekomen",
+        "kunt_u_het_oplossen": "kunt_u_het_oplossen",
+        "in_de_winkel": "in_de_winkel",
+        "een_e_mail_lezen": "een_e_mail_lezen",
+        # B1 unit 17, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "ik_had_moeten": "ik_had_moeten",
+        "had_ik_maar": "had_ik_maar",
+        "het_spijt_me_dat": "het_spijt_me_dat",
+        "de_trein_gemist": "de_trein_gemist",
+        "een_spijtig_weekend_lezen": "een_spijtig_weekend_lezen",
+        # B1 unit 18, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "ik_ben_van_plan": "ik_ben_van_plan",
+        "ik_denk_dat_het_drukker_wordt": "ik_denk_dat_het_drukker_wordt",
+        "ik_weet_nog_niet_of": "ik_weet_nog_niet_of",
+        "plannen_voor_volgend_jaar": "plannen_voor_volgend_jaar",
+        "plannen_lezen": "plannen_lezen",
+        # B1 unit 19, added 2026-11-06. One tag per lesson (tag == bare suffix).
+        "het_artikel_gaat_over": "het_artikel_gaat_over",
+        "kort_gezegd": "kort_gezegd",
+        "volgens_de_schrijver": "volgens_de_schrijver",
+        "het_artikel_samenvatten": "het_artikel_samenvatten",
+        "korte_samenvatting_lezen": "korte_samenvatting_lezen",
         # B1's own review lesson (unit 01-11's "wrapup_production" bare
         # suffix, identical across all 11 units) -- same intentional
         # bare-suffix-collision-reuse precedent already established for
@@ -5057,6 +5208,20 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b2_unit02_speculatie", "spreken"): "to speak",  # "vanochtend sprak ... spreken"
     ("b2_unit04_verhaal", "was"): "was (past tense of 'to be')",  # "ik was moe", not afwassen
     ("b2_unit07_onderhandelen", "alleen"): "only; alone",  # "maar alleen als"
+    # b1 unit 12: senses that differ from the global gloss.
+    ("b1_unit12_voorwaarden", "hardlopen"): "to go running",
+    # b1 unit 13: senses that differ from the global gloss.
+    ("b1_unit13_volgorde_van_gebeurtenissen", "tot"): "until",
+    # b1 unit 15: senses that differ from the global gloss.
+    ("b1_unit15_advies_geven", "raad"): "advise (raad ... aan)",
+    ("b1_unit15_advies_geven", "vraag"): "ask (with je/ik)",
+    # b1 unit 16: senses that differ from the global gloss.
+    ("b1_unit16_een_klacht_indienen", "zoek"): "look into (zoek ... uit)",
+    # b1 unit 18: senses that differ from the global gloss.
+    ("b1_unit18_plannen_en_voorspellingen", "Laat"): "let (laat het me weten)",
+    # b1 unit 19: senses that differ from the global gloss.
+    ("b1_unit19_samenvatten_en_navertellen", "kort"): "short; briefly",
+    ("b1_unit19_samenvatten_en_navertellen", "artikel"): "article (a text)",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
@@ -5065,6 +5230,9 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit15_advies_geven", "raad"): "verb",
+    ("b1_unit15_advies_geven", "vraag"): "verb",
+    ("b1_unit12_voorwaarden", "hardlopen"): "verb",
     ("b1_unit06_verplichtingen", "regel"): "noun",
     ("a1_unit54_zwembad", "regel"): "noun",
     ("b1_unit05_indirecte_rede", "vroeg"): "verb",
