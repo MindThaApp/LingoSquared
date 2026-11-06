@@ -1,0 +1,447 @@
+schema_version: '1.0'
+pack_key: practice.hi-ar.a1.unit14
+source_language: hi
+target_language: ar
+unit_content_key: ar.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_أحب
+    - w_القهوة
+    - w_شاي
+    - w_الماء
+    - w_ولا
+    - w_أفضل
+    - w_تفضل
+    - w_الشاي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+      - w_أفضل
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_أفضل
+      - w_تفضل
+      - w_القهوة
+      - w_الشاي
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_القهوة
+      - w_الشاي
+      - w_الماء
+  qahwa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_القهوة
+  shay: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_شاي
+  shayd:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الشاي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الماء
+  uhibb: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أحب
+  wala: &id004
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ولا
+  ufaddil: &id010
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أفضل
+  tufaddil: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تفضل
+templates:
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.choose.001
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أحب क्रिया "मुझे पसंद है" है; इसके तुरंत बाद वह चीज़ आती है जो आपको पसंद है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.listen.002
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ولا यानी و (और) के साथ لا (नहीं): "और नहीं"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.match.003
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أحب का अर्थ है "मुझे पसंद है" और أفضل का "मुझे ज़्यादा पसंद है"; ولا (और नहीं) नकारात्मक कथन को पिछले कथन से जोड़ता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.order.004
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'पसंद की चीज़ أحب के बाद आती है, और सामान्य प्रकार के लिए ال लगता है: أحب القهوة का अर्थ है "मुझे कॉफ़ी पसंद है"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.order.005
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: لا أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: لا أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'क्रिया से पहले لا उसे नकारात्मक बना देता है: لا أحب का अर्थ है "मुझे पसंद नहीं है"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.fill.006
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أحب القهوة {item} أحب الشاي. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'ولا नकारात्मक वाक्यांश को जोड़ता है: मुझे कॉफ़ी पसंद है और चाय पसंद नहीं है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.fill.007
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أنا {item} الماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أنا (मैं) ज़ोर देने के लिए जोड़ा जा सकता है, पर अकेला أحب भी पहले से "मुझे पसंद है" का अर्थ देता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.translate.008
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شاي बिना उपसर्ग के "चाय" है, जबकि الماء में ال लगा है; أحب का अर्थ है "मुझे पसंद है"।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.translate.009
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: मुझे पानी पसंद है। ("मैं" के लिए अलग शब्द नहीं)
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أحب के बाद सामान्य रूप से किसी चीज़ के लिए अरबी में ال लगता है, इसलिए "मुझे पानी पसंद है" है أحب الماء।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson01.translate.010
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: यह चाय है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'ال के बिना شاي बस "चाय" है, और अरबी में "है" के लिए किसी शब्द की ज़रूरत नहीं: هذا شاي।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.choose.001
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أفضل का अर्थ है "मुझे ज़्यादा पसंद है"; ت उपसर्ग वाला تفضل पुल्लिंग "तुम" वाला रूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.listen.002
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'تفضل का अर्थ है "तुम्हें ज़्यादा पसंद है", जो पुरुष से कहा जाता है: ماذا تفضل يا يوسف؟'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.order.003
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: ماذا {item} يا يوسف؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ت उपसर्ग "तुम" दर्शाता है; ماذا تفضل؟ किसी पुरुष से पूछता है कि उसे क्या ज़्यादा पसंद है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.order.004
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: أفضل {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أفضل {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أفضل के बाद ال के साथ वह चीज़ आती है जो ज़्यादा पसंद है: أفضل القهوة।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.fill.005
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: fill_in_blank
+  frame:
+    text: أنا {item} القهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل का अर्थ है "मुझे ज़्यादा पसंद है"; أ उपसर्ग "मैं" दर्शाता है, जैसे أحب और أريد में।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.translate.006
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل का अर्थ है "मुझे ज़्यादा पसंद है" और تفضل का "तुम्हें (पुल्लिंग) ज़्यादा पसंद है"; उपसर्ग أ या ت बताता है कि कौन।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit14.lesson02.translate.007
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: यूसुफ़, तुम्हें क्या ज़्यादा पसंद है?
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: यूसुफ़ पुरुष है, इसलिए "तुम" वाला रूप تفضل है।
+    language_code: hi
+    direction: ltr

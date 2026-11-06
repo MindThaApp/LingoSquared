@@ -1,0 +1,493 @@
+schema_version: '1.0'
+pack_key: practice.hi-fa.a1.unit19
+source_language: hi
+target_language: fa
+unit_content_key: fa.a1.unit19.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fa by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - phrase
+  - preposition
+  - adjective
+  - proper_noun
+  agreement_tags:
+    semantic:
+    - room_word
+    - home_room_word
+    - object_word
+    - home_location_word
+    - is_location_verb
+    - house_possessive_word
+    - reviewed_phrase
+    - en_fa_a1_unit19_lesson05_words
+    - en_fa_a1_unit19_lesson06_words
+slot_presets:
+  room_word: &id001
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    agreement_tags:
+      semantic: room_word
+  home_room_word: &id007
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    agreement_tags:
+      semantic: home_room_word
+  object_word: &id003
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: object_word
+  location_word:
+    language_code: fa
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: home_location_word
+  is_location_verb: &id006
+    language_code: fa
+    part_of_speech: verb
+    agreement_tags:
+      semantic: is_location_verb
+  house_possessive_word:
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: house_possessive_word
+  room_or_object: &id002
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    agreement_tags:
+      semantic:
+      - room_word
+      - object_word
+  location_or_is: &id004
+    language_code: fa
+    part_of_speech:
+    - preposition
+    - verb
+    agreement_tags:
+      semantic:
+      - home_location_word
+      - is_location_verb
+  location_or_object: &id005
+    language_code: fa
+    part_of_speech:
+    - preposition
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - home_location_word
+      - is_location_verb
+      - object_word
+  housing_review_word: &id010
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    - preposition
+    - verb
+    agreement_tags:
+      semantic:
+      - home_location_word
+      - is_location_verb
+      - room_word
+      - object_word
+      - house_possessive_word
+  house_or_room_word: &id008
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    agreement_tags:
+      semantic:
+      - en_fa_a1_unit19_lesson05_words
+      - room_word
+  your_house_word: &id009
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_fa_a1_unit19_lesson06_words
+templates:
+- content_key: practice.hi-fa.fa.a1.unit19.lesson01.room_choice.001
+  lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
+  type: multiple_choice
+  frame:
+    text: '{room_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    room_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: room_word
+  feedback_frame:
+    text: '{room_word} घर के किसी कमरे या हिस्से का नाम है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson01.room_match.002
+  lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
+  type: matching_pairs
+  frame:
+    text: हर शब्द या वाक्यांश को उसके अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: हर कमरे या फ़र्नीचर के शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson01.room_translate.003
+  lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
+  type: translation
+  frame:
+    text: '{room_word}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      room_word: english_gloss
+  slots:
+    room_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: room_word
+  feedback_frame:
+    text: फ़ारसी शब्द या वाक्यांश है {room_word}।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson02.reviewed_phrase_choice.001
+  lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
+  type: multiple_choice
+  frame:
+    text: '{room_or_object}'
+    language_code: fa
+    direction: rtl
+  slots:
+    room_or_object: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: room_or_object
+  feedback_frame:
+    text: '{room_or_object} घर का वर्णन करने के लिए एक शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson02.room_review_match.002
+  lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
+  type: matching_pairs
+  frame:
+    text: हर शब्द या वाक्यांश को उसके अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: हर कमरे या फ़र्नीचर के शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson02.room_object_order.003
+  lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
+  type: word_order
+  frame:
+    text: اتاق خواب یه {object_word} داره
+    language_code: fa
+    direction: rtl
+  slots:
+    object_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اتاق خواب یه {object_word} داره
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: یه ... داره का मतलब है "इसमें एक ... है", जैसे اتاق خواب یه تخت داره (शयनकक्ष में एक बिस्तर है)।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson03.object_choice.001
+  lesson_content_key: fa.a1.unit19.lesson03.household_objects
+  type: multiple_choice
+  frame:
+    text: '{object_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    object_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: object_word
+  feedback_frame:
+    text: '{object_word} घर के फ़र्नीचर के एक सामान का नाम है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson03.object_match.002
+  lesson_content_key: fa.a1.unit19.lesson03.household_objects
+  type: matching_pairs
+  frame:
+    text: हर शब्द को उसके अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: हर कमरे या फ़र्नीचर के शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson03.room_object_order.003
+  lesson_content_key: fa.a1.unit19.lesson03.household_objects
+  type: word_order
+  frame:
+    text: اتاق خواب یه {object_word} داره
+    language_code: fa
+    direction: rtl
+  slots:
+    object_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اتاق خواب یه {object_word} داره
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: یه ... داره का मतलब है "इसमें एक ... है", जैसे اتاق خواب یه تخت داره (शयनकक्ष में एक बिस्तर है)।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson04.location_choice.001
+  lesson_content_key: fa.a1.unit19.lesson04.location_in_home
+  type: multiple_choice
+  frame:
+    text: '{location_or_is}'
+    language_code: fa
+    direction: rtl
+  slots:
+    location_or_is: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: location_or_is
+  feedback_frame:
+    text: '{location_or_is} बताता है कि कोई चीज़ कहाँ है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson04.location_object_match.002
+  lesson_content_key: fa.a1.unit19.lesson04.location_in_home
+  type: matching_pairs
+  frame:
+    text: हर शब्द को उसके अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: हर शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson04.is_location_verb_translate.003
+  lesson_content_key: fa.a1.unit19.lesson04.location_in_home
+  type: translation
+  frame:
+    text: '{is_location_verb}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      is_location_verb: english_gloss
+  slots:
+    is_location_verb: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: is_location_verb
+  feedback_frame:
+    text: फ़ारसी वाक्यांश है {is_location_verb}।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson05.house_has_room_order.001
+  lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
+  type: word_order
+  frame:
+    text: خونه‌ی من یه {home_room_word} داره
+    language_code: fa
+    direction: rtl
+  slots:
+    home_room_word: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: خونه‌ی من یه {home_room_word} داره
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: خونه‌ی من یه ... داره का मतलब है "मेरे घर में एक ... है", जैसे خونه‌ی من یه آشپزخانه داره।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson05.house_word_choice.002
+  lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
+  type: multiple_choice
+  frame:
+    text: '{house_or_room_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    house_or_room_word: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: house_or_room_word
+  feedback_frame:
+    text: '{house_or_room_word} घर का वर्णन करने के लिए एक शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson06.house_possessive_translate.001
+  lesson_content_key: fa.a1.unit19.lesson06.housing_dialogue
+  type: translation
+  frame:
+    text: '{house_possessive_word}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      house_possessive_word: english_gloss
+  slots:
+    house_possessive_word: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: house_possessive_word
+  feedback_frame:
+    text: फ़ारसी शब्द है {house_possessive_word}।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-fa.fa.a1.unit19.lesson06.unit_review_match.002
+  lesson_content_key: fa.a1.unit19.lesson06.housing_dialogue
+  type: matching_pairs
+  frame:
+    text: हर शब्द या वाक्यांश को उसके अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+  slots:
+    first: *id010
+    second: *id010
+    third: *id010
+    fourth: *id010
+    fifth: *id010
+    sixth: *id010
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: घर से जुड़े हर शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr

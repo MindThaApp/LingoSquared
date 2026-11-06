@@ -1,0 +1,224 @@
+schema_version: '1.0'
+pack_key: practice.hi-prs.a1.unit26
+source_language: hi
+target_language: prs
+unit_content_key: prs.a1.unit26.hobbies
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - verb
+  - adjective
+  agreement_tags:
+    semantic:
+    - hobby_topic_word
+    - hobby_activity_word
+    - en_prs_a1_unit26_words
+slot_presets:
+  hobby_topic_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hobby_topic_word
+  hobby_activity_word: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hobby_activity_word
+  unit_noun_pool: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_prs_a1_unit26_words
+  verb_adjective_pool: &id003
+    language_code: prs
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: en_prs_a1_unit26_words
+templates:
+- content_key: practice.hi-prs.prs.a1.unit26.lesson01.hobby_gloss.001
+  lesson_content_key: prs.a1.unit26.lesson01.hobby_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{hobby_topic_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    hobby_topic_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: hobby_topic_word
+  feedback_frame:
+    text: '*{hobby_topic_word}* खाली समय से जुड़ा शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson01.hobby_pair.002
+  lesson_content_key: prs.a1.unit26.lesson01.hobby_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: &id002
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit26_words
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: हर शब्द को उसके हिंदी अर्थ से मिलाइए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson02.free_time_word_gloss.001
+  lesson_content_key: prs.a1.unit26.lesson02.free_time_question
+  type: multiple_choice
+  frame:
+    text: '{free_time_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    free_time_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: free_time_word
+  feedback_frame:
+    text: '*{free_time_word}* खाली समय के पाठों का एक शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson03.weekly_hobby_order.001
+  lesson_content_key: prs.a1.unit26.lesson03.frequency
+  type: word_order
+  frame:
+    text: من هر هفته {hobby_activity_word} می‌کنم
+    language_code: prs
+    direction: rtl
+  slots:
+    hobby_activity_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من هر هفته {hobby_activity_word} می‌کنم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'शब्द-क्रम: *من هر هفته {hobby_activity_word} می‌کنم* -- मैं हर हफ़्ते ... करता हूँ।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson03.unit_noun_gloss.002
+  lesson_content_key: prs.a1.unit26.lesson03.frequency
+  type: multiple_choice
+  frame:
+    text: '{unit_noun}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_noun: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_noun
+  feedback_frame:
+    text: '*{unit_noun}* शौक़ों वाले पाठों का एक संज्ञा शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson03.unit_noun_translate.003
+  lesson_content_key: prs.a1.unit26.lesson03.frequency
+  type: translation
+  frame:
+    text: '{unit_noun}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      unit_noun: english_gloss
+  slots:
+    unit_noun: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: unit_noun
+  feedback_frame:
+    text: '{unit_noun} इसके लिए दरी शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson04.sometimes_hobby_order.001
+  lesson_content_key: prs.a1.unit26.lesson04.hobbies_dialogue
+  type: word_order
+  frame:
+    text: من هم گاهی {hobby_activity_word} می‌کنم
+    language_code: prs
+    direction: rtl
+  slots:
+    hobby_activity_word: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من هم گاهی {hobby_activity_word} می‌کنم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'शब्द-क्रम: *من هم گاهی {hobby_activity_word} می‌کنم* -- मैं कभी-कभी ... भी करता हूँ।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson04.hobby_activity_translate.002
+  lesson_content_key: prs.a1.unit26.lesson04.hobbies_dialogue
+  type: translation
+  frame:
+    text: '{hobby_activity_word}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      hobby_activity_word: english_gloss
+  slots:
+    hobby_activity_word: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: hobby_activity_word
+  feedback_frame:
+    text: '{hobby_activity_word} इस गतिविधि के लिए दरी शब्द है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-prs.prs.a1.unit26.lesson06.hobby_translate.001
+  lesson_content_key: prs.a1.unit26.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{hobby_topic_word}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      hobby_topic_word: english_gloss
+  slots:
+    hobby_topic_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: hobby_topic_word
+  feedback_frame:
+    text: '{hobby_topic_word} इसके लिए दरी शब्द है।'
+    language_code: hi
+    direction: ltr
