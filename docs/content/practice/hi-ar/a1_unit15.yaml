@@ -1,0 +1,356 @@
+schema_version: '1.0'
+pack_key: practice.hi-ar.a1.unit15
+source_language: hi
+target_language: ar
+unit_content_key: ar.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_أكبر
+    - w_أصغر
+    - w_أقرب
+    - w_أرخص
+    - w_والسوق
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_أكبر
+      - w_أصغر
+      - w_أقرب
+  comp4: &id002
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_أكبر
+      - w_أصغر
+      - w_أقرب
+      - w_أرخص
+  l2: &id005
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_أرخص
+      - w_والسوق
+      - w_أكبر
+      - w_أقرب
+  akbar:
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_أكبر
+  asghar: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_أصغر
+  aqrab: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_أقرب
+  arkhas: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_أرخص
+  walsuq: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_والسوق
+templates:
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.choose.001
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أكبر, أصغر और أقرب तुलनात्मक रूप हैं; हर एक के बाद من (से) आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.listen.002
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'तुलना के लिए तुलनात्मक विशेषण का एक ही रूप होता है, और उसके बाद من आता है: أقرب من का अर्थ है "से ज़्यादा पास"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.order.003
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: word_order
+  frame:
+    text: السوق {item} من المقهى.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: السوق {item} من المقهى.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: तुलनात्मक शब्द तुलना की जा रही दोनों चीज़ों के बीच आता है, और दूसरी चीज़ से पहले من (से) आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.order.004
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: word_order
+  frame:
+    text: المقهى {item} من السوق.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى {item} من السوق.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'अरबी में "है" के लिए शब्द नहीं चाहिए: المقهى أصغر من السوق का शाब्दिक रूप है "कैफ़े बाज़ार से छोटा"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.fill.005
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: fill_in_blank
+  frame:
+    text: المقهى {item} من السوق. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أصغر का अर्थ "छोटा" है; इसी ढाँचे से أكبر, यानी "बड़ा", बनता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.translate.006
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: तुलनात्मक रूप छोटे अरबी विशेषण हैं, जिनमें "अधिक" के लिए अलग शब्द नहीं होता; उनके बाद من आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.translate.007
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: translation
+  frame:
+    text: कैफ़े बाज़ार से छोटा है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى {item} من السوق
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: तुलनात्मक शब्द एक ही रूप में रहता है और उसके बाद من (से) आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson01.translate.008
+  lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+  type: translation
+  frame:
+    text: कैफ़े बाज़ार से ज़्यादा पास है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى {item} من السوق
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أقرب का अर्थ "ज़्यादा पास" है, जो "नज़दीक" के भाव से बना है, और इसके बाद من आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.choose.001
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أرخص का अर्थ "सस्ता" है; यह बाकी तुलनात्मक शब्दों जैसे ही ढाँचे का है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.listen.002
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: والسوق में و (और) और السوق (बाज़ार) एक ही लिखित शब्द में जुड़े हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.order.003
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: word_order
+  frame:
+    text: الماء {item} من القهوة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الماء {item} من القهوة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'أرخص का अर्थ "सस्ता" है: الماء أرخص من القهوة का मतलब है "पानी कॉफ़ी से सस्ता है"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.fill.004
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: fill_in_blank
+  frame:
+    text: الماء {item} من القهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '"सस्ता" में भी वही तुलनात्मक ढाँचा है, और उसके बाद من आता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.translate.005
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'ये चार तुलनात्मक रूप हैं: बड़ा, छोटा, ज़्यादा पास और सस्ता।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.translate.006
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: translation
+  frame:
+    text: पानी कॉफ़ी से सस्ता है।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الماء {item} من القهوة
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'तुलनात्मक शब्द दूसरी चीज़ से पहले من लेता है: कॉफ़ी से सस्ता।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit15.lesson02.translate.007
+  lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+  type: translation
+  frame:
+    text: कैफ़े बाज़ार से ज़्यादा पास है, और बाज़ार कैफ़े से बड़ा है।
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id004
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: المقهى {a} من السوق، {b} أكبر من المقهى
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'و (और) अगले शब्द का हिस्सा बनकर लिखा जाता है: والسوق।'
+    language_code: hi
+    direction: ltr

@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.hi-ar.a1.unit12
+source_language: hi
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_غدا
+    - w_نذهب
+    - w_جيد
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_غدا
+      - w_نذهب
+      - w_جيد
+  ghadan: &id002
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_غدا
+  nadhhab: &id003
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نذهب
+  jayyid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_جيد
+templates:
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.choose.001
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: غدا का अर्थ है कल; نذهب का अर्थ है हम जाते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.listen.002
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: نذهب "जाना" का "हम" रूप है; "हम" रूप ن से शुरू होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.order.003
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل نذهب إلى المقهى {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل نذهب إلى المقهى {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'غدا (कल) आमतौर पर वाक्य के अंत में आता है: क्या हम कल कैफ़े चलें?'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.order.004
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل {item} إلى المقهى غدا؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} إلى المقهى غدا؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل के साथ "हम" रूप योजना को हाँ या नहीं वाले प्रश्न में बदल देता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.fill.005
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا यानी कल; समय उसके बाद आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.fill.006
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: هل {item} إلى المقهى غدا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نذهب का अर्थ है हम जाते हैं, और इसका अर्थ हम जा रहे हैं भी हो सकता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.translate.007
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا यानी कल; نذهب यानी हम जाते हैं; جيد यानी अच्छा।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.translate.008
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: क्या हम कल कैफ़े चलें?
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} إلى المقهى {b}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: एक ही क्रिया रूप نذهب का अर्थ हम जाते हैं भी है और क्या हम चलें भी।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.choose.001
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: جيد का अर्थ है अच्छा; यहाँ यह योजना को स्वीकार करने वाला छोटा उत्तर है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.fill.002
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: fill_in_blank
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'جيد. إلى اللقاء. यानी अच्छा, अलविदा: योजना पर सहमति देना और बात समाप्त करना।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.translate.003
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد विशेषण "अच्छा" है, जो यहाँ योजना से सहमति जताने के लिए इस्तेमाल हुआ है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.translate.004
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: हम कल कैफ़े जा रहे हैं।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: '"हम" रूप نذهب को सर्वनाम की ज़रूरत नहीं होती और इसका अर्थ हम जा रहे हैं भी है; समय का शब्द غدا वाक्य के अंत में आता है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.order.005
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: समय का शब्द स्थान के बाद आता है, फिर घंटा वाक्य को समाप्त करता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.translate.006
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: हम कल पाँच बजे कैफ़े जा रहे हैं।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'अरबी में दिन का समय अंत में रखा जाता है: "पाँचवें घंटे में"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.listen.007
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: स्वरों और अंतिम ध्वनि को सुनकर तीनों शब्दों में अंतर पहचानिए।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson02.order.008
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: अलविदा से पहले सहमति का एक छोटा शब्द योजना को पूरा करता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit12.lesson01.translate.009
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: हाँ, पाँच बजे। अच्छा। फिर मिलते हैं।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: उत्तर समय की पुष्टि करता है, योजना को मंज़ूरी देता है, फिर अलविदा कहता है।
+    language_code: hi
+    direction: ltr

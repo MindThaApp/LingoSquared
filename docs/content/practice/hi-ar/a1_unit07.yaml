@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.hi-ar.a1.unit07
+source_language: hi
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Hindi). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ماء
+    - w_قهوة
+    - w_خبز
+    - w_أريد
+    - w_فضلك
+    - w_وقهوة
+    - w_تريدين
+    - w_خبزا
+    - w_قطعة
+    - w_واحدة
+    - w_تفضلي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  l01m: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_وقهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تريدين
+      - w_خبزا
+      - w_قطعة
+      - w_واحدة
+      - w_تفضلي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ماء
+  qahwa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قهوة
+  wqahwa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_وقهوة
+  fadlak: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_فضلك
+  turidin: &id011
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تريدين
+  khubza: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خبزا
+  qita: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قطعة
+  wahida: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_واحدة
+  tafaddali:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_تفضلي
+templates:
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.choose.001
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أريد का अर्थ है "मुझे चाहिए"; पुरुष हो या स्त्री, यही रूप इस्तेमाल होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.listen.002
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ماء पानी है और قهوة कॉफ़ी है; خبز (रोटी) तीसरी चीज़ है जो आप माँग सकते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.match.003
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'و (और) अगले शब्द से जुड़ता है: وقهوة का अर्थ है "और कॉफ़ी"। من فضلك विनम्र "कृपया" है।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.order.004
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أريد के साथ संज्ञा आए तो अर्थ होता है "मुझे ... चाहिए"; من فضلك (कृपया) अनुरोध को पूरा करता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.fill.005
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'यहाँ و अगले शब्द का हिस्सा बनकर लिखा गया है: وقهوة का अर्थ है "और कॉफ़ी"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.fill.006
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء وقهوة من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: من فضلك का शाब्दिक अर्थ है "आपकी मेहरबानी से"; यह "कृपया" कहने का रोज़मर्रा का तरीक़ा है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.translate.007
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أريد एक क्रिया है जिसका अर्थ है "मुझे चाहिए"; यहाँ के बाकी शब्द वे चीज़ें हैं जिन्हें आप माँग सकते हैं।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.translate.008
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: मुझे पानी चाहिए, कृपया।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'अरबी में संज्ञा से पहले "एक" (a) जैसा शब्द नहीं आता: أريد ماء का अर्थ है "मुझे पानी चाहिए"।'
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson01.translate.009
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: मुझे कॉफ़ी चाहिए, कृपया।
+    language_code: hi
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: قهوة का अंत ة पर होता है, जो स्त्रीलिंग का आम अंत है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.listen.001
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تريدين "चाहना" का स्त्रीलिंग "आप" रूप है; पुरुष को संबोधित करने के लिए अंत अलग होता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.choose.002
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قطعة का अर्थ है "टुकड़ा"; قطعة خبز यानी रोटी का टुकड़ा, और अगला शब्द واحدة (एक) उसके अनुरूप रूप में आता है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.order.003
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: هل تريدين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل تريدين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل कथन को हाँ/नहीं वाला प्रश्न बना देता है; خبزا वह चीज़ है जो चाही जा रही है, यानी रोटी।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.order.004
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: نعم، أريد قطعة خبز {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، أريد قطعة خبز {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة "एक" का स्त्रीलिंग रूप है, जो स्त्रीलिंग शब्द قطعة के अनुरूप है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.fill.005
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: fill_in_blank
+  frame:
+    text: هل {item} خبزا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تريدين का अर्थ है "आप (स्त्री) चाहती हैं", इसलिए هل تريدين خبزا؟ किसी स्त्री से पूछता है "क्या आपको रोटी चाहिए?"
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.translate.006
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: hi
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفضلي स्त्री से कहा जाता है और इसका अर्थ है "लीजिए"; पुरुष के लिए अंत अलग सुनाई देगा।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.translate.007
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: क्या आपको रोटी चाहिए? (स्त्री से कहा गया)
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: अंत का -ين स्त्रीलिंग "आप" रूप दर्शाता है, और चाही जा रही रोटी خبزا लिखी जाती है।
+    language_code: hi
+    direction: ltr
+- content_key: practice.hi-ar.ar.a1.unit07.lesson02.translate.008
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: रोटी का एक टुकड़ा
+    language_code: hi
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} خبز {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة قطعة के बाद आता है और उसके स्त्रीलिंग से मेल खाता है।
+    language_code: hi
+    direction: ltr
