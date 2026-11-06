@@ -92,7 +92,7 @@ export function SpeechSpeedSettings() {
         {t("speech_speed_settings.description")}
       </p>
       {isLoading ? (
-        <p className="muted">{t("speech_speed_settings.loading")}</p>
+        <p className="muted" role="status">{t("speech_speed_settings.loading")}</p>
       ) : languageCodes.length === 0 ? (
         <p className="muted">{t("speech_speed_settings.no_languages")}</p>
       ) : (

@@ -415,7 +415,7 @@ export function PracticeFeedPage() {
   }
 
   if (loadingEligibility) {
-    return <div className="page-loading">{t("common.loading")}</div>;
+    return <div className="page-loading" role="status">{t("common.loading")}</div>;
   }
 
   // Must come BEFORE the locked/empty branch: an unknown eligibility list is
@@ -536,7 +536,7 @@ export function PracticeFeedPage() {
         </div>
       ))}
 
-      {loadingMore && <div className="page-loading">{t("common.loading")}</div>}
+      {loadingMore && <div className="page-loading" role="status">{t("common.loading")}</div>}
 
       {feedError && !loadingMore && (
         <div className="feedback-banner error" role="alert">

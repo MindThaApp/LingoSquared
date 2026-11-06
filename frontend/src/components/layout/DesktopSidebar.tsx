@@ -167,7 +167,7 @@ export function DesktopSidebar() {
           {quests.map((quest) => {
             const pct = quest.target > 0 ? Math.min(100, Math.max(0, (quest.progress / quest.target) * 100)) : 0;
             return (
-              <div key={quest.code} style={{ marginBottom: 10, opacity: quest.completed ? 0.6 : 1 }}>
+              <div key={quest.code} style={{ marginBottom: 10 }}>
                 <div style={{ fontWeight: 700, fontSize: "0.9rem" }}>
                   {quest.completed && (
                     <CheckCircle

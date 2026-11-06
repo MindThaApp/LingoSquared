@@ -64,7 +64,8 @@ export function ReportIssueButton({
         style={{
           background: "none",
           border: "none",
-          padding: 0,
+          padding: "4px 0",
+          minHeight: 24,
           fontSize: "0.8rem",
           cursor: "pointer",
           textDecoration: "underline",
