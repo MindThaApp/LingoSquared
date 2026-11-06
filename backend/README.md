@@ -1,6 +1,6 @@
 # Lingo² backend
 
-FastAPI/PostgreSQL backend for the Lingo² local language-learning application. It supports the ten contract languages, arbitrary ordered language pairs, server-side exercise grading, progress, XP/streaks, achievements, and SM-2 review scheduling.
+FastAPI/PostgreSQL backend for the Lingo² local language-learning application. It supports the ten contract languages, arbitrary ordered language pairs, server-side exercise grading, progress, XP/streaks, achievements, and FSRS review scheduling.
 
 ## Debian/Docker setup
 
@@ -130,11 +130,11 @@ units as locked.
 
 ## Review and progress behavior
 
-Review items are created when an exercise is answered. Scheduling uses SM-2: successful first and second reviews use one- and six-day intervals, later intervals multiply by the ease factor, and failed reviews reset repetitions with a one-day interval. SM-2 is widely understood, deterministic, and sufficient for this local MVP.
+Review items are created when an exercise is answered. Scheduling uses FSRS-4.5 (stability, difficulty, retrievability; default weights; 0.9 target retention): the next interval is the time for retrievability to fall to 90%, and a failed review sharply lowers stability without resetting it. The legacy `ease_factor`/`interval_days`/`repetitions` columns stay populated as derived values. See `app/review/fsrs.py` and migration 0037.
 
 Flashcards are self-graded: the prompt exposes `back_text_blocks` for the
 reveal step, then answer and review submissions send `{"response":"known"}`
-or `{"response":"unknown"}`. These map to successful or failed SM-2 recall;
+or `{"response":"unknown"}`. These map to successful or failed recall;
 flashcards never use typed-answer equality grading.
 
 `GET /me/reviews` always uses cursor pagination, capped at 200 items per page, and returns `{ "items": [...], "next_cursor": string|null }`. This avoids a later response-shape change as a user's review history grows.

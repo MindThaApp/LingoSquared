@@ -11,7 +11,8 @@ from app.models import (
     PracticeTemplate,
     UserLexemeSRS,
 )
-from app.review.sm2 import schedule
+from app.review import fsrs
+from app.review.scheduler import schedule
 from test_endless_practice import (
     artifact,
     create_course_with_lexemes,
@@ -80,56 +81,63 @@ class _ScheduleItem:
         self.last_reviewed_at = last_reviewed_at
 
 
-def test_schedule_on_time_review_keeps_existing_sm2_growth():
+def test_schedule_on_time_review_grows_interval_per_fsrs():
     now = datetime.now(timezone.utc)
     item = _ScheduleItem(
         due_at=now - timedelta(minutes=1),
         last_reviewed_at=now - timedelta(days=10),
     )
 
-    schedule(item, "correct")
+    schedule(item, "correct", now=now)
 
-    assert item.interval_days == 25
+    # SM-2 state (interval 10, ease 2.5) migrates to S=10, D=5.
+    r = fsrs.retrievability(10, 10.0)
+    expected = fsrs.next_stability(5.0, 10.0, r, fsrs.GOOD)
+    assert item.stability == expected
+    assert item.interval_days == fsrs.next_interval(expected)
+    assert 20 <= item.interval_days <= 40
     assert item.repetitions == 3
     assert 0.54 < item.mastery < 0.56
-    assert item.due_at > now + timedelta(days=24)
+    assert item.due_at > now + timedelta(days=item.interval_days - 1)
 
 
-def test_schedule_early_review_scales_interval_growth_by_elapsed_ratio():
+def test_schedule_early_review_grows_less_than_on_time():
     now = datetime.now(timezone.utc)
-    item = _ScheduleItem(
+    early = _ScheduleItem(
         due_at=now + timedelta(days=8),
         last_reviewed_at=now - timedelta(days=2),
     )
+    on_time = _ScheduleItem(
+        due_at=now - timedelta(minutes=1),
+        last_reviewed_at=now - timedelta(days=10),
+    )
 
-    schedule(item, "correct")
+    schedule(early, "correct", now=now)
+    schedule(on_time, "correct", now=now)
 
-    assert item.interval_days == 13
-    assert item.interval_days < 25
-    assert item.repetitions == 3
-    assert 0.54 < item.mastery < 0.56
-    assert item.due_at > now + timedelta(days=12)
+    assert 10 <= early.interval_days < on_time.interval_days
+    assert early.repetitions == 3
 
 
-def test_schedule_first_ever_review_is_not_early_scaled():
+def test_schedule_first_ever_review_uses_initial_stability():
     now = datetime.now(timezone.utc)
     item = _ScheduleItem(
-        due_at=now + timedelta(days=8),
+        repetitions=0,
+        interval_days=0,
+        due_at=now + timedelta(minutes=5),
         last_reviewed_at=None,
     )
 
-    schedule(item, "correct")
+    schedule(item, "correct", now=now)
 
-    assert item.interval_days == 25
-    assert item.repetitions == 3
+    assert item.stability == fsrs.DEFAULT_W[2]
+    assert item.interval_days == 4
+    assert item.repetitions == 1
 
 
 def test_schedule_lapse_on_established_word_keeps_partial_credit():
-    # A lapse must NOT hard-reset a well-established word to
-    # repetitions=0/interval_days=1 (the "ease hell" pattern) — it keeps
-    # 30% of the prior interval and loses 2 repetitions, while the
-    # ease_factor penalty (-0.32, unchanged from before the softening)
-    # and the mastery penalty (-0.2) still apply in full.
+    # A lapse lowers stability (never to zero) and difficulty rises; the
+    # mastery penalty and repetitions reset apply.
     now = datetime.now(timezone.utc)
     item = _ScheduleItem(
         repetitions=8,
@@ -140,21 +148,18 @@ def test_schedule_lapse_on_established_word_keeps_partial_credit():
         last_reviewed_at=now - timedelta(days=100),
     )
 
-    schedule(item, "incorrect")
+    schedule(item, "incorrect", now=now)
 
-    assert item.interval_days == 30  # round(100 * 0.3), not 1
-    assert item.repetitions == 6  # 8 - 2, not 0
-    assert abs(item.ease_factor - 2.18) < 1e-9  # 2.5 - 0.32, unchanged
-    assert abs(item.mastery - 0.7) < 1e-9  # 0.9 - 0.2, unchanged
-    assert item.due_at > now + timedelta(days=29)
+    assert 1 <= item.interval_days < 100
+    assert item.stability < 100 and item.stability > 0
+    assert item.difficulty > 5.0
+    assert item.ease_factor < 2.5
+    assert item.repetitions == 0
+    assert abs(item.mastery - 0.7) < 1e-9
+    assert item.due_at > now + timedelta(days=item.interval_days - 1)
 
 
-def test_schedule_success_after_lapse_regrows_from_retained_interval():
-    # The retained post-lapse interval must actually be USED: with
-    # repetitions still >= 2 after the lapse, the next success takes the
-    # multiplicative branch (interval * ease) from the retained 30%
-    # interval, instead of being overwritten by the 1-day/6-day
-    # new-word bootstrap ladder.
+def test_schedule_success_after_lapse_regrows():
     now = datetime.now(timezone.utc)
     item = _ScheduleItem(
         repetitions=8,
@@ -164,22 +169,18 @@ def test_schedule_success_after_lapse_regrows_from_retained_interval():
         due_at=now - timedelta(minutes=1),
         last_reviewed_at=now - timedelta(days=100),
     )
-    schedule(item, "incorrect")
-    assert item.interval_days == 30
+    schedule(item, "incorrect", now=now)
+    lapsed = item.interval_days
 
-    # Simulate the retained interval elapsing fully (on-time review).
     item.due_at = now - timedelta(minutes=1)
-    item.last_reviewed_at = now - timedelta(days=30)
-    schedule(item, "correct")
+    item.last_reviewed_at = now - timedelta(days=lapsed)
+    schedule(item, "correct", now=now)
 
-    assert item.interval_days == 65  # round(30 * 2.18), not 1 or 6
-    assert item.repetitions == 7
+    assert item.interval_days > lapsed
+    assert item.repetitions == 1
 
 
 def test_schedule_consecutive_lapses_converge_to_floor_never_negative():
-    # Repeated failures compound (x0.3 interval, -2 repetitions each) and
-    # converge to the old full-reset floor (interval=1, repetitions=0)
-    # without ever going negative or below 1 day.
     now = datetime.now(timezone.utc)
     item = _ScheduleItem(
         repetitions=8,
@@ -191,10 +192,13 @@ def test_schedule_consecutive_lapses_converge_to_floor_never_negative():
     )
 
     for _ in range(8):
-        schedule(item, "incorrect")
+        schedule(item, "incorrect", now=now)
+        item.last_reviewed_at = now - timedelta(days=1)
         assert item.interval_days >= 1
         assert item.repetitions >= 0
-        assert item.ease_factor >= 1.3
+        assert 1.3 <= item.ease_factor
+        assert item.stability >= fsrs.MIN_STABILITY
+        assert 1.0 <= item.difficulty <= 10.0
         assert item.mastery >= 0.0
 
     assert item.interval_days == 1

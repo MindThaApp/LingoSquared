@@ -7,7 +7,7 @@ from app.review.grading import (
     is_script_confusion,
     is_too_short_for_typo_tolerance,
 )
-from app.review.sm2 import quality_for_result, schedule
+from app.review.scheduler import rating_for_result, schedule
 
 
 def test_damerau_levenshtein_distance_1_variants():
@@ -431,12 +431,13 @@ def test_short_answer_floor_applies_after_normalization():
     )
 
 
-def test_quality_for_result_mapping():
-    assert quality_for_result("correct") == 5
-    assert quality_for_result("almost") == 4
-    assert quality_for_result("incorrect") == 2
-    assert quality_for_result(True) == 5
-    assert quality_for_result(False) == 2
+def test_rating_for_result_mapping():
+    assert rating_for_result("correct") == 3
+    assert rating_for_result("almost") == 2
+    assert rating_for_result("incorrect") == 1
+    assert rating_for_result(True) == 3
+    assert rating_for_result(False) == 1
+    assert rating_for_result("easy") == 4
 
 
 class _FakeSRSRow:
