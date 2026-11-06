@@ -1,0 +1,372 @@
+schema_version: '1.0'
+pack_key: practice.fa-ar.a1.unit10
+source_language: fa
+target_language: ar
+unit_content_key: ar.a1.unit10.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_يمين
+    - w_الأمام
+    - w_اليسار
+    - w_امش
+    - w_ثم
+    - w_يسار
+    - w_اليمين
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_يمين
+      - w_الأمام
+      - w_اليسار
+      - w_امش
+      - w_ثم
+  mcb: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_يسار
+      - w_الأمام
+      - w_اليمين
+      - w_امش
+      - w_ثم
+  dirs: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_الأمام
+      - w_اليمين
+      - w_اليسار
+  sides: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_اليمين
+      - w_اليسار
+  amam: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الأمام
+  yamin: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اليمين
+  yasar: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اليسار
+  imshi: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_امش
+  thumma: &id007
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ثم
+templates:
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.choose.001
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: يمين اسمِ «راست» است و اليسار همان «چپ» با ال است؛ حرف تعریف ال آن را «چپ» می‌کند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.listen.002
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الأمام یعنی جلو، و إلى الأمام یعنی مستقیم، رو به جلو.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.order.003
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: word_order
+  frame:
+    text: امش إلى {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'إلى (به) پیش از جهت می‌آید و جهت ال می‌گیرد: الأمام، اليمين یا اليسار.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.fill.004
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: fill_in_blank
+  frame:
+    text: امش إلى {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: إلى الأمام روش معمول گفتن «مستقیم» است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.translate.005
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: يمين یعنی راست (جهت)، برعکسِ يسار.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.translate.006
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: مستقیم برو جلو. (به یک مرد)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: امش دستور به یک مرد است؛ إلى الأمام یعنی به جلو.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson01.translate.007
+  lesson_content_key: ar.a1.unit10.lesson01.direction_words
+  type: translation
+  frame:
+    text: به راست برو. (به یک مرد)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'جهتِ بعد از إلى ال می‌گیرد: اليمين یعنی راست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.choose.001
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: امش دستورِ «برو» است که به یک مرد گفته می‌شود؛ ثم یعنی بعد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.listen.002
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'ثم دو مرحله را به ترتیب به هم وصل می‌کند: بعد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.order.003
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: word_order
+  frame:
+    text: امش إلى الأمام ثم إلى {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى الأمام ثم إلى {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ثم (بعد) مرحلهٔ اول را به دوم وصل می‌کند و هر کدام إلى خودش را دارد.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.fill.004
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: fill_in_blank
+  frame:
+    text: امش إلى الأمام {item} إلى اليمين. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ثم یعنی بعد و بین دو جهت می‌آید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.fill.005
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: fill_in_blank
+  frame:
+    text: أين المكتبة؟ {item} إلى الأمام. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: امش دستور به یک مرد است؛ پاسخِ أين المكتبة؟ راهنمایی مسیر است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.translate.006
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ثم یعنی بعد؛ امش یعنی برو، که به یک مرد گفته می‌شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.translate.007
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: مستقیم برو جلو، بعد به راست. (به یک مرد)
+    language_code: fa
+    direction: rtl
+  slots:
+    a: *id004
+    b: *id007
+    c: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {a} {b} إلى {c}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'مسیر دو مرحله دارد: اول جلو، بعد راست.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-ar.ar.a1.unit10.lesson02.translate.008
+  lesson_content_key: ar.a1.unit10.lesson02.basic_route
+  type: translation
+  frame:
+    text: به چپ برو. (به یک مرد)
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: امش إلى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: اليسار یعنی چپ؛ برعکسش اليمين است.
+    language_code: fa
+    direction: rtl

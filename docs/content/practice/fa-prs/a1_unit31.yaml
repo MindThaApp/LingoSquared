@@ -1,0 +1,233 @@
+schema_version: '1.0'
+pack_key: practice.fa-prs.a1.unit31
+source_language: fa
+target_language: prs
+unit_content_key: prs.a1.unit31.education
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  agreement_tags:
+    semantic:
+    - study_vocab_word
+    - field_word
+slot_presets:
+  study_vocab_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: study_vocab_word
+  field_word: &id003
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: field_word
+  study_pair_word: &id002
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - study_vocab_word
+      - field_word
+templates:
+- content_key: practice.fa-prs.prs.a1.unit31.lesson01.study_gloss.001
+  lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{study_vocab_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    study_vocab_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: study_vocab_word
+  feedback_frame:
+    text: '{study_vocab_word} جزو واژه‌های تحصیلی این بخش است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson01.study_pair.002
+  lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: هر واژه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson02.field_gloss.001
+  lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+  type: multiple_choice
+  frame:
+    text: '{field_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    field_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: field_word
+  feedback_frame:
+    text: '{field_word} یک رشته‌ی تحصیلی است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson02.field_study_order.001
+  lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+  type: word_order
+  frame:
+    text: من {field_word} می‌خوانم
+    language_code: prs
+    direction: rtl
+  slots:
+    field_word: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: من {field_word} می‌خوانم
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ترتیب کلمات: من [رشته] می‌خوانم (من [رشته] می‌خوانم).'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson06.study_translate.001
+  lesson_content_key: prs.a1.unit31.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{study_vocab_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      study_vocab_word: english_gloss
+  slots:
+    study_vocab_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: study_vocab_word
+  feedback_frame:
+    text: '{study_vocab_word} واژه‌ی دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson04.education_gloss.001
+  lesson_content_key: prs.a1.unit31.lesson04.education_dialogue
+  type: multiple_choice
+  frame:
+    text: '{study_pair_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    study_pair_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: study_pair_word
+  feedback_frame:
+    text: '{study_pair_word} جزو واژه‌های تحصیلی این بخش است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson02.field_translate.002
+  lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+  type: translation
+  frame:
+    text: '{field_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      field_word: english_gloss
+  slots:
+    field_word: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: field_word
+  feedback_frame:
+    text: '{field_word} واژه‌ی دری برای این رشته‌ی تحصیلی است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson01.study_pair_translate.003
+  lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+  type: translation
+  frame:
+    text: '{study_pair_word}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      study_pair_word: english_gloss
+  slots:
+    study_pair_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: study_pair_word
+  feedback_frame:
+    text: '{study_pair_word} واژه‌ی دری برای این است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-prs.prs.a1.unit31.lesson01.study_pair.002.volume_match.010
+  lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
+    language_code: prs
+    direction: rtl
+    text_blocks:
+    - text: دومین مجموعهٔ جفت‌کردن برای مرور این بخش.
+      language_code: fa
+      direction: rtl
+  slots:
+    word_one: *id002
+    word_two: *id002
+    word_three: *id002
+    word_four: *id002
+    word_five: *id002
+    word_six: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - word_one
+    - word_two
+    - word_three
+    - word_four
+    - word_five
+    - word_six
+  feedback_frame:
+    text: هر واژه را با معنی فارسی‌اش جفت کنید.
+    language_code: fa
+    direction: rtl
