@@ -1366,7 +1366,8 @@ def english_prose(v: str) -> bool:
 
 NONLATIN_LEARNERS = {"ar", "fa", "prs", "hi"}          # learner languages whose text is not Latin script (Cyrillic ru has its own check)
 NONLATIN_LETTER = re.compile(r"[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff\u0900-\u097f]")
-LATIN_WORD = re.compile(r"[A-Za-z\u00c0-\u024f]{2,}(?:['\u2019-][A-Za-z\u00c0-\u024f]+)*")
+# \u0250-\u02ff and \u1e00-\u1eff: IPA/modifier letters and dotted/macron Latin used in Arabic transliteration (saʿidtu, wāḥid)
+LATIN_WORD = re.compile(r"[A-Za-z\u00c0-\u024f\u0250-\u02ff\u1e00-\u1eff]{2,}(?:['\u2019-][A-Za-z\u00c0-\u024f\u0250-\u02ff\u1e00-\u1eff]+)*")
 
 
 # English grammar/teaching terms that translators leave in Latin script inside Arabic/Hindi/Dari notes; unlike other English words
@@ -1392,6 +1393,8 @@ def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str
     tv = {fold(t) for t in target_vocab(target)}
     src_words = None if src is None else {w.lower().replace("\u2019", "'") for w in LATIN_WORD.findall(_SPANS.sub(" ", src))}
     out = []
+    # romanised Arabic in brackets: "(masāʾ al-khayr! ayy film turīdīn)" is transliteration, not English prose
+    v = re.sub(r"\([^()]*[\u0100-\u02ff\u1e00-\u1eff][^()]*\)", " ", v)
     body = _SPANS.sub(" ", v)                       # offsets below refer to `body`, not to `v`
     for m in LATIN_WORD.finditer(body):
         w = m.group(0)
