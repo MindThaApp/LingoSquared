@@ -1,0 +1,263 @@
+schema_version: '1.0'
+pack_key: practice.ar-prs.a1.unit06
+source_language: ar
+target_language: prs
+unit_content_key: prs.a1.unit06.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - adjective
+  - adverb
+  - verb
+  - preposition
+  agreement_tags:
+    semantic:
+    - direction_word
+    - sequence_word
+    - turn_verb
+    - role_word
+    - travel_farewell_word
+    - en_prs_a1_unit06_words
+slot_presets:
+  direction_word:
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: direction_word
+  sequence_word:
+    language_code: prs
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: sequence_word
+  turn_verb: &id003
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: turn_verb
+  direction_or_turn: &id001
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - verb
+    agreement_tags:
+      semantic:
+      - direction_word
+      - turn_verb
+  unit_content_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: en_prs_a1_unit06_words
+  people_and_travel:
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - role_word
+      - travel_farewell_word
+  people_travel_or_turn:
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - role_word
+      - travel_farewell_word
+      - turn_verb
+templates:
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.direction_gloss.001
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: multiple_choice
+  frame:
+    text: '{direction_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    direction_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: direction_word
+  feedback_frame:
+    text: '{direction_word} كلمة أساسية للدلالة على الاتجاه أو الانعطاف.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.direction_translate.003
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: translation
+  frame:
+    text: '{direction_word}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      direction_word: english_gloss
+  slots:
+    direction_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: direction_word
+  feedback_frame:
+    text: '{direction_word} هي الكلمة الدرية الدالّة على هذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.direction_pair.004
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: matching_pairs
+  frame:
+    text: '{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six} — {item_seven} — {item_eight}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item_one: *id002
+    item_two: *id002
+    item_three: *id002
+    item_four: *id002
+    item_five: *id002
+    item_six: *id002
+    item_seven: *id002
+    item_eight: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+    - item_seven
+    - item_eight
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
+    - item_seven
+    - item_eight
+  feedback_frame:
+    text: طابق كل كلمة مع معناها بالعربية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.turn_verb_fill.005
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: fill_in_blank
+  frame:
+    text: به راست {turn_verb}.
+    language_code: prs
+    direction: rtl
+  slots:
+    turn_verb: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: turn_verb
+  feedback_frame:
+    text: '{turn_verb} تُكمل عبارة «انعطف يمينًا».'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.turn_verb_translate.006
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: translation
+  frame:
+    text: '{turn_verb}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      turn_verb: english_gloss
+  slots:
+    turn_verb: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: turn_verb
+  feedback_frame:
+    text: '{turn_verb} هي صيغة الأمر المهذّبة للفعل «انعطف».'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson05.review_choose.001
+  lesson_content_key: prs.a1.unit06.lesson05.landmark_directions
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} يرد في مفردات الاتجاهات في هذه الوحدة.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson06.people_choose.001
+  lesson_content_key: prs.a1.unit06.lesson06.giving_directions_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: اختر المعنى بالعربية لـ {item}.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson06.people_translate.002
+  lesson_content_key: prs.a1.unit06.lesson06.giving_directions_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} هي الكلمة الدارية لهذا.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-prs.prs.a1.unit06.lesson01.turn_verb_fill.005.volume_order.010
+  lesson_content_key: prs.a1.unit06.lesson01.direction_words
+  type: word_order
+  frame:
+    text: به راست {turn_verb}.
+    language_code: prs
+    direction: rtl
+  slots:
+    turn_verb:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: turn_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: به راست {turn_verb}.
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: به راست {turn_verb}.
+    language_code: prs
+    direction: rtl
