@@ -863,8 +863,8 @@ Otherwise it returns HTTP 409 with the standard error envelope and code
   correct for XP/SRS purposes). `almost` means a free-text answer was
   within Damerau-Levenshtein distance 1 of an accepted answer and the
   exercise/language allows typo tolerance (see `orthography_strict`
-  below) — maps to SM-2 quality 4 via `quality_for_result()` in
-  `app/review/sm2.py` (already an isolated seam from Phase A). Choice-type
+  below) — maps to FSRS rating Hard via `rating_for_result()` in
+  `app/review/scheduler.py` (already an isolated seam from Phase A). Choice-type
   exercises (multiple_choice, matching_pairs, word_order, etc.) never
   produce `almost` — only free-text typed answers can.
 - Choice-type exercise prompts may include an optional
@@ -2033,3 +2033,15 @@ Backend implementation choice: a `reading_writing` unit is complete when
 all of its lessons are complete; only those preceding the speaking unit in
 course order are prerequisites. Anonymous unit listings conservatively return
 `locked: true` for speaking units because lock state is learner-specific.
+
+
+## Review scheduling: FSRS (migration 0037)
+
+Scheduling is FSRS-4.5 (`app/review/fsrs.py`, default weights, 0.9 target
+retention) driven from `app/review/scheduler.py`. Ratings: self-grade
+again/hard/good/easy map 1-4; auto-graded incorrect/almost/correct map to
+Again/Hard/Good. No API shape changed: `ease_factor`, `interval_days` and
+`repetitions` remain in every response (ease is derived from FSRS difficulty,
+interval is the scheduled interval). New nullable DB columns `stability` and
+`difficulty` (user_lexeme_srs, review_items) and `rating`, `new_stability`,
+`new_difficulty` (review_events) are internal and not exposed.

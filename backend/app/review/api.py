@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import current_user
 from app.db.session import get_db
 from app.models import Lexeme, UserLexemeSRS
-from app.review.sm2 import LEECH_THRESHOLD, due_at_for
+from app.review.scheduler import LEECH_THRESHOLD, due_at_for
 
 router = APIRouter()
 

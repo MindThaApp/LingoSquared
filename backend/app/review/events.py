@@ -3,7 +3,7 @@
 from sqlalchemy.orm import Session
 
 from app.models import ReviewEvent
-from app.review.sm2 import schedule
+from app.review.scheduler import schedule
 
 
 def schedule_and_log(
@@ -54,6 +54,9 @@ def schedule_and_log(
             previous_due_at=info["previous_due_at"],
             new_due_at=item.due_at,
             latency_ms=latency_ms,
+            rating=info["rating"],
+            new_stability=item.stability,
+            new_difficulty=item.difficulty,
         )
     )
     return item
