@@ -529,6 +529,23 @@ UNIT_FILES_B1 = (
         REPO_ROOT / "docs/content/realizations/fa/b1_unit16_goals_and_plans.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/b1_unit16.yaml",
     ),
+    # Units 17-19 (advice and suggestions / complaints and solving problems /
+    # summarizing and retelling), added 2026-11-06 to fill the three B1 slots
+    # the sibling courses have (give_advice_and_make_suggestions,
+    # make_complaint_and_resolve_problem, summarize_and_retell). Appended in
+    # strict unit order; the tuple index must stay == Unit.order.
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit17_advice_and_suggestions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit17.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit18_complaints_and_problems.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit18.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/b1_unit19_summarizing_and_retelling.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/b1_unit19.yaml",
+    ),
 )
 # B2 units 01-08 (argumentation / speculation / nuance / narrative /
 # register / abstraction / negotiation / synthesis) live in a FOURTH,
@@ -1445,6 +1462,32 @@ FA_GLOSSES = {
     "بتونیم": "(that) we can (subjunctive)",
     "تقسیم": "division (as in 'to divide up')",
 }
+
+# B1 units 17-19 (advice / complaints / summarizing), added 2026-11-06.
+# English-only glosses (no Persian script); person forms carry the person.
+FA_GLOSSES.update({
+    # Unit 17 (advice and suggestions).
+    "خسته\u200cای": "you are tired", "بخوابی": "(that) you sleep (subjunctive)",
+    "نمی\u200cری": "you don't go", "می\u200cرسی": "you seem; you appear",
+    "شبه": "nights (as in 'several nights')", "نمی\u200cخوابم": "I don't sleep",
+    "خوبیه": "it's good (spoken)", "بخوره": "(that) he/she drink (subjunctive)",
+    "بخوری": "(that) you drink (subjunctive)",
+    # Unit 18 (complaints and solving problems).
+    "نشه": "(that) it doesn't happen; if it isn't possible (subjunctive)",
+    "برگردونید": "give back; return (polite)", "نمی\u200cشه": "it doesn't happen; it doesn't work (spoken)",
+    "فاکتور": "receipt; invoice", "عوضش": "replacing it",
+    "خریده": "he/she has bought", "راضیه": "is satisfied (spoken)",
+    "شکایت": "complaint",
+    # Unit 19 (summarizing and retelling).
+    "خلاصه\u200cی": "summary of (linked form)", "می\u200cشن": "they become; they get (spoken)",
+    "می\u200cرسن": "they arrive; they reach (spoken)", "فیلمی": "a film (indefinite, as in 'what film')",
+    "دیدی": "you saw", "می\u200cترسن": "they are scared (spoken)",
+    "خلاصه\u200cاش": "its summary", "بگو": "tell (informal imperative)",
+    "قشنگیه": "it's lovely (spoken)", "دختر": "girl",
+    "دختریه": "a girl (who ...) (spoken)",
+    "توی": "in; inside (spoken)", "دلش": "his/her heart (as in 'she wants')",
+    "بخونه": "(that) he/she study; (that) he/she read (subjunctive)",
+})
 
 
 # A2 unit19 (last weekend: the simple past as a system), added 2026-10-25.
@@ -4262,6 +4305,25 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "fa.b1.unit16"
     ):
         semantics.append("teamwork_word")
+    # B1 units 17-19 (advice / complaints / summarizing), added 2026-11-06.
+    # Single-member (or small, uniformly grammatical) anchor groups for the
+    # word_order frames in the three new practice packs.
+    if token == "بخوابی" and lesson_key.startswith("fa.b1.unit17"):
+        semantics.append("advice_sleep_verb")
+    if token == "بخوری" and lesson_key.startswith("fa.b1.unit17"):
+        semantics.append("advice_drink_verb")
+    if token == "نمی‌ری" and lesson_key.startswith("fa.b1.unit17"):
+        semantics.append("negative_suggestion_verb")
+    if token == "گوشی" and lesson_key.startswith("fa.b1.unit18"):
+        semantics.append("complaint_item_word")
+    if token == "پولم" and lesson_key.startswith("fa.b1.unit18"):
+        semantics.append("refund_object_word")
+    if token in {"فیلم", "داستان"} and lesson_key.startswith("fa.b1.unit19"):
+        semantics.append("summary_subject_word")
+    if token == "جدید" and lesson_key.startswith("fa.b1.unit19"):
+        semantics.append("route_adjective_word")
+    if token == "همه" and lesson_key.startswith("fa.b1.unit19"):
+        semantics.append("everyone_word")
     # Second sweep over the same 32 units: tokens these units introduce
     # first but that no topical group above happened to name -- mostly
     # review vocabulary reaching a NEW course level (a1 words appearing at
