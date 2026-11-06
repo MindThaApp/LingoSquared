@@ -5,16 +5,16 @@ Run from a clean checkout of the commit to ship. All must hold or the ship stops
 | Gate | Threshold |
 |---|---|
 | `scripts/verify.sh --content-only` | pass; WARN line count (full run) <= baseline below |
-| `scripts/_answer_leakage_check.py` | <= 13 hits (ci_local.sh hard limit 36; 91 allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
+| `scripts/_answer_leakage_check.py` | <= 11 hits (ci_local.sh hard limit 36; 91 allowlisted in `scripts/_answer_leakage_allowlist.tsv`) |
 | german / dutch / cross leftover | 0 |
 | `scripts/_note_language_check.py` (English in grammar-note target spans / untranslated note titles; baseline `scripts/_note_language_baseline.tsv` may only shrink) | 0 new, 0 stale |
 | `scripts/_cyrillic_latin_check.py`, `scripts/check_dari_register.py` | 0 findings |
 | `scripts/_target_name_check.py` (wrong language name in cross-pair overlays/practice; allowlist `scripts/_target_name_allowlist.tsv`) | 0 hits |
 | `scripts/_hindi_name_check.py` (one Devanagari spelling per person name, and no Latin-script person name inside Hindi text; table `scripts/_hindi_names.tsv`, exceptions `scripts/_hindi_latin_name_allowlist.tsv`; `scripts/_hindi_latin_names_fix.py` converts new content) | 0 findings |
 | practice-validate (all packs) | 0 errors |
-| `pytest scripts/tests` | pass (217 at e7eaf91c4) |
+| `pytest scripts/tests` | pass (224 at b4641f864) |
 | backend pytest (repo mounted, full suite including `test_content_answer_shapes`) | pass |
-| vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (492) |
+| vitest (`VITE_API_BASE_URL=http://localhost:8000`) | pass (508 at b4641f864) |
 
 ## WARN baseline
 
@@ -44,11 +44,15 @@ C1 tiers (en-fa-c1 and en-prs-c1; 8 units each, built from the same discourse-mo
 
 History (lines): 740 pre-existing courses at 1cca942a0; 2542 at 69aaabfdb; 3000 at a6f9f44ec; 3060 at d9d564b64; 3750 at 294b3618b;
 4230 at 53bec4a11; 4534 at 76a2dd9c5; 4638 at 20b648c90; 5046 at acfde1144 (de/es/fr/it -> ar-a1 4x56, -> hi 4x8, -> prs 4x38);
-5486 at e7eaf91c4 + #172/#173 (5494 before #173).
+5486 at e7eaf91c4 + #172/#173 (5494 before #173); 5486 at b4641f864 (shipped 2026-11-06; en-fa-c1, en-prs-c1 add 0; no pre-existing course changed).
 
 Other gates at e7eaf91c4: leakage 13 hits (91 allowlisted); german/dutch/cross leftover, cyrillic-latin, target-name, hindi-name,
 check_dari_register 0; note-language 0 hit(s) (baseline emptied); practice packs 0 errors; scripts/tests 217; vitest 492;
 backend pytest full suite pass (test_content_answer_shapes included, deselect removed in #172); frontend lint and build pass.
+
+Other gates at b4641f864 (shipped 2026-11-06, includes #179-#185, alembic 0037 FSRS): leakage 11 hits (91 allowlisted); all leftover, target-name,
+hindi-name, note-language checks 0; practice packs 0 errors; scripts/tests 224; vitest 508; backend pytest full suite pass; lint and build pass;
+`scripts/e2e.sh` 5 passed; `scripts/a11y_check.sh` 0 serious/critical axe violations. Leakage threshold is now <= 11.
 
 ## Running all gates locally
 
