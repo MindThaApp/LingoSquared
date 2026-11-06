@@ -517,6 +517,11 @@ class UserLexemeSRS(Base):
     repetitions: Mapped[int] = mapped_column(
         Integer, default=0, server_default="0"
     )
+    # FSRS memory state. NULL until the first review (or until migration 0037
+    # backfills it from the SM-2 columns, which stay as derived values so the
+    # API shape is unchanged).
+    stability: Mapped[float | None] = mapped_column(Float, nullable=True)
+    difficulty: Mapped[float | None] = mapped_column(Float, nullable=True)
     mastery: Mapped[float] = mapped_column(
         Float, default=0.0, server_default="0"
     )
@@ -824,6 +829,8 @@ class ReviewItem(Base):
     ease_factor: Mapped[float] = mapped_column(Float, default=2.5)
     interval_days: Mapped[int] = mapped_column(Integer, default=0)
     repetitions: Mapped[int] = mapped_column(Integer, default=0)
+    stability: Mapped[float | None] = mapped_column(Float, nullable=True)
+    difficulty: Mapped[float | None] = mapped_column(Float, nullable=True)
     mastery: Mapped[float] = mapped_column(Float, default=0)
     due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
@@ -871,6 +878,10 @@ class ReviewEvent(Base):
     )
     new_due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # FSRS columns: 1 Again .. 4 Easy, and the state after the review.
+    rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    new_stability: Mapped[float | None] = mapped_column(Float, nullable=True)
+    new_difficulty: Mapped[float | None] = mapped_column(Float, nullable=True)
 
 
 class Achievement(Base):
