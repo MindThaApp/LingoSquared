@@ -136,6 +136,21 @@ export const AuthApi = {
     storeAuthTokens(result.access_token, result.refresh_token);
     return result;
   },
+  // POST /auth/password-reset/request: always answers the same, whether or
+  // not the address has an account.
+  requestPasswordReset: (email: string) =>
+    post<{ status: "ok" }>("/auth/password-reset/request", { email }),
+  // POST /auth/password-reset/confirm: exchange the emailed token for a new
+  // password; the backend revokes every older session and answers with a
+  // fresh one, which is stored like a login.
+  confirmPasswordReset: async (token: string, newPassword: string) => {
+    const result = await post<AuthResult>("/auth/password-reset/confirm", {
+      token,
+      new_password: newPassword,
+    });
+    storeAuthTokens(result.access_token, result.refresh_token);
+    return result;
+  },
   // POST /auth/social/nonce: single-use nonce for the next Google/Apple
   // sign-in (see socialSignIn.ts).
   socialNonce: () => post<{ nonce: string; expires_in: number }>("/auth/social/nonce", {}),
