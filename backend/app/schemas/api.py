@@ -65,6 +65,13 @@ class PasswordChangeIn(BaseModel):
     current_password:str=Field(max_length=128)
     # Same strength rule as RegisterIn.password.
     new_password:str=Field(min_length=8,max_length=128)
+class PasswordResetRequestIn(BaseModel):
+    email:str=Field(min_length=3,max_length=254)
+class PasswordResetConfirmIn(BaseModel):
+    token:str=Field(min_length=1,max_length=256)
+    # Same strength rule as RegisterIn.password.
+    new_password:str=Field(min_length=8,max_length=128)
+class PasswordResetRequestOut(BaseModel): status:Literal["ok"]="ok"
 class SocialNonceOut(BaseModel): nonce:str; expires_in:int
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel):
