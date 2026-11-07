@@ -107,6 +107,22 @@ class Settings(BaseSettings):
     # nothing is ever sent from them. SENTRY_RELEASE is the git sha or
     # version; SENTRY_ENVIRONMENT defaults from APP_ENV (see
     # sentry_environment_name).
+    # Password reset email. EMAIL_PROVIDER is empty (disabled) by default:
+    # POST /auth/password-reset/request then answers normally but creates no
+    # token and sends nothing. "log" only writes to the server log (the reset
+    # link itself is logged in dev/test only, never in production); "smtp"
+    # sends through the SMTP_* settings. PASSWORD_RESET_BASE_URL is the public
+    # web origin the emailed link points at.
+    email_provider: str = ""
+    email_from: str = ""
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_username: str = ""
+    smtp_password: str = ""
+    smtp_starttls: bool = True
+    password_reset_base_url: str = ""
+    password_reset_ttl_seconds: int = 3600
+    password_reset_request_rate_limit_max: int = 5
     sentry_dsn: str = ""
     sentry_release: str = ""
     sentry_environment: str = ""
