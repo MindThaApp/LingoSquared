@@ -134,6 +134,9 @@ export function LoginPage() {
           <button type="submit" className="btn btn-block" disabled={submitting}>
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
+          <p style={{ textAlign: "center", margin: "12px 0 0" }}>
+            <Link to="/forgot-password">{t("reset.forgot_link")}</Link>
+          </p>
         </form>
         {hasAnySocialProvider() && (
           <>
