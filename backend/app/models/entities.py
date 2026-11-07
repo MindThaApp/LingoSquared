@@ -126,6 +126,26 @@ class UserIdentity(Base):
     user: Mapped[User] = relationship(back_populates="identities")
 
 
+class PasswordResetToken(Base):
+    """A single-use, expiring password-reset token.
+
+    Only the SHA-256 digest of the emailed token is stored (the token is 256
+    random bits, so a fast digest is enough and lets the confirm endpoint look
+    it up directly). used_at is set when the token is consumed; requesting a
+    new reset also voids the user's older unused tokens.
+    """
+
+    __tablename__ = "password_reset_tokens"
+    __table_args__ = (Index("uq_password_reset_tokens_sha256", "token_sha256", unique=True),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    token_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class SocialLoginNonce(Base):
     """A nonce the server issued for one Google/Apple sign-in attempt.
 

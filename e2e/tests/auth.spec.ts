@@ -56,3 +56,19 @@ test("guest login creates a working session", async ({ page }) => {
   await page.waitForURL("/");
   await expect(page.getByRole("link", { name: "Home" }).first()).toBeVisible();
 });
+
+test("forgot password: link from login, generic confirmation, invalid reset link", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByRole("link", { name: "Forgot password?" }).click();
+  await page.waitForURL(/\/forgot-password/);
+  // The e2e stack has no email provider; the response is the same anyway.
+  await page.getByLabel("Email").fill(freshEmail("e2e-forgot"));
+  await page.getByRole("button", { name: "Send reset link" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "reset link is on its way" })).toBeVisible();
+
+  await page.goto("/reset-password?token=not-a-real-token");
+  await page.getByLabel("New password (at least 8 characters)").fill("brandnewpass1");
+  await page.getByLabel("Repeat new password").fill("brandnewpass1");
+  await page.getByRole("button", { name: "Set new password" }).click();
+  await expect(page.getByRole("alert")).toContainText("invalid or has expired");
+});
