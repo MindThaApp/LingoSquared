@@ -20,8 +20,10 @@ from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
 from app.core.security import create_refresh_token, create_token, hash_password, open_successor_token, seal_successor_token, verify_password
 from app.core.errors import fail
+from app.services.email import send_password_reset
 from app.db.session import get_db
 from app.models import (
+    PasswordResetToken,
     Achievement,
     CheckpointAttempt,
     ContentIssueReport,
@@ -113,6 +115,9 @@ from app.schemas.api import (
     RefreshIn,
     RefreshOut,
     PasswordChangeIn,
+    PasswordResetConfirmIn,
+    PasswordResetRequestIn,
+    PasswordResetRequestOut,
     RegisterIn,
     ReviewAnswerOut,
     ReviewDueOut,
@@ -276,6 +281,8 @@ REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.re
 # bcrypt-verify-against-every-row scan, so an unrated caller gets a free
 # token-probing surface AND a CPU sink. Shared limiter, per-IP, same
 # convention as REPORT_RATE_LIMIT's shared coverage of its 3 endpoints.
+PASSWORD_RESET_REQUEST_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.password_reset_request_rate_limit_max, window_seconds=3600))
+PASSWORD_RESET_EMAIL_RATE_LIMIT = register_limiter(RateLimiter(limit=3, window_seconds=3600))
 REFRESH_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
 # POST /auth/social/nonce: each call stores a row, so it is capped like
 # refresh rather than left open.
@@ -1057,6 +1064,55 @@ def change_password(body:PasswordChangeIn,request:Request,user=Depends(current_u
         fail(400,"password_unchanged","Choose a password different from your current one.")
     user.password_hash=hash_password(body.new_password)
     revoke_all_refresh_tokens(db,user.id,utc_now())
+    response=auth_response(db,user)
+    db.commit()
+    return response
+@router.post("/auth/password-reset/request",response_model=PasswordResetRequestOut)
+def request_password_reset(body:PasswordResetRequestIn,request:Request,db:Session=Depends(get_db)):
+    """Start a password reset. The response never depends on the address.
+
+    Rate-limited per client address (429) and, silently, per target address so
+    the endpoint cannot be used to flood one inbox. Does nothing (and answers
+    the same) when no email provider is configured, the address is unknown, or
+    the account has no password to reset (guest or provider-only).
+    """
+    enforce_rate_limit(PASSWORD_RESET_REQUEST_RATE_LIMIT,client_ip(request),"password_reset_rate_limited","Too many password reset requests. Please try again later.")
+    settings=get_settings()
+    email=body.email.strip().lower()
+    result=PasswordResetRequestOut()
+    if not settings.email_provider:
+        return result
+    if PASSWORD_RESET_EMAIL_RATE_LIMIT.check(email) is not None:
+        return result
+    user=db.scalar(select(User).where(User.email==email))
+    if not user or not user.password_hash or not user.is_active or is_guest_account(user):
+        return result
+    now_value=utc_now()
+    db.execute(update(PasswordResetToken).where(PasswordResetToken.user_id==user.id,PasswordResetToken.used_at.is_(None)).values(used_at=now_value))
+    raw=secrets.token_urlsafe(32)
+    db.add(PasswordResetToken(user_id=user.id,token_sha256=refresh_token_digest(raw),expires_at=now_value+timedelta(seconds=settings.password_reset_ttl_seconds)))
+    db.commit()
+    send_password_reset(settings,email,raw)
+    return result
+@router.post("/auth/password-reset/confirm",response_model=AuthOut)
+def confirm_password_reset(body:PasswordResetConfirmIn,request:Request,db:Session=Depends(get_db)):
+    """Set a new password from an emailed token (single use, expiring).
+
+    Revokes every refresh token of the account like a password change does and
+    signs the caller in with a fresh session.
+    """
+    enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
+    now_value=utc_now()
+    row=db.scalar(select(PasswordResetToken).where(PasswordResetToken.token_sha256==refresh_token_digest(body.token)).with_for_update())
+    if not row or row.used_at is not None or as_aware(row.expires_at)<=now_value:
+        fail(400,"invalid_reset_token","This reset link is invalid or has expired. Request a new one.")
+    user=db.get(User,row.user_id)
+    if not user or not user.is_active or is_guest_account(user):
+        fail(400,"invalid_reset_token","This reset link is invalid or has expired. Request a new one.")
+    row.used_at=now_value
+    db.execute(update(PasswordResetToken).where(PasswordResetToken.user_id==user.id,PasswordResetToken.used_at.is_(None)).values(used_at=now_value))
+    user.password_hash=hash_password(body.new_password)
+    revoke_all_refresh_tokens(db,user.id,now_value)
     response=auth_response(db,user)
     db.commit()
     return response

@@ -187,3 +187,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/me/streak
 - Writing prompts are exact-match graded; semantic grading requires a future explicit design.
 - Daily goals have persisted defaults but no contract endpoint for changing them.
 - Migrations use a single initial schema revision; future changes should add normal incremental Alembic revisions.
+
+## Password reset email
+
+`POST /auth/password-reset/request` and `/confirm` (migration 0038). Disabled until `EMAIL_PROVIDER` is set: `log` (dev log only; the link is logged only when `APP_ENV` is dev/test) or `smtp` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_STARTTLS`, `EMAIL_FROM`). Also set `PASSWORD_RESET_BASE_URL` (public web origin). Token lifetime `PASSWORD_RESET_TTL_SECONDS` (default 3600).
