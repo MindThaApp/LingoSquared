@@ -1292,8 +1292,13 @@ def _generate_prioritized(
 ) -> list[PracticeItem]:
     now = datetime.now(timezone.utc)
     lexeme_by_id = {lexeme.id: lexeme for lexeme in lexemes}
+    unreviewable_ids = {
+        row.lexeme_id for row in srs_rows if row.unreviewable_at is not None
+    }
     eligible_rows = [
-        row for row in srs_rows if row.lexeme_id in lexeme_by_id
+        row
+        for row in srs_rows
+        if row.lexeme_id in lexeme_by_id and row.unreviewable_at is None
     ]
     due_rows = sorted(
         (row for row in eligible_rows if row.due_at <= now),
@@ -1355,11 +1360,30 @@ def _generate_prioritized(
             )
         if item is not None:
             generated.append(item)
+        elif source == "review" and row.due_at <= now and row.unreviewable_at is None:
+            row.unreviewable_at = now
+            unreviewable_ids.add(row.lexeme_id)
+            logger.info(
+                "Flagging unreviewable due lexeme: user_id=%s course_id=%s "
+                "lexeme_id=%s token=%r",
+                user_id,
+                course.id,
+                row.lexeme_id,
+                target.token,
+            )
+            db.flush()
 
     fallback = (
-        [lexeme_by_id[row.lexeme_id] for row in eligible_rows]
+        [
+            lexeme_by_id[row.lexeme_id]
+            for row in eligible_rows
+            if row.unreviewable_at is None
+        ]
         if source == "review"
-        else list(lexemes)
+        else [
+            lexeme for lexeme in lexemes
+            if lexeme.id not in unreviewable_ids
+        ]
     )
     rng.shuffle(fallback)
 
@@ -1428,15 +1452,24 @@ def _speaking_targets(
     rng: random.Random,
 ) -> list[Lexeme]:
     lexeme_by_id = {lexeme.id: lexeme for lexeme in lexemes}
+    unreviewable_ids = {
+        row.lexeme_id for row in srs_rows if row.unreviewable_at is not None
+    }
     eligible_rows = [
-        row for row in srs_rows if row.lexeme_id in lexeme_by_id
+        row
+        for row in srs_rows
+        if row.lexeme_id in lexeme_by_id and row.unreviewable_at is None
     ]
     ordered_rows = sorted(
         eligible_rows,
         key=lambda row: (row.mastery, row.due_at, row.lexeme_id),
     )
     seen = {row.lexeme_id for row in ordered_rows}
-    fallback = [lexeme for lexeme in lexemes if lexeme.id not in seen]
+    fallback = [
+        lexeme
+        for lexeme in lexemes
+        if lexeme.id not in seen and lexeme.id not in unreviewable_ids
+    ]
     fallback.sort(key=lambda lexeme: lexeme.id)
     rng.shuffle(fallback)
     return [

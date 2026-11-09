@@ -76,6 +76,7 @@ def _live_progress(
             UserLexemeSRS.user_id == user_id,
             UserLexemeSRS.due_at <= now,
             UserLexemeSRS.suspended.is_(False),
+            UserLexemeSRS.unreviewable_at.is_(None),
         )
     ) or 0
     reviewed_today = db.scalar(
