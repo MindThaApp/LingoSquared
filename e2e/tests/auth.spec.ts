@@ -61,8 +61,12 @@ test("forgot password: link from login, generic confirmation, invalid reset link
   await page.goto("/login");
   await page.getByRole("link", { name: "Forgot password?" }).click();
   await page.waitForURL(/\/forgot-password/);
+  // The URL changes before React swaps the page; wait for the new page's heading so the
+  // fill below cannot land on the login form's own "Email" input (which is then unmounted).
+  await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
   // The e2e stack has no email provider; the response is the same anyway.
   await page.getByLabel("Email").fill(freshEmail("e2e-forgot"));
+  await expect(page.getByLabel("Email")).toHaveValue(/^e2e-forgot-/);
   await page.getByRole("button", { name: "Send reset link" }).click();
   await expect(page.getByRole("status").filter({ hasText: "reset link is on its way" })).toBeVisible();
 
