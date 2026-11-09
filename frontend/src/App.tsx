@@ -11,6 +11,7 @@ import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { isPasswordResetEnabled } from "./config/passwordReset";
 import { RegisterPage } from "./pages/RegisterPage";
 import { CoursePickerPage } from "./pages/CoursePickerPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
@@ -86,8 +87,12 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
+              {isPasswordResetEnabled() && (
+                <>
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                </>
+              )}
               {/* Public legal pages — must stay reachable logged-out (a
                   prospective user reads these before registering). */}
               <Route path="/privacy" element={<PrivacyPolicyPage />} />

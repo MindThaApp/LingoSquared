@@ -57,7 +57,9 @@ test("guest login creates a working session", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Home" }).first()).toBeVisible();
 });
 
+// Password reset UI is hidden unless the app is built with VITE_PASSWORD_RESET_ENABLED=true.
 test("forgot password: link from login, generic confirmation, invalid reset link", async ({ page }) => {
+  test.skip(process.env.VITE_PASSWORD_RESET_ENABLED !== "true", "password reset UI disabled");
   await page.goto("/login");
   await page.getByRole("link", { name: "Forgot password?" }).click();
   await page.waitForURL(/\/forgot-password/);
