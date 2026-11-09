@@ -546,6 +546,9 @@ class UserLexemeSRS(Base):
         Float, default=0.0, server_default="0"
     )
     due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    unreviewable_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     last_reviewed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
