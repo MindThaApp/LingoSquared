@@ -287,6 +287,8 @@ describe("recovering from an unverified session", () => {
       </AuthProvider>,
     );
     await expectStatus("unverified");
+    // statusRef is mirrored in a passive effect; flush it so the guard sees "unverified".
+    await act(async () => {});
 
     await expect(guest!("Sneaky")).rejects.toThrow(/unverified/);
     expect(AuthApi.register).not.toHaveBeenCalled();
