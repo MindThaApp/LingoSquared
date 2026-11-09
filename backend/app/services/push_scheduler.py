@@ -69,6 +69,7 @@ def run_push_scheduler_once(now: datetime | None = None, db: Session | None = No
                     UserLexemeSRS.user_id == user.id,
                     UserLexemeSRS.due_at <= instant,
                     UserLexemeSRS.suspended.is_(False),
+                    UserLexemeSRS.unreviewable_at.is_(None),
                 ).limit(1)
             ) is not None
             if in_local_window(user.timezone, instant, 18, 19) and has_due_reviews:

@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from app.models import (
@@ -14,6 +14,7 @@ from app.models import (
     Lexeme,
     PracticeTemplate,
     Unit,
+    UserLexemeSRS,
 )
 from app.schemas.api import ImportRequest, PracticeArtifactImport
 
@@ -638,6 +639,7 @@ def import_content(db: Session, data: ImportRequest):
         "updated_teaching_items": 0,
     }
     sync_errors: list[str] = []
+    affected_course_ids: set[str] = set()
 
     for course_data in data.courses:
         existing = db.scalar(
@@ -664,12 +666,19 @@ def import_content(db: Session, data: ImportRequest):
                 existing.target_language,
                 existing.title,
             )
+            changed_before = sum(counters.values())
+            recommended_changed = (
+                course_data.recommended is not None
+                and existing.recommended != course_data.recommended
+            )
             if course_data.recommended is not None:
                 existing.recommended = course_data.recommended
             _sync_units(
                 db, existing, course_data.units, sync_errors, counters,
                 data.retire_missing,
             )
+            if recommended_changed or sum(counters.values()) > changed_before:
+                affected_course_ids.add(existing.id)
             continue
 
         course = Course(
@@ -698,7 +707,15 @@ def import_content(db: Session, data: ImportRequest):
             )
 
         count += 1
+        affected_course_ids.add(course.id)
 
+    if affected_course_ids:
+        # Content changes may make previously unbuildable lexemes reviewable.
+        db.execute(
+            update(UserLexemeSRS)
+            .where(UserLexemeSRS.course_id.in_(affected_course_ids))
+            .values(unreviewable_at=None)
+        )
     db.commit()
     return count, sync_errors, counters
 
@@ -828,6 +845,13 @@ def import_practice_templates(
             for field, value in values.items():
                 setattr(row, field, value)
             updated += 1
+    if created or updated:
+        # Template changes may make previously unbuildable lexemes reviewable.
+        db.execute(
+            update(UserLexemeSRS)
+            .where(UserLexemeSRS.course_id == course.id)
+            .values(unreviewable_at=None)
+        )
     db.commit()
     return created, updated, []
 
