@@ -48,6 +48,7 @@ def review_forecast(
     conds = [
         UserLexemeSRS.user_id == user.id,
         UserLexemeSRS.suspended.is_(False),
+        UserLexemeSRS.unreviewable_at.is_(None),
     ]
     if course_id:
         conds.append(UserLexemeSRS.course_id == course_id)

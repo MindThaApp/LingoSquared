@@ -1702,6 +1702,7 @@ def lexeme_reviews_due(
         UserLexemeSRS.user_id == user.id,
         UserLexemeSRS.due_at <= now,
         UserLexemeSRS.suspended.is_(False),
+        UserLexemeSRS.unreviewable_at.is_(None),
     )
     due_count = db.scalar(
         select(func.count(UserLexemeSRS.id)).where(*conditions)
@@ -1915,7 +1916,8 @@ def lexeme_summary(
                 case(
                     (
                         (UserLexemeSRS.due_at <= day_end)
-                        & (UserLexemeSRS.suspended.is_(False)),
+                        & (UserLexemeSRS.suspended.is_(False))
+                        & (UserLexemeSRS.unreviewable_at.is_(None)),
                         1,
                     ),
                     else_=0,
@@ -2097,6 +2099,7 @@ def admin_push_notify_due_reviews(
         .where(
             UserLexemeSRS.due_at <= now,
             UserLexemeSRS.suspended.is_(False),
+            UserLexemeSRS.unreviewable_at.is_(None),
         )
         .join(User, User.id == UserLexemeSRS.user_id)
         .distinct()

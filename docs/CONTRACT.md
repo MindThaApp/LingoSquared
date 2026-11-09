@@ -1130,7 +1130,8 @@ terminal replies are recorded as the completed practice attempt.
 ### Lexeme review flow
 
 `GET /me/reviews/due` returns the current user's unsuspended lexeme reviews
-whose `due_at` is at or before the server's current time:
+whose `due_at` is at or before the server's current time, excluding lexemes
+flagged unreviewable (see below):
 
 ```json
 {
@@ -1140,6 +1141,18 @@ whose `due_at` is at or before the server's current time:
   ]
 }
 ```
+
+**Unreviewable lexemes ("hide + flag", 2026-11-09).** When a due lexeme cannot
+produce any review item (e.g. function words or proper nouns with no usable
+practice template), the item generator sets `user_lexeme_srs.unreviewable_at`
+(nullable timestamp, migration 0039) and logs it at info level. Rows with
+`unreviewable_at` set are excluded from `GET /me/reviews/due` counts, the
+due queue, the review summary/forecast due counts, the clear-reviews quest and
+push reminders. Their FSRS schedule fields are never modified. The flag is
+cleared for the course's rows when `POST /admin/content/import` or
+`POST /admin/courses/{course_id}/practice/import` changes content, so the
+lexeme is tried again. No request/response field is added or changed; the
+flag is internal.
 
 `POST /reviews/session` request:
 
