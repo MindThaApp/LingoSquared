@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 from sqlalchemy import select
 
 from app.db.session import SessionLocal
-from app.models import PracticeItem, ReviewEvent, User, UserLexemeSRS
+from app.models import Lexeme, PracticeItem, ReviewEvent, User, UserLexemeSRS
 from app.review.scheduler import (
     LEECH_THRESHOLD,
     due_at_for,
@@ -110,15 +110,28 @@ def _review_item(client, admin, auth):
     complete_via_api(client, auth, lesson_id)
     uid = user_id(auth)
     with SessionLocal() as db:
-        srs = db.scalar(select(UserLexemeSRS).where(
-            UserLexemeSRS.user_id == uid, UserLexemeSRS.course_id == course_id))
+        srs = db.scalar(
+            select(UserLexemeSRS)
+            .join(Lexeme, Lexeme.id == UserLexemeSRS.lexeme_id)
+            .where(
+                UserLexemeSRS.user_id == uid,
+                UserLexemeSRS.course_id == course_id,
+                Lexeme.token == "uno",
+            )
+            .order_by(Lexeme.id)
+        )
         srs.due_at = datetime.now(timezone.utc) - timedelta(minutes=1)
-        lexeme_id = srs.lexeme_id
         db.commit()
     session = client.post("/reviews/session", headers=auth,
                           json={"course_id": course_id, "size": 1})
     assert session.status_code == 200, session.text
-    return uid, course_id, lexeme_id, session.json()["items"][0]["id"]
+    item_id = session.json()["items"][0]["id"]
+    with SessionLocal() as db:
+        practice_item = db.get(PracticeItem, item_id)
+        assert practice_item is not None
+        lexeme_id = practice_item.target_lexeme_id
+    assert lexeme_id is not None
+    return uid, course_id, lexeme_id, item_id
 
 
 def test_review_answer_writes_event_and_returns_next_due(client, admin, auth):
