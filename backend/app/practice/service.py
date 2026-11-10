@@ -4,6 +4,7 @@ import logging
 import random
 import re
 import time
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -1153,6 +1154,38 @@ def _recent_signatures(
     return signatures
 
 
+_IDENTICAL_YEH_KAF = str.maketrans({"ي": "ی", "ى": "ی", "ك": "ک"})
+
+
+def _normalize_identical(value: Any) -> str:
+    """Canonical form for the identical-prompt/answer test (Persian/Dari)."""
+    text = unicodedata.normalize("NFC", str(value or ""))
+    text = text.translate(_IDENTICAL_YEH_KAF)
+    text = text.replace("\u200c", " ").replace("\u0640", "")
+    text = "".join(
+        ch for ch in unicodedata.normalize("NFD", text)
+        if not unicodedata.combining(ch)
+    )
+    text = re.sub(r"[^\w\s]", "", unicodedata.normalize("NFC", text))
+    return " ".join(text.split())
+
+
+def is_identical_pair_lexeme(course: Course, lexeme: Lexeme) -> bool:
+    """True when a Dari->Farsi (prs-fa) lexeme's word and gloss are the same.
+
+    Such an item shows the same word on both sides, so it is never used as a
+    practice/review/checkpoint target. Nothing is deleted: SRS rows stay, and
+    a due row that can no longer build an item is flagged unreviewable by the
+    existing mechanism. Other directions (including fa-prs) are unaffected.
+    """
+    if course.source_language != "prs" or course.target_language != "fa":
+        return False
+    token = _normalize_identical(lexeme.token)
+    return bool(token) and token == _normalize_identical(
+        display_gloss(lexeme.english_gloss)
+    )
+
+
 def _generate_target_item(
     db: Session,
     *,
@@ -1187,6 +1220,8 @@ def _generate_target_item(
     # therefore violate uq_user_lexeme_srs_user_lexeme for any learner
     # who already has SRS on that word. Nulling it keeps consolidation
     # and weak-outcome reporting strictly unit-scoped.
+    if is_identical_pair_lexeme(course, target):
+        return None
     for tier in _tier_order(mastery, tier_rotation):
         candidates = [
             template for template in templates if template.type in tier
@@ -1378,11 +1413,13 @@ def _generate_prioritized(
             lexeme_by_id[row.lexeme_id]
             for row in eligible_rows
             if row.unreviewable_at is None
+            and not is_identical_pair_lexeme(course, lexeme_by_id[row.lexeme_id])
         ]
         if source == "review"
         else [
             lexeme for lexeme in lexemes
             if lexeme.id not in unreviewable_ids
+            and not is_identical_pair_lexeme(course, lexeme)
         ]
     )
     rng.shuffle(fallback)
