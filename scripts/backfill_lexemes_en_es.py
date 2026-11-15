@@ -1751,6 +1751,29 @@ POS_SETS["pronoun"] |= set()
 POS_SETS["noun"] = POS_SETS.get("noun", set())
 # --- end A2 Block B/C ---
 
+# --- A2 Block D (units 104-109): reasons, order, purpose, conditions, indirect questions, passing on ---
+A2_BLOCK_D_GLOSSES: dict[str, str] = {
+    "sales": "you go out; you leave (informal)", "salimos": "we go out; we leave", "despacio": "slowly",
+    "desayuna": "he or she has breakfast", "manos": "hands", "cenar": "to have dinner", "cierro": "I close",
+    "ceno": "I have dinner", "cenas": "you have dinner (informal)", "último": "last; final (por último: finally)",
+    "pongo": "I put; I add", "aceite": "oil", "necesitar": "to need", "sepas": "you know (after para que)",
+    "vengas": "you come (after para que)", "saber": "to know", "haremos": "we will do; we will make",
+    "ticket": "receipt; ticket", "producto": "product", "tercero": "third", "gratis": "free (no cost)",
+    "cambiarlo": "to exchange it", "conmigo": "with me", "cenamos": "we have dinner", "preguntas": "questions",
+    "digo": "I say; I tell", "preguntar": "to ask (a question)", "nota": "note", "recado": "message; errand",
+}
+A2_BLOCK_D_VERBS = (
+    "sales salimos desayuna cenar cierro ceno cenas pongo necesitar sepas vengas saber haremos cambiarlo cenamos "
+    "digo preguntar"
+).split()
+for _tok, _gloss in A2_BLOCK_D_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS["verb"] |= set(A2_BLOCK_D_VERBS)
+POS_SETS["adjective"] |= {"último", "tercero", "gratis"}
+POS_SETS["adverb"] |= {"despacio"}
+POS_SETS["pronoun"] |= {"conmigo"}
+# --- end A2 Block D ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_es_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_es_b2c1.json"
