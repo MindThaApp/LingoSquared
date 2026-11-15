@@ -1849,6 +1849,65 @@ _ALREADY_TAGGED = set().union(*POS_SETS.values())
 for _pos, _words in A2_BLOCK_A_POS.items():
     POS_SETS.setdefault(_pos, set()).update(split_words(_words) - _ALREADY_TAGGED)
 
+# A2 Block B/C (units 103-108: predictions and promises, permission and rules,
+# ability and possibility, polite requests and offers, advice, starting /
+# stopping / trying): citation forms, glosses and parts of speech for the new
+# tokens. Applied with setdefault so no earlier entry changes.
+A2_BLOCK_BC_CITATION = {
+    "Wird": "wird", "Wirst": "wirst", "Keine": "keine", "Darf": "darf",
+    "Rauchen": "rauchen", "Fotografieren": "fotografieren",
+    "Könntest": "könntest", "Würden": "würden", "Würdest": "würdest",
+    "Soll": "soll", "Tut": "tut", "Nicht": "nicht", "Seit": "seit",
+    "Früh": "früh", "Toll": "toll", "Geh": "geh", "Trink": "trink",
+}
+A2_BLOCK_BC_GLOSSES = {
+    "schneien": "to snow", "werdet": "will (you, plural; auxiliary of the future)",
+    "versprechen": "to promise", "verspreche": "promise (I promise)",
+    "windig": "windy", "Ausflug": "trip; outing", "Ostsee": "the Baltic Sea",
+    "parken": "to park", "rauchen": "to smoke", "telefonieren": "to make a phone call; to be on the phone",
+    "fotografieren": "to take photos; to photograph",
+    "darfst": "may; are allowed to (you, informal singular)", "dürft": "may; are allowed to (you, plural)",
+    "ausziehen": "to take off (clothes, shoes); to move out", "Schuhe": "shoes",
+    "leise": "quiet; quietly", "Müll": "rubbish; waste", "trennen": "to separate; to sort (rubbish)",
+    "musst": "must; have to (you, informal singular)", "müsst": "must; have to (you, plural)",
+    "erlaubt": "allowed; permitted", "verboten": "forbidden; not allowed",
+    "aufzuräumen": "to tidy up (with 'to')", "öffnen": "to open", "Freund": "friend (male); boyfriend",
+    "erklären": "to explain", "Besuch": "visit; visitor", "Regeln": "rules",
+    "rauche": "smoke (I smoke)", "Klavier": "piano", "Englisch": "English (the language)",
+    "könnt": "can; are able to (you, plural)", "mitkommen": "to come along",
+    "Fest": "party; celebration", "organisieren": "to organise", "organisiert": "organises (he/she/it)",
+    "möchtet": "would like (you, plural)", "Weg": "way; path", "könntest": "could (you, informal singular; polite)",
+    "würden": "would (we/they/formal you; used for polite requests)", "würdest": "would (you, informal singular)",
+    "aufmachen": "to open", "Berger": "Berger (a surname)", "Kuchen": "cake", "Prüfung": "exam; test",
+    "sollst": "should; are supposed to (you, informal singular)", "sollt": "should; are supposed to (you, plural)",
+    "Bett": "bed", "solltest": "should (you, informal singular; soft advice)",
+    "solltet": "should (you, plural; soft advice)", "besten": "best (as in 'it is best to')",
+    "Tipp": "tip; piece of advice", "geh": "go (command, informal singular)", "trink": "drink (command, informal singular)",
+    "angefangen": "started; begun (past participle)", "fange": "start (I start)",
+    "fängst": "start (you, informal singular)", "fängt": "starts (he/she/it)",
+    "fangen": "start (we/they)", "fangt": "start (you, plural)", "aufhören": "to stop; to quit",
+    "Schokolade": "chocolate", "aufgehört": "stopped (past participle)",
+    "hörst": "stop (you, informal singular; part of the verb meaning to stop)",
+    "hört": "stops (he/she/it); stop (you, plural)", "versucht": "tried (past participle)",
+    "aufzustehen": "to get up (with 'to')", "einzukaufen": "to buy; to shop (with 'to')",
+    "anzurufen": "to call on the phone (with 'to')", "versuche": "try (I try)", "vergesse": "forget (I forget)",
+}
+A2_BLOCK_BC_POS = {
+    "adjective": "windig leise erlaubt verboten besten",
+    "verb": "schneien werdet versprechen verspreche parken rauchen telefonieren fotografieren darfst dürft "
+            "ausziehen trennen musst müsst aufzuräumen öffnen erklären rauche könnt mitkommen organisieren "
+            "organisiert möchtet könntest würden würdest aufmachen sollst sollt solltest solltet geh trink "
+            "angefangen fange fängst fängt fangen fangt aufhören aufgehört hörst hört versucht aufzustehen "
+            "einzukaufen anzurufen versuche vergesse",
+    "proper_noun": "Berger",
+}
+CITATION_FORMS.update(A2_BLOCK_BC_CITATION)
+for _tok, _gloss in A2_BLOCK_BC_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+_ALREADY_TAGGED = set().union(*POS_SETS.values())
+for _pos, _words in A2_BLOCK_BC_POS.items():
+    POS_SETS.setdefault(_pos, set()).update(split_words(_words) - _ALREADY_TAGGED)
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_de_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_de_b2c1.json"
