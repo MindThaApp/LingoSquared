@@ -4988,6 +4988,8 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # "hardlopen", same class as the age_adj/pet_care_verb fixes above.
     if token in {"voetbal", "yoga", "hardlopen", "zwemmen"}: semantic.append("sport_noun")
     if t == "dicht": semantic.append("sport_dicht_single")
+    # a2_unit82 lesson06 single-member anchor for the fixed frame "Wat {item} je na school?".
+    if t == "deed": semantic.append("wat_deed_single")
 
     # Unit 33 (transportation) practice-template tags, added 2026-07-09.
     # 3-member transport-noun tag, verified safe in "Ik reis met de
@@ -5512,6 +5514,23 @@ NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
 }
 
 
+# a2_unit82 pool clean-up (gloss-fix-q6, 2026-11-15). The unit's grammar-table and
+# instruction cards list sentence-initial capitals, bare spelling letters and
+# metalinguistic labels in introduced_tokens; none of them is vocabulary a
+# practice slot can host, and they held the structured tier under the 40% bar.
+# Capitals fold onto their lowercase citation form (typed answers are graded by
+# exact string match); letters and grammar-term labels are not emitted.
+NL_A2U82_FOLD = {
+    "Vroeger", "Tegenwoordig", "Toen", "Elke", "Nu", "Woonde", "Hun",
+    "Kies", "Eindigt", "Anders", "Enkelvoud", "Meervoud",
+}
+NL_A2U82_DROP = {
+    "t", "k", "f", "ch", "p", "n", "imperfectum", "regelmatige", "enkelvoud",
+    "stam", "meervoudsvorm", "herhaalde", "beschrijft", "situatie",
+    "tegenwoordige", "geeft", "contrast",
+}
+
+
 def _classify_nl(unit_files, level):
     # A FRESH specs dict per level/course -- Lexeme uniqueness is scoped by
     # `Lexeme.course_id`, and "Dutch A1"/"Dutch A2" are two entirely separate
@@ -5537,6 +5556,11 @@ def _classify_nl(unit_files, level):
             for item in lesson["teaching"]:
                 for token in item.get("introduced_tokens", []):
                     token = str(token)
+                    if unit_stem.startswith("a2_unit82"):
+                        if token in NL_A2U82_FOLD and token.lower() in NL_GLOSSES:
+                            token = token.lower()
+                        if token in NL_A2U82_DROP:
+                            continue
                     # Fold sentence-initial / sign-line capitals onto their
                     # lowercase citation form BEFORE anything else, so a
                     # capitalized-by-position spelling never becomes a
