@@ -2893,6 +2893,14 @@ TOO_PREPOSITION_LESSONS = {
 # collision, but these three lessons' negation still collides with the
 # long-established plain "نه" = "nine" entry without this split.
 NO_NEGATION_LESSONS = {
+    "fa.a2.unit29.lesson04.asking_permission",
+    "fa.a2.unit30.lesson04.availability",
+    "fa.a2.unit31.lesson02.offers_and_replies",
+    "fa.a2.unit32.lesson04.problem_and_reply",
+    "fa.a2.unit33.lesson06.habits_dialogue",
+    "fa.a2.unit34.lesson06.dialogue",
+    "fa.a2.unit38.lesson02.asking_when_whether",
+    "fa.a2.unit39.lesson01.hearing_the_report",
     # A2 unit21 (added 2026-11-06): "نه، متأسفانه نه" = no.
     "fa.a2.unit21.lesson02.another_day",
     # A2 unit23 (added 2026-11-15): "نه، مدرسه دور نبود" = no (not "nine").
