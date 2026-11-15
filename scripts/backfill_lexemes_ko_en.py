@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_KO_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "보스턴", "Luna": "루나", "Max": "맥스", "always": "항상;늘", "arrival": "도착", "arrive": "도착하다", "arrives": "도착한다", "ate": "먹었다", "ball": "공", "bigger": "더 큰", "bird": "새", "book": "책", "both": "둘 다", "car": "자동차;차", "cat": "고양이", "cheaper": "더 싼", "cheapest": "가장 싼", "cooking": "요리", "cooks": "요리한다", "departure": "출발", "did": "했다", "different": "다른", "dog": "개", "ever": "한 번이라도;언젠가", "expensive": "비싼", "faster": "더 빠른", "fish": "물고기;생선", "friendly": "친절한;상냥한", "games": "게임", "goes": "간다", "hate": "싫어하다", "hobbies": "취미", "leaves": "떠난다;출발한다", "likes": "좋아한다", "loves": "아주 좋아한다", "milder": "더 순한;더 온화한", "mornings": "아침(복수)", "named": "~라는 이름의", "never": "절대 ~않다;한 번도 ~않다", "nicer": "더 좋은;더 친절한", "often": "자주", "paint": "그리다;칠하다", "painting": "그림 그리기", "paints": "그린다", "pet": "반려동물", "pets": "반려동물들", "platform": "승강장;플랫폼", "play": "놀다;(운동을) 하다;연주하다", "prefer": "더 좋아하다;선호하다", "prefers": "선호한다", "rarely": "드물게;거의 ~않다", "reading": "독서;읽기", "red": "빨간;빨간색의", "round": "왕복의;둥근", "running": "달리기;조깅", "s": "~의", "sister's": "언니의;누나의;여동생의", "smaller": "더 작은", "still": "아직;여전히", "strong": "강한", "swim": "수영하다", "than": "~보다", "thinks": "생각한다", "ticket": "표;티켓", "together": "함께", "train": "기차;열차", "trip": "여행", "very": "매우;아주", "video": "비디오;영상", "visited": "방문했다", "walks": "산책시킨다;걷는다", "watch": "보다;시청하다", "watched": "봤다", "way": "길;방법", "week": "주;일주일", "white": "하얀;흰", "why": "왜", "worked": "일했다", "writer's": "작가의", "yesterday": "어제"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
