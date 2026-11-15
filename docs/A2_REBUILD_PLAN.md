@@ -16,7 +16,7 @@ Ramin's decisions on this plan:
 - **Q1 scope:** Blocks A–D first (19 units per language: A1–A6, B1–B2, C1–C5, D1–D6), starting with a Wave-0 pilot of unit A1 in nl, fa and prs, reviewed by Ramin before scaling. Blocks E–G later.
 - **Q10:** fix the speaking lock now (being done separately in backend).
 - **Q4:** Dari standardizes on **می‌توانم** (formal). A1 and B1 prs content will be retrofitted to match A2 (separately).
-- **Q5:** existing A2 scenario units are interleaved AFTER the grammar block they use (needs a reorder-import safety check first). **Done 2026-11-15 for en-prs-a2, Block A** (safety check: PR #227): `a2_unit18_shopping_complaint` (past-tense purchases) now sits after `a2_unit26`. `a2_unit13_maintenance` stays: `a2_unit24` reuses its vocabulary (برق), so moving it fails the introduced-token validator. The rest depend on Blocks B-D. The course has no speaking unit.
+- **Q5:** existing A2 scenario units are interleaved AFTER the grammar block they use (needs a reorder-import safety check first). **Done 2026-11-15 for en-prs-a2, Block A** (safety check: PR #227): `a2_unit18_shopping_complaint` (past-tense purchases) now sits after `a2_unit26`. `a2_unit13_maintenance` stays: `a2_unit24` reuses its vocabulary (برق), so moving it fails the introduced-token validator. The rest depend on Blocks B-D. The course has no speaking unit. **en-nl-a2, Block A:** `a2_unit28_probleem_melden` and `a2_unit77_iets_terugbrengen` (the only scenario units built on past-tense grammar) now sit after `a2_unit85`; the other 8 depend on Blocks B-D or no new block and stay in place.
 - **Q3 (decided 2026-11-15) — Dari rulings:**
   - **Progressive:** BOTH. Teach plain present *می‌* first for "I go / I am going" (*می‌روم*), then introduce *در حال … استم* (*در حال رفتن استم*) as an optional emphasis form.
   - **Present perfect:** formal *رفته‌ام* AND the spoken Kabuli forms are both taught. Show the spoken forms explicitly in notes; accept both as answers.
@@ -784,7 +784,7 @@ as drip content.
 - **[DECIDED 2026-09-29] Q5 — ordering.** Interleave the existing 10 A2 scenario units after their
   grammar blocks (recommended; needs §4.4), or leave them first?
   **Decision:** interleave existing A2 scenario units AFTER the grammar block they use; needs a reorder-import safety check first.
-  **Status (2026-11-15):** en-prs Block A done (see top). en-fa NOT done: moving fa `a2_unit13` or `a2_unit18` breaks the introduced-token validator in fa units 20, 21 and 26, which reuse their vocabulary; needs vocabulary re-introduction first. Blocks B-D scenario units pending as those blocks land.
+  **Status (2026-11-15):** en-nl Block A done (see top). en-prs Block A done (see top). en-fa NOT done: moving fa `a2_unit13` or `a2_unit18` breaks the introduced-token validator in fa units 20, 21 and 26, which reuse their vocabulary; needs vocabulary re-introduction first. Blocks B-D scenario units pending as those blocks land.
 - **Q6 — B1.** Leave the overlapping B1 units as-is for launch, or schedule a
   light B1 retrofit that removes the now-duplicated A2 layer?
 - **Q7 — X→en.** Add the 31 outcomes to the shared spine now, accepting the
