@@ -1,0 +1,200 @@
+schema_version: '1.0'
+pack_key: practice.zh-en.a1.unit32
+source_language: zh
+target_language: en
+unit_content_key: en.a1.unit32.animals
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - pet_animal
+slot_presets:
+  pet_animal: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: pet_animal
+templates:
+- content_key: practice.zh-en.en.a1.unit32.lesson01.choose.001
+  lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}是本课学过的一种动物。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit32.lesson01.listen.002
+  lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}是你听到的那个词。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit32.lesson01.match.003
+  lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: 把每种动物与它的中文意思连起来。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit32.lesson01.translate.004
+  lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 英语翻译是{item}。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit32.lesson01.order.005
+  lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item}是提到的那只宠物。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit32.lesson02.translate.001
+  lesson_content_key: en.a1.unit32.lesson02.describing_pets
+  type: translation
+  frame:
+    text: 我有{item}。
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 我有{item}。
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.zh-en.en.a1.unit32.lesson04.translate.002
+  lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+  type: translation
+  frame:
+    text: 我们在看{item}。
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: We watch the {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 我们在看{item}。
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.zh-en.en.a1.unit32.lesson02.translate.001.volume_order.004
+  lesson_content_key: en.a1.unit32.lesson02.describing_pets
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: pet_animal
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
