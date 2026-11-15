@@ -1290,6 +1290,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_AR_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "بوسطن", "Luna": "لونا", "Max": "ماكس", "always": "دائمًا", "arrival": "وصول", "arrive": "يصل؛ أن يصل", "arrives": "يصل", "ate": "أكل (ماضي أكل)", "ball": "كرة", "bigger": "أكبر", "bird": "طائر", "book": "كتاب", "both": "كلاهما", "car": "سيارة", "cat": "قطة", "cheaper": "أرخص", "cheapest": "الأرخص", "cooking": "الطبخ", "cooks": "يطبخ", "departure": "مغادرة", "did": "فعل (ماضي فعل)", "different": "مختلف", "dog": "كلب", "ever": "يومًا ما؛ هل سبق", "expensive": "غالٍ", "faster": "أسرع", "fish": "سمكة", "friendly": "ودود", "games": "ألعاب", "goes": "يذهب", "hate": "يكره", "hobbies": "هوايات", "leaves": "يغادر", "likes": "يحب (هو/هي)", "loves": "يحب كثيرًا (هو/هي)", "milder": "ألطف؛ أخف", "mornings": "صباحات", "named": "اسمه؛ اسمها", "never": "أبدًا", "nicer": "ألطف؛ أجمل", "often": "غالبًا", "paint": "يرسم؛ أن يرسم", "painting": "الرسم", "paints": "يرسم (هو/هي)", "pet": "حيوان أليف", "pets": "حيوانات أليفة", "platform": "رصيف", "play": "يلعب؛ أن يلعب", "prefer": "يفضّل", "prefers": "يفضّل (هو/هي)", "rarely": "نادرًا", "reading": "القراءة", "red": "أحمر", "round": "ذهاب وإياب؛ مستدير", "running": "الجري", "s": "علامة الملكية", "sister's": "أخت (ملكية)", "smaller": "أصغر", "still": "ما زال", "strong": "قوي", "swim": "يسبح؛ أن يسبح", "than": "من (في المقارنة)", "thinks": "يظن (هو/هي)؛ يفكّر (هو/هي)", "ticket": "تذكرة", "together": "معًا", "train": "قطار", "trip": "رحلة", "very": "جدًا", "video": "فيديو", "visited": "زار (ماضي زار)", "walks": "نزهات", "watch": "يشاهد؛ أن يشاهد", "watched": "شاهد (ماضي شاهد)", "way": "اتجاه؛ طريق", "week": "أسبوع", "white": "أبيض", "why": "لماذا", "worked": "عمل (ماضي عمل)", "writer's": "الكاتب (ملكية)", "yesterday": "أمس"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
