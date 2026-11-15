@@ -443,6 +443,26 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit21_reschedule_appointment.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit21.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit22_busy_morning.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit22.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit23_childhood_habits.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit23.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit24_what_was_happening.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit24.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit25_have_you_ever.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit26_already_happened.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit26.yaml",
+    ),
 )
 
 # B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
@@ -1582,6 +1602,56 @@ FA_GLOSSES.update({
     "می‌گیریم": "we get / we make (an appointment)",
 })
 
+# A2 units 22-26 (busy morning through earlier past events), added 2026-11-15.
+# Spoken/person forms are deliberately distinct; glosses describe the atomic
+# sense taught by these units rather than the whole phrase around the token.
+FA_GLOSSES.update({
+    "دوش": "shower", "کلیدم": "my key", "گرفتم": "I took; got",
+    "پوشیدم": "I put on; wore", "بستم": "I closed",
+    "موقع": "time; point in time", "نزدم": "I didn't hit; make",
+    "می‌چسبه": "it attaches (spoken)", "فعل": "verb",
+    "سبک": "light (as in a light verb)", "یادم": "my mind; my memory",
+    "قبلا": "before; formerly", "بچه": "child", "حیاط": "yard; courtyard",
+    "دور": "far", "ساختن": "to build; make",
+    "می‌خوندم": "I used to read (spoken)",
+    "می‌ساختن": "they used to build (spoken)",
+    "عصرها": "in the afternoons", "می‌رفتی": "you used to go (spoken)",
+    "می‌رفتن": "they used to go (spoken)",
+    "می‌خوندی": "you used to read (spoken)",
+    "می‌خوند": "he/she used to read (spoken)",
+    "می‌خوندیم": "we used to read (spoken)",
+    "خونه‌مون": "our home (spoken)", "محله‌مون": "our neighbourhood (spoken)",
+    "مدرسه‌مون": "our school (spoken)",
+    "محله‌تون": "your neighbourhood (polite/plural, spoken)",
+    "نمی‌رفتم": "I didn't use to go (spoken)",
+    "نمی‌خوندم": "I didn't use to read (spoken)",
+    "نمی‌کردم": "I didn't use to do (spoken)",
+    "اتفاق": "incident; event", "شام": "dinner",
+    "وایساد": "it stopped (spoken)", "افتاد": "it happened; fell",
+    "داشتن": "they were (progressive auxiliary, spoken)",
+    "خیابون": "street (spoken)", "رد": "across; past",
+    "می‌شدم": "I became; would become (spoken)",
+    "می‌کردی": "you were doing; used to do (spoken)",
+    "شیراز": "Shiraz", "غذای": "food of; food (linked form)",
+    "هندی": "Indian", "کره‌ای": "Korean", "سوار": "riding; mounted",
+    "اسب": "horse", "رفته‌م": "I have gone (spoken)",
+    "رفته‌ای": "you have gone", "خورده‌م": "I have eaten (spoken)",
+    "دیده‌م": "I have seen (spoken)", "شده‌م": "I have become (spoken)",
+    "نرفته‌م": "I haven't gone (spoken)",
+    "نخورده‌م": "I haven't eaten (spoken)",
+    "ندیده‌م": "I haven't seen (spoken)",
+    "نشده‌م": "I haven't become (spoken)", "رفته‌ام": "I have gone (written)",
+    "رفته‌یم": "we have gone (spoken)",
+    "رفته‌این": "you all have gone (spoken)",
+    "رفته‌ن": "they have gone (spoken)", "خورده‌ای": "you have eaten",
+    "خورده": "he/she has eaten; eaten", "دیده‌ای": "you have seen",
+    "دیده‌یم": "we have seen (spoken)", "شده‌ای": "you have become",
+    "بلیت": "ticket", "ایستگاه": "station", "کلیدها": "keys",
+    "جا": "place (as in leave behind)", "برگشتم": "I returned",
+    "رسیده": "arrived; having arrived", "رسیدی": "you arrived",
+    "بودین": "you all were; had (spoken)", "برگشته": "returned; gone back",
+})
+
 # --- 2026-10-19: Farsi B2 tier (units 01-08) ---------------------------------
 # Every B2 introduced token absent from FA_GLOSSES above (364 of the 573
 # distinct B2 tokens). Each gloss is the atomic English meaning of the sense
@@ -2223,7 +2293,7 @@ FA_B2_GLOSS_OVERRIDES = {
 
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
 FA_PROPER_NOUNS = set(
-    "ترکیه "
+    "ترکیه شیراز "
     "علی نرگس سارا مینا ایران انگلیس فرانسه آزادی رضا تهران نگار آرش "
     "مریم نیما".split()
     # A2 units 11-18, added 2026-07-11.
@@ -2307,7 +2377,7 @@ FA_PARTICLES = set(
     + ["کاش", "هرچند", "اما", "اینکه", "آیا"]
 )
 FA_ADVERBS = set(
-    "بعدا متأسفانه "
+    "بعدا متأسفانه قبلا عصرها "
     "فعلاً خیلی چطور کجا اینجا همین‌طور کجایی باهم فردا حتماً خودمونی چند "
     "اونجا مستقیم بعد لطفاً امروز الان کیلویی نقدی زیادی بیشتر چرا "
     "یکم دیر چندم بعدش یه‌کم دیرتر چیکار معمولاً شب‌ها دیروز "
@@ -2351,7 +2421,7 @@ FA_ADVERBS = set(
     + ["پیاده", "قبل", "عقب", "آخرش", "بیرون"]
 )
 FA_ADJECTIVES = set(
-    "مریضم "
+    "مریضم سبک دور هندی کره‌ای سوار "
     "خوبی بد ایرانی انگلیسی فرانسوی بزرگه کوچیکه متأهل مجرد برعکسه شلوغه "
     "آفتابی بارونی ابری برفی گرم سرد خنک نزدیک خوشمزه ملی قدیم جدید موافق "
     "تعطیل هجری شمسی دهم هشتم بیدار هر خوب "
@@ -2433,6 +2503,17 @@ FA_NUMBERS = set(
     + ["نُه"]
 )
 FA_VERBS = {
+    # A2 units 22-26 (past narration, habits, progressive, perfect),
+    # added 2026-11-15. These inflected spoken forms must not fall through
+    # to the noun default.
+    "گرفتم", "پوشیدم", "بستم", "نزدم", "می‌چسبه", "ساختن",
+    "می‌خوندم", "می‌ساختن", "می‌رفتی", "می‌رفتن", "می‌خوندی",
+    "می‌خوند", "می‌خوندیم", "نمی‌رفتم", "نمی‌خوندم", "نمی‌کردم",
+    "وایساد", "افتاد", "داشتن", "می‌شدم", "می‌کردی", "رفته‌م",
+    "رفته‌ای", "خورده‌م", "دیده‌م", "شده‌م", "نرفته‌م", "نخورده‌م",
+    "ندیده‌م", "نشده‌م", "رفته‌ام", "رفته‌یم", "رفته‌این", "رفته‌ن",
+    "خورده‌ای", "خورده", "دیده‌ای", "دیده‌یم", "شده‌ای", "برگشتم",
+    "رسیده", "رسیدی", "بودین", "برگشته",
     # A2 units 20-21 (holiday plans; rescheduling), added 2026-11-06.
     "نمی‌خوام", "نمی‌کنم", "می‌مونی", "می‌مونیم", "بگیره", "مناسبه",
     "نمی‌تونی", "نمی‌تونه", "می‌گیریم",
