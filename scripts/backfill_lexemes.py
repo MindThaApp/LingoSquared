@@ -3956,6 +3956,9 @@ FA_A2_PART_OF_SPEECH.update({
     "همکاری": "noun", "پولی": "noun", "شبه": "verb", "نبود": "verb",
     "دیدی": "verb", "برام": "preposition",
 })
+# Units 48-51 (Block G): POS/sense fixes for tokens first introduced there.
+FA_A2_GLOSS_OVERRIDES.update({"گذشت": "it passed; it went by (as in 'we had a good time')"})
+FA_A2_PART_OF_SPEECH.update({"فعلا": "adverb", "خوش": "adjective", "گذشت": "verb"})
 
 
 
