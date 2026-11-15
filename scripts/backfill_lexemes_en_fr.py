@@ -60,7 +60,7 @@ LEVELS = {"a1": "en-fr", "a2": "en-fr-a2", "b1": "en-fr-b1", "b2": "en-fr-b2", "
 PROPER_NOUNS = {
     "Camille", "Noé", "Montreuil", "Lille", "Inès", "Mathieu", "Trois-Frères",
     "Saint-Ouen", "Lyon", "Paris", "Fleurs", "Fournier", "Lambert",
-    "République", "Vitale", "Girard", "Lefebvre", "Dijon", "Italie",
+    "République", "Vitale", "Girard", "Lefebvre", "Dijon", "Italie", "France",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -725,6 +725,43 @@ A2_BLOCK_BC_ENTRIES: dict[str, tuple[str, str]] = {
     "oublie": ("v", "forget; forgets"), "n'oubliez": ("v", "do not forget (formal or plural)"),
 }
 for _tok, (_code, _gloss) in A2_BLOCK_BC_ENTRIES.items():
+    if _tok in GLOSSES:  # an earlier unit already glossed this token: first sight wins
+        continue
+    GLOSSES[_tok] = _gloss
+    if _code != "n":
+        POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
+
+# --- A2 Block D additions (units 95-100): reasons, sequencing, purpose, conditions, indirect questions, passing on messages
+A2_BLOCK_D_ENTRIES: dict[str, tuple[str, str]] = {
+    # unit95 reasons and consequences
+    "restes": ("v", "you stay (informal)"), "arrives": ("v", "you arrive (informal)"),
+    "absent": ("a", "absent (masc.)"), "pauvre": ("a", "poor; unfortunate"),
+    "qu'elle": ("h", "that she; because she"), "n'es": ("v", "you are not (informal)"),
+    "j'arrive": ("v", "I arrive; I am coming"),
+    # unit96 sequencing
+    "mains": ("n", "hands"), "lave": ("v", "wash; washes"), "assiettes": ("n", "plates"),
+    "m'appelles": ("v", "you call me (informal)"),
+    # unit97 purpose
+    "gagner": ("v", "to earn; to win"), "j'économise": ("v", "I save (money)"),
+    "films": ("n", "films"), "apprenons": ("v", "we learn"), "France": ("N", "France"),
+    "travailles": ("v", "you work (informal)"),
+    # unit98 real conditions
+    "soif": ("n", "thirst"), "mauvais": ("a", "bad (masc.)"),
+    "préparerai": ("v", "I will prepare; I will make"), "article": ("n", "item; article"),
+    "rembourser": ("v", "to refund"), "rembourse": ("v", "refunds; refund"),
+    "mets": ("v", "put on (command, informal); I put; you put"),
+    "appelle-moi": ("h", "call me (command, informal)"),
+    "apporte": ("v", "bring (command, informal); brings"), "j'apporte": ("v", "I bring"),
+    # unit99 indirect questions
+    "savez-vous": ("h", "do you know (formal)"), "fermé": ("a", "closed (masc.)"),
+    "d'avance": ("d", "in advance"),
+    # unit100 passing on messages
+    "disons": ("v", "we say"), "dites": ("v", "you say (formal or plural)"),
+    "baisser": ("v", "to turn down; to lower"), "baisse": ("v", "turn down; turns down; lower"),
+    "téléphoner": ("v", "to phone"), "téléphoné": ("v", "phoned"),
+    "l'appeler": ("h", "to call him, her"), "l'appelle": ("h", "I call him, her"),
+}
+for _tok, (_code, _gloss) in A2_BLOCK_D_ENTRIES.items():
     if _tok in GLOSSES:  # an earlier unit already glossed this token: first sight wins
         continue
     GLOSSES[_tok] = _gloss
