@@ -1,0 +1,153 @@
+schema_version: '1.0'
+pack_key: practice.ro-en.a1.unit35
+source_language: ro
+target_language: en
+unit_content_key: en.a1.unit35.technology
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - device_noun
+    - device_noun_a
+slot_presets:
+  device_noun: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: device_noun
+  device_noun_a: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: device_noun_a
+templates:
+- content_key: practice.ro-en.en.a1.unit35.lesson01.choose.001
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} este un dispozitiv din această lecție.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-en.en.a1.unit35.lesson01.listen.002
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} este cuvântul pe care l-ai auzit.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-en.en.a1.unit35.lesson01.translate.004
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Traducerea în engleză este {item}.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-en.en.a1.unit35.lesson01.order.005
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} este dispozitivul menționat.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-en.en.a1.unit35.lesson02.translate.001
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: translation
+  frame:
+    text: 'Am următorul obiect: {item}.'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Am următorul obiect: {item}.'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.ro-en.en.a1.unit35.lesson02.translate.001.volume_order.002
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: device_noun_a
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr

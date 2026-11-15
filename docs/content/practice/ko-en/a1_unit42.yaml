@@ -1,0 +1,152 @@
+schema_version: '1.0'
+pack_key: practice.ko-en.a1.unit42
+source_language: ko
+target_language: en
+unit_content_key: en.a1.unit42.personality
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - personality_adj
+slot_presets:
+  personality_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: personality_adj
+  unit_adjective:
+    language_code: en
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: a1_unit42_personality
+templates:
+- content_key: practice.ko-en.en.a1.unit42.lesson01.choose.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원에 나오는 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-en.en.a1.unit42.lesson01.listen.002
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 방금 들은 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-en.en.a1.unit42.lesson01.translate.004
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 영어로는 {item}이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-en.en.a1.unit42.lesson01.order.005
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: word_order
+  frame:
+    text: She is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item}은(는) 앞에서 말한 성격이에요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-en.en.a1.unit42.lesson02.translate.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: translation
+  frame:
+    text: 그녀는 {item}.
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 영어 문장은 She is {item}.이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-en.en.a1.unit42.lesson02.translate.001.volume_order.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: word_order
+  frame:
+    text: She is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 올바른 순서는 She is {item}.이에요.
+    language_code: ko
+    direction: ltr

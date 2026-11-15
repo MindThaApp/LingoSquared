@@ -1,0 +1,106 @@
+schema_version: '1.0'
+pack_key: practice.ja-en.a1.unit39
+source_language: ja
+target_language: en
+unit_content_key: en.a1.unit39.neighborhood
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - neighborhood_adj
+slot_presets:
+  neighborhood_adj:
+    language_code: en
+    part_of_speech:
+    - noun
+    - adjective
+  area_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: neighborhood_adj
+  noisy_single:
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: volume_prs_en_a1_unit39_item_07_single
+  unit39_noun:
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: a1_unit39_neighborhood
+  unit39_match_word:
+    language_code: en
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: a1_unit39_neighborhood
+  unit39_lesson01_word:
+    language_code: en
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: a1_unit39_neighborhood_lesson01
+  unit39_lesson04_noun:
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: a1_unit39_neighborhood_lesson04
+templates:
+- content_key: practice.ja-en.en.a1.unit39.lesson02.order.001
+  lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+  type: word_order
+  frame:
+    text: Our neighborhood is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Our neighborhood is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 正しい語順は *Our neighborhood is {item}.* です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit39.lesson03.translate.001
+  lesson_content_key: en.a1.unit39.lesson03.dialogue_asking_about_the_neighborhood
+  type: translation
+  frame:
+    text: 私たちの近所は{item}です。
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Our neighborhood is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 英語の文は *Our neighborhood is {item}.* です。
+    language_code: ja
+    direction: ltr
