@@ -786,7 +786,7 @@ as drip content.
 - **[DECIDED 2026-09-29] Q5 — ordering.** Interleave the existing 10 A2 scenario units after their
   grammar blocks (recommended; needs §4.4), or leave them first?
   **Decision:** interleave existing A2 scenario units AFTER the grammar block they use; needs a reorder-import safety check first.
-  **Status (2026-11-15):** en-nl Block A done (see top). en-prs Block A done (see top). en-fa Block A done (2026-11-15, Block B PR): the words fa units 20, 21 and 26 borrowed from `a2_unit13`/`a2_unit18` (با, ممنون, رسید) are now re-introduced in those units, so `a2_unit13_maintenance` and `a2_unit18_shopping_complaint` sit after `a2_unit26`. The fa A2 course has no speaking unit, so `speaking_unlocked()` is unaffected. `a2_unit20_holiday_plans` now follows Block B; `a2_unit12_doctor` now follows Block C; the rest are interleaved as Block D lands.
+  **Status (2026-11-15):** en-nl Block A done (see top). en-prs Block A done (see top). en-fa Block A done (2026-11-15, Block B PR): the words fa units 20, 21 and 26 borrowed from `a2_unit13`/`a2_unit18` (با, ممنون, رسید) are now re-introduced in those units, so `a2_unit13_maintenance` and `a2_unit18_shopping_complaint` sit after `a2_unit26`. The fa A2 course has no speaking unit, so `speaking_unlocked()` is unaffected. `a2_unit20_holiday_plans` now follows Block B; `a2_unit12_doctor` follows Block C; `a2_unit15_travel_disruption` and `a2_unit21_reschedule_appointment` follow Block D. `a2_unit11_banking` stays (moving it breaks a2_unit14 prompt vocabulary).
 - **Q6 — B1.** Leave the overlapping B1 units as-is for launch, or schedule a
   light B1 retrofit that removes the now-duplicated A2 layer?
 - **Q7 — X→en.** Add the 31 outcomes to the shared spine now, accepting the
