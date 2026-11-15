@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_RU_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "Бостон", "Luna": "Луна", "Max": "Макс", "always": "всегда", "arrival": "прибытие", "arrive": "прибывать", "arrives": "прибывает", "ate": "прошедшее время от есть (кушать)", "ball": "мяч", "bigger": "больше; крупнее", "bird": "птица", "book": "книга", "both": "оба; обе", "car": "машина", "cat": "кошка", "cheaper": "дешевле", "cheapest": "самый дешёвый", "cooking": "готовка", "cooks": "готовит", "departure": "отправление", "did": "прошедшее время от делать", "different": "разный; разные", "dog": "собака", "ever": "когда-либо", "expensive": "дорогой", "faster": "быстрее", "fish": "рыба", "friendly": "дружелюбный", "games": "игры", "goes": "идёт; ходит", "hate": "ненавидеть", "hobbies": "хобби", "leaves": "отправляется; уезжает", "likes": "любит; нравится", "loves": "любит", "milder": "мягче (сравнительная степень от мягкий)", "mornings": "утра", "named": "по имени; названный", "never": "никогда", "nicer": "приятнее; красивее", "often": "часто", "paint": "рисовать", "painting": "рисование", "paints": "рисует", "pet": "домашнее животное", "pets": "домашние животные", "platform": "платформа", "play": "играть", "prefer": "предпочитать", "prefers": "предпочитает", "rarely": "редко", "reading": "чтение", "red": "красный; красная", "round": "туда и обратно (о билете)", "running": "бег", "s": "окончание притяжательной формы (чей-то)", "sister's": "сестры (принадлежащее сестре)", "smaller": "меньше", "still": "всё ещё; всё же", "strong": "сильный; крепкий", "swim": "плавать", "than": "чем", "thinks": "думает", "ticket": "билет", "together": "вместе", "train": "поезд", "trip": "поездка", "very": "очень", "video": "видео", "visited": "посетил; прошедшее время от посещать", "walks": "прогулки; гуляет", "watch": "смотреть", "watched": "смотрел; прошедшее время от смотреть", "way": "способ; сторона", "week": "неделя", "white": "белый; белая", "why": "почему", "worked": "работал; прошедшее время от работать", "writer's": "писателя (принадлежащее писателю)", "yesterday": "вчера"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
