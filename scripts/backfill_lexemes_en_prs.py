@@ -2993,7 +2993,7 @@ PRS_A2U19_NEW = {
     "رفتن": ("to go (infinitive)", "verb"),
     "داشتن": ("to have (infinitive)", "verb"),
     "آن‌ها": ("they", "pronoun"),
-    "رفتیم": ("we went", "verb"),
+    "رفتیم": ("I have gone (spoken); we went", "verb"),
     "رفتین": ("you (plural) went", "verb"),
     "خوردن": ("to eat (infinitive)", "verb"),
     "خوردی": ("you ate", "verb"),
@@ -3005,7 +3005,7 @@ PRS_A2U19_NEW = {
     "خریدن": ("to buy (infinitive)", "verb"),
     "نرفتم": ("I didn't go", "verb"),
     "نرفتی": ("you didn't go", "verb"),
-    "نرفتیم": ("we didn't go", "verb"),
+    "نرفتیم": ("I have not gone (spoken); we didn't go", "verb"),
     "نرفتین": ("you (plural) didn't go", "verb"),
     "نرفتند": ("they didn't go", "verb"),
     "نخوردم": ("I didn't eat", "verb"),
@@ -3016,6 +3016,48 @@ PRS_A2U19_NEW = {
 for _tok, (_gloss, _pos) in PRS_A2U19_NEW.items():
     PRS_GLOSSES.setdefault(_tok, _gloss)
     PRS_POS.setdefault(_tok, _pos)
+
+# Per-unit sense overrides for A2 units 22/23/29 (gloss-fix-q6, 2026-11-15).
+# Keyed (unit number, token); applied only to that unit's own occurrence, so
+# earlier rows keep the inherited gloss. Value = (gloss, part_of_speech or None).
+# Unit 22: the light verbs زدن/کشیدن/گرفتن carry the meaning of the noun they
+# follow (قدم زدن, حرف زدن, انتظار کشیدن, دوش گرفتن). Unit 23: the imperfect
+# teaches the HABITUAL past ("used to"), not "would". Unit 29: باشم/باشی/باشیم
+# are the subjunctive of بودن after باید ("I must be quiet").
+PRS_A2U22_29_OVERRIDES: dict[tuple[int, str], tuple[str, str | None]] = {
+    (22, "گرفتم"): ("I took (as in taking a shower)", None),
+    (22, "گرفت"): ("he/she took (as in taking a shower)", None),
+    (22, "نگرفتم"): ("I did not take (as in taking a shower)", None),
+    (22, "قدم"): ("step (as in taking a walk)", None),
+    (22, "حرف"): ("talk; word (as in to talk)", None),
+    (22, "انتظار"): ("waiting (as in to wait)", None),
+    (22, "زدن"): ("to walk; to talk (light verb, as in take a walk, talk); literally to strike", None),
+    (22, "زد"): ("he/she walked; talked (light verb); struck", None),
+    (22, "زدم"): ("I walked; talked (light verb); I struck", None),
+    (22, "زدیم"): ("we talked; walked (light verb); we struck", None),
+    (22, "نزدم"): ("I did not walk; did not talk (light verb)", None),
+    (22, "کشیدن"): ("to wait (light verb); literally to pull", None),
+    (22, "کشید"): ("he/she waited (light verb); pulled", None),
+    (22, "کشیدم"): ("I waited (light verb); I pulled", None),
+    (22, "نکشیدم"): ("I did not wait (light verb)", None),
+    (22, "رسیدن"): ("to arrive (infinitive)", "verb"),
+    (23, "می‌رفتم"): ("I used to go", None),
+    (23, "می‌رفتی"): ("you used to go (informal)", None),
+    (23, "می‌رفت"): ("he/she used to go", None),
+    (23, "می‌رفتیم"): ("we used to go", None),
+    (23, "می‌کردم"): ("I used to do", None),
+    (23, "می‌کردی"): ("you used to do (informal)", None),
+    (23, "می‌کرد"): ("he/she used to do", None),
+    (23, "می‌کردیم"): ("we used to do", None),
+    (23, "می‌خورد"): ("he/she used to eat", None),
+    (23, "می‌آمدند"): ("they used to come", None),
+    (23, "می‌خواندم"): ("I used to read; used to study", None),
+    (29, "باشم"): ("(that) I be (as in I must be quiet)", None),
+    (29, "باشی"): ("(that) you be (informal, as in you must be quiet)", None),
+    (29, "باشیم"): ("(that) we be (as in we must be quiet)", None),
+    (29, "اینجا"): ("here", None),
+}
+
 
 # Unit-scoped gloss overrides (applied only to the unit19 row of the token, so
 # A1/A2-earlier rows keep their inherited glosses): the bare-stem and
@@ -3198,10 +3240,10 @@ PRS_A2U25_NEW = {
     "خورده‌ایم": ("we have eaten", "verb"),
     "خورده‌این": ("you have eaten (polite/plural)", "verb"),
     "خورده‌اند": ("they have eaten", "verb"),
-    "دیدیم": ("we saw", "verb"),
-    "پختیم": ("we cooked", "verb"),
+    "دیدیم": ("I have seen (spoken); we saw", "verb"),
+    "پختیم": ("I have cooked (spoken); we cooked", "verb"),
     "پختی": ("you cooked (informal)", "verb"),
-    "کردیم": ("we did", "verb"),
+    "کردیم": ("I have done (spoken); we did", "verb"),
     "دیده‌ام": ("I have seen", "verb"),
     "دیده‌ای": ("you have seen (informal)", "verb"),
     "پخته‌ام": ("I have cooked", "verb"),
@@ -5382,6 +5424,12 @@ def _classify(files, level, specs, derive_phrases=False):
                         and token in PRS_A2U19_GLOSS_OVERRIDES
                     ):
                         english_gloss = PRS_A2U19_GLOSS_OVERRIDES[token]
+                    _u2229 = re.match(r"prs\.a2\.unit(2[2-9])\.", lesson_key)
+                    if _u2229:
+                        _ov = PRS_A2U22_29_OVERRIDES.get((int(_u2229.group(1)), token))
+                        if _ov:
+                            english_gloss = _ov[0]
+                            part_of_speech = _ov[1] or part_of_speech
                     existing = specs.get(key)
                     if existing is None:
                         # ONLY on first introduction -- see
