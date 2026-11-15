@@ -1326,6 +1326,56 @@ VERBS.update({
     "geslapen", "bezocht", "thuisgebleven", "geworden", "gebleven",
 })
 
+# A2 units 81-85 (Block A grammar-led units), added 2026-11-15.
+NL_GLOSSES.update({
+    "opgestaan": "got up (past participle)", "uitstappen": "to get off",
+    "uitgestapt": "got off (past participle)", "instappen": "to get on; to board",
+    "ingestapt": "got on (past participle)", "aangekleed": "got dressed (past participle)",
+    "opgeruimd": "tidied up (past participle)", "afgewassen": "washed up (past participle)",
+    "meegenomen": "taken along (past participle)", "Vervolgens": "next; then",
+    "kopje": "the cup", "Scheidbaar": "separable", "deelwoorden": "participles",
+    "ge": "ge- (participle prefix)", "ontbeten": "had breakfast (past participle)",
+    "hulpwerkwoord": "auxiliary verb", "gestapt": "stepped; got on (past participle)",
+    "lunch": "the lunch", "vroeger": "in the past; formerly", "Vroeger": "in the past; formerly",
+    "tegenwoordig": "nowadays", "Tegenwoordig": "nowadays", "flat": "the apartment; the flat",
+    "werkte": "worked (imperfectum)", "imperfectum": "simple past tense (imperfectum)",
+    "regelmatige": "regular", "enkelvoud": "singular", "Enkelvoud": "singular",
+    "huiswerk": "the homework", "Eindigt": "ends", "stam": "the stem", "t": "the letter t",
+    "k": "the letter k", "f": "the letter f", "ch": "the letters ch", "p": "the letter p",
+    "Kies": "choose", "fietste": "cycled (imperfectum)", "leerde": "learned (imperfectum)",
+    "maakte": "made (imperfectum)", "speelde": "played (imperfectum)",
+    "logeren": "to stay over; to stay as a guest", "logeerden": "stayed over (imperfectum, plural)",
+    "woonden": "lived (imperfectum, plural)", "werkten": "worked (imperfectum, plural)",
+    "meervoudsvorm": "plural form", "n": "the letter n", "speelden": "played (imperfectum, plural)",
+    "speeltuin": "the playground", "herhaalde": "repeated", "gewoonten": "habits",
+    "jeugd": "the youth; childhood", "Hun": "their", "stond": "stood (imperfectum)",
+    "Woonde": "lived (imperfectum)", "beschrijft": "describes", "tegenwoordige": "present",
+    "contrast": "the contrast", "lekke": "flat; punctured", "regenbui": "the rain shower",
+    "plotseling": "suddenly", "gingen": "went (imperfectum, plural)", "zagen": "saw (imperfectum, plural)",
+    "zeiden": "said (imperfectum, plural)", "namen": "took (imperfectum, plural)",
+    "gaf": "gave (imperfectum)", "gaven": "gave (imperfectum, plural)",
+    "stonden": "stood (imperfectum, plural)", "zaten": "sat (imperfectum, plural)",
+    "liep": "walked (imperfectum)", "liepen": "walked (imperfectum, plural)",
+    "reed": "rode; drove (imperfectum)", "wachten": "to wait", "wachtte": "waited (imperfectum)",
+    "vooropgezette": "placed first", "persoonsvorm": "the finite verb", "moment": "the moment",
+    "waarop": "at which", "situaties": "situations", "tegelijk": "at the same time",
+    "bezig": "busy; in progress", "halte": "the stop", "sushi": "the sushi",
+    "Egyptisch": "Egyptian", "boottocht": "the boat trip", "gemaakt": "made (past participle)",
+    "ooit": "ever", "gereisd": "travelled (past participle)", "vorig": "last; previous",
+    "at": "ate (imperfectum)", "reisde": "travelled (imperfectum)", "Specifiek": "specific",
+    "vragenlijst": "the questionnaire", "Voltooid": "completed; perfect", "koffer": "the suitcase",
+    "verliezen": "to lose", "verloren": "lost (past participle)", "Perfectum": "present perfect (perfectum)",
+    "paraplu": "the umbrella", "voorwerpen": "objects; items", "plaatst": "places",
+})
+
+VERBS.update({'ontbeten', 'wachten', 'uitgestapt', 'Kies', 'beschrijft', 'gingen', 'gaf', 'stonden', 'Eindigt', 'logeren', 'instappen', 'zagen', 'woonden', 'gestapt', 'fietste', 'leerde', 'namen', 'wachtte', 'speelde', 'verliezen', 'Woonde', 'logeerden', 'opgeruimd', 'aangekleed', 'meegenomen', 'gereisd', 'opgestaan', 'liepen', 'werkte', 'reisde', 'stond', 'at', 'zeiden', 'plaatst', 'afgewassen', 'ingestapt', 'uitstappen', 'speelden', 'verloren', 'maakte', 'werkten', 'zaten', 'gemaakt', 'gaven', 'liep', 'reed'})
+NOUNS.update({'deelwoorden', 'flat', 'stam', 'gewoonten', 'Enkelvoud', 'moment', 'hulpwerkwoord', 'speeltuin', 'boottocht', 'vragenlijst', 'lunch', 'paraplu', 'persoonsvorm', 'sushi', 'kopje', 'regenbui', 'meervoudsvorm', 'huiswerk', 'halte', 'jeugd', 'voorwerpen', 'enkelvoud', 'koffer', 'imperfectum', 'situaties', 'contrast'})
+ADJECTIVES.update({'Voltooid', 'Scheidbaar', 'herhaalde', 'vooropgezette', 'bezig', 'Perfectum', 'lekke', 'tegenwoordige', 'vorig', 'Specifiek', 'regelmatige', 'Egyptisch'})
+ADVERBS.update({'plotseling', 'tegelijk', 'Tegenwoordig', 'ooit', 'Vervolgens', 'Vroeger', 'vroeger', 'tegenwoordig'})
+PARTICLES.update({'k', 'n', 'f', 't', 'ge', 'ch', 'p'})
+PRONOUNS.update({'Hun'})
+PREPOSITIONS.update({'waarop'})
+
 # A2 units 79 (vakantieplannen/holiday plans) and 80 (afspraak verzetten/moving
 # an appointment), added 2026-10-27.
 NL_GLOSSES.update({
@@ -3656,6 +3706,34 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "niet_en_geen": "negation_niet_geen",
         "noors_weekend_lezen": "weekend_reading",
         "lotte_en_omar_op_maandag": "weekend_dialogue",
+        # A2 units 81-85 (Block A grammar-led units), added 2026-11-15.
+        "ge_in_het_midden": "separable_participle_form",
+        "stappen_op_volgorde": "morning_steps_vocabulary",
+        "wel_of_geen_ge": "participle_ge_contrast",
+        "de_ochtend_ging_mis": "morning_negation_dat_clause",
+        "noors_bericht": "busy_morning_reading",
+        "lotte_en_noor": "busy_morning_dialogue",
+        "vroeger_en_nu": "then_and_now_vocabulary",
+        "te_of_de": "imperfectum_te_de",
+        "enkelvoud_en_meervoud": "imperfectum_number",
+        "mijn_oude_buurt": "old_neighbourhood_habits",
+        "lottes_jeugd": "childhood_reading",
+        "lotte_en_omar": "past_habits_dialogue",
+        "onregelmatige_vormen": "irregular_imperfectum_forms",
+        "vormen_combineren": "imperfectum_forms_mixed",
+        "toen_en_terwijl": "toen_terwijl_clauses",
+        "een_klein_incident": "small_incident_story",
+        "ooit_en_nooit": "experience_ooit_nooit",
+        "al_en_nog_niet": "experience_al_nog_niet",
+        "ervaring_of_verhaal": "perfectum_vs_imperfectum",
+        "de_ervaringsvragenlijst": "experience_questionnaire",
+        "noors_reisprofiel": "travel_profile_reading",
+        "lotte_en_omar_vragen_elkaar": "experience_dialogue",
+        "wat_was_eerder": "earlier_event_vocabulary",
+        "had_of_was": "past_perfect_auxiliary_choice",
+        "wanneer_welke_tijd": "perfectum_vs_past_perfect",
+        "nadat": "nadat_clause",
+        "noors_verloren_paraplu": "lost_umbrella_reading",
         # A2 unit 79 (vakantieplannen/holiday plans), added 2026-10-27.
         "wat_ga_je_doen": "holiday_plans_vocabulary",
         "van_plan_zijn": "intention_van_plan",
