@@ -230,6 +230,9 @@ def dutch_vocab() -> frozenset:
     # Dutch words that are also ordinary English / French loans in English overlays (tip, 'bon appetit'):
     # flagging them as Dutch leftovers is a false positive (added with nl A2 units 90 and 95).
     voc -= {"tip", "bon"}
+    # Block E units 98-102: "schoen" is the ASCII spelling of German schön in en-de overlays; "hotels" and "pen"
+    # are ordinary English words in English notes/distractors (false positives, 2026-11-15).
+    voc -= {"schoen", "hotels", "pen"}
     return frozenset(voc)
 
 
