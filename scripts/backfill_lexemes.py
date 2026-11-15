@@ -527,6 +527,22 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit47_right_now.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit47.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit48_message_to_friend.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit48.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit49_invitations.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit49.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit50_changing_arrangement.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit50.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit51_short_story.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit51.yaml",
+    ),
 )
 
 # B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
@@ -1716,6 +1732,22 @@ FA_GLOSSES.update({
     "بودین": "you all were; had (spoken)", "برگشته": "returned; gone back",
 })
 
+# A2 units 48-51 (Block G integration), added 2026-11-15.
+FA_GLOSSES.update({
+    "تئاتر": "theatre", "کادو": "gift; present", "قرارمون": "our arrangement (spoken)",
+    "کردیم": "we did; made (spoken)", "نمی‌تونیم": "we can't (spoken)",
+    "دوچرخه‌ها": "bicycles", "قایق": "boat", "شهربازی": "amusement park",
+    "بستنی": "ice cream", "شدیم": "we became; got on (spoken)",
+    "دیدیم": "we saw (spoken)", "خریدیم": "we bought (spoken)",
+    "خریدن": "they bought (spoken)", "برگشتن": "they came back (spoken)",
+    "ترسید": "he/she was scared", "خندید": "he/she laughed",
+    "ترسیدن": "they were scared (spoken)", "خندیدن": "they laughed (spoken)",
+    "می‌خوردن": "they were eating (spoken)", "می‌گرفت": "he/she was taking; buying (spoken)",
+    "می‌گرفتم": "I used to buy; take (spoken)", "بلیت‌ها": "the tickets",
+    "رسیدیم": "we arrived (spoken)", "ترسیدم": "I was scared",
+    "خندیدم": "I laughed",
+})
+
 # --- 2026-10-19: Farsi B2 tier (units 01-08) ---------------------------------
 # Every B2 introduced token absent from FA_GLOSSES above (364 of the 573
 # distinct B2 tokens). Each gloss is the atomic English meaning of the sense
@@ -2621,6 +2653,10 @@ FA_VERBS = {
     "ندیده‌م", "نشده‌م", "رفته‌ام", "رفته‌یم", "رفته‌این", "رفته‌ن",
     "خورده‌ای", "خورده", "دیده‌ای", "دیده‌یم", "شده‌ای", "برگشتم",
     "رسیده", "رسیدی", "بودین", "برگشته",
+    # A2 units 48-51.
+    "کردیم", "نمی‌تونیم", "شدیم", "دیدیم", "خریدیم", "خریدن", "برگشتن",
+    "ترسید", "خندید", "ترسیدن", "خندیدن", "می‌خوردن", "می‌گرفت",
+    "می‌گرفتم", "رسیدیم", "ترسیدم", "خندیدم",
     # A2 units 20-21 (holiday plans; rescheduling), added 2026-11-06.
     "نمی‌خوام", "نمی‌کنم", "می‌مونی", "می‌مونیم", "بگیره", "مناسبه",
     "نمی‌تونی", "نمی‌تونه", "می‌گیریم",
