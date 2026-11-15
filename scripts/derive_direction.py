@@ -747,6 +747,8 @@ def cmd_inject(args):
         cm_new[g][0].append(str(u.realization.relative_to(ROOT)))
         cm_new[g][1].append(new_ov_rel)
         if py is not None:
+            if args.sibling == "nl-en" and u.stem.startswith("b2_"):
+                _retag_nl_b2(py)
             if tag_universe is not None:
                 kept = []
                 for t in py.get("templates", []):
@@ -788,6 +790,23 @@ def _collect_semantic(o, acc: set) -> None:
     elif isinstance(o, list):
         for v in o:
             _collect_semantic(v, acc)
+
+
+def _retag_nl_b2(o) -> None:
+    """nl-en B2 packs use the Dutch backfill's unit-wide tag b2_unitNN_<slug>[_lessonMM]; the generated X->en backfill
+    names the same sets en_b2_uNN[_lMM]. Rename in place (slot tag lists and tag_schema)."""
+    if isinstance(o, dict):
+        for k, v in list(o.items()):
+            if k == "semantic":
+                def f(x):
+                    m = re.match(r"b2_unit(\d\d)_[a-z_]+?(?:_lesson(\d\d))?$", x) if isinstance(x, str) else None
+                    return x if not m else f"en_b2_u{m.group(1)}" + (f"_l{m.group(2)}" if m.group(2) else "")
+                o[k] = [f(x) for x in v] if isinstance(v, list) else f(v)
+            else:
+                _retag_nl_b2(v)
+    elif isinstance(o, list):
+        for v in o:
+            _retag_nl_b2(v)
 
 
 def _prune_semantic(o, universe: set) -> bool:
