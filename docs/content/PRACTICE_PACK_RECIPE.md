@@ -641,7 +641,7 @@ that is the *underdetermined production prompt* defect (marks correct learners w
   files were needed the last time this drifted.
 * **Register pins:** `fa-en` overlay lane = colloquial spoken Persian
   (می‌شه/می‌کنه/اینجاست, polite شما to the learner). `prs-en` = colloquial Dari
-  (می‌تانین/استه). `nl-en` = informal jij. Match the lane you are authoring in.
+  (می‌توانین/استه). `nl-en` = informal jij. Match the lane you are authoring in.
 * **`listen_select`: do not author any for `en-fa` or `en-prs`** (§6.2).
 * **Defect 1.30 (harakat) — CORRECTED 2026-07-22.** The old text said normalization
   does not strip short-vowel diacritics; it does (§6.6), so a harakat-only difference

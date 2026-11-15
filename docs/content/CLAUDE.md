@@ -238,7 +238,7 @@ built for the automatable ones, but AUTHORS must not reproduce them:
   lane's register in the first dispatch prompt and record it here.
 - **fa.json UI locale (app chrome): formal written Persian** — distinct
   surface from course-content overlays; normalized 2026-07-12.
-- **prs-en overlay lane: colloquial Dari** (می‌تانین/استه style).
+- **prs-en overlay lane: colloquial Dari** (می‌توانین/استه style).
 - **nl-en overlay lane: informal jij-register.**
 - **de-en overlay lane: formal Sie in learner-facing instructions, informal
   du inside casual character dialogue/example glosses** (norm observed in
