@@ -463,6 +463,18 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit26_already_happened.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit26.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit45_self_care.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit45.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit46_refer_back.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit46.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit47_right_now.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit47.yaml",
+    ),
 )
 
 # B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
@@ -3485,6 +3497,47 @@ for _tok, _d in FA_C1_NEW.items():
         _target.setdefault(_tok, _d["gloss"])
     else:
         _target.add(_tok)
+
+
+# A2 units 45-47 (Block F: self-care, object clitics, present progressive),
+# added 2026-11-15. Glosses give the atomic sense taught in these units;
+# clitic verbs gloss the whole spoken verb-plus-pronoun form.
+FA_GLOSSES.update({
+    "خسته‌م": "I am tired (spoken)", "عصبانیم": "I am angry",
+    "نگرانم": "I am worried", "حالت": "your state; how you feel",
+    "مراقبت": "care (as in 'look after')",
+    "می‌کنین": "you (pl.) do (spoken)",
+    "خودم": "myself", "خودت": "yourself",
+    "خودمون": "ourselves (spoken)", "خودتون": "yourselves; you (polite, spoken)",
+    "خودشون": "themselves (spoken)",
+    "مواظب": "careful; looking after", "باش": "be (to one friend)",
+    "باشین": "be (to several people or polite, spoken)",
+    "مسواک": "toothbrush; toothbrushing", "دست‌هام": "my hands",
+    "صورتم": "my face",
+    "دیدمش": "I saw him / her / it (spoken)",
+    "خوندمش": "I read it (spoken)", "گرفتمش": "I got it (spoken)",
+    "دیدیش": "you saw him / her / it (spoken)", "دوستام": "my friends (spoken)",
+    "دیدمشون": "I saw them (spoken)", "دیدمت": "I saw you (spoken)",
+    "قرض": "loan (as in 'to borrow')", "برام": "for me (spoken)",
+    "خریدی": "you bought", "خریدیش": "you bought it (spoken)",
+    "خوندیش": "you read it (spoken)", "گرفتیش": "you got it (spoken)",
+    "ندیدمش": "I did not see it (spoken)", "نخریدمش": "I did not buy it (spoken)",
+    "نخوندمش": "I did not read it (spoken)", "نگرفتمش": "I did not get it (spoken)",
+    "خوندی": "you read", "گرفتی": "you got; you took",
+    "دارین": "you (pl.) are (doing) (progressive auxiliary, spoken)",
+    "می‌خونیم": "we read (spoken)", "می‌خونین": "you (pl.) read (spoken)",
+    "می‌خونن": "they read (spoken)", "نمی‌خونم": "I do not read (spoken)",
+    "خونه‌ایم": "we are at home (spoken)", "تلویزیون": "television",
+    "می‌بینن": "they watch; see (spoken)",
+})
+FA_PRONOUNS.update({"خودم", "خودت", "خودمون", "خودتون", "خودشون"})
+FA_ADJECTIVES.update({"خسته‌م", "عصبانیم", "نگرانم", "مواظب"})
+FA_VERBS.update({
+    "می‌کنین", "باش", "باشین", "دیدمش", "خوندمش", "گرفتمش", "دیدیش",
+    "دیدمشون", "دیدمت", "خریدی", "خریدیش", "خوندیش", "گرفتیش", "ندیدمش",
+    "نخریدمش", "نخوندمش", "نگرفتمش", "خوندی", "گرفتی", "دارین", "می‌خونیم",
+    "می‌خونین", "می‌خونن", "نمی‌خونم", "خونه‌ایم", "می‌بینن",
+})
 
 
 def fa_part_of_speech(token: str) -> str:
