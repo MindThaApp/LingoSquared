@@ -57,7 +57,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "hi"
-LEVELS = {"a1": "en-hi", "a2": "en-hi-a2", "b1": "en-hi-b1"}
+LEVELS = {"a1": "en-hi", "a2": "en-hi-a2", "b1": "en-hi-b1", "b2": "en-hi-b2", "c1": "en-hi-c1"}
 
 PROPER_NOUNS = {"प्रिया", "अर्जुन", "भारत", "लंदन", "अमेरिका", "दिल्ली", "मुंबई"}
 
@@ -2499,11 +2499,31 @@ for _tag, _words in {
 
 part_of_speech_b1 = pos_lookup(POS_SETS_B1)
 
+# B2/C1 tables (one shared table for both levels; each is still its own Course).
+# Precedence B1 > scripts/lexdata/en_hi_b2c1.json > A2 > A1, for gloss and POS alike.
+import json as _json
+_B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_hi_b2c1.json"
+B2C1_NEW = _json.loads(_B2C1_JSON.read_text(encoding="utf-8")) if _B2C1_JSON.exists() else {}
+GLOSSES_B2C1 = {**GLOSSES, **GLOSSES_A2, **{t: d["gloss"] for t, d in B2C1_NEW.items()}, **GLOSSES_B1}
+
+
+def part_of_speech_b2c1(token):
+    if token in GLOSSES_B1:
+        return part_of_speech_b1(token)
+    if token in B2C1_NEW:
+        return B2C1_NEW[token]["pos"]
+    if token in GLOSSES_A2:
+        return part_of_speech_a2(token)
+    return part_of_speech(token)
+
+
 
 TABLES = {
     "a1": (GLOSSES, part_of_speech, CATEGORY_TAGS),
     "a2": (GLOSSES_A2, part_of_speech_a2, CATEGORY_TAGS_A2),
     "b1": (GLOSSES_B1, part_of_speech_b1, CATEGORY_TAGS_B1),
+    "b2": (GLOSSES_B2C1, part_of_speech_b2c1, {}),
+    "c1": (GLOSSES_B2C1, part_of_speech_b2c1, {}),
 }
 
 
