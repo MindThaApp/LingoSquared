@@ -1,0 +1,265 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a2.unit81
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit81.een_drukke_ochtend
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Authored for the six lessons of A2 unit 81. Recognition and production use a
+    unit-wide union of safe morning-routine tags; structured practice uses the same
+    union without adjectives in six-pair matching tasks, plus a transport word-order
+    frame and a single-candidate fill-in-blank. The lexemes bus and was are excluded:
+    bus carries the stale gloss "the tin (in an idiom for 'it adds up perfectly')"
+    although this unit teaches the vehicle, and was carries "do the dishes (with ik)"
+    although the reading uses the past tense of zijn. Native review should confirm
+    that the broad word/gloss pools remain pedagogically clear for this grammar-led
+    unit and that the feedback wording sounds natural in English.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic: &safe_tags
+    - time_of_day
+    - transport_noun
+    - routine_verb_infinitive
+    - morning_steps_vocabulary
+    - participle_ge_contrast
+    - morning_negation_dat_clause
+    - place_non_station
+    - busy_morning_dialogue
+
+templates:
+# lesson01 -- Ge- in het midden
+- content_key: practice.en-nl.nl.a2.unit81.lesson01.choose.001
+  lesson_content_key: nl.a2.unit81.lesson01.ge_in_het_midden
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item: &broad_word
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, particle, phrase]
+      agreement_tags: {semantic: *safe_tags}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word is used to describe the busy morning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson01.listen.002
+  lesson_content_key: nl.a2.unit81.lesson01.ge_in_het_midden
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson01.match.003
+  lesson_content_key: nl.a2.unit81.lesson01.ge_in_het_midden
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots:
+    first: &match_word
+      language_code: nl
+      part_of_speech: [noun, verb, adverb, particle, phrase]
+      agreement_tags: {semantic: *safe_tags}
+    second: *match_word
+    third: *match_word
+    fourth: *match_word
+    fifth: *match_word
+    sixth: *match_word
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch morning word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson01.order.004
+  lesson_content_key: nl.a2.unit81.lesson01.ge_in_het_midden
+  type: word_order
+  frame: {text: 'Ik ga met de {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: transport_noun}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'Ik ga met de {item}.', language_code: nl, direction: ltr}
+  feedback_frame: {text: 'Put the Dutch travel sentence in the correct order.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson01.translate.005
+  lesson_content_key: nl.a2.unit81.lesson01.ge_in_het_midden
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
+
+# lesson02 -- Stappen op volgorde
+- content_key: practice.en-nl.nl.a2.unit81.lesson02.choose.001
+  lesson_content_key: nl.a2.unit81.lesson02.stappen_op_volgorde
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word helps describe the sequence of morning events.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson02.listen.002
+  lesson_content_key: nl.a2.unit81.lesson02.stappen_op_volgorde
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson02.match.003
+  lesson_content_key: nl.a2.unit81.lesson02.stappen_op_volgorde
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots: {first: *match_word, second: *match_word, third: *match_word, fourth: *match_word, fifth: *match_word, sixth: *match_word}
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch morning word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson02.fill.004
+  lesson_content_key: nl.a2.unit81.lesson02.stappen_op_volgorde
+  type: fill_in_blank
+  frame: {text: 'Vervolgens heb ik mijn {item} afgewassen.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: morning_steps_vocabulary}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'Kopje completes the sentence about washing up.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson02.translate.005
+  lesson_content_key: nl.a2.unit81.lesson02.stappen_op_volgorde
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
+
+# lesson03 -- Wel of geen ge-?
+- content_key: practice.en-nl.nl.a2.unit81.lesson03.choose.001
+  lesson_content_key: nl.a2.unit81.lesson03.wel_of_geen_ge
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word appears in the lesson about participles.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson03.listen.002
+  lesson_content_key: nl.a2.unit81.lesson03.wel_of_geen_ge
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson03.match.003
+  lesson_content_key: nl.a2.unit81.lesson03.wel_of_geen_ge
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots: {first: *match_word, second: *match_word, third: *match_word, fourth: *match_word, fifth: *match_word, sixth: *match_word}
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson03.translate.004
+  lesson_content_key: nl.a2.unit81.lesson03.wel_of_geen_ge
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
+
+# lesson04 -- De ochtend ging mis
+- content_key: practice.en-nl.nl.a2.unit81.lesson04.choose.001
+  lesson_content_key: nl.a2.unit81.lesson04.de_ochtend_ging_mis
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word helps explain what happened that morning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson04.listen.002
+  lesson_content_key: nl.a2.unit81.lesson04.de_ochtend_ging_mis
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson04.match.003
+  lesson_content_key: nl.a2.unit81.lesson04.de_ochtend_ging_mis
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots: {first: *match_word, second: *match_word, third: *match_word, fourth: *match_word, fifth: *match_word, sixth: *match_word}
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson04.translate.004
+  lesson_content_key: nl.a2.unit81.lesson04.de_ochtend_ging_mis
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
+
+# lesson05 -- Noors bericht
+- content_key: practice.en-nl.nl.a2.unit81.lesson05.choose.001
+  lesson_content_key: nl.a2.unit81.lesson05.noors_bericht
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word belongs to Noor''s account of her morning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson05.listen.002
+  lesson_content_key: nl.a2.unit81.lesson05.noors_bericht
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson05.match.003
+  lesson_content_key: nl.a2.unit81.lesson05.noors_bericht
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots: {first: *match_word, second: *match_word, third: *match_word, fourth: *match_word, fifth: *match_word, sixth: *match_word}
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson05.translate.004
+  lesson_content_key: nl.a2.unit81.lesson05.noors_bericht
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
+
+# lesson06 -- Lotte en Noor
+- content_key: practice.en-nl.nl.a2.unit81.lesson06.choose.001
+  lesson_content_key: nl.a2.unit81.lesson06.lotte_en_noor
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'This word appears in the conversation about the morning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson06.listen.002
+  lesson_content_key: nl.a2.unit81.lesson06.lotte_en_noor
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'The Dutch word you heard means {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson06.match.003
+  lesson_content_key: nl.a2.unit81.lesson06.lotte_en_noor
+  type: matching_pairs
+  frame: {text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}', language_code: nl, direction: ltr}
+  slots: {first: *match_word, second: *match_word, third: *match_word, fourth: *match_word, fifth: *match_word, sixth: *match_word}
+  slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+  answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+  feedback_frame: {text: 'Match each Dutch word with its English meaning.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit81.lesson06.translate.004
+  lesson_content_key: nl.a2.unit81.lesson06.lotte_en_noor
+  type: translation
+  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  slots: {item: *broad_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: {text: 'The Dutch answer is {item}.', language_code: en, direction: ltr}
