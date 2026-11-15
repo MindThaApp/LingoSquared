@@ -1,0 +1,153 @@
+schema_version: '1.0'
+pack_key: practice.pl-en.a1.unit35
+source_language: pl
+target_language: en
+unit_content_key: en.a1.unit35.technology
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Polish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - device_noun
+    - device_noun_a
+slot_presets:
+  device_noun: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: device_noun
+  device_noun_a: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: device_noun_a
+templates:
+- content_key: practice.pl-en.en.a1.unit35.lesson01.choose.001
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to słowo z tej lekcji.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-en.en.a1.unit35.lesson01.listen.002
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} to usłyszane słowo.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-en.en.a1.unit35.lesson01.translate.004
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Angielskie tłumaczenie to {item}.
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-en.en.a1.unit35.lesson01.order.005
+  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Chodzi o: {item}.'
+    language_code: pl
+    direction: ltr
+- content_key: practice.pl-en.en.a1.unit35.lesson02.translate.001
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: translation
+  frame:
+    text: 'To mam: {item}.'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'To mam: {item}.'
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.pl-en.en.a1.unit35.lesson02.translate.001.volume_order.002
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: word_order
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: device_noun_a
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
