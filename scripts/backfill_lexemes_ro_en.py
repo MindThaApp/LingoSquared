@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_RO_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "Boston", "Luna": "Luna", "Max": "Max", "always": "întotdeauna", "arrival": "sosire", "arrive": "a ajunge; a sosi", "arrives": "ajunge; sosește", "ate": "a mâncat", "ball": "minge", "bigger": "mai mare", "bird": "pasăre", "book": "carte", "both": "amândoi", "car": "mașină", "cat": "pisică", "cheaper": "mai ieftin", "cheapest": "cel mai ieftin", "cooking": "gătit", "cooks": "gătește", "departure": "plecare", "did": "a făcut", "different": "diferit", "dog": "câine", "ever": "vreodată", "expensive": "scump", "faster": "mai rapid", "fish": "pește", "friendly": "prietenos", "games": "jocuri", "goes": "merge", "hate": "a urî", "hobbies": "hobby-uri", "leaves": "pleacă", "likes": "place; îi place", "loves": "iubește", "milder": "mai blând; mai ușor", "mornings": "dimineți", "named": "numit", "never": "niciodată", "nicer": "mai drăguț; mai simpatic", "often": "des", "paint": "a picta", "painting": "pictat", "paints": "pictează", "pet": "animal de companie", "pets": "animale de companie", "platform": "peron", "play": "a juca", "prefer": "a prefera", "prefers": "preferă", "rarely": "rar", "reading": "citit", "red": "roșu", "round": "dus-întors", "running": "alergat", "s": "-ul/-ului", "sister's": "al surorii", "smaller": "mai mic", "still": "încă", "strong": "puternic", "swim": "a înota", "than": "decât", "thinks": "crede; gândește", "ticket": "bilet", "together": "împreună", "train": "tren", "trip": "călătorie", "very": "foarte", "video": "video", "visited": "a vizitat", "walks": "plimbări", "watch": "a se uita; a privi", "watched": "a urmărit; s-a uitat", "way": "drum; sens", "week": "săptămână", "white": "alb", "why": "de ce", "worked": "a lucrat", "writer's": "al scriitorului", "yesterday": "ieri"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
