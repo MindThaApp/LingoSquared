@@ -516,6 +516,26 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit39.yaml",
     ),
     (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit40_the_one_that.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit40.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit41_the_best.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit41.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit42_describing_things.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit42.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit43_this_that.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit43.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit44_not_yet.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit44.yaml",
+    ),
+    (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit45_self_care.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit45.yaml",
     ),
@@ -2929,6 +2949,8 @@ TOO_PREPOSITION_LESSONS = {
 # collision, but these three lessons' negation still collides with the
 # long-established plain "نه" = "nine" entry without this split.
 NO_NEGATION_LESSONS = {
+    "fa.a2.unit42.lesson06.lost_coat_dialogue",
+    "fa.a2.unit46.lesson04.yes_no",
     "fa.a2.unit29.lesson04.asking_permission",
     "fa.a2.unit30.lesson04.availability",
     "fa.a2.unit31.lesson02.offers_and_replies",
@@ -3832,6 +3854,109 @@ FA_A2_GLOSS_OVERRIDES = {
 FA_A2_PART_OF_SPEECH.update({"داد": "noun", "ورزشی": "adjective", "بده": "adjective", "آزادم": "adjective"})
 for _tok, (_gloss, _pos) in FA_A2U27_39_NEW.items():
     FA_GLOSSES.setdefault(_tok, _gloss)
+
+# A2 units 40-44 (relative clauses through negation), added 2026-11-15.
+# English-only glosses; "(before 'that')" marks the indefinite stem that a
+# relative clause attaches to, so it never collapses onto the bare noun.
+FA_A2U40_44_NEW = {
+    "کیفی": ("a bag (before 'that')", "noun"),
+    "ساعتی": ("a watch (before 'that')", "noun"),
+    "کلیدی": ("a key (before 'that')", "noun"),
+    "مرد": ("man", "noun"),
+    "نشسته": ("sitting; seated", "verb"),
+    "مدیره": ("is the manager (spoken)", "verb"),
+    "مردی": ("a man (before 'that')", "noun"),
+    "خانمی": ("a lady (before 'that')", "noun"),
+    "مشتری‌ای": ("a customer (before 'that')", "noun"),
+    "عینکی": ("a pair of glasses (before 'that')", "noun"),
+    "کیفش": ("her bag (spoken)", "noun"),
+    "گمشده‌ها": ("lost things; lost property", "noun"),
+    "کارمندی": ("a clerk (before 'that')", "noun"),
+    "اونی": ("the one (that)", "pronoun"),
+    "دوربین": ("camera", "noun"),
+    "باتری": ("battery", "noun"),
+    "گوشیه": ("is the phone (spoken)", "verb"),
+    "ارزون": ("cheap", "adjective"),
+    "گرون": ("expensive", "adjective"),
+    "ارزونه": ("is cheap (spoken)", "verb"),
+    "گرونه": ("is expensive (spoken)", "verb"),
+    "ارزون‌تر": ("cheaper", "adjective"),
+    "گرون‌تر": ("more expensive", "adjective"),
+    "بدتر": ("worse", "adjective"),
+    "ارزون‌ترین": ("the cheapest", "adjective"),
+    "گرون‌ترین": ("the most expensive", "adjective"),
+    "بهترین": ("the best", "adjective"),
+    "بدترین": ("the worst", "adjective"),
+    "آپارتمان": ("apartment", "noun"),
+    "بزرگ‌ترین": ("the biggest", "adjective"),
+    "کوچیک‌ترین": ("the smallest", "adjective"),
+    "نزدیک‌ترین": ("the nearest", "adjective"),
+    "قشنگ‌ترین": ("the prettiest", "adjective"),
+    "کوه": ("mountain", "noun"),
+    "دریاست": ("is the sea (spoken)", "verb"),
+    "کدومه": ("which one is it (spoken)", "verb"),
+    "هتله": ("is the hotel (spoken)", "verb"),
+    "اندازه‌ی": ("size of (linked form)", "noun"),
+    "اندازه": ("size; extent", "noun"),
+    "سوم": ("third", "adjective"),
+    "بهترینه": ("is the best (spoken)", "verb"),
+    "کوچیک‌تر": ("smaller", "adjective"),
+    "آپارتمانه": ("is the apartment (spoken)", "verb"),
+    "ارزون‌ترینه": ("is the cheapest (spoken)", "verb"),
+    "پالتو": ("coat", "noun"),
+    "نو": ("new", "adjective"),
+    "پالتوی": ("coat of (linked form)", "noun"),
+    "چرمی": ("leather (adjective)", "adjective"),
+    "چوبی": ("wooden", "adjective"),
+    "مبل": ("sofa", "noun"),
+    "چرمیه": ("is leather (spoken)", "verb"),
+    "مال": ("belonging to; property of", "noun"),
+    "قدیمیه": ("is old (spoken)", "verb"),
+    "شماست": ("is yours", "verb"),
+    "ست": ("is (attached ending, as in 'is Sara's')", "verb"),
+    "پرتقال": ("orange", "noun"),
+    "یکی": ("one (of them)", "pronoun"),
+    "گل": ("flower", "noun"),
+    "رمان": ("novel", "noun"),
+    "گل‌ها": ("flowers (plural)", "noun"),
+    "کتاب‌ها": ("books (plural)", "noun"),
+    "پرتقال‌ها": ("oranges (plural)", "noun"),
+    "رمان‌ها": ("novels (plural)", "noun"),
+    "شیرینی‌ها": ("sweets; pastries (plural)", "noun"),
+    "نون‌ها": ("breads (plural, spoken)", "noun"),
+    "رمانی": ("a novel (indefinite form)", "noun"),
+    "نونوایی": ("bakery", "noun"),
+    "گل‌فروشی": ("flower shop", "noun"),
+    "نونی": ("some bread (indefinite, spoken)", "noun"),
+    "گلی": ("a flower (indefinite form)", "noun"),
+    "شیرینی‌ای": ("a pastry (indefinite form)", "noun"),
+    "گل‌های": ("flowers of (linked form)", "noun"),
+    "نیومده": ("has not come (spoken)", "verb"),
+    "ندادم": ("I did not give", "verb"),
+    "سفارشم": ("my order", "noun"),
+    "نمی‌کنه": ("he/she doesn't do; work (spoken)", "verb"),
+    "هیچ": ("no; not any (as in 'no table')", "adjective"),
+    "کس": ("person; one (as in 'nobody')", "noun"),
+    "میزی": ("a table (indefinite form)", "noun"),
+    "اتاقی": ("a room (indefinite form)", "noun"),
+    "قهوه‌ها": ("coffees (plural)", "noun"),
+}
+FA_A2_PART_OF_SPEECH.update({_tok: _pos for _tok, (_gloss, _pos) in FA_A2U40_44_NEW.items()})
+for _tok, (_gloss, _pos) in FA_A2U40_44_NEW.items():
+    FA_GLOSSES.setdefault(_tok, _gloss)
+# Level-scoped (a2) sense/POS fixes for tokens first introduced in units 40-47.
+FA_A2_GLOSS_OVERRIDES.update({
+    "همکاری": "a colleague (before 'that')",
+    "پولی": "a wallet (before 'that')",
+    "شبه": "it is night (spoken)",
+    "کجایی": "where are you (right now; spoken)",
+    "دادم": "I gave; I lent (spoken)",
+})
+FA_A2_PART_OF_SPEECH.update({
+    "همکاری": "noun", "پولی": "noun", "شبه": "verb", "نبود": "verb",
+    "دیدی": "verb", "برام": "preposition",
+})
+
 
 
 def fa_part_of_speech(token: str) -> str:
