@@ -1768,6 +1768,87 @@ for _tok, _pos in DERIVED_TARGET_POS.items():
     POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end derive_target.py ---
 
+# A2 Block A (units 98-102: busy morning, then and now, when it happened,
+# ever done it, past perfect): citation forms, glosses and parts of speech
+# for the new tokens. Applied with setdefault so no earlier entry changes.
+A2_BLOCK_A_CITATION = {
+    "Bist": "bist", "Damals": "damals", "Draußen": "draußen", "Endlich": "endlich",
+    "Früher": "früher", "Gestern": "gestern", "Hektisch": "hektisch",
+    "Manchmal": "manchmal", "Nachdem": "nachdem", "Noch": "noch", "Oh": "oh",
+    "Plötzlich": "plötzlich", "Schon": "schon", "Super": "super", "Viele": "viele",
+    "Warst": "warst", "Zuletzt": "zuletzt",
+}
+A2_BLOCK_A_GLOSSES = {
+    "Antworten": "answers", "Dorf": "village", "Dunkeln": "the dark (as in 'in the dark')",
+    "Flugzeug": "plane; aeroplane", "Fragebogen": "questionnaire",
+    "Glück": "luck; good fortune", "Haltestelle": "bus stop; stop",
+    "Hausaufgaben": "homework", "Hunger": "hunger", "Kerze": "candle",
+    "Kind": "child", "Licht": "light", "Male": "times; occasions (as in 'many times')",
+    "Minute": "minute", "Pech": "bad luck", "Pizza": "pizza",
+    "Schülerin": "school pupil (female)", "Sonne": "sun", "Stadt": "city; town",
+    "Student": "student (male)", "Sushi": "sushi", "Tür": "door",
+    "Uni": "university", "Zeitung": "newspaper",
+    "abgeholt": "picked up (past participle)", "angezogen": "put on, as clothes (past participle)",
+    "anrief": "called on the phone (simple past)", "anziehen": "to put on (clothes)",
+    "aufgeräumt": "tidied up (past participle)", "aufgestanden": "got up (past participle)",
+    "ausgehen": "to go out (of a light); to go out for the evening",
+    "ausgestiegen": "got off; got out (past participle)", "ausging": "went out, of a light (simple past)",
+    "aussteigen": "to get off; to get out of a vehicle", "aßen": "ate (simple past, we/they)",
+    "bekommen": "to get; to receive", "bezahlt": "paid for (past participle)",
+    "brachte": "brought (simple past)", "davor": "before that; in front of it",
+    "deinem": "your (to a man or neuter noun, informal)",
+    "damals": "back then; at that time", "draußen": "outside",
+    "durfte": "was allowed to (I/he/she/it, simple past)", "durften": "were allowed to (we/they, simple past)",
+    "durftet": "were allowed to (you, plural, simple past)",
+    "eingekauft": "bought, shopped for (past participle)", "eingestiegen": "got on; boarded (past participle)",
+    "einkaufen": "to shop; to buy groceries", "einmal": "once; one time",
+    "einsteigen": "to get on; to board", "endlich": "at last; finally",
+    "fliegen": "to fly", "frisches": "fresh (before a neuter noun)", "früh": "early",
+    "früher": "earlier; in the past; formerly",
+    "gebucht": "booked (past participle)", "geduscht": "showered (past participle)",
+    "geflogen": "flew; flown (past participle)", "gefrühstückt": "had breakfast (past participle)",
+    "gepackt": "packed (past participle)", "geschwommen": "swam; swum (past participle)",
+    "gespannt": "excited; eager to see what happens", "gespült": "washed up (past participle)",
+    "gewartet": "waited (past participle)", "gewohnt": "lived, resided (past participle)",
+    "ging": "went (simple past, I/he/she/it)", "gleichzeitig": "at the same time",
+    "glücklich": "happy", "halbe": "half (before a feminine noun)",
+    "hattest": "had (you, informal singular, simple past)", "hattet": "had (you, plural, simple past)",
+    "hektisch": "hectic; very busy", "hörte": "heard; listened to (simple past)",
+    "kochte": "cooked (simple past, I/he/she/it)", "kochten": "cooked (simple past, we/they)",
+    "kochtest": "cooked (you, informal singular, simple past)", "kochtet": "cooked (you, plural, simple past)",
+    "konntest": "could; were able to (you, informal, simple past)", "lachte": "laughed (simple past)",
+    "las": "read (simple past, I/he/she/it)", "mitgenommen": "taken along (past participle)",
+    "mitnehmen": "to take along; to bring with you", "musste": "had to (I/he/she/it, simple past)",
+    "mussten": "had to (we/they, simple past)", "oh": "oh", "sah": "saw (simple past, I/he/she/it)",
+    "saß": "sat (simple past, I/he/she/it)", "saßen": "sat (simple past, we/they)",
+    "schien": "shone; seemed (simple past)", "schlief": "slept (simple past, I/he/she/it)",
+    "seinen": "his (before a masculine noun in the accusative)", "stand": "stood; was standing (simple past, I/he/she/it)",
+    "standen": "stood; were standing (simple past, we/they)", "super": "great; super",
+    "warst": "were (you, informal singular, simple past)", "wart": "were (you, plural, simple past)",
+    "warteten": "waited (simple past, we/they)", "wollten": "wanted to (we/they, simple past)",
+    "wolltest": "wanted to (you, informal, simple past)", "zuletzt": "finally; last of all",
+    "zweimal": "twice", "Schade": "what a pity; what a shame", "plötzlich": "suddenly", "nachdem": "after (introduces a clause about the earlier event)",
+}
+A2_BLOCK_A_POS = {
+    "adverb": "damals draußen endlich früher früh gestern manchmal plötzlich schon noch "
+              "zuletzt gleichzeitig davor einmal zweimal",
+    "adjective": "hektisch glücklich gespannt halbe frisches viele super deinem seinen",
+    "particle": "nachdem oh",
+    "phrase": "Schade",
+    "verb": "abgeholt angezogen anrief anziehen aufgeräumt aufgestanden ausgehen ausgestiegen "
+            "ausging aussteigen aßen bekommen bezahlt brachte durfte durften durftet eingekauft "
+            "eingestiegen einkaufen einsteigen fliegen gebucht geduscht geflogen gefrühstückt "
+            "gepackt geschwommen gespült gewartet gewohnt ging hattest hattet hörte kochte kochten "
+            "kochtest kochtet konntest lachte las mitgenommen mitnehmen musste mussten sah saß saßen "
+            "schien schlief stand standen warst wart warteten wollten wolltest bist",
+}
+CITATION_FORMS.update(A2_BLOCK_A_CITATION)
+for _tok, _gloss in A2_BLOCK_A_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+_ALREADY_TAGGED = set().union(*POS_SETS.values())
+for _pos, _words in A2_BLOCK_A_POS.items():
+    POS_SETS.setdefault(_pos, set()).update(split_words(_words) - _ALREADY_TAGGED)
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_de_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_de_b2c1.json"
