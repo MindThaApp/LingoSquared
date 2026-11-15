@@ -1,0 +1,198 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a2.unit90
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit90.goede_raad
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Authored for the lessons of A2 unit 90 that have backfilled lexemes (grammar-led unit). Recognition, matching and bare-word production use a unit-wide union of the unit lesson semantic tags over content words (noun, verb, adjective, adverb, preposition) so every hosted lesson reaches the 3-option and 6-pair floors at course scope. Pronouns, proper nouns, particles and phrases are left out. Thin unit (13 hostable lexemes). Backfill glosses to double-check: bed, bedankt/Bedankt (phrase, excluded by part of speech). Native speaker should confirm the lexical set.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - advice_moeten
+    - advice_zou_moeten
+    - advice_strength_contrast
+    - advice_waarom_niet
+    - advice_message_reading
+    - past_habits_dialogue
+templates:
+- content_key: practice.en-nl.nl.a2.unit90.lesson01.choose.001
+  lesson_content_key: nl.a2.unit90.lesson01.je_moet_rusten
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item: &unit_word
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, preposition]
+      agreement_tags:
+        semantic: [advice_moeten, advice_zou_moeten, advice_strength_contrast, advice_waarom_niet, advice_message_reading, past_habits_dialogue]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson01.match.002
+  lesson_content_key: nl.a2.unit90.lesson01.je_moet_rusten
+  type: matching_pairs
+  frame: &match_frame
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots: &match_slots
+    first: *unit_word
+    second: *unit_word
+    third: *unit_word
+    fourth: *unit_word
+    fifth: *unit_word
+    sixth: *unit_word
+  slot_relations: &match_relations
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation: &match_answer
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame: &match_feedback
+    text: Match each Dutch word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a2.unit90.lesson01.translate.003
+  lesson_content_key: nl.a2.unit90.lesson01.je_moet_rusten
+  type: translation
+  frame: &translation_frame
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: &translation_feedback
+    text: The Dutch answer is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit90.lesson02.listen.001
+  lesson_content_key: nl.a2.unit90.lesson02.je_zou_moeten
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson02.match.002
+  lesson_content_key: nl.a2.unit90.lesson02.je_zou_moeten
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit90.lesson02.translate.003
+  lesson_content_key: nl.a2.unit90.lesson02.je_zou_moeten
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit90.lesson03.choose.001
+  lesson_content_key: nl.a2.unit90.lesson03.moet_zou_of_beter
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson03.match.002
+  lesson_content_key: nl.a2.unit90.lesson03.moet_zou_of_beter
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit90.lesson03.translate.003
+  lesson_content_key: nl.a2.unit90.lesson03.moet_zou_of_beter
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit90.lesson04.listen.001
+  lesson_content_key: nl.a2.unit90.lesson04.waarom_niet
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson04.match.002
+  lesson_content_key: nl.a2.unit90.lesson04.waarom_niet
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit90.lesson04.translate.003
+  lesson_content_key: nl.a2.unit90.lesson04.waarom_niet
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit90.lesson05.choose.001
+  lesson_content_key: nl.a2.unit90.lesson05.bericht_van_lotte
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson05.match.002
+  lesson_content_key: nl.a2.unit90.lesson05.bericht_van_lotte
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit90.lesson05.translate.003
+  lesson_content_key: nl.a2.unit90.lesson05.bericht_van_lotte
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit90.lesson06.listen.001
+  lesson_content_key: nl.a2.unit90.lesson06.lotte_en_omar
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit90.lesson06.match.002
+  lesson_content_key: nl.a2.unit90.lesson06.lotte_en_omar
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit90.lesson06.translate.003
+  lesson_content_key: nl.a2.unit90.lesson06.lotte_en_omar
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
