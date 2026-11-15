@@ -22,6 +22,7 @@ Ramin's decisions on this plan:
   - **Present perfect:** formal *رفته‌ام* AND the spoken Kabuli forms are both taught. Show the spoken forms explicitly in notes; accept both as answers.
   - **Object clitics:** teach *او را / آن را*. Accept *دیدمش* as an answer but keep it out of taught text. *ازش / باهاش / بهت* stay banned (Tehrani).
   - **Future *خواهم رفت*:** recognition only. Teach the future as *می‌* plus a time word. *خواهم رفت* appears only in reading and recognition items.
+- **Progress (en-prs, 2026-11-15):** Wave-0 pilot A1 already exists as `prs/a2_unit19_last_weekend` (wired in `en-prs-a2`, reviewed, practice pack present); it uses none of the Q3 forms and needs no change. Units A2-A6 are authored as `a2_unit22`-`a2_unit26` and appended at the end of the manifest (the Q5 reorder has not been done).
 - **Q2, Q6, Q7, Q8, Q9:** not yet decided; left open. Until Q2 is ruled, new fa/prs units use the plan's recommended size (6 lessons x ~6 exercises).
 
 ---
