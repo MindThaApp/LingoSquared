@@ -1,0 +1,152 @@
+schema_version: '1.0'
+pack_key: practice.fr-en.a1.unit42
+source_language: fr
+target_language: en
+unit_content_key: en.a1.unit42.personality
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - personality_adj
+slot_presets:
+  personality_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: personality_adj
+  unit_adjective:
+    language_code: en
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: a1_unit42_personality
+templates:
+- content_key: practice.fr-en.en.a1.unit42.lesson01.choose.001
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} est un mot de cette leçon.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit42.lesson01.listen.002
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} est le mot que tu as entendu.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit42.lesson01.translate.004
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La traduction anglaise est {item}.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit42.lesson01.order.005
+  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
+  type: word_order
+  frame:
+    text: She is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Le trait de caractère mentionné est : {item}.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit42.lesson02.translate.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: translation
+  frame:
+    text: 'Pour la décrire : {item}.'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'La phrase anglaise est : She is {item}.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit42.lesson02.translate.001.volume_order.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: word_order
+  frame:
+    text: She is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: personality_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She is {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'L’ordre correct est : She is {item}.'
+    language_code: fr
+    direction: ltr
