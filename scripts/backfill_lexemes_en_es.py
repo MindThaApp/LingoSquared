@@ -1639,6 +1639,68 @@ for _tok, _pos in DERIVED_TARGET_POS.items():
     POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end derive_target.py ---
 
+# --- A2 Block A (units 93-97): past tenses, glosses and parts of speech ---
+A2_BLOCK_A_GLOSSES: dict[str, str] = {
+    "levantado": "got up (past participle of levantarse)", "duchado": "showered (past participle of ducharse)",
+    "desayunado": "had breakfast (past participle)", "hemos": "we have (helping verb)",
+    "llegado": "arrived (past participle)", "ella": "she", "despertarse": "to wake up",
+    "lavarse": "to wash oneself (lavarse los dientes: to brush one's teeth)", "dientes": "teeth",
+    "peinarse": "to comb one's hair", "acostarse": "to go to bed", "temprano": "early",
+    "despertado": "woke up (past participle of despertarse)", "peinado": "combed (past participle of peinarse)",
+    "acostado": "went to bed (past participle of acostarse)", "vestido": "got dressed (past participle of vestirse)",
+    "levanté": "I got up (past, finished day)", "llaves": "keys", "ventana": "window",
+    "vuelto": "come back (past participle of volver)", "dicho": "said (past participle of decir)",
+    "escrito": "written (past participle of escribir)", "venido": "come (past participle of venir)",
+    "cantar": "to sing", "bailar": "to dance",
+    "jugaba": "I or he or she used to play", "caminábamos": "we used to walk", "bailaba": "she or he used to dance",
+    "estudiaba": "I or he or she used to study", "cantaban": "they used to sing", "caminaba": "she or he used to walk",
+    "jugabas": "you used to play (informal)", "jugábamos": "we used to play", "jugaban": "they used to play",
+    "cantábamos": "we used to sing", "cantabas": "you used to sing (informal)", "estudiaban": "they used to study",
+    "vivir": "to live", "comía": "I or he or she used to eat", "bebías": "you used to drink (informal)",
+    "leche": "milk", "leíamos": "we used to read", "pueblo": "village; small town", "vivían": "they used to live",
+    "vivíamos": "we used to live", "leía": "I or he or she used to read", "iba": "I or he or she used to go; was going",
+    "comías": "you used to eat (informal)", "vivía": "I or he or she used to live", "comíamos": "we used to eat",
+    "eras": "you were (informal; imperfect)", "éramos": "we were (imperfect)", "ibas": "you used to go (informal)",
+    "íbamos": "we used to go; we were going", "iban": "they used to go; they were going",
+    "veía": "I or he or she used to see", "veías": "you used to see (informal)", "veíamos": "we used to see",
+    "veían": "they used to see", "niño": "boy; child (de niño: as a boy)", "niña": "girl (de niña: as a girl)",
+    "cantaba": "I or he or she used to sing", "canto": "I sing", "jardín": "garden", "chocolate": "chocolate",
+    "tele": "TV", "bebía": "I or he or she used to drink", "pasar": "to spend (time); to happen",
+    "pasaba": "I or he or she used to spend (time)", "veranos": "summers", "bebíamos": "we used to drink",
+    "hacías": "you used to do; you were doing (informal)", "ayudaba": "I or she or he used to help", "espero": "I wait",
+    "cocinando": "cooking (gerund)", "trabajando": "working (gerund)", "comiendo": "eating (gerund)",
+    "escribiendo": "writing (gerund)", "leyendo": "reading (gerund)", "durmiendo": "sleeping (gerund)",
+    "lloviendo": "raining (gerund)", "estabas": "you were (informal; in progress)", "estábamos": "we were (in progress)",
+    "ducha": "showers (he or she)", "pasea": "walks (he or she); takes for a walk", "paseando": "walking; strolling (gerund)",
+    "hablando": "talking (gerund)", "caminando": "walking (gerund)", "viendo": "watching; seeing (gerund)",
+    "haciendo": "doing; making (gerund)", "duchando": "showering (gerund; with estar)", "vio": "he or she saw",
+    "empezó": "started (he or she did)", "atasco": "traffic jam", "repente": "suddenness (de repente: suddenly)",
+    "mojado": "wet (masc.)", "mojada": "wet (fem.)", "paella": "paella", "pizza": "pizza",
+    "estado": "been (past participle of estar)", "viajado": "travelled (past participle)",
+    "probado": "tried; tasted (past participle)", "esquiar": "to ski", "caballo": "horse (montar a caballo: to ride a horse)",
+    "esquiado": "skied (past participle)", "nadado": "swum (past participle)", "montado": "ridden (past participle of montar)",
+    "jamás": "never (stronger than nunca)", "pescado": "fish (as food)", "limón": "lemon", "campo": "countryside",
+    "experiencias": "experiences", "habías": "you had (informal; helping verb)", "habíamos": "we had (helping verb)",
+    "buscado": "looked for (past participle)", "encontrar": "to find", "cena": "dinner", "comprado": "bought (past participle)",
+    "volví": "I came back; I returned", "perdona": "sorry; excuse me (informal)", "mala": "bad (fem.)", "suerte": "luck",
+}
+A2_BLOCK_A_VERBS = (
+    "levantado duchado desayunado hemos llegado despertarse lavarse peinarse acostarse despertado peinado acostado "
+    "vestido levanté vuelto dicho escrito venido cantar bailar jugaba caminábamos bailaba estudiaba cantaban caminaba "
+    "jugabas jugábamos jugaban cantábamos cantabas estudiaban vivir comía bebías leíamos vivían vivíamos leía iba comías "
+    "vivía comíamos eras éramos ibas íbamos iban veía veías veíamos veían cantaba canto bebía pasar pasaba bebíamos "
+    "hacías ayudaba espero cocinando trabajando comiendo escribiendo leyendo durmiendo lloviendo estabas estábamos ducha "
+    "pasea paseando hablando caminando viendo haciendo duchando vio empezó estado viajado probado esquiar esquiado nadado "
+    "montado buscado encontrar comprado volví perdona habías habíamos"
+).split()
+for _tok, _gloss in A2_BLOCK_A_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS["verb"] |= set(A2_BLOCK_A_VERBS)
+POS_SETS["pronoun"] |= {"ella"}
+POS_SETS["adverb"] |= {"temprano", "jamás", "repente"}
+POS_SETS["adjective"] |= {"mojado", "mojada", "mala"}
+# --- end A2 Block A ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_es_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_es_b2c1.json"
@@ -1664,6 +1726,12 @@ for _tag, _words in {
         CATEGORY_TAGS.setdefault(_w, []).append(_tag)
 
 A2_GLOSS_OVERRIDES = {
+    ("a2_unit93_una_manana_ocupada", "visto"): "seen (past participle of ver)",
+    ("a2_unit93_una_manana_ocupada", "puesto"): "put (past participle of poner)",
+    ("a2_unit93_una_manana_ocupada", "lavado"): "washed (past participle of lavarse)",
+    ("a2_unit94_cuando_era_pequeno", "hacía"): "I or he or she used to make; used to do",
+    ("a2_unit95_que_pasaba", "salió"): "he or she left (past)",
+    ("a2_unit95_que_pasaba", "llama"): "calls",
     ("a2_unit18_banco", "cuenta"): "account (bank); bill",
     ("a2_unit21_entrevista", "puesto"): "position; job post",
     ("a2_unit21_entrevista", "hace"): "makes; does; ago (with a length of time)",
@@ -1683,6 +1751,8 @@ A2_GLOSS_OVERRIDES = {
 }
 # Parts of speech that differ from the A1/A2 classification, per unit.
 B1_POS_OVERRIDES = {
+    ("a2_unit93_una_manana_ocupada", "puesto"): "verb",
+    ("a2_unit93_una_manana_ocupada", "lavado"): "verb",
     ("b1_unit26_habilidades", "como"): "preposition",
     ("b1_unit27_obligaciones", "entre"): "verb",
     ("b1_unit32_condiciones", "recibo"): "verb",
