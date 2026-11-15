@@ -60,7 +60,7 @@ LEVELS = {"a1": "en-fr", "a2": "en-fr-a2", "b1": "en-fr-b1", "b2": "en-fr-b2", "
 PROPER_NOUNS = {
     "Camille", "Noé", "Montreuil", "Lille", "Inès", "Mathieu", "Trois-Frères",
     "Saint-Ouen", "Lyon", "Paris", "Fleurs", "Fournier", "Lambert",
-    "République", "Vitale", "Girard", "Lefebvre", "Dijon",
+    "République", "Vitale", "Girard", "Lefebvre", "Dijon", "Italie",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -606,6 +606,66 @@ A2_ENTRIES: dict[str, tuple[str, str]] = {
 }
 POS_SETS["preposition"].discard("d'autres")  # A2 classifies the elided form as a phrase
 for _tok, (_code, _gloss) in A2_ENTRIES.items():
+    GLOSSES[_tok] = _gloss
+    if _code != "n":
+        POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
+
+# --- A2 Block A additions (units 81-85): grammar-led past-tense units --------
+A2_BLOCK_A_ENTRIES: dict[str, tuple[str, str]] = {
+    # unit81 busy morning (passé composé)
+    "allés": ("v", "gone; went (masc. plural)"), "partis": ("v", "left (masc. plural)"),
+    "arrivés": ("v", "arrived (masc. plural)"), "arrivées": ("v", "arrived (fem. plural)"),
+    "restés": ("v", "stayed (masc. plural)"), "s'habille": ("v", "gets dressed"),
+    "réveillé": ("v", "woke up (masc.)"), "t'es": ("v", "you are (reflexive past auxiliary)"),
+    "levé": ("v", "got up (masc.)"), "habillé": ("v", "got dressed (masc.)"),
+    "habillée": ("v", "got dressed (fem.)"), "levée": ("v", "got up (fem.)"),
+    "réveillés": ("v", "woke up (masc. plural)"), "enfin": ("d", "finally; at last"),
+    # unit82 past habits (imparfait)
+    "autrefois": ("d", "in the past; formerly"), "j'habitais": ("v", "I used to live"),
+    "campagne": ("n", "countryside"), "jouions": ("v", "we used to play"),
+    "regardais": ("v", "I used to watch; I was watching"), "télé": ("n", "TV"),
+    "j'aimais": ("v", "I used to like"), "habiter": ("v", "to live (in a place)"),
+    "regardait": ("v", "he, she used to watch"), "jouais": ("v", "I used to play; you used to play"),
+    "aimions": ("v", "we used to like"), "habitiez": ("v", "you used to live (formal or plural)"),
+    "jouaient": ("v", "they used to play"), "jouons": ("v", "we play"),
+    "finissons": ("v", "we finish"), "finissais": ("v", "I used to finish"),
+    "faisais": ("v", "I used to do; I used to make"), "étais": ("v", "I was; you were (informal)"),
+    "étions": ("v", "we were"), "étiez": ("v", "you were (formal or plural)"),
+    "avions": ("v", "we had"), "aviez": ("v", "you had (formal or plural)"),
+    "avaient": ("v", "they had"), "faisions": ("v", "we used to do; we used to make"),
+    "ville": ("n", "city; town"), "bonbons": ("n", "sweets; candies"),
+    "mangeons": ("v", "we eat"), "mangeais": ("v", "I used to eat"),
+    "mangions": ("v", "we used to eat"), "j'allais": ("v", "I used to go"),
+    "regardions": ("v", "we used to watch"), "allions": ("v", "we used to go"),
+    "prenais": ("v", "I used to take"), "venais": ("v", "I used to come"),
+    "voyais": ("v", "I used to see"), "prenaient": ("v", "they used to take"),
+    "travaillait": ("v", "he, she used to work"),
+    "habitais": ("v", "I used to live; you used to live (informal)"),
+    # unit83 what was happening (imparfait vs passé composé)
+    "pleuvait": ("v", "it was raining"), "dormir": ("v", "to sleep"),
+    "dormais": ("v", "I was sleeping"), "lisait": ("v", "he, she was reading"),
+    "cuisinions": ("v", "we were cooking"), "j'attendais": ("v", "I was waiting"),
+    "attendions": ("v", "we were waiting"), "vent": ("n", "wind"),
+    "entendu": ("v", "heard"), "bruit": ("n", "noise"),
+    "tombée": ("v", "fell (fem.)"), "sonne": ("v", "rings"),
+    "sort": ("v", "goes out"), "sorti": ("v", "went out (masc.)"),
+    "écoutait": ("v", "he, she was listening"), "lisais": ("v", "I was reading"),
+    "monter": ("v", "to get on; to go up"), "monté": ("v", "got on; went up (masc.)"),
+    "rentré": ("v", "went home (masc.)"), "parlais": ("v", "I was talking"),
+    # unit84 life experiences (déjà / jamais)
+    "sushis": ("n", "sushi"), "visité": ("v", "visited"), "plat": ("n", "dish"),
+    "pays": ("n", "country"), "l'avion": ("n", "the plane"), "Italie": ("N", "Italy"),
+    "essayé": ("v", "tried"), "expériences": ("n", "experiences"),
+    "voyagé": ("v", "travelled"),
+    # unit85 what had happened (plus-que-parfait)
+    "perdre": ("v", "to lose"), "perd": ("v", "loses"), "achetons": ("v", "we buy"),
+    "rentrés": ("v", "went home (masc. plural)"), "parties": ("v", "left (fem. plural)"),
+    "n'avait": ("v", "had not"), "manque": ("v", "misses; is missing"),
+    "manqué": ("v", "missed"),
+}
+for _tok, (_code, _gloss) in A2_BLOCK_A_ENTRIES.items():
+    if _tok in GLOSSES:  # an earlier unit already glossed this token: first sight wins
+        continue
     GLOSSES[_tok] = _gloss
     if _code != "n":
         POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
