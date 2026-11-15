@@ -45,7 +45,7 @@ WEAK_SHARED = {
     "pl": {"plus"},
     "nl": {"is", "plus"},
     "de": {"is", "plus"},
-    "es": {"plus"},
+    "es": {"plus", "has"},
     "fr": {"plus"},
     "ro": {"plus"},
     "it": {"plus"},
