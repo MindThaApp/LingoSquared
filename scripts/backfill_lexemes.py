@@ -4704,6 +4704,14 @@ PHRASE_GLOSS_OVERRIDES: dict[str, str] = {
 }
 
 
+# C1 sense fixes (native-review lane 2026-11-15): the inherited gloss hid the sense C1 teaches.
+FA_C1_GLOSS_OVERRIDES = {
+    "عکس": "photo; the opposite",
+    "طرف": "side",
+    "دست": "hand (in 'to join forces')",
+}
+
+
 def _cap_gloss(text, limit=255):
     """lexemes.english_gloss is String(255): shorten long derived-phrase glosses at a word boundary."""
     if len(text) <= limit:
@@ -4864,6 +4872,8 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # the B2 card teaches -- see FA_B2_PART_OF_SPEECH and
                     # FA_B2_GLOSS_OVERRIDES. Level-scoped, so A1-B1 rows
                     # are untouched.
+                    if level == "c1":
+                        english_gloss = FA_C1_GLOSS_OVERRIDES.get(token, english_gloss)
                     if level == "b2":
                         part_of_speech = FA_B2_PART_OF_SPEECH.get(token, part_of_speech)
                         english_gloss = FA_B2_GLOSS_OVERRIDES.get(token, english_gloss)

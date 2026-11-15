@@ -5459,6 +5459,24 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # but a single course-scoped lexeme can carry only one gloss, so overriding
     # b1_unit02 to "true" would misgloss unit04's "where". Needs a finer
     # (per-occurrence) mechanism than this one; left as-is for now.
+    # B1 units 04-19 gloss review (2026-11-15): Dutch removed from English glosses and
+    # wrong-sense glosses fixed (the gloss is the graded MC/translate answer).
+    ("b1_unit04_ingewikkelde_zinnen", "komt"): "comes",
+    ("b1_unit06_verplichtingen", "mee"): "along; with",
+    ("b1_unit13_volgorde_van_gebeurtenissen", "gegeten"): "eaten (past participle)",
+    ("b1_unit15_advies_geven", "raad"): "advise",
+    ("b1_unit15_advies_geven", "raadt"): "advises",
+    ("b1_unit16_een_klacht_indienen", "zoek"): "look into; find out",
+    ("b1_unit16_een_klacht_indienen", "aangekomen"): "arrived",
+    ("b1_unit16_een_klacht_indienen", "Verkoper"): "seller",
+    ("b1_unit17_spijt_en_wensen", "Had"): "had (in a wish: if only I had)",
+    ("b1_unit17_spijt_en_wensen", "gespaard"): "saved",
+    ("b1_unit17_spijt_en_wensen", "gebeld"): "called",
+    ("b1_unit17_spijt_en_wensen", "Maakt"): "makes",
+    ("b1_unit18_plannen_en_voorspellingen", "Laat"): "let",
+    ("b1_unit10_werkverantwoordelijkheden", "belangrijke"): "important (before a noun)",
+    ("b1_unit19_samenvatten_en_navertellen", "Kort"): "in short",
+    ("b1_unit19_samenvatten_en_navertellen", "kort"): "short",
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
