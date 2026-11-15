@@ -446,6 +446,78 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/prs/a2_unit21_afspraak_verzetten.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a2_unit21.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit22_busy_morning.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit22.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit23_how_it_used_to_be.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit23.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit24_what_was_happening.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit24.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit25_have_you_ever.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit25.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit26_already_happened.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit26.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit27_my_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit27.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit28_predictions_promises.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit28.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit29_rules_permission.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit29.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit30_can_and_might.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit31_polite_requests.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit32_giving_advice.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit33_starting_stopping_trying.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit34_because_so.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit35_before_after_when.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit36_in_order_to.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit37_if_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit38_asking_indirectly.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit39_passing_message.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit39.yaml",
+    ),
 )
 
 # B1 units 01-06 (abilities, necessity, conditions, sequencing, reported
@@ -3024,6 +3096,435 @@ for _tok, (_gloss, _pos) in PRS_A2U20_NEW.items():
     PRS_GLOSSES.setdefault(_tok, _gloss)
     PRS_POS.setdefault(_tok, _pos)
 
+# A2 units 22-39 (past narration through reported messages), added 2026-11-15.
+# English-only glosses; inflected forms name their person/number so distinct
+# forms of a lemma never collapse to the same learner-facing answer.
+PRS_A2U22_NEW = {
+    "لباس‌هایم": ("my clothes", "noun"),
+    "دوش": ("shower", "noun"),
+    "شدی": ("you became (informal)", "verb"),
+    "شدیم": ("we became", "verb"),
+    "شدین": ("you became (polite/plural)", "verb"),
+    "شدند": ("they became", "verb"),
+    "قدم": ("step; walk", "noun"),
+    "زدن": ("to strike; do (infinitive)", "verb"),
+    "انتظار": ("waiting", "noun"),
+    "کشیدن": ("to pull; do (infinitive)", "verb"),
+    "سوار": ("aboard", "adjective"),
+    "پوشیدن": ("to put on (infinitive)", "verb"),
+    "پوشیدم": ("I put on", "verb"),
+    "بستن": ("to close (infinitive)", "verb"),
+    "بستم": ("I closed", "verb"),
+    "زد": ("he/she struck; did", "verb"),
+    "زدم": ("I struck; did", "verb"),
+    "کشید": ("he/she pulled; did", "verb"),
+    "کشیدم": ("I pulled; did", "verb"),
+    "نشدم": ("I did not become", "verb"),
+    "نشدی": ("you did not become (informal)", "verb"),
+    "نشد": ("he/she did not become", "verb"),
+    "نشدیم": ("we did not become", "verb"),
+    "نشدند": ("they did not become", "verb"),
+    "نزدم": ("I did not strike; do", "verb"),
+    "نکشیدم": ("I did not pull; do", "verb"),
+    "نگرفتم": ("I did not take", "verb"),
+    "نپوشیدم": ("I did not put on", "verb"),
+    "نی": ("no (informal)", "particle"),
+    "زدیم": ("we struck; did", "verb"),
+    "رسیدیم": ("we arrived", "verb"),
+    "ثریا": ("Soraya (name)", "proper_noun"),
+    "نوید": ("Navid (name)", "proper_noun"),
+}
+
+PRS_A2U23_NEW = {
+    "قبلا": ("before; previously", "adverb"),
+    "می‌رفتی": ("you used to go (informal)", "verb"),
+    "می‌رفتین": ("you used to go (polite/plural)", "verb"),
+    "می‌رفتند": ("they used to go", "verb"),
+    "می‌کردیم": ("we used to do", "verb"),
+    "می‌کردین": ("you used to do (polite/plural)", "verb"),
+    "می‌کردند": ("they used to do", "verb"),
+    "نمی‌رفتم": ("I did not use to go", "verb"),
+    "می‌خوردم": ("I used to eat", "verb"),
+    "می‌خوردی": ("you used to eat (informal)", "verb"),
+    "می‌خوردیم": ("we used to eat", "verb"),
+    "می‌خوردین": ("you used to eat (polite/plural)", "verb"),
+    "می‌خوردند": ("they used to eat", "verb"),
+    "می‌دیدم": ("I used to see", "verb"),
+    "آمدن": ("to come (infinitive)", "verb"),
+    "می‌آمدم": ("I used to come", "verb"),
+    "می‌آمد": ("he/she used to come", "verb"),
+    "بودی": ("you were (informal)", "verb"),
+    "بودیم": ("we were", "verb"),
+    "بودین": ("you were (polite/plural)", "verb"),
+    "نمی‌رفتی": ("you did not use to go (informal)", "verb"),
+    "نمی‌رفت": ("he/she did not use to go", "verb"),
+    "نمی‌رفتیم": ("we did not use to go", "verb"),
+    "نمی‌رفتین": ("you did not use to go (polite/plural)", "verb"),
+    "نمی‌رفتند": ("they did not use to go", "verb"),
+    "قدیمی": ("old; old-fashioned", "adjective"),
+    "همسایه‌ها": ("neighbors", "noun"),
+    "مادرکلانم": ("my grandmother", "noun"),
+    "جمعه‌ها": ("Fridays", "noun"),
+    "جاوید": ("Javid (name)", "proper_noun"),
+}
+
+PRS_A2U24_NEW = {
+    "باد": ("wind", "noun"),
+    "ترافیک": ("traffic", "noun"),
+    "تیلفونم": ("my telephone", "noun"),
+    "خیس": ("wet", "adjective"),
+    "رانندگی": ("driving", "noun"),
+    "بودن": ("to be (infinitive)", "verb"),
+    "نمی‌خوردم": ("I was not eating", "verb"),
+    "نمی‌دیدم": ("I was not seeing", "verb"),
+    "نمی‌کردم": ("I was not doing", "verb"),
+}
+
+PRS_A2U25_NEW = {
+    "منتو": ("mantu dumplings", "noun"),
+    "طیاره": ("airplane", "noun"),
+    "رفته‌ام": ("I have gone", "verb"),
+    "رفته‌ای": ("you have gone (informal)", "verb"),
+    "رفته‌ایم": ("we have gone", "verb"),
+    "رفته‌این": ("you have gone (polite/plural)", "verb"),
+    "رفته‌اند": ("they have gone", "verb"),
+    "خورده": ("eaten; he/she has eaten", "verb"),
+    "دیده": ("seen; he/she has seen", "verb"),
+    "پختن": ("to cook (infinitive)", "verb"),
+    "پخت": ("he/she cooked", "verb"),
+    "پخته": ("cooked; he/she has cooked", "verb"),
+    "خورده‌ام": ("I have eaten", "verb"),
+    "خورده‌ای": ("you have eaten (informal)", "verb"),
+    "خورده‌ایم": ("we have eaten", "verb"),
+    "خورده‌این": ("you have eaten (polite/plural)", "verb"),
+    "خورده‌اند": ("they have eaten", "verb"),
+    "دیدیم": ("we saw", "verb"),
+    "پختیم": ("we cooked", "verb"),
+    "پختی": ("you cooked (informal)", "verb"),
+    "کردیم": ("we did", "verb"),
+    "دیده‌ام": ("I have seen", "verb"),
+    "دیده‌ای": ("you have seen (informal)", "verb"),
+    "پخته‌ام": ("I have cooked", "verb"),
+    "پخته‌ای": ("you have cooked (informal)", "verb"),
+    "هرگز": ("never", "adverb"),
+    "هیچ‌وقت": ("never; at no time", "adverb"),
+    "نرفته‌ام": ("I have not gone", "verb"),
+    "نرفته‌ای": ("you have not gone (informal)", "verb"),
+    "نرفته‌ایم": ("we have not gone", "verb"),
+    "نرفته‌این": ("you have not gone (polite/plural)", "verb"),
+    "نرفته‌اند": ("they have not gone", "verb"),
+    "نرفته": ("not gone; he/she has not gone", "verb"),
+    "نخورده‌ام": ("I have not eaten", "verb"),
+    "ندیده‌ام": ("I have not seen", "verb"),
+    "نپخته‌ام": ("I have not cooked", "verb"),
+    "نکرده‌ام": ("I have not done", "verb"),
+}
+
+PRS_A2U26_NEW = {
+    "برگشتن": ("to return (infinitive)", "verb"),
+    "برگشتم": ("I returned", "verb"),
+    "پاسپورت": ("passport", "noun"),
+    "پاسپورتم": ("my passport", "noun"),
+    "گم": ("lost", "adjective"),
+    "رسیده": ("arrived; he/she has arrived", "verb"),
+    "برگشته": ("returned; he/she has returned", "verb"),
+    "نخورده": ("not eaten", "verb"),
+    "ندیده": ("not seen", "verb"),
+    "نیامده": ("not come", "verb"),
+    "قبلاً": ("before; previously", "adverb"),
+    "برسم": ("that I arrive", "verb"),
+    "برسیم": ("that we arrive", "verb"),
+    "نعمت": ("Nemat (name)", "proper_noun"),
+    "شکیبا": ("Shakiba (name)", "proper_noun"),
+}
+
+PRS_A2U27_NEW = {
+    "مهتاب": ("Mahtab (name)", "proper_noun"),
+    "لطیف": ("Latif (name)", "proper_noun"),
+    "می‌روین": ("you go (polite/plural)", "verb"),
+    "نمی‌روی": ("you do not go (informal)", "verb"),
+    "نمی‌رود": ("he/she does not go", "verb"),
+    "نمی‌رویم": ("we do not go", "verb"),
+    "نمی‌روند": ("they do not go", "verb"),
+    "بروی": ("that you go (informal)", "verb"),
+    "بروند": ("that they go", "verb"),
+    "می‌خواهیم": ("we want", "verb"),
+    "می‌خواهند": ("they want", "verb"),
+    "نمی‌خواهم": ("I do not want", "verb"),
+    "نمی‌خواهیم": ("we do not want", "verb"),
+    "بیاییم": ("that we come", "verb"),
+    "خواهم": ("I will", "verb"),
+}
+
+PRS_A2U28_NEW = {
+    "هوای": ("weather of", "noun"),
+    "پیش‌بینی": ("forecast; prediction", "noun"),
+    "پس‌فردا": ("the day after tomorrow", "adverb"),
+    "نیاید": ("that he/she not come", "verb"),
+    "نرویم": ("that we not go", "verb"),
+    "قول": ("promise", "noun"),
+    "فراموش": ("forgotten; forgetful", "adjective"),
+    "بعداً": ("later", "adverb"),
+    "نمی‌آیم": ("I am not coming", "verb"),
+    "خواهد": ("he/she will", "verb"),
+    "نخواهد": ("he/she will not", "verb"),
+    "بارید": ("it rained; snowed", "verb"),
+    "نادر": ("Nader (name)", "proper_noun"),
+    "بصیره": ("Basira (name)", "proper_noun"),
+}
+
+PRS_A2U29_NEW = {
+    "حوض": ("pool", "noun"),
+    "آب‌بازی": ("swimming; playing in water", "noun"),
+    "قانون‌ها": ("rules", "noun"),
+    "قانون‌های": ("rules of", "noun"),
+    "ورزشی": ("athletic; sports", "adjective"),
+    "ببرم": ("that I take", "verb"),
+    "بپوشی": ("that you wear (informal)", "verb"),
+    "بپوشین": ("that you wear (polite/plural)", "verb"),
+    "بپوشم": ("that I wear", "verb"),
+    "ساکت": ("quiet", "adjective"),
+    "سگرت": ("cigarette", "noun"),
+    "ممنوع": ("forbidden", "adjective"),
+    "بخوری": ("that you eat (informal)", "verb"),
+    "بخورد": ("that he/she eat", "verb"),
+    "بخوریم": ("that we eat", "verb"),
+    "بخورند": ("that they eat", "verb"),
+    "ندارین": ("you do not have (polite/plural)", "verb"),
+    "نمی‌توانین": ("you cannot (polite/plural)", "verb"),
+    "شکیلا": ("Shakila (name)", "proper_noun"),
+    "نصیر": ("Nasir (name)", "proper_noun"),
+    "بیاورین": ("bring (polite/plural)", "verb"),
+    "حوله": ("towel", "noun"),
+    "حوله‌ام": ("my towel", "noun"),
+    "مرکز": ("center", "noun"),
+    "دویدن": ("to run (infinitive)", "verb"),
+    "بدوی": ("that you run (informal)", "verb"),
+    "بدوین": ("that you run (polite/plural)", "verb"),
+    "بیندازین": ("throw (polite/plural)", "verb"),
+    "بیندازند": ("that they throw", "verb"),
+    "اولین": ("first", "adjective"),
+    "نازیلا": ("Nazila (name)", "proper_noun"),
+    "فهیم": ("Fahim (name)", "proper_noun"),
+}
+
+PRS_A2U30_NEW = {
+    "نوشتن": ("to write (infinitive)", "verb"),
+    "بخوانم": ("that I read", "verb"),
+    "بنویسم": ("that I write", "verb"),
+    "بگویم": ("that I say", "verb"),
+    "نمی‌توانی": ("you cannot (informal)", "verb"),
+    "نمی‌توانند": ("they cannot", "verb"),
+    "مشغول": ("busy", "adjective"),
+    "بیایی": ("that you come (informal)", "verb"),
+    "مطمئن": ("sure; certain", "adjective"),
+    "نیایند": ("that they not come", "verb"),
+    "بتوانم": ("that I can", "verb"),
+    "نتوانم": ("that I cannot", "verb"),
+    "بتواند": ("that he/she can", "verb"),
+    "بتوانی": ("that you can (informal)", "verb"),
+    "بتوانیم": ("that we can", "verb"),
+    "بتوانین": ("that you can (polite/plural)", "verb"),
+    "بتوانند": ("that they can", "verb"),
+    "سخی": ("Sakhi (name)", "proper_noun"),
+    "وحیده": ("Wahida (name)", "proper_noun"),
+    "کمپیوترم": ("my computer", "noun"),
+    "حمید": ("Hamid (name)", "proper_noun"),
+    "پلوشه": ("Palwasha (name)", "proper_noun"),
+}
+
+PRS_A2U31_NEW = {
+    "کیسه": ("bag", "noun"),
+    "بدهی": ("that you give (informal)", "verb"),
+    "بدهد": ("that he/she give", "verb"),
+    "بدهند": ("that they give", "verb"),
+    "ببرین": ("take (polite/plural)", "verb"),
+    "بیا": ("come (informal command)", "verb"),
+    "برو": ("go (informal command)", "verb"),
+    "بیاور": ("bring (informal command)", "verb"),
+    "کن": ("do (informal command)", "verb"),
+    "قند": ("sugar", "noun"),
+    "خودم": ("myself", "pronoun"),
+    "نکنین": ("do not do (polite/plural)", "verb"),
+    "نروین": ("do not go (polite/plural)", "verb"),
+    "نگویین": ("do not say (polite/plural)", "verb"),
+    "ندهین": ("do not give (polite/plural)", "verb"),
+    "نگیرین": ("do not take (polite/plural)", "verb"),
+    "نیایین": ("do not come (polite/plural)", "verb"),
+    "نکن": ("do not do (informal)", "verb"),
+    "نرو": ("do not go (informal)", "verb"),
+    "نگو": ("do not say (informal)", "verb"),
+    "نده": ("do not give (informal)", "verb"),
+    "نیا": ("do not come (informal)", "verb"),
+    "نگیر": ("do not take (informal)", "verb"),
+    "بگذار": ("let; leave (informal command)", "verb"),
+    "بگذارین": ("let; leave (polite/plural command)", "verb"),
+    "نگذار": ("do not let; leave (informal)", "verb"),
+    "نگذارین": ("do not let; leave (polite/plural)", "verb"),
+    "نکشین": ("do not undergo (polite/plural)", "verb"),
+    "آقای": ("Mr.; gentleman", "noun"),
+    "گل‌هایم": ("my flowers", "noun"),
+    "ماجده": ("Majda (name)", "proper_noun"),
+    "شفیق": ("Shafiq (name)", "proper_noun"),
+    "مسعود": ("Masoud (name)", "proper_noun"),
+    "رحیمه": ("Rahima (name)", "proper_noun"),
+    "فرزانه": ("Farzana (name)", "proper_noun"),
+}
+
+PRS_A2U32_NEW = {
+    "خوابیدن": ("to sleep (infinitive)", "verb"),
+    "سرم": ("my head", "noun"),
+    "درد": ("pain", "noun"),
+    "بخور": ("eat (informal command)", "verb"),
+    "بخواب": ("sleep (informal command)", "verb"),
+    "بخوابی": ("that you sleep (informal)", "verb"),
+    "نروی": ("that you not go (informal)", "verb"),
+    "نخوابی": ("that you not sleep (informal)", "verb"),
+    "بخوانی": ("that you read (informal)", "verb"),
+    "خرج": ("spending; expense", "noun"),
+    "نکنی": ("that you not do (informal)", "verb"),
+    "چیزهای": ("things of; kinds of things", "noun"),
+    "نخری": ("that you not buy (informal)", "verb"),
+    "پیشنهادت": ("your suggestion (informal)", "noun"),
+    "ممنون": ("grateful; thank you", "adjective"),
+    "ذکریا": ("Zakaria (name)", "proper_noun"),
+    "شب‌ها": ("nights; at night", "noun"),
+    "نمی‌خوابم": ("I do not sleep", "verb"),
+    "جمیله": ("Jamila (name)", "proper_noun"),
+    "فقط": ("only", "adverb"),
+}
+
+PRS_A2U33_NEW = {
+    "می‌دوم": ("I run", "verb"),
+    "عادت": ("habit", "noun"),
+    "کوشش": ("effort; attempt", "noun"),
+    "بدوم": ("that I run", "verb"),
+    "بخوابم": ("that I sleep", "verb"),
+    "شوم": ("that I become", "verb"),
+    "نخورم": ("that I not eat", "verb"),
+    "نخوابم": ("that I not sleep", "verb"),
+    "ترک": ("quitting; leaving", "noun"),
+    "شیرینی": ("sweets", "noun"),
+    "نمی‌خورم": ("I do not eat", "verb"),
+    "نمی‌بینم": ("I do not see; watch", "verb"),
+    "نیامدی": ("you did not come (informal)", "verb"),
+    "کتابم": ("my book", "noun"),
+    "نجیبه": ("Najiba (name)", "proper_noun"),
+    "یاسین": ("Yasin (name)", "proper_noun"),
+    "می‌خوری": ("you eat (informal)", "verb"),
+    "می‌بینی": ("you see; watch (informal)", "verb"),
+    "خالده": ("Khalida (name)", "proper_noun"),
+}
+
+PRS_A2U34_NEW = {
+    "عذر": ("excuse; apology", "noun"),
+    "مرجان": ("Marjan (name)", "proper_noun"),
+    "هارون": ("Haroun (name)", "proper_noun"),
+    "آمدند": ("they came", "verb"),
+    "آمدی": ("you came (informal)", "verb"),
+    "آمدیم": ("we came", "verb"),
+    "نیامد": ("he/she did not come", "verb"),
+    "نیامدم": ("I did not come", "verb"),
+    "نیامدند": ("they did not come", "verb"),
+    "نیامدیم": ("we did not come", "verb"),
+    "نیامدین": ("you did not come (polite/plural)", "verb"),
+    "ماندم": ("I stayed", "verb"),
+    "ماندی": ("you stayed (informal)", "verb"),
+    "ماندیم": ("we stayed", "verb"),
+    "دادم": ("I gave", "verb"),
+    "دادی": ("you gave (informal)", "verb"),
+    "دادیم": ("we gave", "verb"),
+    "بنابراین": ("therefore", "adverb"),
+    "زیرا": ("because", "particle"),
+    "نیلوفر": ("Niloufar (name)", "proper_noun"),
+    "نکردی": ("you did not do (informal)", "verb"),
+}
+
+PRS_A2U35_NEW = {
+    "می‌پوشم": ("I put on; wear", "verb"),
+    "چمدان": ("suitcase", "noun"),
+    "چمدانم": ("my suitcase", "noun"),
+    "برسی": ("that you arrive (informal)", "verb"),
+    "برسین": ("that you arrive (polite/plural)", "verb"),
+    "برسند": ("that they arrive", "verb"),
+    "جوش": ("boiling", "noun"),
+    "انداختن": ("to throw; put in (infinitive)", "verb"),
+    "انداختم": ("I threw; put in", "verb"),
+    "می‌بندم": ("I close; pack", "verb"),
+    "نرگس": ("Nargis (name)", "proper_noun"),
+    "اکبر": ("Akbar (name)", "proper_noun"),
+    "کارم": ("my work", "noun"),
+    "یوسف": ("Yusuf (name)", "proper_noun"),
+    "نسرین": ("Nasrin (name)", "proper_noun"),
+}
+
+PRS_A2U36_NEW = {
+    "فروزان": ("Forouzan (name)", "proper_noun"),
+    "عارف": ("Aref (name)", "proper_noun"),
+    "فرستادن": ("to send (infinitive)", "verb"),
+    "آسان": ("easy", "adjective"),
+    "آوردن": ("to bring (infinitive)", "verb"),
+    "بفرستد": ("that he/she send", "verb"),
+    "نرسم": ("that I not arrive", "verb"),
+    "نکنم": ("that I not do", "verb"),
+    "فوزیه": ("Fawzia (name)", "proper_noun"),
+    "نمی‌دهم": ("I do not give", "verb"),
+    "ندهم": ("that I not give", "verb"),
+}
+
+PRS_A2U37_NEW = {
+    "بیرون": ("outside", "adverb"),
+    "نروم": ("that I not go", "verb"),
+    "نیایم": ("that I not come", "verb"),
+    "نخرم": ("that I not buy", "verb"),
+    "نباشد": ("that he/she/it not be", "verb"),
+    "بپوش": ("put on (informal command)", "verb"),
+    "سردت": ("you are cold (informal)", "phrase"),
+    "شوی": ("that you become (informal)", "verb"),
+    "کالا": ("goods; item", "noun"),
+    "نداشته": ("not having", "verb"),
+    "مشتریان": ("customers", "noun"),
+    "شاهین": ("Shahin (name)", "proper_noun"),
+    "زینب": ("Zainab (name)", "proper_noun"),
+    "فریبا": ("Fariba (name)", "proper_noun"),
+    "نمی‌خواهین": ("you do not want (polite/plural)", "verb"),
+}
+
+PRS_A2U38_NEW = {
+    "می‌دانم": ("I know", "verb"),
+    "می‌دانی": ("you know (informal)", "verb"),
+    "می‌داند": ("he/she knows", "verb"),
+    "می‌دانیم": ("we know", "verb"),
+    "می‌دانین": ("you know (polite/plural)", "verb"),
+    "بلیت": ("ticket", "noun"),
+    "ثمینه": ("Samina (name)", "proper_noun"),
+    "سمیر": ("Samir (name)", "proper_noun"),
+}
+
+PRS_A2U39_NEW = {
+    "مینا": ("Mina (name)", "proper_noun"),
+    "حشمت": ("Hashmat (name)", "proper_noun"),
+    "می‌پرسد": ("he/she asks", "verb"),
+    "بیاورد": ("that he/she bring", "verb"),
+    "بگویی": ("that you say (informal)", "verb"),
+    "بگوید": ("that he/she say", "verb"),
+    "یادداشت": ("note", "noun"),
+    "می‌نویسد": ("he/she writes", "verb"),
+    "بهزاد": ("Behzad (name)", "proper_noun"),
+    "راحله": ("Rahela (name)", "proper_noun"),
+}
+
+for _new_glosses in (
+    PRS_A2U22_NEW, PRS_A2U23_NEW, PRS_A2U24_NEW, PRS_A2U25_NEW,
+    PRS_A2U26_NEW, PRS_A2U27_NEW, PRS_A2U28_NEW, PRS_A2U29_NEW,
+    PRS_A2U30_NEW, PRS_A2U31_NEW, PRS_A2U32_NEW, PRS_A2U33_NEW,
+    PRS_A2U34_NEW, PRS_A2U35_NEW, PRS_A2U36_NEW, PRS_A2U37_NEW,
+    PRS_A2U38_NEW, PRS_A2U39_NEW,
+):
+    for _tok, (_gloss, _pos) in _new_glosses.items():
+        PRS_GLOSSES.setdefault(_tok, _gloss)
+        PRS_POS.setdefault(_tok, _pos)
+
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
 VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_prs_a1_unit38_color_word_05_single'], 'آرزو': ['volume_en_prs_a1_unit02_person_name_04_single'], 'بانک': ['volume_en_prs_a1_unit05_city_place_06_single'], 'بهار': ['volume_en_prs_a1_unit39_specific_season_word_03_single'], 'جمعه': ['volume_en_prs_a1_unit09_weekday_name_10_single'], 'دور': ['volume_en_prs_a1_unit05_location_word_08_single'], 'سند': ['volume_en_prs_a2_unit09_office_word_12_single'], 'شریف': ['volume_en_prs_a1_unit02_city_name_02_single'], 'شوخ': ['volume_en_prs_a1_unit37_personality_word_07_single'], 'غذا': ['volume_en_prs_a1_unit36_cook_object_word_09_single'], 'نامه': ['volume_en_prs_a1_unit35_sendable_item_word_11_single'], 'پولیس': ['volume_en_prs_a1_unit40_emergency_service_word_01_single']}
@@ -4894,7 +5395,9 @@ def _classify(files, level, specs, derive_phrases=False):
                         )
                         if lesson_key.startswith("prs.a2.unit19."):
                             unit_tags = unit_tags + PRS_A2U19_EXTRA_TAGS.get(token, [])
-                        if unit_tags and lesson_key.startswith(("prs.a2.unit20.", "prs.a2.unit21.", "prs.c1.")):
+                        if unit_tags and lesson_key.startswith(
+                            tuple(f"prs.a2.unit{unit}." for unit in range(20, 40)) + ("prs.c1.",)
+                        ):
                             # single-member anchor per token (derive_target.py packs builds its templates over these)
                             unit_tags = unit_tags + [f"w_{token}"]
                         if unit_tags:
@@ -4968,6 +5471,8 @@ def _classify(files, level, specs, derive_phrases=False):
                             content_key,
                             teaching_overlays.get(content_key, {}).get("gloss", ""),
                         )
+                        if len(target_text) > 255 or len(phrase_gloss) > 255:
+                            continue  # whole reading passage: too long for a lexeme row
                         specs.setdefault(
                             (level, target_text),
                             {
