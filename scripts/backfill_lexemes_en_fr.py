@@ -670,6 +670,67 @@ for _tok, (_code, _gloss) in A2_BLOCK_A_ENTRIES.items():
     if _code != "n":
         POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
 
+# --- A2 Block B/C additions (units 86-91): prediction, permission, ability, request, advice, habit units
+A2_BLOCK_BC_ENTRIES: dict[str, tuple[str, str]] = {
+    # unit86 predictions and promises (futur proche, futur simple)
+    "ciel": ("n", "sky"), "n'allons": ("v", "we are not going (to)"),
+    "pleuvra": ("v", "it will rain"), "fera": ("v", "he, she, it will do; will make"),
+    "serons": ("v", "we will be"), "mangerai": ("v", "I will eat"),
+    "partiras": ("v", "you will leave (informal)"), "arrivera": ("v", "he, she will arrive"),
+    "resterons": ("v", "we will stay"), "regarderez": ("v", "you will look at (formal or plural)"),
+    "parleront": ("v", "they will talk"), "j'aurai": ("v", "I will have"),
+    "ferai": ("v", "I will do; I will make"), "irons": ("v", "we will go"),
+    "seront": ("v", "they will be"), "aura": ("v", "he, she, it will have"),
+    "promettre": ("v", "to promise"), "apporter": ("v", "to bring"),
+    "promets": ("v", "I promise; you promise (informal)"), "viendrai": ("v", "I will come"),
+    "j'apporterai": ("v", "I will bring"), "t'appellerai": ("v", "I will call you"),
+    "promis": ("v", "promised"), "viendras": ("v", "you will come (informal)"),
+    "viendra": ("v", "he, she will come"), "viendrons": ("v", "we will come"),
+    "pluie": ("n", "rain"), "annonce": ("v", "announces; forecasts"),
+    "sandwichs": ("n", "sandwiches"), "apporteras": ("v", "you will bring (informal)"),
+    # unit87 permission and rules (pouvoir, devoir, il faut)
+    "fenêtre": ("n", "window"), "interdit": ("a", "forbidden (masc.)"),
+    "permis": ("a", "allowed (masc.)"), "fumer": ("v", "to smoke"),
+    "montrer": ("v", "to show"), "devons": ("v", "we must"),
+    "doivent": ("v", "they must"), "n'avez": ("v", "you do not have (formal or plural)"),
+    "emprunter": ("v", "to borrow"), "désolée": ("a", "sorry (fem.)"),
+    # unit88 ability and availability (savoir, pouvoir, venir)
+    "conduire": ("v", "to drive"), "sait": ("v", "knows how to (he, she)"),
+    "savons": ("v", "we know how to"), "savez": ("v", "you know how to (formal or plural)"),
+    "savent": ("v", "they know how to"), "venons": ("v", "we come"),
+    "viennent": ("v", "they come"), "guitare": ("n", "guitar"),
+    "piano": ("n", "piano"), "pâtes": ("n", "pasta"),
+    # unit89 polite requests and offers
+    "thé": ("n", "tea"), "eau": ("n", "water"),
+    "voudriez": ("v", "you would like (formal or plural)"),
+    "voudraient": ("v", "they would like"), "lentement": ("d", "slowly"),
+    "porter": ("v", "to carry"), "t'aider": ("h", "to help you (informal)"),
+    "instant": ("n", "moment"), "serveur": ("n", "waiter"),
+    "demandes": ("v", "you ask (informal)"),
+    # unit90 simple advice
+    "devriez": ("v", "you should (formal or plural)"), "devrions": ("v", "we should"),
+    "devraient": ("v", "they should"), "sors": ("v", "I go out; you go out (informal)"),
+    "mangez": ("v", "eat (command, formal or plural)"), "marchez": ("v", "walk (command, formal or plural)"),
+    "dormez": ("v", "sleep (command, formal or plural)"), "buvez": ("v", "drink (command, formal or plural)"),
+    # unit91 starting, stopping, trying, forgetting
+    "continuer": ("v", "to continue"), "continue": ("v", "continue; continues"),
+    "courons": ("v", "we run"), "courez": ("v", "you run (formal or plural)"),
+    "courent": ("v", "they run"), "commençons": ("v", "we start"),
+    "continuons": ("v", "we continue"), "continué": ("v", "continued"),
+    "arrêter": ("v", "to stop"), "arrêté": ("v", "stopped"),
+    "arrête": ("v", "stop; stops"), "j'arrête": ("v", "I stop; I am stopping"),
+    "essayons": ("v", "we try"), "essaies": ("v", "you try (informal)"),
+    "essaie": ("v", "try; tries"), "essayez": ("v", "you try (formal or plural)"),
+    "essaient": ("v", "they try"), "n'oublie": ("v", "do not forget; does not forget"),
+    "oublie": ("v", "forget; forgets"), "n'oubliez": ("v", "do not forget (formal or plural)"),
+}
+for _tok, (_code, _gloss) in A2_BLOCK_BC_ENTRIES.items():
+    if _tok in GLOSSES:  # an earlier unit already glossed this token: first sight wins
+        continue
+    GLOSSES[_tok] = _gloss
+    if _code != "n":
+        POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
+
 B1_ENTRIES: dict[str, tuple[str, str]] = {
     # unit25 abilities
     "complet": ("a", "complete; full (masc.)"), "prêt": ("a", "ready (masc.)"),
