@@ -48,7 +48,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "es"
-LEVELS = {"a1": "en-es", "a2": "en-es-a2", "b1": "en-es-b1"}
+LEVELS = {"a1": "en-es", "a2": "en-es-a2", "b1": "en-es-b1", "b2": "en-es-b2", "c1": "en-es-c1"}
 
 PROPER_NOUNS = {
     "Elena", "Mateo", "Lucía", "Diego", "Carlos", "Ana", "México", "Colombia",
@@ -1639,6 +1639,14 @@ for _tok, _pos in DERIVED_TARGET_POS.items():
     POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end derive_target.py ---
 
+# B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_es_b2c1.json.
+import json as _json
+_B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_es_b2c1.json"
+B2C1_NEW = _json.loads(_B2C1_JSON.read_text(encoding="utf-8")) if _B2C1_JSON.exists() else {}
+for _tok, _d in B2C1_NEW.items():
+    GLOSSES.setdefault(_tok, _d["gloss"])
+    if _d["pos"] != "noun":
+        POS_SETS.setdefault(_d["pos"], set()).add(_tok)
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}

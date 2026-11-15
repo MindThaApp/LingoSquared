@@ -54,7 +54,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "ro"
-LEVELS = {"a1": "en-ro", "a2": "en-ro-a2", "b1": "en-ro-b1"}
+LEVELS = {"a1": "en-ro", "a2": "en-ro-a2", "b1": "en-ro-b1", "b2": "en-ro-b2", "c1": "en-ro-c1"}
 
 PROPER_NOUNS = {"Ana", "Mihai", "București", "Elena", "Radu", "Diana", "Vasile", "Ionescu"}
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
@@ -2252,6 +2252,14 @@ for _tok, _gloss in {"135": "one hundred thirty-five", "80": "eighty"}.items():
     GLOSSES.setdefault(_tok, _gloss)
 POS_SETS.setdefault("adjective", set()).update(['135', '80'])
 
+# B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_ro_b2c1.json.
+import json as _json
+_B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_ro_b2c1.json"
+B2C1_NEW = _json.loads(_B2C1_JSON.read_text(encoding="utf-8")) if _B2C1_JSON.exists() else {}
+for _tok, _d in B2C1_NEW.items():
+    GLOSSES.setdefault(_tok, _d["gloss"])
+    if _d["pos"] != "noun":
+        POS_SETS.setdefault(_d["pos"], set()).add(_tok)
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
