@@ -133,3 +133,11 @@ vocabulary — a blind replace breaks dozens of exercises) ·
 4. A separate fresh-context review per batch — this is launch-gate
    content, full review, no sampling (root `CLAUDE.md` tiered-review
    policy).
+
+## Dari grammar rulings (2026-11-15, from the A2 rebuild Q3 decision)
+
+The canonical record is `docs/A2_REBUILD_PLAN.md` (Q3). Two rulings affect register checks:
+
+- Spoken Kabuli present perfect is the contracted form (*رفتیم، رفتی، رفته، رفتیم، رفتین، رفتن*), not *رفته استم*. Spoken 1sg *رفتیم* differs from the simple past *رفتم*. The formal *رفته‌ام* paradigm is also taught; both are accepted.
+- The 2pl ending is -ین everywhere (formal perfect *رفته‌این*); -ید forms are accepted as answers only.
+
