@@ -2315,6 +2315,14 @@ PRS_B2_NEW: dict[str, tuple[str, str]] = {
 PRS_GLOSSES.update({token: gloss for token, (gloss, _pos) in PRS_B2_NEW.items()})
 PRS_POS.update({token: pos for token, (_gloss, pos) in PRS_B2_NEW.items()})
 
+# C1 data (token -> {gloss, pos}) from scripts/lexdata/en_prs_c1.json.
+import json as _json
+_C1_JSON = REPO_ROOT / "scripts/lexdata/en_prs_c1.json"
+PRS_C1_NEW = _json.loads(_C1_JSON.read_text(encoding="utf-8")) if _C1_JSON.exists() else {}
+for _tok, _d in PRS_C1_NEW.items():
+    PRS_GLOSSES.setdefault(_tok, _d["gloss"])
+    PRS_POS.setdefault(_tok, _d["pos"])
+
 # B1 units 12-19 (debate, workplace, narrative, advice, complaint, regrets,
 # future plans, summarize), added 2026-11-06. Only tokens no earlier level
 # already glossed.
@@ -4558,6 +4566,43 @@ PHRASE_GLOSS_OVERRIDES: dict[str, str] = {
 }
 
 
+# C1 units: separate "Dari C1" course row.
+UNIT_FILES_C1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit01_sakhtar_goftar.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit02_manaye_zemni.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit03_lahn_va_sathe_zaban.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit04_paziresh_va_pasokh.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit05_agar_chenin_bud.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit06_zaban_kenayei.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit07_miyanjigari_manabe.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/c1_unit08_eqna_va_balaghat.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/c1_unit08.yaml",
+    ),
+)
+
+
 def _classify(files, level, specs, derive_phrases=False):
     # derive_phrases=True is only ever passed for UNIT_FILES_A2 (see
     # iter_specs() below) -- added 2026-07-07 (A2 tagging-depth pass) to
@@ -4946,6 +4991,7 @@ def iter_specs():
     # whole example sentences and grammar-note paragraphs, so a derived
     # "phrase" lexeme would be keyed on an explanatory sentence.
     _classify(UNIT_FILES_B2, "b2", specs)
+    _classify(UNIT_FILES_C1, "c1", specs)
     yield from specs.values()
 
 
@@ -4959,11 +5005,11 @@ def main() -> int:
     if args.dry_run:
         counts = {
             level: sum(spec["level"] == level for spec in specs)
-            for level in ("a1", "a2", "b1", "b2")
+            for level in ("a1", "a2", "b1", "b2", "c1")
         }
         print(
             f"Lexeme backfill dry run: {len(specs)} prs ({counts['a1']} a1, "
-            f"{counts['a2']} a2, {counts['b1']} b1, {counts['b2']} b2)."
+            f"{counts['a2']} a2, {counts['b1']} b1, {counts['b2']} b2, {counts['c1']} c1)."
         )
         return 0
 
@@ -4974,7 +5020,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2"), ("b1", "Dari B1"), ("b2", "Dari B2")):
+        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2"), ("b1", "Dari B1"), ("b2", "Dari B2"), ("c1", "Dari C1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(

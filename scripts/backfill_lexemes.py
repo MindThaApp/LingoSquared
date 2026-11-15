@@ -597,6 +597,42 @@ UNIT_FILES_B2 = (
         REPO_ROOT / "docs/content/overlays/en-fa/b2_unit08.yaml",
     ),
 )
+# C1 units 01-08: a FIFTH separate course row ("Persian C1", the overlays'
+# course.title). Glosses/POS come from scripts/lexdata/en_fa_c1.json.
+UNIT_FILES_C1 = (
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit01_sakhtar_goftar.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit02_manaye_zemni.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit03_lahn_va_sathe_zaban.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit04_paziresh_va_pasokh.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit05_agar_chenin_bud.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit06_zaban_kenayei.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit07_miyanjigari_manabe.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/c1_unit08_eqna_va_balaghat.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/c1_unit08.yaml",
+    ),
+)
 EN_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’/-][A-Za-z]+)*")
 
 # Atomic glosses are intentionally explicit. A teaching-card gloss often
@@ -3350,6 +3386,26 @@ FA_B2_EXTRA_TAGS: dict[str, list[str]] = {
 }
 
 
+# C1 data (token -> {gloss, pos}); see UNIT_FILES_C1.
+import json as _json
+_C1_JSON = REPO_ROOT / "scripts/lexdata/en_fa_c1.json"
+FA_C1_NEW = _json.loads(_C1_JSON.read_text(encoding="utf-8")) if _C1_JSON.exists() else {}
+_FA_POS_SETS = {
+    "proper_noun": FA_PROPER_NOUNS, "pronoun": FA_PRONOUNS, "preposition": FA_PREPOSITIONS,
+    "particle": FA_PARTICLES, "adverb": FA_ADVERBS, "adjective": FA_ADJECTIVES,
+    "symbol": FA_SYMBOLS, "verb": FA_VERBS, "phrase": FA_MULTIWORD_PHRASES,
+}
+for _tok, _d in FA_C1_NEW.items():
+    FA_GLOSSES.setdefault(_tok, _d["gloss"])
+    _target = _FA_POS_SETS.get(_d["pos"])
+    if _target is None:
+        continue  # noun is the default
+    if isinstance(_target, dict):
+        _target.setdefault(_tok, _d["gloss"])
+    else:
+        _target.add(_tok)
+
+
 def fa_part_of_speech(token: str) -> str:
     if token in FA_SYMBOLS:
         return "symbol"
@@ -4987,6 +5043,7 @@ def iter_specs():
     yield from _classify_fa(UNIT_FILES_A2, "a2", fa_specs, seen_en)
     yield from _classify_fa(UNIT_FILES_B1, "b1", fa_specs, seen_en)
     yield from _classify_fa(UNIT_FILES_B2, "b2", fa_specs, seen_en)
+    yield from _classify_fa(UNIT_FILES_C1, "c1", fa_specs, seen_en)
     yield from fa_specs.values()
 
 
@@ -5003,7 +5060,7 @@ def main() -> int:
         fa_count = sum(spec["language_code"] == "fa" for spec in specs)
         en_count = sum(spec["language_code"] == "en" for spec in specs)
         print(f"Lexeme backfill dry run: {fa_count} fa, {en_count} en.")
-        for level in ("a1", "a2", "b1", "b2"):
+        for level in ("a1", "a2", "b1", "b2", "c1"):
             level_fa = sum(
                 spec["language_code"] == "fa" and spec["level"] == level
                 for spec in specs
@@ -5022,7 +5079,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Farsi A1"), ("a2", "Farsi A2"), ("b1", "Farsi B1"), ("b2", "Farsi B2")):
+        for level, title in (("a1", "Farsi A1"), ("a2", "Farsi A2"), ("b1", "Farsi B1"), ("b2", "Farsi B2"), ("c1", "Persian C1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
