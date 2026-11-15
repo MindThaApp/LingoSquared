@@ -786,7 +786,7 @@ as drip content.
 - **[DECIDED 2026-09-29] Q5 — ordering.** Interleave the existing 10 A2 scenario units after their
   grammar blocks (recommended; needs §4.4), or leave them first?
   **Decision:** interleave existing A2 scenario units AFTER the grammar block they use; needs a reorder-import safety check first.
-  **Status (2026-11-15):** en-nl Block A done (see top). en-prs Block A done (see top). en-fa NOT done: moving fa `a2_unit13` or `a2_unit18` breaks the introduced-token validator in fa units 20, 21 and 26, which reuse their vocabulary; needs vocabulary re-introduction first. Blocks B-D scenario units pending as those blocks land.
+  **Status (2026-11-15):** en-nl Block A done (see top). en-prs Block A done (see top). en-fa Block A done (2026-11-15, Block B PR): the words fa units 20, 21 and 26 borrowed from `a2_unit13`/`a2_unit18` (با, ممنون, رسید) are now re-introduced in those units, so `a2_unit13_maintenance` and `a2_unit18_shopping_complaint` sit after `a2_unit26`. The fa A2 course has no speaking unit, so `speaking_unlocked()` is unaffected. `a2_unit20_holiday_plans` now follows Block B; the rest are interleaved as Blocks C-D land.
 - **Q6 — B1.** Leave the overlapping B1 units as-is for launch, or schedule a
   light B1 retrofit that removes the now-duplicated A2 layer?
 - **Q7 — X→en.** Add the 31 outcomes to the shared spine now, accepting the
