@@ -1,0 +1,214 @@
+schema_version: '1.0'
+pack_key: practice.de-en.a1.unit38
+source_language: de
+target_language: en
+unit_content_key: en.a1.unit38.household
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - household_noun
+    - trash_word
+slot_presets:
+  household_noun: &id001
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: household_noun
+  trash_single: &id002
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: trash_word
+  unit38_noun:
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: a1_unit38_household
+templates:
+- content_key: practice.de-en.en.a1.unit38.lesson01.choose.001
+  lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson01.listen.002
+  lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson01.match.003
+  lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort die deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson01.translate.004
+  lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Die englische Übersetzung ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson02.choose.002
+  lesson_content_key: en.a1.unit38.lesson02.doing_chores
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson02.order.001
+  lesson_content_key: en.a1.unit38.lesson02.doing_chores
+  type: word_order
+  frame:
+    text: The {item} can wait until tomorrow.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: The {item} can wait until tomorrow.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Die richtige Reihenfolge ist: *The {item} can wait until tomorrow.*'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson04.order.001
+  lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+  type: word_order
+  frame:
+    text: I forgot about the {item} again.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I forgot about the {item} again.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Die richtige Reihenfolge ist: *I forgot about the {item} again.*'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson01.fill.005
+  lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+  type: fill_in_blank
+  frame:
+    text: Please take out the {item} tonight.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das fehlende Wort ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit38.lesson04.translate.001
+  lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+  type: translation
+  frame:
+    text: Bring heute Abend bitte {item} raus.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please take out the {item} tonight.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Der englische Satz lautet: *Please take out the {item} tonight.*'
+    language_code: de
+    direction: ltr
