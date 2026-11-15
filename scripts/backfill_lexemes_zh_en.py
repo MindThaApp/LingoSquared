@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_ZH_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "波士顿", "Luna": "露娜", "Max": "马克斯", "always": "总是", "arrival": "到达", "arrive": "到达", "arrives": "到达", "ate": "吃了", "ball": "球", "bigger": "更大的", "bird": "鸟", "book": "书", "both": "两者都;两个都", "car": "汽车", "cat": "猫", "cheaper": "更便宜的", "cheapest": "最便宜的", "cooking": "烹饪;做饭", "cooks": "做饭;烹饪", "departure": "出发", "did": "做了", "different": "不同的", "dog": "狗", "ever": "曾经", "expensive": "贵的", "faster": "更快的", "fish": "鱼", "friendly": "友好的;友善的", "games": "游戏", "goes": "去", "hate": "讨厌;恨", "hobbies": "爱好", "leaves": "离开;出发", "likes": "喜欢", "loves": "爱;很喜欢", "milder": "更温和的", "mornings": "早晨(复数)", "named": "名叫", "never": "从不;从来没有", "nicer": "更好的;更友善的", "often": "经常", "paint": "画;涂", "painting": "绘画;画画", "paints": "画", "pet": "宠物", "pets": "宠物(复数)", "platform": "站台;月台", "play": "玩;打;演奏", "prefer": "更喜欢;宁愿", "prefers": "更喜欢", "rarely": "很少", "reading": "阅读;读书", "red": "红色的", "round": "往返的;圆的", "running": "跑步", "s": "的", "sister's": "姐姐的;妹妹的", "smaller": "更小的", "still": "仍然;还", "strong": "强壮的;强烈的", "swim": "游泳", "than": "比", "thinks": "认为;想", "ticket": "票", "together": "一起", "train": "火车", "trip": "旅行", "very": "很;非常", "video": "视频", "visited": "参观了;拜访了", "walks": "遛;走", "watch": "看;观看", "watched": "看了", "way": "路;方式", "week": "周;星期", "white": "白色的", "why": "为什么", "worked": "工作了", "writer's": "作家的", "yesterday": "昨天"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
