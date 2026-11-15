@@ -1,0 +1,234 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.a2.unit85
+source_language: en
+target_language: nl
+unit_content_key: nl.a2.unit85.de_trein_was_al_weg
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Authored for all six lexeme-bearing lessons in the grammar-led past-perfect
+    unit. Recognition and production use a unit-wide union over content words;
+    structured practice uses six-pair matching and two course-safe word-order
+    frames. The pronoun Die is excluded because its backfill gloss "Those; that"
+    does not express its dialogue sense "it/that one" (Omar's bag). No
+    fill_in_blank was added: none of the unit's available semantic-tag and
+    part-of-speech intersections gives a unit-satisfiable, course-wide
+    single-candidate slot, and the available multi-candidate sets are not truly
+    interchangeable in one frame. Native speaker should confirm the broad
+    lexical set and the two word-order frames.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - earlier_event_vocabulary
+    - past_perfect_auxiliary_choice
+    - perfectum_vs_past_perfect
+    - nadat_clause
+    - lost_umbrella_reading
+    - past_habits_dialogue
+templates:
+- content_key: practice.en-nl.nl.a2.unit85.lesson01.choose.001
+  lesson_content_key: nl.a2.unit85.lesson01.wat_was_eerder
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots:
+    item: &unit_word
+      language_code: nl
+      part_of_speech: [noun, verb, adverb, particle]
+      agreement_tags:
+        semantic: [earlier_event_vocabulary, past_perfect_auxiliary_choice,
+          perfectum_vs_past_perfect, nadat_clause, lost_umbrella_reading,
+          past_habits_dialogue]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson01.match.002
+  lesson_content_key: nl.a2.unit85.lesson01.wat_was_eerder
+  type: matching_pairs
+  frame: &match_frame
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots: &match_slots
+    first: *unit_word
+    second: *unit_word
+    third: *unit_word
+    fourth: *unit_word
+    fifth: *unit_word
+    sixth: *unit_word
+  slot_relations: &match_relations
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation: &match_answer
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame: &match_feedback
+    text: Match each Dutch word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a2.unit85.lesson01.order.003
+  lesson_content_key: nl.a2.unit85.lesson01.wat_was_eerder
+  type: word_order
+  frame: &earlier_frame {text: 'Dat gebeurde {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adverb
+      agreement_tags: {semantic: earlier_event_vocabulary}
+  answer_derivation:
+    kind: render_frame
+    frame: *earlier_frame
+  feedback_frame: {text: 'The adverb says when the event happened.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson01.translate.004
+  lesson_content_key: nl.a2.unit85.lesson01.wat_was_eerder
+  type: translation
+  frame: &translation_frame
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: &translation_feedback
+    text: The Dutch answer is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.a2.unit85.lesson02.listen.001
+  lesson_content_key: nl.a2.unit85.lesson02.had_of_was
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson02.match.002
+  lesson_content_key: nl.a2.unit85.lesson02.had_of_was
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit85.lesson02.translate.003
+  lesson_content_key: nl.a2.unit85.lesson02.had_of_was
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit85.lesson03.choose.001
+  lesson_content_key: nl.a2.unit85.lesson03.wanneer_welke_tijd
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson03.match.002
+  lesson_content_key: nl.a2.unit85.lesson03.wanneer_welke_tijd
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit85.lesson03.order.003
+  lesson_content_key: nl.a2.unit85.lesson03.wanneer_welke_tijd
+  type: word_order
+  frame: &counter_frame {text: 'Het loket was {item}.', language_code: nl, direction: ltr}
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags: {semantic: perfectum_vs_past_perfect}
+  answer_derivation:
+    kind: render_frame
+    frame: *counter_frame
+  feedback_frame: {text: 'The adjective describes the state of the ticket window.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson03.translate.004
+  lesson_content_key: nl.a2.unit85.lesson03.wanneer_welke_tijd
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit85.lesson04.listen.001
+  lesson_content_key: nl.a2.unit85.lesson04.nadat
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson04.match.002
+  lesson_content_key: nl.a2.unit85.lesson04.nadat
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit85.lesson04.translate.003
+  lesson_content_key: nl.a2.unit85.lesson04.nadat
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit85.lesson05.choose.001
+  lesson_content_key: nl.a2.unit85.lesson05.noors_verloren_paraplu
+  type: multiple_choice
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the English meaning of {item}.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson05.match.002
+  lesson_content_key: nl.a2.unit85.lesson05.noors_verloren_paraplu
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit85.lesson05.translate.003
+  lesson_content_key: nl.a2.unit85.lesson05.noors_verloren_paraplu
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
+
+- content_key: practice.en-nl.nl.a2.unit85.lesson06.listen.001
+  lesson_content_key: nl.a2.unit85.lesson06.lotte_en_omar
+  type: listen_select
+  frame: {text: '{item}', language_code: nl, direction: ltr}
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame: {text: 'Choose the meaning of the Dutch word you heard.', language_code: en, direction: ltr}
+- content_key: practice.en-nl.nl.a2.unit85.lesson06.match.002
+  lesson_content_key: nl.a2.unit85.lesson06.lotte_en_omar
+  type: matching_pairs
+  frame: *match_frame
+  slots: *match_slots
+  slot_relations: *match_relations
+  answer_derivation: *match_answer
+  feedback_frame: *match_feedback
+- content_key: practice.en-nl.nl.a2.unit85.lesson06.translate.003
+  lesson_content_key: nl.a2.unit85.lesson06.lotte_en_omar
+  type: translation
+  frame: *translation_frame
+  slots: {item: *unit_word}
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame: *translation_feedback
