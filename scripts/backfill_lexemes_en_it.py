@@ -10,7 +10,7 @@ docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
 Scope: A1 (the "en-it-a1" manifest group, units 01-24), A2 (the "en-it-a2"
-group, units 25-34, the Block A past-tense units 84-88 and the Block B/C
+group, units 25-34, the Block A past-tense units 84-88, the Block D units 95-100 and the Block B/C
 units 89-94) and B1 (the "en-it-b1" group, units
 35-53, added in session 12). B2+ is not classified yet; extend
 LEVELS and the tables below together. The A2 course is its own course, so a
@@ -1965,6 +1965,46 @@ GLOSSES.update({
     "ora": "hour; time (of day); now",
     "so": "I know; I can (know how to)",
 })
+
+# --- A2 Block D (units 95-100): reasons, sequencing, purpose, conditions, indirect questions, reported messages; data only ---
+BLOCK_D_NEW: dict[str, tuple[str, str]] = {
+    'chiuso': ('closed (masc.)', 'adjective'),
+    'compri': ('you buy (informal)', 'verb'),
+    'esce': ('he/she goes out; leaves', 'verb'),
+    'esco': ('I go out; I leave', 'verb'),
+    'fame': ('hunger', 'noun'),
+    'fermata': ('stop (bus stop)', 'noun'),
+    'finisce': ('he/she finishes', 'verb'),
+    'gratis': ('free (of charge)', 'adjective'),
+    'guadagnare': ('to earn', 'verb'),
+    'guarderemo': ('we will watch', 'verb'),
+    'guardiamo': ('we watch', 'verb'),
+    'lago': ('lake', 'noun'),
+    'maglia': ('shirt; sweater', 'noun'),
+    'magliette': ('shirts; T-shirts', 'noun'),
+    'malata': ('ill (fem.)', 'adjective'),
+    'mangia': ('he/she eats; eat! (informal command)', 'verb'),
+    'mettere': ('to put; to set', 'verb'),
+    'metterla': ('to set it (fem. object)', 'verb'),
+    'metti': ('you put; you set (informal)', 'verb'),
+    'metto': ('I put; I set', 'verb'),
+    'peccato': ('what a pity; sin', 'noun'),
+    'perde': ('he/she loses; misses', 'verb'),
+    'perdi': ('you lose; you miss (informal)', 'verb'),
+    'portate': ('bring! (plural command)', 'verb'),
+    'risparmio': ('I save (money)', 'verb'),
+    'sapere': ('to know', 'verb'),
+    'servire': ('to be used for; to serve', 'verb'),
+    'siccome': ('since; as (gives a known reason)', 'particle'),
+    'signor': ('Mr; sir', 'noun'),
+    'stare': ('to stay; to be (well)', 'verb'),
+    'telefona': ('he/she phones', 'verb'),
+    'terza': ('third (fem.)', 'adjective'),
+}
+for _tok, (_gloss, _pos) in BLOCK_D_NEW.items():
+    GLOSSES.setdefault(_tok, _gloss)
+    if _pos != "noun":
+        POS_SETS.setdefault(_pos, set()).add(_tok)
 
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
