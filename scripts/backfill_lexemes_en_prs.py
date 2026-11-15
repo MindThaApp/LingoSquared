@@ -4603,6 +4603,16 @@ UNIT_FILES_C1 = (
 )
 
 
+# C1 sense fixes (native-review lane 2026-11-15): the inherited gloss hid the sense C1 teaches.
+PRS_C1_GLOSS_OVERRIDES = {
+    "عکس": "photo; the opposite",
+    "بند": "tied; hanging",
+    "ساده": "simple",
+    "مستقیم": "direct",
+    "دعوت": "call; appeal",
+}
+
+
 def _classify(files, level, specs, derive_phrases=False):
     # derive_phrases=True is only ever passed for UNIT_FILES_A2 (see
     # iter_specs() below) -- added 2026-07-07 (A2 tagging-depth pass) to
@@ -4856,6 +4866,8 @@ def _classify(files, level, specs, derive_phrases=False):
                     # tokens an earlier level glossed in a different sense,
                     # plus the B2 practice tags (anchors / curated pools).
                     # Gated on level so no A1-B1 lexeme can change.
+                    if level == "c1":
+                        english_gloss = PRS_C1_GLOSS_OVERRIDES.get(token, english_gloss)
                     if level == "b2":
                         english_gloss = PRS_B2_GLOSS_OVERRIDES.get(token, english_gloss)
                         part_of_speech = PRS_B2_POS_OVERRIDES.get(token, part_of_speech)
