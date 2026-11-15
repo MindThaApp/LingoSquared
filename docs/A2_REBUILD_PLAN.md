@@ -17,7 +17,12 @@ Ramin's decisions on this plan:
 - **Q10:** fix the speaking lock now (being done separately in backend).
 - **Q4:** Dari standardizes on **می‌توانم** (formal). A1 and B1 prs content will be retrofitted to match A2 (separately).
 - **Q5:** existing A2 scenario units are interleaved AFTER the grammar block they use (needs a reorder-import safety check first).
-- **Q2, Q3, Q6, Q7, Q8, Q9:** not yet decided; left open.
+- **Q3 (decided 2026-11-15) — Dari rulings:**
+  - **Progressive:** BOTH. Teach plain present *می‌* first for "I go / I am going" (*می‌روم*), then introduce *در حال … استم* (*در حال رفتن استم*) as an optional emphasis form.
+  - **Present perfect:** formal *رفته‌ام* AND the spoken Kabuli forms are both taught. Show the spoken forms explicitly in notes; accept both as answers.
+  - **Object clitics:** teach *او را / آن را*. Accept *دیدمش* as an answer but keep it out of taught text. *ازش / باهاش / بهت* stay banned (Tehrani).
+  - **Future *خواهم رفت*:** recognition only. Teach the future as *می‌* plus a time word. *خواهم رفت* appears only in reading and recognition items.
+- **Q2, Q6, Q7, Q8, Q9:** not yet decided; left open. Until Q2 is ruled, new fa/prs units use the plan's recommended size (6 lessons x ~6 exercises).
 
 ---
 
@@ -268,7 +273,7 @@ says otherwise.
 - **Can-do:** Say what was going on when something else happened.
 - **nl:** imperfectum, irregular (*was/had/ging/kwam/zag/zei*), *toen* + verb-final.
 - **fa:** past progressive *داشتم می‌رفتم که…* plus *وقتی (که)*.
-- **prs:** past continuous with *وقتی که*. **The Dari progressive form is open (Q3).**
+- **prs:** past continuous with *وقتی که*. **Progressive: both forms (Q3 decided 2026-11-15): plain *می‌* first, then optional *در حال … استم*.**
 - **Vocab:** small incidents, weather, traffic.
 - **Recycles:** travel, emergencies, weather.
 
@@ -276,7 +281,7 @@ says otherwise.
 - **Can-do:** Ask and say what you have or have never done.
 - **nl:** perfectum vs imperfectum choice, *ooit* / *nog nooit* / *al* / *nog niet*.
 - **fa:** present perfect. The colloquial form (رفته‌م) is taught; the written form (رفته‌ام) is taught for recognition only.
-- **prs:** present perfect in formal *رفته‌ام*. **The Kabuli spoken form is open (Q3).**
+- **prs:** present perfect in formal *رفته‌ام*. **Q3 decided 2026-11-15: teach formal *رفته‌ام* AND the spoken Kabuli forms (shown explicitly in notes; both accepted).**
 - **Vocab:** travel, food, experiences.
 - **Recycles:** food, travel, outings.
 
@@ -295,7 +300,7 @@ says otherwise.
 - **Can-do:** Say what you are going to do soon, and what you intend to do later.
 - **nl:** *gaan* + infinitive; *van plan zijn om … te*.
 - **fa:** present-for-future made explicit; *می‌خوام* + subjunctive for intention.
-- **prs:** present-for-future; *می‌خواهم* + subjunctive (full form is the Dari norm).
+- **prs:** present-for-future (*می‌* plus a time word); *می‌خواهم* + subjunctive (full form is the Dari norm).
 - **Vocab:** holidays, courses, moving house.
 - **Recycles:** travel, education, housing.
 
@@ -303,7 +308,7 @@ says otherwise.
 - **Can-do:** Predict what will happen and make a promise.
 - **nl:** *zullen* (prediction/promise) vs *gaan*; *misschien* + inversion.
 - **fa:** formal future *خواهم رفت* for recognition in news/notices; *شاید / احتمالاً* + subjunctive.
-- **prs:** *خواهم رفت* (fits the formal realization); *شاید* + subjunctive, which has no note today.
+- **prs:** *خواهم رفت* (recognition only, reading items; Q3 decided 2026-11-15); *شاید* + subjunctive, which has no note today.
 - **Vocab:** weather forecasts, notices, commitments.
 - **Recycles:** weather, work, appointments.
 
@@ -458,7 +463,7 @@ says otherwise.
 - **Can-do:** Refer back to people and things without repeating them.
 - **nl:** object pronouns, full set; *er* + number (*ik heb er drie*), *erover / ervan / ermee*.
 - **fa:** **object clitics on verbs** (*دیدمش*, *بهش گفتم*).
-- **prs:** *او را / آن را*. **The clitic policy is open (Q3):** `check_dari_register.py` flags ازش / باهاش / بهت.
+- **prs:** *او را / آن را*. **Clitic policy (Q3 decided 2026-11-15):** teach *او را / آن را*; accept *دیدمش* as an answer but never in taught text; ازش / باهاش / بهت stay banned (`check_dari_register.py`).
 - **Vocab:** gifts, borrowing, returns.
 - **Recycles:** library, celebrations, shops.
 
@@ -466,7 +471,7 @@ says otherwise.
 - **Can-do:** Say what is going on right now and what someone is in the middle of.
 - **nl:** *aan het* + infinitive; *zitten / staan / liggen te*.
 - **fa:** present progressive *دارم می‌رم*, contrasted with plain present.
-- **prs:** **open (Q3).** DARI_REGISTER_REPAIR.md does not cover the progressive. The candidate is *در حال … استم* or plain *می‌*.
+- **prs:** **Q3 decided 2026-11-15: both.** Plain *می‌* first, then *در حال … استم* as optional emphasis.
 - **Vocab:** phone calls, household.
 - **Recycles:** phone/communication, household, laundry.
 - **Estimate:** nl 36 · fa 36 · prs 30.
@@ -761,13 +766,14 @@ as drip content.
   **Decision:** Blocks A–D first (19 units per language), Wave-0 pilot of A1 in nl/fa/prs reviewed by Ramin before scaling; E–G later.
 - **Q2 — fa/prs unit size.** Is 6 lessons × ~6 exercises right? The current
   fa/prs A2 units are 4 × ~5.
-- **Q3 — Dari rulings.** Please rule on:
+- **[DECIDED 2026-11-15] Q3 — Dari rulings.** Questions were:
   - the progressive (*در حال … استم*, or plain present only);
   - spoken present perfect forms;
   - object clitics on verbs (دیدمش), given that ازش / باهاش are flagged
     Tehrani;
   - whether *خواهم رفت* is acceptable as taught (not just recognized) in the
     formal realization.
+  **Decision:** progressive = both (plain *می‌* first, then optional *در حال … استم*); present perfect = formal *رفته‌ام* AND spoken Kabuli forms, both taught and accepted; object clitics = teach *او را / آن را*, accept *دیدمش* as an answer only, keep ازش / باهاش banned; *خواهم رفت* = recognition only (future taught as *می‌* + time word).
 - **[DECIDED 2026-09-29] Q4 — prs modal.** Standardize prs A2 on **می‌تانم** (matching A1 and B1)
   before authoring, and retrofit the 84 می‌توانم / می‌توانین uses in
   `realizations/prs/a2_*`?
