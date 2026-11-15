@@ -25,6 +25,7 @@ Ramin's decisions on this plan:
   - **2pl ending -ین everywhere (2026-11-15):** the formal perfect 2pl is *رفته‌این*, not *رفته‌اید*; the spoken 2pl is *رفتین*. -ید forms stay as accepted answers only. Applied to en-prs A2 units 22-26 (only unit 25 used -اید).
   - **Future *خواهم رفت*:** recognition only. Teach the future as *می‌* plus a time word. *خواهم رفت* appears only in reading and recognition items.
 - **Progress (en-prs, 2026-11-15):** Wave-0 pilot A1 already exists as `prs/a2_unit19_last_weekend` (wired in `en-prs-a2`, reviewed, practice pack present); it uses none of the Q3 forms and needs no change. Units A2-A6 are authored as `a2_unit22`-`a2_unit26` and appended at the end of the manifest (the Q5 reorder has not been done).
+- **Progress (en-prs Blocks B-D, 2026-11-15):** B1-B2 authored as `prs/a2_unit27`-`a2_unit28`, C1-C5 as `a2_unit29`-`a2_unit33`, D1-D6 as `a2_unit34`-`a2_unit39` (all unreviewed, native Dari review pending; -ید 2pl is not listed in accepted answers because `check_dari_register.py` flags it, so typo tolerance covers it).
 - **Q2, Q6, Q7, Q8, Q9:** not yet decided; left open. Until Q2 is ruled, new fa/prs units use the plan's recommended size (6 lessons x ~6 exercises).
 
 ---
