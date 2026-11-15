@@ -579,6 +579,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_DE_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "Boston", "Luna": "Luna", "Max": "Max", "always": "immer", "arrival": "Ankunft", "arrive": "ankommen", "arrives": "kommt an", "ate": "aß (Vergangenheit von essen)", "ball": "Ball", "bigger": "größer", "bird": "Vogel", "book": "Buch", "both": "beide", "car": "Auto", "cat": "Katze", "cheaper": "günstiger; billiger", "cheapest": "am günstigsten; am billigsten", "cooking": "Kochen", "cooks": "kocht", "departure": "Abfahrt", "did": "tat; machte (Vergangenheit von tun)", "different": "verschieden; unterschiedlich", "dog": "Hund", "ever": "jemals; schon einmal", "expensive": "teuer", "faster": "schneller", "fish": "Fisch", "friendly": "freundlich", "games": "Spiele", "goes": "geht; fährt", "hate": "hassen", "hobbies": "Hobbys", "leaves": "fährt ab; geht ab", "likes": "mag", "loves": "liebt; mag sehr", "milder": "milder", "mornings": "Morgen (Plural); Vormittage", "named": "namens; heißt", "never": "nie; niemals", "nicer": "schöner; netter", "often": "oft", "paint": "malen", "painting": "Malen", "paints": "malt", "pet": "Haustier", "pets": "Haustiere", "platform": "Bahnsteig; Gleis", "play": "spielen", "prefer": "bevorzugen; lieber mögen", "prefers": "bevorzugt; mag lieber", "rarely": "selten", "reading": "Lesen", "red": "rot", "round": "hin und zurück (Fahrkarte)", "running": "Laufen; Joggen", "s": "'s (Besitz)", "sister's": "der Schwester; Schwester-", "smaller": "kleiner", "still": "immer noch; noch", "strong": "stark", "swim": "schwimmen", "than": "als (beim Vergleich)", "thinks": "denkt; findet", "ticket": "Fahrkarte; Ticket", "together": "zusammen", "train": "Zug", "trip": "Reise; Fahrt", "very": "sehr", "video": "Video", "visited": "besuchte", "walks": "geht spazieren; geht zu Fuß", "watch": "ansehen; zuschauen", "watched": "sah an; schaute an", "way": "Richtung; Weg", "week": "Woche", "white": "weiß", "why": "warum", "worked": "arbeitete", "writer's": "des Schriftstellers; der Schriftstellerin", "yesterday": "gestern"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
