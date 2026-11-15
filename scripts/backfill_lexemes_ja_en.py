@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_JA_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "ボストン", "Luna": "ルナ", "Max": "マックス", "always": "いつも", "arrival": "到着", "arrive": "到着する", "arrives": "到着する", "ate": "食べた", "ball": "ボール", "bigger": "より大きい", "bird": "鳥", "book": "本", "both": "両方", "car": "車", "cat": "猫", "cheaper": "より安い", "cheapest": "いちばん安い", "cooking": "料理", "cooks": "料理する", "departure": "出発", "did": "した", "different": "違う;異なる", "dog": "犬", "ever": "今までに;かつて", "expensive": "高い", "faster": "より速い", "fish": "魚", "friendly": "フレンドリーな;人懐っこい", "games": "ゲーム", "goes": "行く", "hate": "嫌う;大嫌いである", "hobbies": "趣味", "leaves": "出発する", "likes": "好きである", "loves": "大好きである", "milder": "より穏やかな", "mornings": "朝(複数)", "named": "〜という名前の", "never": "決して〜ない", "nicer": "より素敵な;より親切な", "often": "よく;しばしば", "paint": "絵を描く", "painting": "絵を描くこと", "paints": "絵を描く", "pet": "ペット", "pets": "ペット(複数)", "platform": "プラットフォーム;ホーム", "play": "遊ぶ;(スポーツを)する", "prefer": "〜のほうが好き;好む", "prefers": "〜のほうが好き", "rarely": "めったに〜ない", "reading": "読書", "red": "赤い", "round": "往復の;丸い", "running": "ランニング", "s": "〜の", "sister's": "姉の;妹の", "smaller": "より小さい", "still": "まだ;今でも", "strong": "強い", "swim": "泳ぐ", "than": "〜より", "thinks": "思う", "ticket": "切符;チケット", "together": "一緒に", "train": "電車;列車", "trip": "旅行", "very": "とても", "video": "ビデオ;動画", "visited": "訪れた;訪問した", "walks": "散歩させる;歩く", "watch": "見る;観る", "watched": "見た", "way": "道;方法", "week": "週", "white": "白い", "why": "なぜ", "worked": "働いた", "writer's": "作家の", "yesterday": "昨日"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
