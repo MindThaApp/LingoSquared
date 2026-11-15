@@ -2303,6 +2303,49 @@ FA_B2_GLOSS_OVERRIDES = {
     "زنگ": "ring; ringing (of a bell or phone)",
 }
 
+# Per-unit sense overrides for A2 units 22-26 (gloss-fix-q6, 2026-11-15).
+# Keyed (unit number, token); applied only to the unit's own occurrence, so the
+# A1 rows and the other units' rows are untouched. Value = (gloss, part_of_speech
+# or None to keep the classified one). Evidence: the unit realizations
+# (e.g. زنگ نزدم "I didn't call", ماشین رو روشن کردم "I started the car",
+# شام درست می‌کردم "I was making dinner", مغازه بسته شده بود "the shop had
+# closed", منم هنوز نخورده‌م "me too, I haven't eaten it yet").
+FA_A2U22_26_OVERRIDES: dict[tuple[int, str], tuple[str, str | None]] = {
+    (22, "نزدم"): ("I didn't (call); negative of the light verb meaning to strike or make a call", None),
+    (22, "زدم"): ("I called (light verb: to make a phone call); I hit", None),
+    (22, "روشن"): ("on; switched on (as in start the car)", "adjective"),
+    (22, "نوشتم"): ("I wrote", "verb"),
+    (22, "یادم"): ("my memory (as in I forgot)", None),
+    (23, "می‌رفتم"): ("I used to go (habitual past, spoken)", "verb"),
+    (23, "می‌کردم"): ("I used to do (habitual past, spoken)", None),
+    (23, "می‌رفتی"): ("you used to go (spoken)", None),
+    (23, "می‌رفت"): ("he/she used to go", None),
+    (23, "می‌رفتیم"): ("we used to go (habitual past)", None),
+    (23, "می‌کردیم"): ("we used to do (as in we used to play)", "verb"),
+    (23, "داشتیم"): ("we had (past)", "verb"),
+    (23, "داشت"): ("he/she had (past)", None),
+    (23, "توی"): ("in; inside (spoken)", "preposition"),
+    (24, "درست"): ("made; prepared (as in to make a meal)", "adjective"),
+    (24, "داشتم"): ("I was (in the middle of); progressive auxiliary, also 'I had'", None),
+    (24, "داشتی"): ("you were (in the middle of); progressive auxiliary, spoken", None),
+    (24, "رد"): ("past; across (as in to cross the street)", None),
+    (24, "می‌شدم"): ("I was (crossing); imperfect of to become, as in I was crossing", None),
+    (24, "راه"): ("way; road (as in set off)", None),
+    (25, "منم"): ("me too; I also (spoken)", "pronoun"),
+    (25, "دیده"): ("seen; he/she has seen (past participle)", "verb"),
+    (26, "تازه"): ("just (recently)", "adverb"),
+    (26, "خریده"): ("he/she has bought; bought (past participle)", "verb"),
+    (26, "بسته"): ("closed (as in had closed)", "adjective"),
+    (26, "گذاشته"): ("put; left (past participle, as in left behind)", "verb"),
+}
+
+
+# Single-member anchors for tokens whose pack slot must host exactly one form
+# (the frame is only grammatical for that participle).
+FA_A2U22_26_EXTRA_TAGS: dict[tuple[int, str], list[str]] = {
+    (25, "دیده"): ["w_دیده"],
+}
+
 FA_SYMBOLS = set("س ل ا م ن ت ش چ ی ه ک گ ج د ر ف و ب خ ز".split())
 FA_PROPER_NOUNS = set(
     "ترکیه شیراز "
@@ -2800,6 +2843,10 @@ TOO_PREPOSITION_LESSONS = {
 NO_NEGATION_LESSONS = {
     # A2 unit21 (added 2026-11-06): "نه، متأسفانه نه" = no.
     "fa.a2.unit21.lesson02.another_day",
+    # A2 unit23 (added 2026-11-15): "نه، مدرسه دور نبود" = no (not "nine").
+    "fa.a2.unit23.lesson02.form_drag",
+    # A2 unit25: "نه، هنوز نرفته‌م" = no, not yet.
+    "fa.a2.unit25.lesson01.form_recognition",
     # A2 unit19 (added 2026-10-25): "نه، ورزش نکردم" / "نه، نرفتم" = no.
     "fa.a2.unit19.lesson03.negative_past",
     # B2 (added 2026-10-19): "نه کاملا ... نه کاملا" (neither ... nor),
@@ -4994,6 +5041,12 @@ def _classify_fa(files, level, fa_specs, seen_en):
                             english_gloss = "before (as in 'a day before')"
                         if token == "خواهش":
                             english_gloss = "you're welcome (as in 'don't mention it')"
+                    _u2226 = re.match(r"fa\.a2\.unit(2[2-6])\.", lesson_key)
+                    if _u2226:
+                        _ov = FA_A2U22_26_OVERRIDES.get((int(_u2226.group(1)), token))
+                        if _ov:
+                            english_gloss = _ov[0]
+                            part_of_speech = _ov[1] or part_of_speech
                     if token == "تا" and lesson_key in TA_UNTIL_LESSONS:
                         key = (level, token, "until_prep")
                         part_of_speech = "preposition"
@@ -5026,6 +5079,10 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         if level == "c1" and unit_tags:
                             # single-member anchor per token (practice packs build their templates over these)
                             unit_tags = unit_tags + [f"w_{token}"]
+                        if _u2226:
+                            unit_tags = unit_tags + FA_A2U22_26_EXTRA_TAGS.get(
+                                (int(_u2226.group(1)), token), []
+                            )
                         if lesson_key.startswith("fa.a2.unit19."):
                             unit_tags = unit_tags + FA_A2U19_EXTRA_TAGS.get(token, [])
                         if lesson_key.startswith("fa.a2.unit20."):
@@ -5170,6 +5227,12 @@ def _classify_fa(files, level, fa_specs, seen_en):
                             "agreement_tags": tags,
                         },
                     )
+                # A2 units 22+ no longer emit the English source_gloss lexemes
+                # (gloss-fix-q6, 2026-11-15): they are not target-language
+                # vocabulary, can never be hosted by a practice slot and only
+                # dilute the unit pool the checkpoint/coverage gate measures.
+                if re.match(r"fa\.a2\.unit(2[2-9]|[3-9]\d)\.", lesson_key):
+                    continue
                 for match in EN_TOKEN_RE.findall(gloss):
                     token = match.casefold().replace("’", "'")
                     seen_key = (level, token)
