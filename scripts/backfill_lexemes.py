@@ -464,6 +464,58 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit26.yaml",
     ),
     (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit27_my_plans.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit27.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit28_predictions_promises.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit28.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit29_rules_permission.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit29.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit30_ability_possibility.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit30.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit31_polite_requests.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit31.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit32_giving_advice.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit32.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit33_start_stop_try.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit33.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit34_because_so.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit34.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit35_before_after_when.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit36_in_order_to.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit37_if_conditions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit38_indirect_questions.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit39_pass_on_message.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit39.yaml",
+    ),
+    (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit45_self_care.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit45.yaml",
     ),
@@ -3586,6 +3638,157 @@ FA_VERBS.update({
     "می‌خونین", "می‌خونن", "نمی‌خونم", "خونه‌ایم", "می‌بینن",
 })
 
+# A2 units 27-39 (plans through reported messages), added 2026-11-15.
+# English-only glosses; spoken inflected forms name their person/number so
+# distinct forms of a lemma never collapse to the same learner-facing answer.
+FA_A2U27_39_NEW = {
+    "جعبه": ("box", "noun"),
+    "معمولا": ("usually", "adverb"),
+    "می‌باره": ("it rains (spoken)", "verb"),
+    "نیاد": ("(that) it/he/she not come (spoken)", "verb"),
+    "نمی‌باره": ("it doesn't rain (spoken)", "verb"),
+    "قول": ("promise", "noun"),
+    "کمکت": ("help you (spoken)", "noun"),
+    "نمی‌کنی": ("you don't do (spoken)", "verb"),
+    "نکنم": ("(that) I not do (spoken)", "verb"),
+    "می‌زنی": ("you call; you hit (spoken)", "verb"),
+    "هواشناسی": ("meteorology; weather service", "noun"),
+    "اطلاعیه": ("notice; announcement", "noun"),
+    "بارید": ("it rained (written)", "verb"),
+    "قانون‌های": ("rules of (linked form)", "noun"),
+    "بگیری": ("(that) you take (spoken)", "verb"),
+    "بیاری": ("(that) you bring (spoken)", "verb"),
+    "بزنی": ("(that) you hit; do (spoken)", "verb"),
+    "بدی": ("(that) you give (spoken)", "verb"),
+    "برگردونی": ("(that) you return (spoken)", "verb"),
+    "حوله": ("towel", "noun"),
+    "بپوشی": ("(that) you wear (spoken)", "verb"),
+    "بدوی": ("(that) you run (spoken)", "verb"),
+    "ممنوعه": ("forbidden", "adjective"),
+    "دویدن": ("running; to run", "noun"),
+    "بخری": ("(that) you buy (spoken)", "verb"),
+    "بشوری": ("(that) you wash (spoken)", "verb"),
+    "بشینم": ("(that) I sit (spoken)", "verb"),
+    "اجازه": ("permission", "noun"),
+    "بندازی": ("(that) you throw (spoken)", "verb"),
+    "بپوشید": ("(that) you all wear", "verb"),
+    "قانون‌ها": ("the rules", "noun"),
+    "گیتار": ("guitar", "noun"),
+    "بخونم": ("(that) I read (spoken)", "verb"),
+    "نرم": ("(that) I not go (spoken)", "verb"),
+    "نیام": ("(that) I not come (spoken)", "verb"),
+    "مشغولم": ("I am busy", "adjective"),
+    "نون": ("bread (spoken)", "noun"),
+    "ببندید": ("close (polite/plural)", "verb"),
+    "بذارید": ("let; put (polite/plural, spoken)", "verb"),
+    "ببندم": ("(that) I close (spoken)", "verb"),
+    "کمکتون": ("your help (polite/plural, spoken)", "noun"),
+    "خودم": ("myself", "pronoun"),
+    "برو": ("go! (informal)", "verb"),
+    "بکن": ("do! (informal)", "verb"),
+    "بکنید": ("do! (polite/plural)", "verb"),
+    "نرو": ("don't go! (informal)", "verb"),
+    "نیا": ("don't come! (informal)", "verb"),
+    "نکن": ("don't do! (informal)", "verb"),
+    "نرید": ("don't go! (polite/plural, spoken)", "verb"),
+    "نکنید": ("don't do! (polite/plural)", "verb"),
+    "نزنید": ("don't hit; don't do (polite/plural)", "verb"),
+    "کیفم": ("my bag", "noun"),
+    "کیفتون": ("your bag (polite/plural, spoken)", "noun"),
+    "ببرم": ("(that) I carry; take (spoken)", "verb"),
+    "داروخونه": ("pharmacy (spoken)", "noun"),
+    "بخونی": ("(that) you study; read (spoken)", "verb"),
+    "نظرم": ("my opinion", "noun"),
+    "نخوری": ("(that) you not eat; drink (spoken)", "verb"),
+    "نری": ("(that) you not go (spoken)", "verb"),
+    "نخوابی": ("(that) you not sleep (spoken)", "verb"),
+    "نکنی": ("(that) you not do (spoken)", "verb"),
+    "نخونی": ("(that) you not study; read (spoken)", "verb"),
+    "حق": ("right; being right", "noun"),
+    "توئه": ("it is yours (spoken)", "pronoun"),
+    "نمی‌دونم": ("I don't know (spoken)", "verb"),
+    "دوستن": ("they are friends (spoken)", "verb"),
+    "تلویزیون": ("television", "noun"),
+    "نوشابه": ("soda; soft drink", "noun"),
+    "شیرینی": ("sweets; pastry", "noun"),
+    "می‌دوم": ("I run", "verb"),
+    "نمی‌خورم": ("I don't eat; drink (spoken)", "verb"),
+    "ترک": ("giving up; leaving", "noun"),
+    "نمی‌دوم": ("I don't run", "verb"),
+    "بخوابم": ("(that) I sleep (spoken)", "verb"),
+    "شم": ("(that) I become (short spoken form)", "verb"),
+    "بدوم": ("(that) I run", "verb"),
+    "نخورم": ("(that) I not eat; drink (spoken)", "verb"),
+    "سعی": ("effort; try", "noun"),
+    "آفرین": ("well done", "particle"),
+    "ببخش": ("sorry; excuse me (informal)", "verb"),
+    "می‌خوری": ("you eat; drink (spoken)", "verb"),
+    "نزدی": ("you didn't hit; call (spoken)", "verb"),
+    "مریض": ("sick; ill", "adjective"),
+    "نمیام": ("I'm not coming (spoken)", "verb"),
+    "قرارمون": ("our appointment (spoken)", "noun"),
+    "کردیم": ("we did; made", "verb"),
+    "چراغ": ("light; lamp", "noun"),
+    "مسواک": ("toothbrush", "noun"),
+    "بپزم": ("(that) I cook (spoken)", "verb"),
+    "می‌بندم": ("I close (spoken)", "verb"),
+    "سبزی": ("herbs; greens", "noun"),
+    "شستم": ("I washed", "verb"),
+    "پختم": ("I cooked", "verb"),
+    "موزیک": ("music", "noun"),
+    "برسی": ("(that) you arrive (spoken)", "verb"),
+    "می‌خوریم": ("we eat; drink (spoken)", "verb"),
+    "پست": ("post office; mail", "noun"),
+    "بازار": ("market; bazaar", "noun"),
+    "اومدی": ("you came (spoken)", "verb"),
+    "نمی‌ریم": ("we don't go (spoken)", "verb"),
+    "نیای": ("(that) you not come (spoken)", "verb"),
+    "نباشه": ("(if) it not be (spoken)", "verb"),
+    "جنس": ("goods; item; material", "noun"),
+    "می‌دیم": ("we give (spoken)", "verb"),
+    "نمی‌دیم": ("we don't give (spoken)", "verb"),
+    "می‌دونید": ("you all know (polite/plural, spoken)", "verb"),
+    "اینجاست": ("it is here (spoken)", "verb"),
+    "می‌دونی": ("you know (informal, spoken)", "verb"),
+    "پیغام": ("message", "noun"),
+    "یادداشت": ("note", "noun"),
+    "می‌گن": ("they say (spoken)", "verb"),
+    "می‌پرسه": ("he/she asks (spoken)", "verb"),
+    "کلیدش": ("his/her/its key (spoken)", "noun"),
+    "ماشینه": ("it is the car (spoken)", "noun"),
+    "همکارت": ("your colleague", "noun"),
+}
+# Level-scoped (a2 only) part-of-speech for the tokens above plus a few
+# earlier A2 tokens that fell through to the noun default; A1/B1 rows untouched.
+FA_A2_PART_OF_SPEECH = {_tok: _pos for _tok, (_gloss, _pos) in FA_A2U27_39_NEW.items()}
+FA_A2_PART_OF_SPEECH.update({
+    "بخوابی": "verb", "بخوری": "verb", "بخونه": "verb", "می‌رسن": "verb",
+    "می‌رسی": "verb", "خوبیه": "adjective", "ممکنه": "adjective",
+    "جدا": "adverb", "احتمالا": "adverb", "خاموش": "adjective",
+    "داخل": "adverb",
+})
+# Level-scoped (a2) sense fixes for tokens first introduced in units 27-39:
+# the inherited gloss hid the sense these units teach (e.g. بلند "tall" for
+# حرف بلند بزنی "talk loudly"; می‌رسی "you seem" for کی می‌رسی "when do you arrive").
+FA_A2_GLOSS_OVERRIDES = {
+    "بلند": "loud; tall (as in 'talk loudly')",
+    "سرم": "my head (as in 'my head hurts')",
+    "دست": "hand (as in 'don't touch')",
+    "می‌زنه": "he/she calls; hits (spoken)",
+    "می‌رسی": "you arrive (spoken)",
+    "بده": "bad (as in 'I feel bad')",
+    "نگاه": "looking; watching",
+    "بخورم": "(that) I eat; drink (spoken)",
+    "داد": "shout; yell (as in 'to shout')",
+    "ورزشی": "sports; sporty",
+    "چنده": "how much / what number is it (spoken)",
+    "می‌کنیم": "we do; will do (spoken)",
+    "باشی": "(that) you be (spoken)",
+}
+FA_A2_PART_OF_SPEECH.update({"داد": "noun", "ورزشی": "adjective", "بده": "adjective", "آزادم": "adjective"})
+for _tok, (_gloss, _pos) in FA_A2U27_39_NEW.items():
+    FA_GLOSSES.setdefault(_tok, _gloss)
+
 
 def fa_part_of_speech(token: str) -> str:
     if token in FA_SYMBOLS:
@@ -5059,6 +5262,9 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # the B2 card teaches -- see FA_B2_PART_OF_SPEECH and
                     # FA_B2_GLOSS_OVERRIDES. Level-scoped, so A1-B1 rows
                     # are untouched.
+                    if level == "a2":
+                        part_of_speech = FA_A2_PART_OF_SPEECH.get(token, part_of_speech)
+                        english_gloss = FA_A2_GLOSS_OVERRIDES.get(token, english_gloss)
                     if level == "c1":
                         english_gloss = FA_C1_GLOSS_OVERRIDES.get(token, english_gloss)
                     if level == "b2":
