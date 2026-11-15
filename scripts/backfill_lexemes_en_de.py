@@ -1908,6 +1908,51 @@ _ALREADY_TAGGED = set().union(*POS_SETS.values())
 for _pos, _words in A2_BLOCK_BC_POS.items():
     POS_SETS.setdefault(_pos, set()).update(split_words(_words) - _ALREADY_TAGGED)
 
+# A2 Block D (units 109-114: reasons and consequences, time clauses, purpose,
+# real conditions, indirect questions, passing on a message): citation forms,
+# glosses and parts of speech for the new tokens. Applied with setdefault so no
+# earlier entry changes.
+A2_BLOCK_D_CITATION = {
+    "Weil": "weil", "Bevor": "bevor", "Immer": "immer", "Weißt": "weißt",
+    "Wissen": "wissen", "Wozu": "wozu",
+}
+A2_BLOCK_D_GLOSSES = {
+    "weil": "because (the verb goes to the end of its clause)",
+    "bevor": "before (introduces a clause about the later event)",
+    "immer": "always; every time",
+    "weißt": "know (you, informal singular)", "wisst": "know (you, plural)",
+    "wissen": "to know (a fact); know (we, they, formal you)",
+    "wozu": "what for; for what purpose",
+    "aufsteht": "gets up (he, she, it; joined form used at the end of a clause)",
+    "aufstehe": "get up (I; joined form used at the end of a clause)",
+    "anruft": "calls on the phone (he, she, it; joined form used at the end of a clause)",
+    "anfängt": "starts (he, she, it; joined form used at the end of a clause)",
+    "mitkommt": "comes along (he, she, it; joined form used at the end of a clause)",
+    "Oje": "oh dear", "packt": "packs", "seine": "his (before a feminine or plural noun)",
+    "steigt": "gets on; climbs (as in boarding a train)", "holen": "to fetch; to get",
+    "fit": "fit; in good shape", "stellst": "set (you, informal singular; as in setting an alarm clock)",
+    "Liste": "list", "verdienen": "to earn", "scheinen": "to shine; to seem",
+    "schneit": "snows; it snows", "Rabatt": "discount", "Pullover": "pullover; sweater",
+    "tauschen": "to exchange; to swap", "Apfel": "apple", "iss": "eat (command, informal singular)",
+    "planen": "to plan", "plant": "plans (he, she, it)", "Fragen": "questions",
+    "zeige": "show (I show)", "hilfst": "help (you, informal singular)",
+    "Notiz": "note; short written message", "klingelt": "rings",
+    "wartest": "wait (you, informal singular)", "Sag": "say; tell (command, informal singular)",
+    "Ruf": "call (command, informal singular)", "Hilf": "help (command, informal singular)",
+}
+A2_BLOCK_D_POS = {
+    "verb": "aufsteht aufstehe anruft anfängt mitkommt packt steigt holen stellst verdienen scheinen "
+            "schneit iss planen plant zeige hilfst klingelt wartest Sag Ruf Hilf wisst",
+    "adjective": "fit seine",
+    "particle": "Oje",
+}
+CITATION_FORMS.update(A2_BLOCK_D_CITATION)
+for _tok, _gloss in A2_BLOCK_D_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+_ALREADY_TAGGED = set().union(*POS_SETS.values())
+for _pos, _words in A2_BLOCK_D_POS.items():
+    POS_SETS.setdefault(_pos, set()).update(split_words(_words) - _ALREADY_TAGGED)
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_de_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_de_b2c1.json"
