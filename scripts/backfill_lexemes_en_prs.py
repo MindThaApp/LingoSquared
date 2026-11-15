@@ -4882,7 +4882,7 @@ def _classify(files, level, specs, derive_phrases=False):
                         )
                         if lesson_key.startswith("prs.a2.unit19."):
                             unit_tags = unit_tags + PRS_A2U19_EXTRA_TAGS.get(token, [])
-                        if unit_tags and lesson_key.startswith(("prs.a2.unit20.", "prs.a2.unit21.")):
+                        if unit_tags and lesson_key.startswith(("prs.a2.unit20.", "prs.a2.unit21.", "prs.c1.")):
                             # single-member anchor per token (derive_target.py packs builds its templates over these)
                             unit_tags = unit_tags + [f"w_{token}"]
                         if unit_tags:

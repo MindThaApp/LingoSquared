@@ -4704,6 +4704,13 @@ PHRASE_GLOSS_OVERRIDES: dict[str, str] = {
 }
 
 
+def _cap_gloss(text, limit=255):
+    """lexemes.english_gloss is String(255): shorten long derived-phrase glosses at a word boundary."""
+    if len(text) <= limit:
+        return text
+    return text[: limit - 1].rsplit(" ", 1)[0].rstrip(",;:") + "."
+
+
 def _classify_fa(files, level, fa_specs, seen_en):
     # Keyed by (level, token) -- A1 and A2 are separate courses (separate
     # Lexeme rows are fine/expected even for a token spelled the same in
@@ -4872,6 +4879,9 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         )
                         if level == "b2":
                             unit_tags = unit_tags + FA_B2_EXTRA_TAGS.get(token, [])
+                        if level == "c1" and unit_tags:
+                            # single-member anchor per token (practice packs build their templates over these)
+                            unit_tags = unit_tags + [f"w_{token}"]
                         if lesson_key.startswith("fa.a2.unit19."):
                             unit_tags = unit_tags + FA_A2U19_EXTRA_TAGS.get(token, [])
                         if lesson_key.startswith("fa.a2.unit20."):
@@ -5012,7 +5022,7 @@ def _classify_fa(files, level, fa_specs, seen_en):
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": target_text, "language_code": "fa",
                             "part_of_speech": "phrase",
-                            "english_gloss": PHRASE_GLOSS_OVERRIDES.get(content_key, gloss),
+                            "english_gloss": _cap_gloss(PHRASE_GLOSS_OVERRIDES.get(content_key, gloss)),
                             "agreement_tags": tags,
                         },
                     )
