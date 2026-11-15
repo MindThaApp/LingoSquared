@@ -1376,6 +1376,87 @@ PARTICLES.update({'k', 'n', 'f', 't', 'ge', 'ch', 'p'})
 PRONOUNS.update({'Hun'})
 PREPOSITIONS.update({'waarop'})
 
+# immediately BEFORE the line "# immediately AFTER the line "PROPER_NOUNS.update({'noor', 'omar'})" (~line 1424) and BEFORE
+# "# A2 units 79 (vakantieplannen/holiday plans) and 80 ...". Only tokens of units 91 and 96
+# that are still missing (NL_GLOSSES + part of speech); everything else is already defined.
+# A2 units 91 and 96 (beginnen/stoppen/proberen; weet u waar), added 2026-11-15.
+NL_GLOSSES.update({
+    "snoepen": "to snack on sweets", "snoep": "snack on sweets (with ik)",
+    "Roken": "smoking", "rook": "smoke (with ik)", "gestopt": "stopped (past participle)",
+    "stopt": "stops", "probeert": "tries", "kijkt": "watches; looks",
+    "tv": "the TV", "Weet": "know (question form)", "Wie": "who",
+    "opent": "opens", "Pardon": "excuse me; pardon", "pardon": "excuse me; pardon",
+    "Groeten": "best wishes; regards (sign-off)",
+})
+VERBS.update({'snoepen', 'snoep', 'rook', 'gestopt', 'stopt', 'probeert', 'kijkt', 'Weet', 'opent'})
+NOUNS.update({'Roken', 'tv', 'Groeten'})
+PRONOUNS.update({'Wie'})
+PHRASES.update({'Pardon', 'pardon'})
+
+# A2 units 79 (vakantieplannen/holiday plans) and 80 (afspraak verzetten/moving"
+# (right after the "A2 units 81-85" VERBS/NOUNS/.../PREPOSITIONS .update block, ~line 1378).
+# Needs PHRASES and PROPER_NOUNS (defined ~line 1177-1186, before this point).
+# A2 units 86-90, 92-95, 97 (Block B/C/D grammar-led units), added 2026-11-15.
+NL_GLOSSES.update({
+    "zon": "the sun", "schijnt": "shines", "schijnen": "to shine",
+    "weersverwachting": "the weather forecast", "zult": "will (jij zult)", "Zal": "shall; will",
+    "beloven": "to promise", "belofte": "the promise", "beloof": "promise", "Beloof": "promise",
+    "wolk": "the cloud", "wolken": "clouds", "koekjes": "cookies; biscuits",
+    "Mededeling": "the announcement", "Jullie": "you (plural)", "huisregels": "the house rules",
+    "plastic": "the plastic", "hoeven": "to need to; to have to", "Hoef": "need (to)",
+    "kleedkamer": "the changing room", "zingen": "to sing", "gitaar": "the guitar",
+    "typen": "to type", "repareren": "to repair", "terugbellen": "to call back",
+    "Kunnen": "can; are able to (plural)", "Groetjes": "best wishes; regards",
+    "halen": "to fetch; to get", "inpakken": "to pack", "ingepakt": "packed (past participle)",
+    "pak": "pack", "pakt": "packs", "dragen": "to carry; to wear", "Wacht": "wait",
+    "Geef": "give", "opendoen": "to open (the door)", "zware": "heavy", "toets": "the test",
+    "uitgeven": "to spend", "tip": "the tip", "tips": "tips", "oefen": "practise",
+    "bedankt": "thanks", "woordvolgorde": "the word order", "verandert": "changes",
+    "Omdat": "because", "Jammer": "too bad; what a pity", "Want": "because; for",
+    "Staat": "stands; is placed", "voorop": "in front; first", "overmorgen": "the day after tomorrow",
+    "bijzin": "the subordinate clause", "gedoucht": "showered (past participle)",
+    "perfectum": "present perfect (perfectum)", "Ook": "also; too", "honger": "the hunger",
+    "thuiskomen": "to come home", "thuiskom": "come home", "thuiskwam": "came home (imperfectum)",
+    "vertel": "tell", "gebeurt": "happens", "aankomt": "arrives", "opnemen": "to pick up (the phone); to record",
+    "waarvoor": "for what; what for", "vergeet": "forget", "lijstje": "the little list",
+    "spaart": "saves", "bon": "the receipt", "korting": "the discount", "gratis": "free",
+    "krijg": "get; receive", "bezorging": "the delivery", "noor": "Noor", "omar": "Omar",
+    "briefje": "the note", "doorgeven": "to pass on", "o": "oh",
+})
+
+VERBS.update({'schijnt', 'schijnen', 'zult', 'Zal', 'beloven', 'beloof', 'Beloof', 'hoeven', 'Hoef',
+    'zingen', 'typen', 'repareren', 'terugbellen', 'Kunnen', 'halen', 'inpakken', 'ingepakt', 'pak', 'pakt',
+    'dragen', 'Wacht', 'Geef', 'opendoen', 'uitgeven', 'oefen', 'verandert', 'Staat', 'gedoucht',
+    'thuiskomen', 'thuiskom', 'thuiskwam', 'vertel', 'gebeurt', 'aankomt', 'opnemen', 'vergeet',
+    'spaart', 'krijg', 'doorgeven'})
+NOUNS.update({'zon', 'weersverwachting', 'belofte', 'wolk', 'wolken', 'koekjes', 'Mededeling', 'huisregels',
+    'plastic', 'kleedkamer', 'gitaar', 'Groetjes', 'toets', 'tip', 'tips', 'woordvolgorde', 'bijzin',
+    'perfectum', 'honger', 'lijstje', 'bon', 'korting', 'bezorging', 'briefje'})
+ADJECTIVES.update({'zware', 'gratis'})
+ADVERBS.update({'voorop', 'overmorgen'})
+PARTICLES.update({'Omdat', 'Want', 'Ook', 'o'})
+PRONOUNS.update({'Jullie'})
+PREPOSITIONS.update({'waarvoor'})
+PHRASES.update({'bedankt', 'Jammer'})
+PROPER_NOUNS.update({'noor', 'omar'})
+
+# immediately AFTER the line "PROPER_NOUNS.update({'noor', 'omar'})" (~line 1424) and BEFORE
+# "# A2 units 79 (vakantieplannen/holiday plans) and 80 ...". Only tokens of units 91 and 96
+# that are still missing (NL_GLOSSES + part of speech); everything else is already defined.
+# A2 units 91 and 96 (beginnen/stoppen/proberen; weet u waar), added 2026-11-15.
+NL_GLOSSES.update({
+    "snoepen": "to snack on sweets", "snoep": "snack on sweets (with ik)",
+    "Roken": "smoking", "rook": "smoke (with ik)", "gestopt": "stopped (past participle)",
+    "stopt": "stops", "probeert": "tries", "kijkt": "watches; looks",
+    "tv": "the TV", "Weet": "know (question form)", "Wie": "who",
+    "opent": "opens", "Pardon": "excuse me; pardon", "pardon": "excuse me; pardon",
+    "Groeten": "best wishes; regards (sign-off)",
+})
+VERBS.update({'snoepen', 'snoep', 'rook', 'gestopt', 'stopt', 'probeert', 'kijkt', 'Weet', 'opent'})
+NOUNS.update({'Roken', 'tv', 'Groeten'})
+PRONOUNS.update({'Wie'})
+PHRASES.update({'Pardon', 'pardon'})
+
 # A2 units 79 (vakantieplannen/holiday plans) and 80 (afspraak verzetten/moving
 # an appointment), added 2026-10-27.
 NL_GLOSSES.update({
@@ -3734,6 +3815,79 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "wanneer_welke_tijd": "perfectum_vs_past_perfect",
         "nadat": "nadat_clause",
         "noors_verloren_paraplu": "lost_umbrella_reading",
+        # A2 units 86-90, 92-95, 97 (Block B/C/D grammar-led units), added 2026-11-15.
+        # Shared slugs already in this dict (lotte_en_omar, noors_bericht, nadat_ik_gegeten_heb,
+        # scheidbare_werkwoorden) are intentionally not redefined.
+        "misschien": "possibility_misschien",
+        "het_weer_van_morgen": "weather_forecast_vocabulary",
+        "ik_zal_het_doen": "zullen_promise_form",
+        "zullen_of_gaan": "zullen_vs_gaan_contrast",
+        "bericht_en_mededeling": "forecast_announcement_reading",
+        "lotte_en_omar_beloven": "promise_dialogue",
+        "mag_dat": "permission_mogen",
+        "dat_moet": "obligation_moeten",
+        "hoeven_niet_te": "no_obligation_hoeven_te",
+        "zwembad_en_sportschool": "pool_gym_rules",
+        "huisregels_bibliotheek": "library_house_rules",
+        "dit_kan_ik": "ability_kunnen_statement",
+        "kun_je_dat": "ability_kunnen_question",
+        "kunnen_willen_moeten": "modal_contrast_kunnen_willen_moeten",
+        "twee_werkwoorden": "modal_plus_infinitive",
+        "misschien_kan_het": "possibility_kan_het",
+        "zou_je_kunnen": "polite_request_zou_je_kunnen",
+        "je_of_u": "polite_request_je_or_u",
+        "zal_ik": "offer_zal_ik",
+        "even_en_eens": "softener_even_eens",
+        "graag_of_nee_hoor": "accept_decline_offer",
+        "koffie_bij_lotte": "polite_request_dialogue",
+        "je_moet_rusten": "advice_moeten",
+        "je_zou_moeten": "advice_zou_moeten",
+        "moet_zou_of_beter": "advice_strength_contrast",
+        "waarom_niet": "advice_waarom_niet",
+        "bericht_van_lotte": "advice_message_reading",
+        "reden_en_gevolg": "reason_result_vocabulary",
+        "omdat_werkwoord_achteraan": "omdat_verb_final",
+        "omdat_want_of_dus": "omdat_want_dus_contrast",
+        "afspraak_verzetten": "reschedule_reasons",
+        "voordat_ik_ga": "voordat_clause",
+        "voordat_of_nadat": "voordat_nadat_contrast",
+        "wanneer_en_als": "wanneer_als_clauses",
+        "een_reisdag": "travel_day_reading",
+        "sparen_om_te": "om_te_purpose",
+        "omdat_en_zodat": "omdat_zodat_contrast",
+        "een_lijstje": "shopping_list_om_te",
+        "noors_dag": "day_plan_reading",
+        "als_het_regent": "als_condition_clause",
+        "werkwoord_achteraan": "verb_final_in_conditional",
+        "voorop_of_achteraan": "clause_order_inversion",
+        "regels_in_de_winkel": "shop_rules_conditionals",
+        "wat_zegt_hij": "reported_speech_statement_simple",
+        "ze_vraagt_of": "reported_question_of",
+        "van_ik_naar_hij": "reported_speech_pronoun_shift",
+        "een_bericht_doorgeven": "relay_message_dialogue",
+        "een_briefje_lezen": "note_reading_reported",
+        "de_collega_belt": "colleague_call_dialogue",
+# Lesson slug "lotte_en_omar" (unit 96 lesson 6) is already defined and is intentionally not redefined.
+        # A2 unit 91 (beginnen/stoppen/proberen), added 2026-11-15.
+        "ik_begin_te_sporten": "beginnen_te_infinitive",
+        "stoppen_met": "stoppen_met_activity",
+        "proberen_en_vergeten": "proberen_vergeten_te",
+        "hij_zit_te_lezen": "posture_verb_te_infinitive",
+        "noors_plan": "habit_plan_reading",
+        "lotte_en_omar_sporten": "habit_progress_dialogue",
+        # A2 unit 96 (weet u waar), added 2026-11-15.
+        "weet_u_waar": "indirect_question_waar",
+        "wanneer_en_hoe_laat": "indirect_question_wanneer_hoe_laat",
+        "weet_u_of": "indirect_question_of",
+        "kunt_u_mij_zeggen": "polite_indirect_request",
+        "omars_bericht": "indirect_question_message_reading",
+
+#   python3 scripts/backfill_lexemes_en_nl.py --dry-run
+# Exit 0 plus "Lexeme backfill dry run: ..." expected. NOTE: --dry-run only covers units 91/96 once
+# their realization paths are listed in scripts/manifest.d/content/en-nl-a2.txt (they were not at
+# 2026-11-15). Verified on a throw-away copy with both parts applied: all 681 introduced tokens of
+# units 91+96 resolve (gloss, part of speech, nl_agreement_tags for every lesson). Before the paste
+# the same check fails with: missing explicit Dutch gloss for 'Groeten' (and 14 more tokens).
         # A2 unit 79 (vakantieplannen/holiday plans), added 2026-10-27.
         "wat_ga_je_doen": "holiday_plans_vocabulary",
         "van_plan_zijn": "intention_van_plan",
