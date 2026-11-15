@@ -1701,6 +1701,56 @@ POS_SETS["adverb"] |= {"temprano", "jamás", "repente"}
 POS_SETS["adjective"] |= {"mojado", "mojada", "mala"}
 # --- end A2 Block A ---
 
+# --- A2 Block B/C (units 98-103): future, rules, ability, requests, advice, habits ---
+A2_BLOCK_BC_GLOSSES: dict[str, str] = {
+    "sabemos": "we know (how to)", "saben": "they know (how to)", "tocar": "to play (an instrument); to touch",
+    "guitarra": "guitar", "venimos": "we come", "vienen": "they come", "libres": "free (plural)",
+    "ocupados": "busy (masc. plural)", "das": "you give (informal)", "bolígrafo": "pen",
+    "pasas": "you pass; you hand over (informal)", "sal": "salt", "decirme": "to tell me",
+    "señora": "madam; Mrs.", "echo": "I throw; I put (echar una mano: to lend a hand)",
+    "ayudarte": "to help you", "deberíamos": "we should", "duermes": "you sleep (informal)",
+    "bebes": "you drink (informal)", "haré": "I will do; I will make", "intentaré": "I will try",
+    "comes": "you eat (informal)", "empiezo": "I start", "empiezas": "you start (informal)",
+    "tenis": "tennis", "dejo": "I stop; I leave", "dulces": "sweets", "dejas": "you stop; you leave (informal)",
+    "dejamos": "we stop; we leave", "dejado": "stopped; left (past participle)", "intento": "I try",
+    "intentas": "you try (informal)", "intenta": "he or she tries", "vuelvo": "I come back; I do again (volver a)",
+    "acabas": "you finish (informal; acabar de: to have just)", "acaba": "he or she finishes (acaba de: has just)",
+    "acabamos": "we finish (acabamos de: we have just)", "intentar": "to try", "acabar": "to finish (acabar de: to have just)",
+    "olvidado": "forgotten (past participle)", "olvidar": "to forget", "come": "he or she eats", "rutina": "routine",
+    "mirar": "to look at; to watch", "hablaré": "I will speak", "hablarás": "you will speak (informal)",
+    "hablará": "he or she will speak", "hablaremos": "we will speak", "hablarán": "they will speak",
+    "comeré": "I will eat", "comerás": "you will eat (informal)", "comerá": "he or she will eat",
+    "comeremos": "we will eat", "comerán": "they will eat", "viviré": "I will live",
+    "vivirás": "you will live (informal)", "vivirá": "he or she will live", "viviremos": "we will live",
+    "vivirán": "they will live", "nevar": "to snow", "nevará": "it will snow", "hará": "it will be (weather); he or she will do",
+    "habrá": "there will be", "tendré": "I will have", "podré": "I will be able to", "saldré": "I will leave; I will go out",
+    "vendré": "I will come", "tendrás": "you will have (informal)", "tendrá": "he or she will have",
+    "tendremos": "we will have", "tendrán": "they will have", "podrás": "you will be able to (informal)",
+    "podrá": "he or she will be able to", "podremos": "we will be able to", "podrán": "they will be able to",
+    "saldrás": "you will leave (informal)", "saldrá": "he or she will leave", "saldremos": "we will leave",
+    "saldrán": "they will leave", "vendrás": "you will come (informal)", "vendrá": "he or she will come",
+    "vendremos": "we will come", "vendrán": "they will come", "cielo": "sky", "comprará": "he or she will buy",
+    "prometo": "I promise", "llegaré": "I will arrive", "llevará": "he or she will take; will bring",
+    "llevarás": "you will take; you will bring (informal)", "llevaré": "I will take; I will bring",
+    "llamarás": "you will call (informal)", "fumar": "to smoke", "aparcar": "to park", "foto": "photo",
+    "tienen": "they have", "prohibido": "forbidden",
+}
+A2_BLOCK_BC_VERBS = (
+    "sabemos saben tocar venimos vienen das pasas decirme echo ayudarte deberíamos duermes bebes haré intentaré comes "
+    "empiezo empiezas dejo dejas dejamos dejado intento intentas intenta vuelvo acabas acaba acabamos intentar acabar "
+    "olvidado olvidar come mirar hablaré hablarás hablará hablaremos hablarán comeré comerás comerá comeremos comerán "
+    "viviré vivirás vivirá viviremos vivirán nevar nevará hará habrá tendré podré saldré vendré tendrás tendrá tendremos "
+    "tendrán podrás podrá podremos podrán saldrás saldrá saldremos saldrán vendrás vendrá vendremos vendrán comprará "
+    "prometo llegaré llevará llevarás llevaré llamarás fumar aparcar tienen"
+).split()
+for _tok, _gloss in A2_BLOCK_BC_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS["verb"] |= set(A2_BLOCK_BC_VERBS)
+POS_SETS["adjective"] |= {"libres", "ocupados", "prohibido"}
+POS_SETS["pronoun"] |= set()
+POS_SETS["noun"] = POS_SETS.get("noun", set())
+# --- end A2 Block B/C ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_es_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_es_b2c1.json"
