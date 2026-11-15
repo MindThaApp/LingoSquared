@@ -1289,6 +1289,12 @@ B1_SENSE_FIXES: dict[str, str] = {
 }
 
 GLOSSES = EN_TARGET_TO_HI_GLOSS
+# BEGIN reverse-a1-depth
+A1_DEPTH_GLOSSES = {"11:30": "11:30", "9:15": "9:15", "Boston": "बॉस्टन", "Luna": "लूना", "Max": "मैक्स", "always": "हमेशा", "arrival": "आगमन", "arrive": "पहुँचना", "arrives": "पहुँचता है", "ate": "खाया (खाना का भूतकाल)", "ball": "गेंद", "bigger": "बड़ा; ज़्यादा बड़ा", "bird": "पक्षी; चिड़िया", "book": "किताब", "both": "दोनों", "car": "कार; गाड़ी", "cat": "बिल्ली", "cheaper": "ज़्यादा सस्ता", "cheapest": "सबसे सस्ता", "cooking": "खाना बनाना", "cooks": "खाना बनाता है", "departure": "प्रस्थान", "did": "किया", "different": "अलग", "dog": "कुत्ता", "ever": "कभी", "expensive": "महँगा", "faster": "ज़्यादा तेज़", "fish": "मछली", "friendly": "मिलनसार", "games": "खेल", "goes": "जाता है", "hate": "नफ़रत करना", "hobbies": "शौक़", "leaves": "छोड़ता है; रवाना होता है", "likes": "पसंद करता है", "loves": "बहुत पसंद करता है", "milder": "ज़्यादा हल्का; नरम", "mornings": "सुबहें", "named": "नाम का", "never": "कभी नहीं", "nicer": "ज़्यादा अच्छा", "often": "अक्सर", "paint": "रंगना; पेंट करना", "painting": "चित्रकारी", "paints": "पेंट करता है", "pet": "पालतू जानवर", "pets": "पालतू जानवर", "platform": "प्लेटफ़ॉर्म", "play": "खेलना", "prefer": "ज़्यादा पसंद करना", "prefers": "ज़्यादा पसंद करता है", "rarely": "कभी-कभार", "reading": "पढ़ना", "red": "लाल", "round": "आना-जाना", "running": "दौड़ना", "s": "का/की (संबंध चिह्न)", "sister's": "बहन की", "smaller": "छोटा; ज़्यादा छोटा", "still": "अब भी", "strong": "मज़बूत", "swim": "तैरना", "than": "से (तुलना में)", "thinks": "सोचता है", "ticket": "टिकट", "together": "साथ में", "train": "ट्रेन", "trip": "यात्रा", "very": "बहुत", "video": "वीडियो", "visited": "गया/घूमा (मिलने जाने का भूतकाल)", "walks": "सैर", "watch": "देखना", "watched": "देखा", "way": "रास्ता; तरफ़", "week": "हफ़्ता; सप्ताह", "white": "सफ़ेद", "why": "क्यों", "worked": "काम किया", "writer's": "लेखक का", "yesterday": "कल"}
+A1_DEPTH_POS = {"ball": "noun", "swim": "verb", "walks": "noun"}
+EN_POS = {**EN_POS, **A1_DEPTH_POS}
+GLOSSES = {**GLOSSES, **A1_DEPTH_GLOSSES}
+# END reverse-a1-depth
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
