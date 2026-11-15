@@ -227,6 +227,9 @@ def dutch_vocab() -> frozenset:
                 walk(v)
     for f in sorted((CONTENT / "realizations/nl").glob("*.yaml")):
         walk(load(f))
+    # Dutch words that are also ordinary English / French loans in English overlays (tip, 'bon appetit'):
+    # flagging them as Dutch leftovers is a false positive (added with nl A2 units 90 and 95).
+    voc -= {"tip", "bon"}
     return frozenset(voc)
 
 
