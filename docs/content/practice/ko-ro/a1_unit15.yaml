@@ -1,0 +1,490 @@
+schema_version: '1.0'
+pack_key: practice.ko-ro.a1.unit15
+source_language: ko
+target_language: ro
+unit_content_key: ro.a1.unit15.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ro by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_tren
+    - w_pleacă
+    - w_peron
+    - w_trenul
+    - w_peronul
+    - w_bilet
+    - w_București
+    - w_drum
+    - w_bun
+slot_presets:
+  a_pool: &id001
+    language_code: ro
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_trenul
+      - w_peronul
+  all6: &id006
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tren
+      - w_pleacă
+      - w_peron
+      - w_bilet
+      - w_București
+      - w_drum
+  b_pool: &id005
+    language_code: ro
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_bilet
+      - w_București
+      - w_drum
+      - w_tren
+      - w_peron
+  c_pool: &id008
+    language_code: ro
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_drum
+      - w_bun
+      - w_tren
+      - w_bilet
+  t_trenul: &id004
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_trenul
+  t_peronul: &id003
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_peronul
+  t_pleaca: &id002
+    language_code: ro
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_pleacă
+  t_bilet: &id007
+    language_code: ro
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_bilet
+  t_bun: &id009
+    language_code: ro
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_bun
+templates:
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.choose.001
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Trenul과 peronul은 tren과 peron 끝에 관사 -ul을 붙인 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.listen.002
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Pleacă는 '떠나요'를 뜻하는 동사로, La ce oră pleacă trenul?에서 trenul과 함께 쓰여요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.order.003
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: La ce oră {item} trenul?
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră {item} trenul?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Pleacă는 그 사람, 그녀, 그것에 모두 쓸 수 있어서 trenul과 함께 쓸 수 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.order.004
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: word_order
+  frame:
+    text: Trenul este la {item} trei.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul은 peron에 관사가 붙은 형태라서 '그 승강장'을 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.fill.005
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: fill_in_blank
+  frame:
+    text: Trenul {item} la ora nouă. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Pleacă는 3인칭 형태로, '떠나요'를 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.translate.006
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: 기차는 몇 시에 떠나요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La ce oră pleacă {item}?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Trenul은 tren에 -ul이 붙은 형태로 '그 기차'예요. ora nouă는 시각을 알려 줘요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.translate.007
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: 기차는 9시에 떠나요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul {item} la ora nouă.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: La ora nouă는 시각을 나타내요. 동사는 그 사람, 그녀, 그것에 모두 같은 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson01.translate.008
+  lesson_content_key: ro.a1.unit15.lesson01.trenul_pleaca
+  type: translation
+  frame:
+    text: 기차는 3번 승강장에 있어요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Trenul este la {item} trei.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Peronul trei는 '3번 승강장'이라는 뜻이고, 관사는 명사에 붙어 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.choose.001
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bilet는 '표'이고, București는 수도예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.listen.002
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bilet는 중성이에요. 단수는 un bilet, 복수는 două bilete예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.match.003
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ro
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tren, peron, bilet, drum은 명사이고, pleacă는 동사이며, București는 고유 명사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.order.004
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: word_order
+  frame:
+    text: Am un {item}.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Am un {item}.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Bilet는 중성이고, 중성 명사는 단수에서 un을 취해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.fill.005
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: fill_in_blank
+  frame:
+    text: Aș dori un {item} la București, vă rog. ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Aș dori un bilet은 정중한 요청이에요. vă rog는 dumneavoastră에 어울려요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.translate.006
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: 부쿠레슈티행 표 한 장 주세요. (격식체, dumneavoastră로 부르는 사람에게)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aș dori un {item} la București, vă rog.
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Aș dori에 un과 명사를 더하면 정중한 요청이 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.translate.007
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: 부쿠레슈티행 표는 얼마예요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cât costă un {item} la București?
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Cât costă는 하나의 가격을 묻기 때문에 동사가 단수로 유지돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson02.translate.008
+  lesson_content_key: ro.a1.unit15.lesson02.un_bilet_va_rog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 이 단어들은 모두 여행에 나오는 사물, 행동, 장소를 가리켜요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson03.choose.001
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Drum bun은 누군가에게 즐거운 여행을 빌어 주는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson03.order.002
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: word_order
+  frame:
+    text: Drum {item}, Mihai!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum은 중성이라서 단수에서 형용사가 남성형 bun을 취해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson03.fill.003
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: fill_in_blank
+  frame:
+    text: Drum {item}, Mihai! ({hint})
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 이 작별 인사에서는 bun이 명사 뒤에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ro.ro.a1.unit15.lesson03.translate.004
+  lesson_content_key: ro.a1.unit15.lesson03.la_gara
+  type: translation
+  frame:
+    text: 미하이, 즐거운 여행 되세요!
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Drum {item}, Mihai!
+      language_code: ro
+      direction: ltr
+  feedback_frame:
+    text: Drum bun은 떠나는 사람에게 하는 고정된 인사말이에요.
+    language_code: ko
+    direction: ltr

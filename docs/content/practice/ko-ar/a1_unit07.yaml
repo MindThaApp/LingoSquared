@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit07
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ماء
+    - w_قهوة
+    - w_خبز
+    - w_أريد
+    - w_فضلك
+    - w_وقهوة
+    - w_تريدين
+    - w_خبزا
+    - w_قطعة
+    - w_واحدة
+    - w_تفضلي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  l01m: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+      - w_وقهوة
+      - w_خبز
+      - w_أريد
+      - w_فضلك
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_ماء
+      - w_قهوة
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تريدين
+      - w_خبزا
+      - w_قطعة
+      - w_واحدة
+      - w_تفضلي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ماء
+  qahwa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قهوة
+  wqahwa: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_وقهوة
+  fadlak: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_فضلك
+  turidin: &id011
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تريدين
+  khubza: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خبزا
+  qita: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_قطعة
+  wahida: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_واحدة
+  tafaddali:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_تفضلي
+templates:
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.choose.001
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أريد는 '저는 원해요'라는 뜻이에요. 남자든 여자든 같은 형태를 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.listen.002
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ماء는 물, قهوة는 커피예요. خبز(빵)는 주문할 수 있는 세 번째 품목이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.match.003
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: و(그리고)는 다음 단어에 붙어요. وقهوة는 '그리고 커피'예요. من فضلك는 공손하게 부탁할 때 쓰는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.order.004
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أريد 뒤에 명사를 붙이면 '저는 ~을 원해요'가 돼요. من فضلك(부탁드려요)는 요청을 마무리해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.fill.005
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 여기서 و는 다음 단어의 일부로 붙어요. وقهوة는 '그리고 커피'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.fill.006
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: fill_in_blank
+  frame:
+    text: أريد ماء وقهوة من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: من فضلك는 직역하면 '당신의 호의로부터'이고, 일상에서 '부탁드려요'라고 말하는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.translate.007
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أريد는 '저는 원해요'라는 뜻의 동사예요. 나머지 단어들은 요청할 수 있는 것들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.translate.008
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: 물 주세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 아랍어에서는 명사 앞에 '한'에 해당하는 관사를 쓰지 않아요. أريد ماء는 '저는 물을 원해요'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson01.translate.009
+  lesson_content_key: ar.a1.unit07.lesson01.food_drink
+  type: translation
+  frame:
+    text: 커피 주세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: قهوة는 여성형 어미로 흔한 ة로 끝나요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.listen.001
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تريدين은 '원하다'의 여성에게 하는 2인칭 형태예요. 남성에게는 어미가 달라요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.choose.002
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: قطعة는 '조각'이라는 뜻이에요. قطعة خبز는 '빵 한 조각'이고, 뒤의 واحدة(하나)는 이에 맞춰 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.order.003
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: هل تريدين {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل تريدين {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل은 평서문을 예/아니요 질문으로 바꿔요. خبزا는 원하는 대상으로서의 '빵'이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.order.004
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: word_order
+  frame:
+    text: نعم، أريد قطعة خبز {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، أريد قطعة خبز {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة는 여성형 '하나'로, 여성 단어 قطعة에 맞춘 거예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.fill.005
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: fill_in_blank
+  frame:
+    text: هل {item} خبزا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تريدين은 여성에게 하는 '원해요'라서, هل تريدين خبزا؟는 여성에게 '빵을 드릴까요?'라고 묻는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.translate.006
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفضلي는 여성에게 하는 말로 '여기 있어요'라는 뜻이에요. 남성에게는 어미가 달라요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.translate.007
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: 빵을 드릴까요? (여성에게 하는 말)
+    language_code: ko
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 어미 -ين은 여성에게 하는 2인칭 형태를 나타내고, 원하는 대상인 빵은 خبزا로 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit07.lesson02.translate.008
+  lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+  type: translation
+  frame:
+    text: 빵 한 조각
+    language_code: ko
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} خبز {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: واحدة는 قطعة 뒤에 와서 그 여성형에 맞춰요.
+    language_code: ko
+    direction: ltr

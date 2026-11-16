@@ -1,0 +1,508 @@
+schema_version: '1.0'
+pack_key: practice.ko-pl.a1.unit06
+source_language: ko
+target_language: pl
+unit_content_key: pl.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chleb
+    - w_masło
+    - w_ser
+    - w_woda
+    - w_mleko
+    - w_kawa
+    - w_herbata
+    - w_kawę
+    - w_herbatę
+    - w_wodę
+    - w_zupa
+    - w_sok
+    - w_cukier
+    - w_rachunek
+    - w_lubić
+    - w_lubię
+    - w_lubi
+    - w_zupę
+    - w_danie
+    - w_polecać
+    - w_polecam
+    - w_poleca
+    - w_co
+    - w_już
+    - w_podaję
+slot_presets:
+  u06_l1: &id001
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_chleb
+      - w_masło
+      - w_ser
+      - w_woda
+      - w_mleko
+      - w_kawa
+      - w_herbata
+  u06_ask: &id002
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_mleko
+      - w_masło
+  s_herbate: &id003
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_herbatę
+  s_wode: &id004
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_wodę
+  u06_l2: &id005
+    language_code: pl
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_zupa
+      - w_sok
+      - w_cukier
+      - w_rachunek
+      - w_lubić
+      - w_lubię
+      - w_lubi
+  u06_like: &id006
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_zupę
+      - w_kawę
+      - w_herbatę
+      - w_wodę
+      - w_chleb
+      - w_ser
+      - w_sok
+  s_lubi: &id007
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lubi
+  s_zupe: &id008
+    language_code: pl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_zupę
+  u06_l3: &id009
+    language_code: pl
+    part_of_speech:
+    - pronoun
+    - particle
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_danie
+      - w_polecać
+      - w_polecam
+      - w_poleca
+      - w_co
+      - w_już
+      - w_podaję
+  s_podaje: &id010
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_podaję
+  s_poleca: &id011
+    language_code: pl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_poleca
+templates:
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.choose.001
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 폴란드어 명사에는 모두 성이 있습니다. chleb와 ser는 남성, kawa, herbata, woda는 여성, masło와 mleko는 중성입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.listen.002
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 폴란드어에는 관사가 없어서 chleb은 '빵'도 되고 '그 빵'도 될 수 있습니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.order.003
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: word_order
+  frame:
+    text: Proszę o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: proszę o 뒤에서 -a로 끝나는 여성 명사는 -ę로 바뀌지만(kawa, kawę), chleb나 mleko 같은 남성·중성 명사는 그대로입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.fill.004
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: fill_in_blank
+  frame:
+    text: Proszę o {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Proszę o에 목적격 형태를 붙이면 무언가를 정중하게 부탁하는 표현이 됩니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.translate.005
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: 물 좀 주세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Proszę o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: proszę o 뒤의 명사는 목적격 형태가 됩니다. woda는 wodę가 됩니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson01.translate.006
+  lesson_content_key: pl.a1.unit06.lesson01.jedzenie_i_picie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Masło와 mleko는 중성의 전형적인 어미인 -o로 끝나고, chleb와 ser는 자음으로 끝나는 남성 명사입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.choose.001
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lubić는 사전형이고, lubię는 자기 자신에 대해, lubi는 다른 사람에 대해 말할 때 씁니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.match.002
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id005
+    second: *id005
+    third: *id005
+    fourth: *id005
+    fifth: *id005
+    sixth: *id005
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 동사 어미가 인칭을 나타냅니다. 나는 -ę(lubię), 그 사람(그, 그녀)은 -i(lubi)입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.order.003
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: word_order
+  frame:
+    text: Lubię {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: lubię 뒤에서 좋아하는 대상은 목적격 형태가 됩니다. zupa는 zupę가 되고, sok, chleb, ser는 그대로입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.fill.004
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: fill_in_blank
+  frame:
+    text: On {item} zupę. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Lubi는 그 사람(그, 그녀)에게 쓰는 형태라서 대명사 on과 함께 쓸 수 있습니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.translate.005
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: 저는 수프를 좋아해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Lubię {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: -a로 끝나는 여성 명사는 목적어일 때 -ę가 되므로 zupa는 zupę가 됩니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson02.translate.006
+  lesson_content_key: pl.a1.unit06.lesson02.wiecej_jedzenia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: lubię와 lubi 한 쌍이 보여 주는 규칙은 인칭마다 어미가 다르다는 것입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.listen.001
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Polecać는 lubić와 같은 방식으로 쓰입니다. polecam은 제가 추천한다는 뜻이고, poleca는 그 사람이 추천한다는 뜻이며 pan이나 pani와 함께 쓰면 당신이 추천한다는 뜻입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.match.002
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Co pan poleca?에는 3인칭 형태 poleca를 씁니다. pan과 pani에는 3인칭 동사가 따르기 때문입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.order.003
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: word_order
+  frame:
+    text: Polecam {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Polecam {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: Polecam 뒤에서도 lubię처럼 명사가 목적격 형태가 됩니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.fill.004
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: fill_in_blank
+  frame:
+    text: Już {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 웨이터가 직접 서빙하는 사람이므로 1인칭 형태 podaję로 말합니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.translate.005
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: 무엇을 추천하세요? (남성에게, 격식체)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Co pan {item}?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: pan이나 pani와 함께 쓰는 동사는 poleca이며, 3인칭과 같은 형태입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit06.lesson03.translate.006
+  lesson_content_key: pl.a1.unit06.lesson03.w_restauracji
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Już는 '이미'라는 뜻도 되고, Już podaję에서처럼 '곧바로'라는 뜻도 됩니다.
+    language_code: ko
+    direction: ltr

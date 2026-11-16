@@ -1,0 +1,474 @@
+schema_version: '1.0'
+pack_key: practice.ko-ru.a1.unit09
+source_language: ko
+target_language: ru
+unit_content_key: ru.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Пушкина
+    - w_аптека
+    - w_банк
+    - w_библиотека
+    - w_большое
+    - w_вашей
+    - w_вокзал
+    - w_где
+    - w_гостиница
+    - w_моей
+    - w_находится
+    - w_ресторан
+    - w_улица
+    - w_улице
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+      - w_банк
+      - w_аптека
+  p2: &id002
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_находится
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_улице
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_аптека
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_где
+      - w_находится
+      - w_улица
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_банк
+      - w_аптека
+      - w_вокзал
+      - w_гостиница
+      - w_ресторан
+      - w_библиотека
+  p7: &id007
+    language_code: ru
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Пушкина
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_гостиница
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_вашей
+      - w_моей
+      - w_большое
+      - w_библиотека
+      - w_банк
+  p10: &id010
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_вашей
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_моей
+  p12: &id012
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_большое
+templates:
+- content_key: practice.ko-ru.ru.a1.unit09.lesson01.choose.001
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Где는 "어디", находится는 "위치해 있다"라는 뜻이에요. 함께 쓰면 장소의 위치를 묻는 말이 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson01.order.002
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: word_order
+  frame:
+    text: Где {item} магазин?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где {item} магазин?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Находится는 3인칭 단수 동사형이라서 магазин 같은 단수 명사와 함께 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson01.fill.003
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: fill_in_blank
+  frame:
+    text: Магазин на Тверской {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 장소를 나타내는 на("~에") 뒤에서는 улица가 улице로 바뀌어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson01.translate.004
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: 약국은 어디에 있어요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...?는 장소가 어디 있는지 묻는 기본 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson01.translate.005
+  lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Где는 "어디", улица는 "거리, 길"이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.choose.001
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Банк, вокзал, ресторан은 남성 명사이고, аптека, гостиница, библиотека는 여성 명사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.listen.002
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 이 장소 이름들은 명사예요. Где находится банк?처럼 명사 앞에 관사 같은 단어를 따로 붙일 필요가 없어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.match.003
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Банк와 ресторан은 '뱅크', '레스토랑'과 소리가 비슷해서 알아보기 쉬워요. аптека는 '약국'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.order.004
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: word_order
+  frame:
+    text: Где находится {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Где находится ...?는 단수 장소 명사라면 어떤 것에든 쓸 수 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.fill.005
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: fill_in_blank
+  frame:
+    text: Банк на улице {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 사람 이름을 딴 거리는 이름을 생격으로 써요. улица Пушкина는 '푸시킨 거리'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson02.translate.006
+  lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+  type: translation
+  frame:
+    text: 호텔은 어디에 있어요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Где находится {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Гостиница는 '호텔'을 뜻하는 여성 명사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.choose.001
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Вашей와 моей는 ваш와 мой의 여성형이고, на 뒤에서 쓰여요: на вашей улице, на моей улице.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.order.002
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: word_order
+  frame:
+    text: Что есть на {item} улице?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Вашей는 여성 명사 улице에 맞춘 형태예요. 존칭 вы로 묻는 정중한 질문이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.fill.003
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: На {item} улице есть банк. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Моей는 моя가 на 뒤에서 취하는 형태예요. улица가 여성 명사이고 전치격이기 때문이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.fill.004
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: fill_in_blank
+  frame:
+    text: Спасибо {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id012
+    hint: *id012
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Спасибо большое는 '정말 고맙습니다'라고 따뜻하게 감사를 전하는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.translate.005
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: 당신의 거리에는 무엇이 있나요? (존칭)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что есть на {item} улице?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Что есть на вашей улице?는 거리에 무엇이 있는지 묻는 말이에요. вы 형태인 вашей를 써서 공손해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.translate.006
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: 정말 감사합니다.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Спасибо {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Большое는 중성 명사 спасибо에 맞춰서 -ое로 끝나요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit09.lesson03.translate.007
+  lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+  type: translation
+  frame:
+    text: 우리 동네 거리에는 은행이 하나 있어요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На {item} улице есть банк.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У меня есть는 소유를 말할 때 쓰고, 거리에 무언가가 있다고 할 때는 На моей улице есть를 써요.
+    language_code: ko
+    direction: ltr
