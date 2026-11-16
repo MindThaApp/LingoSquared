@@ -1,0 +1,470 @@
+schema_version: '1.0'
+pack_key: practice.ja-ar.a1.unit04
+source_language: ja
+target_language: ar
+unit_content_key: ar.a1.unit04.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_تاريخ
+    - w_اليوم
+    - w_مايو
+    - w_يونيو
+    - w_الخامس
+    - w_السادس
+    - w_درس
+    - w_في
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_تاريخ
+      - w_اليوم
+      - w_مايو
+      - w_يونيو
+  l02mc: &id005
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_الخامس
+      - w_السادس
+      - w_درس
+      - w_في
+  words: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_تاريخ
+      - w_اليوم
+      - w_مايو
+      - w_يونيو
+      - w_الخامس
+      - w_السادس
+      - w_درس
+      - w_في
+  months: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_مايو
+      - w_يونيو
+  ords: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_الخامس
+      - w_السادس
+  tareekh: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تاريخ
+  yawm:
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_اليوم
+  fi: &id008
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_في
+  khamis: &id009
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_الخامس
+  sadis: &id011
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_السادس
+  may: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مايو
+  june: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_يونيو
+templates:
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.choose.001
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: اليوم は文字どおり「その日」で、定冠詞 ال が前にくっついています。これがアラビア語の「今日」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.match.002
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 月の名前 مايو と يونيو は、国際的な暦の呼び方(5月、6月)に対応しています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.order.003
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: word_order
+  frame:
+    text: اليوم الخامس من {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم الخامس من {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: アラビア語の日付は、まず日、次に من(〜の)、そして月の順に読みます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.fill.004
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: fill_in_blank
+  frame:
+    text: ما {item} اليوم؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ما تاريخ اليوم؟ は、今日の日付をたずねるときの一般的な言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.translate.005
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 月の名前は1語で書きます。مايو は5月、يونيو は6月です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.translate.006
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: translation
+  frame:
+    text: 今日は何日ですか?
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ما {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 日付の質問は、ما(何)と تاريخ(日付)と اليوم(今日)でできています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.listen.001
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الخامس(5番目)のような序数には ال がつきます。ここでは男性名詞 يوم(日)を指すので男性形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.match.002
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: في は「〜に・〜で」という意味で、独立した1語として書きます。次の語にくっつく ب とは違います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.order.003
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: word_order
+  frame:
+    text: اليوم {item} من مايو.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {item} من مايو.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 序数には ال がつきます。الخامس は「5番目」、السادس は「6番目」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.fill.004
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: fill_in_blank
+  frame:
+    text: اليوم الخامس من {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 月は من の後ろに来るので、اليوم الخامس من يونيو は「今日は6月5日です」という意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.order.005
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: word_order
+  frame:
+    text: الدرس {item} الخامس من مايو.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس {item} الخامس من مايو.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 日付の前の في は「その日に」という意味です:في الخامس من مايو。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.translate.006
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: في の後ろの語は普通の名詞と同じように扱います。في الدرس は「レッスンで」という意味で、ال が特定のものを表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.translate.007
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: 今日は5月5日です。
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id009
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {a} من {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 「5番目」は الخامس、「6番目」は السادس です。どちらも يوم(日)を指すので男性形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.translate.008
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: 今日は6月6日です。
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اليوم {a} من {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 「6番目」は السادس です。ほかの序数と同じく、前に ال がつきます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson01.listen.007
+  lesson_content_key: ar.a1.unit04.lesson01.date_words
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 月にはそれぞれ名前がありますが、日と月は من(〜の)でつなぎます:الخامس من مايو。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.choose.009
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 日付の前の في は「その日に」という意味で、ال は序数(5番目、6番目など)につきます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit04.lesson02.translate.010
+  lesson_content_key: ar.a1.unit04.lesson02.state_dates
+  type: translation
+  frame:
+    text: レッスンは5月5日です。
+    language_code: ja
+    direction: ltr
+  slots:
+    f: *id008
+    d: *id009
+    m: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الدرس {f} {d} من {m}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: レッスンの日付では、序数の前に في(〜に)を使います:الدرس في الخامس من مايو。
+    language_code: ja
+    direction: ltr

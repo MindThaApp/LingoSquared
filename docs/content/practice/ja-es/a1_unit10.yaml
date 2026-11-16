@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.ja-es.a1.unit10
+source_language: ja
+target_language: es
+unit_content_key: es.a1.unit10.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u10
+    - es_a1_u10_l01
+    - w_calor
+    - w_frío
+    - w_llueve
+    - w_nublado
+    - w_porque
+    - w_demasiado
+    - w_razón
+    - w_tienda
+slot_presets:
+  weather: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u10_l01
+  nouns: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u10
+  content: &id009
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  words: &id010
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  others: &id011
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u10
+  calor: &id003
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_calor
+  frio: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_frío
+  llueve: &id005
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_llueve
+  nublado: &id006
+    language_code: es
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_nublado
+  porque: &id007
+    language_code: es
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_porque
+  demasiado: &id008
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_demasiado
+  razon: &id012
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_razón
+  tienda: &id013
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tienda
+templates:
+- content_key: practice.ja-es.es.a1.unit10.lesson01.choose.001
+  lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Tiempo は「天気」と「時間」の両方の意味があります。¿Qué tiempo hace? は天気をたずねる文です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson01.listen.002
+  lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lluvia は名詞で「雨」、llueve は動詞で「雨が降る」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson02.order.001
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: word_order
+  frame:
+    text: En julio hace {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En julio hace {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: スペイン語の天気表現では hacer のあとに名詞を置きます。hace calor は直訳すると「暑さを作る」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson02.translate.002
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: translation
+  frame:
+    text: 12月は寒いです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En diciembre hace {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: ここでの frío は hace のあとに来る名詞です。「とても寒い」は hace mucho frío で、muy frío とは言いません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson02.fill.003
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: fill_in_blank
+  frame:
+    text: Hoy {item} y hace frío. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Llover には主語が要りません。llueve だけで「雨が降る」「雨が降っている」という意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson02.order.004
+  lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+  type: word_order
+  frame:
+    text: Hoy está {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoy está {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 今日は曇りです。Nublado は形容詞なので、hace ではなく está と一緒に使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson04.fill.001
+  lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+  type: fill_in_blank
+  frame:
+    text: Necesitamos agua {item} hace calor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Porque は1語でアクセント記号がなく、「なぜなら」の意味です。¿Por qué? は2語でアクセント記号があり、「なぜ」とたずねます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson04.translate.002
+  lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+  type: translation
+  frame:
+    text: 7月は暑すぎます。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: En julio hace {item} calor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Demasiado は「〜すぎる」という意味で、名詞の前に置きます:demasiado calor。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson05.match.001
+  lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Es importante + 不定詞で、助言を表します:es importante llevar agua。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson05.translate.002
+  lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: スペイン語の天気の語:sol、lluvia、viento、nube は名詞で、nublado は形容詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson06.choose.001
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Prefiero は preferir から来ています。e が ie に変わります:prefiero、prefieres。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson06.translate.002
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: translation
+  frame:
+    text: 君の言うとおりだよ。(親しい相手に)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tienes {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: スペイン語では「正しい」と言う代わりに「理由を持っている」と表現します:tener razón。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit10.lesson06.order.003
+  lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+  type: word_order
+  frame:
+    text: Hay una {item} cerca de aquí.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hay una {item} cerca de aquí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: この近くにお店があります。Tienda は女性名詞なので una をつけます。
+    language_code: ja
+    direction: ltr
