@@ -104,7 +104,7 @@ describe("ConversationRunner", () => {
     expect(await screen.findByText(/almost_feedback.title_romanized/, { selector: ".almost-title" })).toBeInTheDocument();
     // Input is still open for the retry; the reply was not counted correct.
     expect(screen.getByPlaceholderText("practice.conversation_reply_placeholder")).toBeInTheDocument();
-    expect(onAnswered).toHaveBeenLastCalledWith(false, 0);
+    expect(onAnswered).not.toHaveBeenCalled();
     await sendReply("goed");
     await waitFor(() => expect(onAnswered).toHaveBeenLastCalledWith(true, 5));
   });
