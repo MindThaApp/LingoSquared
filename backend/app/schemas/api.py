@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_serializer, model_validator
 from app.models.entities import CEFRLevel, ExerciseType, UnitSection
 
 ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","app_bug","general_feedback","other"]
@@ -123,7 +123,17 @@ class AdminUserCreateOut(BaseModel): user:AdminUserOut; temporary_password:str
 class AdminPasswordResetOut(BaseModel): temporary_password:str
 class AdminUserUnlockOut(BaseModel): completed_lessons:int; passed_checkpoints:int; introduced_lexemes:int
 class LanguageOut(ORM): code:str; name:str; native_name:str; script:Literal["latin","cyrillic","han","arabic","devanagari","hangul","japanese"]; direction:Literal["ltr","rtl"]
-class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
+class TextBlock(BaseModel):
+    text:str; language_code:str; direction:Literal["ltr","rtl"]; speaker:str|None=None
+    # Pronunciation addition (CONTRACT.md, docs/content/translit/SCHEME.md): optional Latin
+    # romanization of `text`, attached at compile time. Omitted from serialization when absent so
+    # content without it stays byte-identical (no import churn).
+    translit:str|None=None
+    @model_serializer(mode="wrap")
+    def _omit_empty_translit(self, handler):
+        data=handler(self)
+        if data.get("translit") is None: data.pop("translit",None)
+        return data
 # 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):
 # optional example sentences showing the card's word in real context —
 # additive, cards without examples serialize exactly as before.

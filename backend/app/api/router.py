@@ -150,6 +150,7 @@ from app.review.grading import (
     is_arabic_hamza_only_difference,
     select_feedback,
 )
+from app.review.translit_nudge import romanized_input_nudge
 from app.review.placement import (
     PLACEMENT_BLOCK_SIZE,
     PLACEMENT_LEVELS,
@@ -618,6 +619,8 @@ def stored_exercise_answer(e,attempt):
             )
             else select_feedback(feedback_meta, attempt.response, result)
         )
+        if result == "almost":
+            feedback = romanized_input_nudge(attempt.response, e.correct_response, language_code) or feedback
     return {
         "correct": attempt.correct,
         "result": result,
@@ -1691,6 +1694,8 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     feedback = select_feedback(feedback_meta,body.response,result)
     if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
         feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+    if result == "almost":
+        feedback = romanized_input_nudge(body.response,e.correct_response,language_code) or feedback
     return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":feedback,"next_due_at":r.due_at}
 @router.get("/me/reviews/due", response_model=ReviewDueOut)
 def lexeme_reviews_due(
@@ -3011,7 +3016,11 @@ def practice_answer(
             item.correct_response
         ),
         "xp_awarded": xp_awarded,
-        "feedback": render_item_feedback(
+        "feedback": (
+            romanized_input_nudge(body.response, item.correct_response, language_code)
+            if result == "almost"
+            else None
+        ) or render_item_feedback(
             db, template, item.course_id, item.filled_slots,
             item.target_lexeme_id,
         ),

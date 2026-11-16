@@ -55,6 +55,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           correctOption={correctOption}
           direction={optionsDirection}
           lang={exercise.prompt.answer_language_code}
+          translitMap={exercise.prompt.translit_map}
         />
         <button
           className="btn btn-block"
