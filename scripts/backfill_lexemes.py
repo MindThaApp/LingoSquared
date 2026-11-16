@@ -3944,6 +3944,63 @@ FA_A2U40_44_NEW = {
 FA_A2_PART_OF_SPEECH.update({_tok: _pos for _tok, (_gloss, _pos) in FA_A2U40_44_NEW.items()})
 for _tok, (_gloss, _pos) in FA_A2U40_44_NEW.items():
     FA_GLOSSES.setdefault(_tok, _gloss)
+# A2 thin-unit vocabulary (units 27, 34, 36, 48-50) and unit41 predicate, added 2026-11-15 (fa-a2-polish).
+FA_A2U_POLISH_NEW = {
+    "ناهار": ("lunch", "noun"),
+    "گردش": ("outing", "noun"),
+    "دعوتنامه": ("invitation card", "noun"),
+    "میزبانی": ("hosting", "noun"),
+    "پذیرایی": ("entertaining guests", "noun"),
+    "فرصت": ("opportunity", "noun"),
+    "فرش": ("rug", "noun"),
+    "پرده": ("curtain", "noun"),
+    "کیک": ("cake", "noun"),
+    "رستوران": ("restaurant", "noun"),
+    "کافه": ("cafe", "noun"),
+    "مهمونی": ("party", "noun"),
+    "خستگی": ("tiredness", "noun"),
+    "خواب": ("sleep", "noun"),
+    "گرما": ("heat", "noun"),
+    "سرما": ("cold", "noun"),
+    "اضافه‌کاری": ("overtime", "noun"),
+    "پروژه": ("project", "noun"),
+    "پاکت": ("envelope", "noun"),
+    "تمبر": ("stamp", "noun"),
+    "پاسپورت": ("passport", "noun"),
+    "مدارک": ("documents", "noun"),
+    "چمدون": ("suitcase", "noun"),
+    "ارز": ("foreign currency", "noun"),
+    "فهرست": ("list", "noun"),
+    "مقصد": ("destination", "noun"),
+    "جشن": ("celebration", "noun"),
+    "عروسی": ("wedding", "noun"),
+    "تبریک": ("congratulations", "noun"),
+    "مبارک": ("happy; blessed", "adjective"),
+    "فرستادم": ("I sent", "verb"),
+    "شنیدم": ("I heard", "verb"),
+    "موفقیت": ("success", "noun"),
+    "تشکر": ("thanks", "noun"),
+    "خاطره": ("memory", "noun"),
+    "ناراحت": ("upset", "adjective"),
+    "دلتنگ": ("missing someone", "adjective"),
+    "جالب": ("interesting", "adjective"),
+    "پیک‌نیک": ("picnic", "noun"),
+    "دورهمی": ("get-together", "noun"),
+    "میزبان": ("host", "noun"),
+    "مهمون": ("guest", "noun"),
+    "مشغول": ("busy", "adjective"),
+    "آزاد": ("free", "adjective"),
+    "تأخیر": ("delay", "noun"),
+    "گرفتارم": ("I am tied up", "adjective"),
+    "فوری": ("urgent", "adjective"),
+    "قطعی": ("confirmed", "adjective"),
+    "عقب": ("back; later", "adverb"),
+    "بندازیم": ("let us put", "verb"),
+    "بزرگ‌ترینه": ("is the biggest (spoken)", "verb"),
+}
+FA_A2_PART_OF_SPEECH.update({_tok: _pos for _tok, (_gloss, _pos) in FA_A2U_POLISH_NEW.items()})
+for _tok, (_gloss, _pos) in FA_A2U_POLISH_NEW.items():
+    FA_GLOSSES.setdefault(_tok, _gloss)
 # Level-scoped (a2) sense/POS fixes for tokens first introduced in units 40-47.
 FA_A2_GLOSS_OVERRIDES.update({
     "همکاری": "a colleague (before 'that')",
