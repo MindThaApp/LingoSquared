@@ -53,6 +53,7 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
         correctOption={correctOption}
         direction={direction}
         lang={exercise.prompt.answer_language_code}
+        translitMap={exercise.prompt.translit_map}
       />
       <button
         className="btn btn-block"

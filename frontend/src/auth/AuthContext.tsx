@@ -398,6 +398,11 @@ export function isGuestUser(user: AuthUser | null): boolean {
   return Boolean(user?.email?.startsWith("guest-") && user.email.endsWith("@example.com"));
 }
 
+/** Like useAuth() but returns null outside an AuthProvider (display-only consumers, tests). */
+export function useOptionalAuth(): AuthContextValue | null {
+  return useContext(AuthContext);
+}
+
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");

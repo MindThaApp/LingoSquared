@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
+import { TargetText } from "../TargetText";
 import { SpeakButton } from "../SpeakButton";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
@@ -92,7 +93,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
                     so term -> arrow -> match always reads in the answer
                     language's own flow, with the arrow glyph flipped to keep
                     pointing from term to match visually in RTL. */}
-                <bdi>{p.left}</bdi>
+                <bdi><TargetText text={p.left} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[p.left]} /></bdi>
                 {matchedRightFor(p.left) !== undefined && (
                   <>
                     {" "}
@@ -118,7 +119,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
               // punctuation), so let each tile's own first-strong text decide.
               dir="auto"
             >
-              {right}
+              <TargetText text={right} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[right]} />
             </button>
           ))}
         </div>

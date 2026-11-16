@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { TargetText } from "../TargetText";
 
 interface WordBankInputProps {
   tiles: string[];
+  /** prompt.translit_map and the answer language (for the pronunciation line + beta marker). */
+  translitMap?: Record<string, string>;
+  lang?: string;
   // Explicit on BOTH containers: a click-built token sequence inherits
   // direction from nowhere (fa/prs would otherwise assemble LTR).
   direction: "ltr" | "rtl" | undefined;
@@ -15,7 +19,7 @@ interface WordBankInputProps {
 // used bank slot keeps an invisible placeholder so nothing shifts, and a
 // removed tile reappears in its original slot. Submits the same trimmed,
 // space-joined string the typed input would.
-export function WordBankInput({ tiles, direction, disabled, onSubmit }: WordBankInputProps) {
+export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMap, lang }: WordBankInputProps) {
   const { t } = useTranslation();
   const [placed, setPlaced] = useState<number[]>([]);
 
@@ -45,7 +49,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit }: WordBank
             onClick={() => unplace(position)}
             disabled={disabled}
           >
-            {tiles[bankIndex]}
+            <TargetText text={tiles[bankIndex]} lang={lang ?? "und"} bare translit={translitMap?.[tiles[bankIndex]]} />
           </button>
         ))}
       </div>
@@ -63,7 +67,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit }: WordBank
               disabled
               data-testid={`word-bank-slot-${bankIndex}`}
             >
-              {tile}
+              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} />
             </button>
           ) : (
             <button
@@ -74,7 +78,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit }: WordBank
               disabled={disabled}
               data-testid={`word-bank-slot-${bankIndex}`}
             >
-              {tile}
+              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} />
             </button>
           );
         })}

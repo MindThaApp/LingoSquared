@@ -69,6 +69,8 @@ from _fill_in_blank_ambiguity_check import (  # noqa: E402
     load_lexemes_for_pair as _fib_load_lexemes_for_pair,
 )
 
+from translit.attach import attach_card as _translit_card, attach_exercise as _translit_exercise  # noqa: E402
+
 RTL_LANGUAGES = {"fa", "prs", "ar"}
 # Persian-script codepoint purity only applies to fa/prs (Persian-range
 # yeh/keheh are the CORRECT codepoints there). Arabic (ar) is RTL too but
@@ -4960,6 +4962,8 @@ def compile_import_request(
                     )
                     for item in lesson.get("teaching", [])
                 ]
+                for card in teaching:
+                    _translit_card(card, realization_document["target_language"])
 
                 exercises = []
                 for exercise_order, exercise in enumerate(
@@ -4967,7 +4971,7 @@ def compile_import_request(
                     1,
                 ):
                     key = exercise["content_key"]
-                    exercises.append(
+                    compiled_exercise = (
                         compile_exercise(
                             exercise,
                             exercise_overlays[key],
@@ -4981,6 +4985,12 @@ def compile_import_request(
                             introduced_tokens=taught_tokens,
                         )
                     )
+                    _translit_exercise(
+                        compiled_exercise,
+                        realization_document["target_language"],
+                        lesson.get("module_kind"),
+                    )
+                    exercises.append(compiled_exercise)
 
                 compiled_lessons.append(
                     {
