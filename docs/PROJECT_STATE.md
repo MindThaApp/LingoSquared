@@ -7,30 +7,41 @@ Read this when you need to know WHAT EXISTS. Full chronological history is in
 `docs/BUILD_LOG.md`; the current session's state is in the latest
 `docs/SESSION_HANDOFF_*.md`.
 
-## Current state (2026-11-05, refreshed)
+## Current state (2026-11-16, refreshed)
 
-- **Live (192.168.4.4):** e7eaf91c4 plus non-runtime #172-#174; 228 courses, 9748 units,
-  351286 exercises, alembic 0036 head. Integration branch
-  `fix/wsl-handover-followups` (never master). CI runs and is green on GitHub.
-- **Completion score:** about 82% on the 12-area weighted scorecard (73.5% on
-  2026-11-04). Detail: `.local/logs/completion-rescore-2026-11-05.md` (local, not
-  tracked).
-- **Cross pairs:** European learners into ar/fa/hi/prs (32 pairs) are done
-  (#151, #156, #157, #159-#163). Not built: among ar/fa/hi/prs (12, deferred) and
-  ja/ko/zh (36).
-- **Shipped since 2026-11-04:** self-serve `POST /auth/password` (#149); enforced
-  CSP, see `docs/CSP.md` (#147); RTL `dir` on notes and feedback (#153, #168);
-  note-language checker baseline at 0 (#152, #154, #165-#167); one Devanagari
-  spelling per Hindi person name (#170); Arabic gender glosses (#171);
-  `docs/KEY_ROTATION.md` (#146); `scripts/ci_local.sh` (#150).
-- **Open gaps:** audio unrendered (GCP TTS billing disabled; no Azure/Gemini
-  keys); no DB backup cron on the server (backups only at deploys); no TLS;
-  native review gate about 6-8% of overlays/packs; ~4400 Latin names inside Hindi
-  sentences in hi-X overlays; hi-nl `write_dinner_summary` accepts the Hindi prompt
-  as a correct answer (allowlisted in #172, should be fixed, not allowlisted);
-  `nightly-content.yml` cannot run until it exists on the default branch;
-  Privacy/Terms are English-only with a notice; no forgot-password flow; SM-2
-  only (no FSRS); 321 merged remote branches not yet pruned.
+- **Live (192.168.4.4):** still the 2026-11-05 deploy (e7eaf91c4, alembic 0036).
+  The integration branch `fix/wsl-handover-followups` (never master) is well
+  ahead: dozens of PRs (#269 to #323) are merged but not deployed (content
+  import, backfills, practice import, migrations 0037 to 0039). Deploy is
+  pending Ramin's approval of the temp-admin step. CI is green on GitHub.
+- **Catalogue:** 254 courses now live on the integration branch (228 at the
+  last deploy). The A2 expansions (units 68-108 per direction, practice packs,
+  cross-A2 pairs for targets nl and fa and others) are merged; native review
+  still covers only 6-8% of overlays/packs.
+- **Shipped since 2026-11-05:** FSRS-4.5 review scheduling replacing SM-2
+  (#184, alembic 0037; lexeme-level SRS and the review page `ReviewPage.tsx`
+  on `/reviews/session`); password reset flow (alembic 0038, tokens table,
+  `POST /auth/password-reset/request`; disabled until `EMAIL_PROVIDER` and
+  `PASSWORD_RESET_BASE_URL` are set; frontend links hidden behind
+  `VITE_PASSWORD_RESET_ENABLED`); transliteration phase 1 (pronunciation
+  store, `TargetText`, romanized-input nudge; ru and hi data, #317, beta,
+  unreviewed LLM pronunciation) with phase 2 (#320) in flight; unreviewable
+  lexemes (alembic 0039); self-serve `POST /auth/password`; enforced CSP
+  (`docs/CSP.md`); Sentry code and scrubbing (`docs/SENTRY.md`).
+- **Launch readiness:** audit in `.local/logs/launch-readiness-2026-11-16.md`
+  (local). Ops preparation lives in `docs/ops/` (`BACKUP_RESTORE.md`,
+  `TLS_SETUP.md`, `KEY_ROTATION.md`, `SENTRY.md`) with scripts in
+  `scripts/ops/`; none of it is installed on the server yet.
+- **Cross pairs:** European learners into ar/fa/hi/prs (32 pairs) done. Not
+  built: among ar/fa/hi/prs (12, deferred) and ja/ko/zh (36).
+- **Open gaps (launch blockers first):** no TLS; no DB backup cron or restore
+  drill on the server; audio unrendered (GCP TTS billing disabled, no
+  Azure/Gemini keys); password-reset email provider not configured; Sentry DSN
+  not set on the server; native review gate; Privacy/Terms are unreviewed
+  English-only drafts; fa/prs terminal punctuation untypeable on the in-app
+  keyboard; ~4400 Latin names in hi-X sentences; 321 merged branches not pruned;
+  `nightly-content.yml` cannot run until it exists on the default branch; the
+  integration branch has never been merged to the default branch.
 
 ## Language-path status (moved from root CLAUDE.md, 2026-08-03)
 
@@ -214,8 +225,8 @@ through in a live browser yet:
 
 Auth; all 10 languages (fa/prs fully separate, correct RTL + script
 metadata); courses → units → lessons → all 20 exercise types (dictation added
-2026-08-03); SM-2 review
-(being replaced by lexeme-level SRS); gamification (XP/streak/achievements);
+2026-08-03); FSRS-4.5 review
+(lexeme-level SRS, replaced SM-2 in #184); gamification (XP/streak/achievements);
 reading/writing vs. speaking sections with server-enforced unlock; CEFR
 A1–C2; teaching phase before exercises; in-app content-issue reporting +
 admin triage + coverage dashboard; Endless Practice generative feed (all 6
