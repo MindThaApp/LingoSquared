@@ -3166,7 +3166,7 @@ BLOCK_D_NEW: dict[str, tuple[str, str]] = {
     "السُّوق": ("the market", "noun"),
     "الصَّيْدَلِيَّة": ("the pharmacy", "noun"),
     "الطَّقْس": ("the weather", "noun"),
-    "الْإِنْجْلِيزِيَّة": ("English (the language)", "noun"),
+    "الْإِنْجِلِيزِيَّة": ("English (the language)", "noun"),
     "الْبَنْك": ("the bank", "noun"),
     "الْحَدِيقَة": ("the garden; the park", "noun"),
     "الْعَشَاء": ("dinner", "noun"),
