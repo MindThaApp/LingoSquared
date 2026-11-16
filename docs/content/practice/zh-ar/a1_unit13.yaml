@@ -1,0 +1,445 @@
+schema_version: '1.0'
+pack_key: practice.zh-ar.a1.unit13
+source_language: zh
+target_language: ar
+unit_content_key: ar.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ذهبت
+    - w_أمس
+    - w_اشتريت
+    - w_تفاحا
+    - w_فعلت
+    - w_شربت
+slot_presets:
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+      - w_فعلت
+      - w_شربت
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+  l02: &id007
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_فعلت
+      - w_شربت
+      - w_أمس
+      - w_ذهبت
+  dhahabtu: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ذهبت
+  ams: &id003
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_أمس
+  ishtaraytu: &id006
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_اشتريت
+  tuffahan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحا
+  faalta: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_فعلت
+  shariba: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_شربت
+templates:
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.choose.001
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ذهبت 是“我去了”,اشتريت 是“我买了”;两个都是第一人称过去时动词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.listen.002
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أمس 的意思是“昨天”;过去时动词与它连用。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.match.003
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 过去时词尾 -ت 表示“我”(ذهبت、اشتريت、شربت);فعلت 是本单元问句中的“你做了”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.order.004
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: word_order
+  frame:
+    text: ذهبت إلى السوق {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ذهبت إلى السوق {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أمس（昨天）通常放在句末：我昨天去了市场。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.fill.005
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق ثم اشتريت {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاحا 表示“苹果”，是被买的东西（宾语），所以以 alif 结尾。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.translate.006
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ذهبت 是“我去了”；اشتريت 是“我买了”；تفاحا 是作为所买之物的“苹果”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.translate.007
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: 我昨天去了市场。（没有单独表示“我”的词）
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} إلى السوق {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 过去式的词尾 -ت 本身就表示“我”，所以不需要再加代词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson01.translate.008
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: 我买了苹果。（没有单独表示“我”的词）
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 所买之物要带 alif 词尾：تفاحا。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.choose.001
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: فعلت 是“你做了”，例如 ماذا فعلت أمس؟（你昨天做了什么？）
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.listen.002
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: شربت 是“我喝了”；对比 ذهبت，两者都以相同的 -ت 结尾。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.match.003
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: ذهبت、اشتريت 和 شربت 都用同样的 -ت 词尾表示过去；فعلت（你做了）出现在疑问句中。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.order.004
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: word_order
+  frame:
+    text: ماذا {item} أمس؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} أمس؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ماذا 加过去式动词表示“你做了什么”；أمس 把时间定在“昨天”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.fill.005
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق. اشتريت تفاحا. {item} قهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شربت 是“我喝了”；过去式词尾 -ت 表示“我”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.fill.006
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ماذا {item} أمس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت 是“做”的过去式；这个问句是问你昨天做了什么。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.translate.007
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت（你做了）和 شربت（我喝了）都是以 -ت 结尾的过去式动词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.translate.008
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: 优素福问蕾拉：你昨天做了什么？
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id008
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: فعلت 是过去式的“你”形式；无论对男性还是女性，书写形式都相同。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit13.lesson02.translate.009
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: 我喝了咖啡。（没有单独表示“我”的词）
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} قهوة'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 过去式用 -ت 词尾表示“我”：شربت 是“我喝了”。
+    language_code: zh
+    direction: ltr
