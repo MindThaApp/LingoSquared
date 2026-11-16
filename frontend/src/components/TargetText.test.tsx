@@ -71,6 +71,16 @@ describe("TargetText / pronunciation line", () => {
     expect(screen.getByText("Privet")).toBeTruthy();
   });
 
+  it("a reviewed romanization carries no beta marker even for fa/prs/ar", () => {
+    const { container } = render(
+      <TranslitStateProvider value={on}>
+        <TextBlockView block={{ ...fa, translit_reviewed: true }} />
+      </TranslitStateProvider>,
+    );
+    expect(container.querySelector(".translit")).not.toBeNull();
+    expect(container.querySelector(".translit-beta")).toBeNull();
+  });
+
   it("bare mode keeps option text unwrapped when nothing extra shows", () => {
     const { container } = render(
       <TranslitStateProvider value={off}>

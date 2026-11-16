@@ -7,6 +7,7 @@ import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { TranslitProvider } from "../components/translitContext";
 import { TranslitToggle } from "../components/TranslitToggle";
+import { Pronunciation } from "../components/TargetText";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
@@ -375,8 +376,11 @@ function LessonRunnerContent() {
             correct={formatCorrectResponse(bannerResult.correct_response)}
             dir={options?.exercise ? answerDirectionForExercise(options.exercise) : "ltr"}
             spoken={options?.spoken}
+            romanized={bannerResult.feedback_code === "romanized_input"}
+            correctTranslit={bannerResult.correct_response_translit}
+            lang={options?.exercise?.prompt.answer_language_code}
           />
-          {bannerResult.feedback && (
+          {bannerResult.feedback && bannerResult.feedback_code !== "romanized_input" && (
             <FeedbackParagraph text={bannerResult.feedback} prompt={options?.exercise?.prompt} style={{ margin: "0 0 10px" }} />
           )}
           {options?.footer}
@@ -400,6 +404,7 @@ function LessonRunnerContent() {
         {status !== "correct" && (
           <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
             {renderAnswerLine("lesson_runner.correct_answer", formatCorrectResponse(bannerResult.correct_response))}
+            <Pronunciation translit={bannerResult.correct_response_translit} lang={options?.exercise?.prompt.answer_language_code ?? "und"} />
           </p>
         )}
         {bannerResult.feedback && (
@@ -552,6 +557,9 @@ function LessonRunnerContent() {
                 <AlmostFeedback
                   learner={typeof reviewResponse === "string" ? reviewResponse : undefined}
                   spoken={reviewSpoken}
+                  romanized={reviewResult.feedback_code === "romanized_input"}
+                  correctTranslit={reviewResult.correct_response_translit}
+                  lang={item.prompt.answer_language_code}
                   correct={formatCorrectResponse(reviewResult.correct_response)}
                   dir={answerDirectionForExercise({
                     id: item.id,

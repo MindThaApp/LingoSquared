@@ -22,7 +22,10 @@ vi.mock("@lingo/shared/api/endpoints", () => ({
   CatalogApi: { course: vi.fn() },
   LexemeApi: { mistakes: vi.fn(), mistakesSummary: vi.fn() },
 }));
-vi.mock("../auth/AuthContext", () => ({ useAuth: () => ({ user: { id: "u1" } }) }));
+vi.mock("../auth/AuthContext", () => ({
+  useAuth: () => ({ user: { id: "u1" } }),
+  useOptionalAuth: () => ({ user: { id: "u1" } }),
+}));
 vi.mock("../components/ReportIssueButton", () => ({ ReportIssueButton: () => null }));
 vi.mock("../components/FixMistakes", () => ({ FixMistakes: () => null }));
 

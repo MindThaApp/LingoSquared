@@ -60,14 +60,14 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
       <div className="word-answer-row" dir={direction} lang={exercise.prompt.answer_language_code}>
         {chosen.map((word, i) => (
           <button type="button" key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
-            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} />
+            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} reviewed={exercise.prompt.translit_reviewed_list?.includes(word)} />
           </button>
         ))}
       </div>
       <div className="word-bank" dir={direction} lang={exercise.prompt.answer_language_code}>
         {available.map((word, i) => (
           <button type="button" key={i} ref={i === 0 ? firstTileRef : undefined} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
-            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} />
+            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} reviewed={exercise.prompt.translit_reviewed_list?.includes(word)} />
           </button>
         ))}
       </div>

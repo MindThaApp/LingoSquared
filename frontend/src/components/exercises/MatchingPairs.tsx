@@ -93,7 +93,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
                     so term -> arrow -> match always reads in the answer
                     language's own flow, with the arrow glyph flipped to keep
                     pointing from term to match visually in RTL. */}
-                <bdi><TargetText text={p.left} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[p.left]} /></bdi>
+                <bdi><TargetText text={p.left} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[p.left]} reviewed={exercise.prompt.translit_reviewed_list?.includes(p.left)} /></bdi>
                 {matchedRightFor(p.left) !== undefined && (
                   <>
                     {" "}
@@ -119,7 +119,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
               // punctuation), so let each tile's own first-strong text decide.
               dir="auto"
             >
-              <TargetText text={right} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[right]} />
+              <TargetText text={right} lang={answerLanguageCode ?? "und"} bare translit={exercise.prompt.translit_map?.[right]} reviewed={exercise.prompt.translit_reviewed_list?.includes(right)} />
             </button>
           ))}
         </div>

@@ -6,6 +6,7 @@ interface WordBankInputProps {
   tiles: string[];
   /** prompt.translit_map and the answer language (for the pronunciation line + beta marker). */
   translitMap?: Record<string, string>;
+  translitReviewed?: readonly string[];
   lang?: string;
   // Explicit on BOTH containers: a click-built token sequence inherits
   // direction from nowhere (fa/prs would otherwise assemble LTR).
@@ -19,7 +20,7 @@ interface WordBankInputProps {
 // used bank slot keeps an invisible placeholder so nothing shifts, and a
 // removed tile reappears in its original slot. Submits the same trimmed,
 // space-joined string the typed input would.
-export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMap, lang }: WordBankInputProps) {
+export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMap, translitReviewed, lang }: WordBankInputProps) {
   const { t } = useTranslation();
   const [placed, setPlaced] = useState<number[]>([]);
 
@@ -49,7 +50,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMa
             onClick={() => unplace(position)}
             disabled={disabled}
           >
-            <TargetText text={tiles[bankIndex]} lang={lang ?? "und"} bare translit={translitMap?.[tiles[bankIndex]]} />
+            <TargetText text={tiles[bankIndex]} lang={lang ?? "und"} bare translit={translitMap?.[tiles[bankIndex]]} reviewed={translitReviewed?.includes(tiles[bankIndex])} />
           </button>
         ))}
       </div>
@@ -67,7 +68,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMa
               disabled
               data-testid={`word-bank-slot-${bankIndex}`}
             >
-              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} />
+              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} reviewed={translitReviewed?.includes(tile)} />
             </button>
           ) : (
             <button
@@ -78,7 +79,7 @@ export function WordBankInput({ tiles, direction, disabled, onSubmit, translitMa
               disabled={disabled}
               data-testid={`word-bank-slot-${bankIndex}`}
             >
-              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} />
+              <TargetText text={tile} lang={lang ?? "und"} bare translit={translitMap?.[tile]} reviewed={translitReviewed?.includes(tile)} />
             </button>
           );
         })}

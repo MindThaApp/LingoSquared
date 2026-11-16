@@ -18,6 +18,13 @@ describe("answerOutcome", () => {
     expect(answerOutcome(almost, false)).toEqual(answerOutcome(correct, false));
   });
 
+  it("romanized input (almost, correct:false) is not a pass: re-queued for a retry in script", () => {
+    const romanized = { correct: false, result: "almost" as const };
+    expect(resultPassed(romanized)).toBe(false);
+    expect(answerOutcome(romanized, false)).toEqual({ resolved: false, requeue: true, recordMissed: true });
+    expect(passAccuracy([correct, romanized])).toBe(0.5);
+  });
+
   it("incorrect re-queues and records a miss; a confirmation resolves but still records", () => {
     expect(answerOutcome(wrong, false)).toEqual({ resolved: false, requeue: true, recordMissed: true });
     expect(answerOutcome(wrong, true)).toEqual({ resolved: true, requeue: false, recordMissed: true });

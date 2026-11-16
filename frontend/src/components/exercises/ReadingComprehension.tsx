@@ -39,6 +39,7 @@ export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResul
         direction={direction}
         lang={exercise.prompt.answer_language_code}
         translitMap={exercise.prompt.translit_map}
+        translitReviewed={exercise.prompt.translit_reviewed_list}
       />
       <button
         className="btn btn-block"

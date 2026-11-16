@@ -16,6 +16,8 @@ interface ChoiceOptionsProps {
   lang?: string;
   /** prompt.translit_map: romanization by exact option text (shown when "Show pronunciation" is on). */
   translitMap?: Record<string, string>;
+  /** prompt.translit_reviewed_list: strings whose romanization was native-reviewed (no beta marker). */
+  translitReviewed?: readonly string[];
 }
 
 /**
@@ -34,6 +36,7 @@ export function ChoiceOptions({
   direction,
   lang,
   translitMap,
+  translitReviewed,
 }: ChoiceOptionsProps) {
   const { t } = useTranslation();
   const firstRef = useRef<HTMLButtonElement | null>(null);
@@ -58,7 +61,7 @@ export function ChoiceOptions({
             onClick={() => !disabled && onSelect(option)}
             disabled={disabled}
           >
-            <TargetText text={option} lang={lang ?? "und"} bare translit={translitMap?.[option]} />
+            <TargetText text={option} lang={lang ?? "und"} bare translit={translitMap?.[option]} reviewed={translitReviewed?.includes(option)} />
             {state && (
               <>
                 {" "}
