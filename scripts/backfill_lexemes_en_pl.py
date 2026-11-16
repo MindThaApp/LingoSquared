@@ -2831,6 +2831,120 @@ POS_SETS.setdefault("adjective", set()).update({"zabiegany", "mokry", "mokra", "
 POS_SETS.setdefault("adverb", set()).update({"nagle", "dawniej", "kiedyś", "konno", "kilka", "aż", "ani"})
 # --- end A2 Block A ---
 
+# --- A2 Block B/C (units 76-81): future, rules, ability, requests, advice, start/stop ---
+A2_BLOCK_BC_GLOSSES = _g("""
+świeci=it shines (the sun shines)
+my=we
+będziemy=we will be (future of to be); used with an infinitive: we will wait, we will write
+oni=they (masc.)
+będą=they will be (future of to be)
+napiszę=I will write (one finished action)
+zadzwonisz=you will call (one finished action)
+zadzwoni=he will call; she will call
+zadzwonimy=we will call
+obiecuję=I promise
+spóźnię=I will be late (used with the reflexive word: I will be late)
+wieczora=of the evening (used after the word for until/by: by the evening)
+wycieczka=trip, excursion
+kurtka=jacket
+wezmę=I will take
+kurtkę=jacket (as the object: a jacket)
+kupimy=we will buy
+wrócimy=we will come back
+martwię=I worry (said in: I worry about)
+kupisz=you will buy
+obiecujesz=you promise
+parkować=to park (infinitive)
+wchodzić=to go in, to enter (infinitive)
+hałasować=to make noise (infinitive)
+musisz=you have to, you must (said to one person)
+ręce=hands (the plural, as in wash your hands)
+zdjąć=to take off (clothes, shoes; infinitive)
+basenie=pool (the form used after the word for at/on: at the pool)
+darmo=free of charge (used in the phrase meaning for free)
+wyłączyć=to switch off, to turn off (infinitive)
+krzyczeć=to shout (infinitive)
+my=we
+oni=they
+tańczyć=to dance
+śpiewać=to sing
+umie=he/she knows how to; he/she can (a learned skill)
+umiesz=you know how to; you can (a learned skill)
+umiemy=we know how to; we can (a learned skill)
+umieją=they know how to; they can (a learned skill)
+potrafię=I am able to; I can (said of a skill)
+potrafisz=you are able to; you can (a skill)
+potrafi=he/she is able to; he/she can (a skill)
+potrafimy=we are able to; we can (a skill)
+potrafią=they are able to; they can (a skill)
+lekcję=a lesson (object form, as in "I have a lesson")
+okno=window
+drzwi=door (always plural in form)
+mógłbyś=could you (to a man)
+potrzebujesz=you need
+dam=I will give; part of the phrase meaning I can manage
+radę=advice; in the phrase meaning I can manage
+pudła=boxes
+ciężkie=heavy
+poprosiła=she asked
+poprosił=he asked
+poprosiłam=I asked (said by a woman)
+odpowiedziałam=I answered (said by a woman)
+powinien=he should; ought to (said of a man)
+pójdziesz=you will go (on foot, one time)
+odpoczął=rested (past, said of or to a man)
+odpoczęła=rested (past, said of or to a woman)
+tyle=so much; that much
+idź=go (command to one person)
+pij=drink (command to one person)
+pracuj=work (command to one person)
+radę=advice (object form, as after 'for')
+rada=advice; a piece of advice
+polskiego=Polish (language), as the object of learning
+zacząłem=I started (said by a man)
+zaczęłam=I started (said by a woman)
+zaczęła=she started
+zaczęliśmy=we started
+zaczęłyśmy=we started (said by a group of women)
+rok=year
+zacząłeś=you started (said to a man)
+zaczęłaś=you started (said to a woman)
+słodycze=sweets
+siedzieć=to sit; to spend time (on the phone)
+seriale=TV series (plural)
+siedzi=he sits; she sits; is sitting
+przestałem=I stopped (said by a man)
+przestałam=I stopped (said by a woman)
+przestał=he stopped
+przestała=she stopped
+przestaliśmy=we stopped
+przestałyśmy=we stopped (said by a group of women)
+przestałeś=you stopped (said to a man)
+przestałaś=you stopped (said to a woman)
+biegał=he ran; he used to run
+spróbowałam=I tried, gave it a go (said by a woman)
+próbował=he tried; he was trying
+spróbowała=she tried, gave it a go
+trudne=difficult, hard
+spróbował=he tried, gave it a go
+próbowała=she tried; she was trying
+zapomnieliśmy=we forgot
+zapomniałyśmy=we forgot (said by a group of women)
+skończyłam=I finished (said by a woman)
+skończył=he finished
+""")
+for _tok, _gloss in A2_BLOCK_BC_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS.setdefault("verb", set()).update(
+    t for t in A2_BLOCK_BC_GLOSSES
+    if t.endswith(("ć", "ł", "ła", "ło", "li", "ły", "łem", "łam", "łeś", "łaś", "liśmy", "łyśmy", "ść", "ęła", "ęłam", "ęłaś", "ęliśmy", "ęłyśmy", "ę", "sz", "my", "ią", "ą", "i"))
+    and not t.endswith(("rada", "radę", "ręce", "okno", "drzwi", "pudła", "ciężkie", "trudne", "słodycze", "seriale", "tyle"))
+    or t in {"idź", "pij", "pracuj", "będą", "będziemy", "dam", "świeci", "wezmę", "powinien", "umie", "umiesz", "umiemy", "potrafię", "musisz", "zacznie"})
+POS_SETS.setdefault("adjective", set()).update({"ciężkie", "trudne"})
+POS_SETS.setdefault("pronoun", set()).update({"my", "oni"})
+POS_SETS["verb"] -= {"rada", "radę", "okno", "drzwi", "pudła", "ręce", "słodycze", "seriale", "wycieczka", "kurtka", "kurtkę", "basenie", "rok", "lekcję", "wieczora"} | {"ciężkie", "trudne", "my", "oni"}
+# --- end A2 Block B/C ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_pl_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_pl_b2c1.json"
