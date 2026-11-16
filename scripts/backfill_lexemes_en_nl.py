@@ -1481,6 +1481,52 @@ PRONOUNS.update({"degene", "Jouw"})
 PHRASES.update({"Succes"})
 PROPER_NOUNS.update({"Strand", "Tuin", "lotte"})
 
+# A2 Block F units 103-105 (verb systems), added 2026-11-15.
+NL_GLOSSES.update({
+    "hoofd": "the head",
+    "buik": "the stomach; belly",
+    "arts": "the doctor",
+    "bang": "afraid",
+    "baard": "the beard",
+    "voelen": "to feel",
+    "haasten": "to hurry",
+    "scheren": "to shave",
+    "scheert": "shaves",
+    "wast": "washes",
+    "gezicht": "the face",
+    "handen": "hands",
+    "tanden": "teeth",
+    "baby": "the baby",
+    "vergissen": "to make a mistake",
+    "vervelen": "to bore",
+    "vergis": "make a mistake (with ik)",
+    "verveelt": "bores; gets bored",
+    "verveel": "get bored (with ik)",
+    "vergist": "makes a mistake",
+    "mezelf": "myself",
+    "jezelf": "yourself",
+    "zichzelf": "himself; herself; oneself",
+    "ontspannen": "to relax",
+    "bad": "the bath",
+    "ontspan": "relax",
+    "knipt": "cuts; clips",
+    "scheer": "shave (with ik)",
+    "pen": "the pen",
+    "teruggeven": "to give back",
+    "pennen": "pens",
+    "hou": "like; love (hou van)",
+    "erover": "about it",
+    "ernaar": "at it; to it",
+    "Bloemen": "flowers",
+    "Praten": "talk; discuss (question form)",
+    "afwas": "the dishes; washing-up",
+})
+VERBS.update({"voelen", "haasten", "scheren", "scheert", "wast", "vergissen", "vervelen", "vergis", "verveelt", "verveel", "vergist", "ontspannen", "ontspan", "knipt", "scheer", "teruggeven", "hou", "Praten"})
+NOUNS.update({"hoofd", "buik", "arts", "baard", "gezicht", "handen", "tanden", "baby", "bad", "pen", "pennen", "Bloemen", "afwas"})
+ADJECTIVES.update({"bang"})
+PRONOUNS.update({"mezelf", "jezelf", "zichzelf"})
+ADVERBS.update({"erover", "ernaar"})
+
 # A2 units 86-90, 92-95, 97 (Block B/C/D grammar-led units), added 2026-11-15.
 NL_GLOSSES.update({
     "zon": "the sun", "schijnt": "shines", "schijnen": "to shine",
@@ -3966,6 +4012,22 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "weet_u_of": "indirect_question_of",
         "kunt_u_mij_zeggen": "polite_indirect_request",
         "omars_bericht": "indirect_question_message_reading",
+        # A2 Block F units 103-105, added 2026-11-15.
+        "hoe_voel_je_je": "reflexive_feelings",
+        "het_hele_rijtje": "reflexive_pronoun_paradigm",
+        "wassen_of_zich_wassen": "reflexive_vs_non_reflexive",
+        "bij_de_kapper_en_thuis": "grooming_dialogue",
+        "cadeaus_en_boeken": "object_pronoun_vocabulary",
+        "hem_haar_het_ze": "object_pronouns_hem_haar_het_ze",
+        "mij_of_me": "stressed_unstressed_object_pronouns",
+        "hoeveel_er": "quantity_er",
+        "erover_ermee": "er_plus_preposition",
+        "boeken_terugbrengen": "library_return_dialogue",
+        "wat_ben_je_aan_het_doen": "aan_het_infinitive",
+        "met_een_object": "aan_het_with_object",
+        "nu_of_altijd": "progressive_vs_simple_present",
+        "zitten_staan_liggen_lopen": "posture_verbs_progressive",
+        "lotte_en_omar_bellen": "phone_call_dialogue",
         # A2 Block E units 98-102, added 2026-11-15.
         "winkelen": "shopping_demonstratives",
         "niet_en_geen": "negation_niet_geen_intro",
