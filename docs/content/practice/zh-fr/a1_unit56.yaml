@@ -1,0 +1,296 @@
+schema_version: '1.0'
+pack_key: practice.zh-fr.a1.unit56
+source_language: zh
+target_language: fr
+unit_content_key: fr.a1.unit56.transports
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_achats
+    - w_inconnu
+    - w_leçons
+    - w_marche
+    - w_marcher
+    - w_mots
+    - w_moyen
+    - w_précédentes
+    - w_surtout
+    - w_transports
+    - w_utilises
+    - w_voiture
+    - w_voyage
+    - w_voyager
+    - w_vélo
+templates:
+- content_key: practice.zh-fr.fr.a1.unit56.lesson01.choose.001
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_vélo
+        - w_voyage
+        - w_voiture
+        - w_marcher
+        - w_marche
+        - w_voyager
+        - w_leçons
+        - w_précédentes
+        - w_utilises
+        - w_mots
+        - w_transports
+        - w_inconnu
+        - w_achats
+        - w_moyen
+        - w_surtout
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} 是本单元的词汇之一，出自关于火车、自行车、汽车和步行的课程。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson02.listen.001
+  lesson_content_key: fr.a1.unit56.lesson02.chacun_voyage_differemment
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} 是本单元的词汇之一，出自“每个人的出行方式都不同”这一课。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson03.translate.001
+  lesson_content_key: fr.a1.unit56.lesson03.acheter_un_billet
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} 是本单元的词汇之一，来自买票那一课。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson04.match.001
+  lesson_content_key: fr.a1.unit56.lesson04.lea_demande_a_mathieu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 请把每个法语单词与它的中文意思配对；这些单词来自本单元的课程。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson01.choose.002
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} 是本单元的词汇之一，出自关于火车、自行车、汽车和步行的课程。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson02.translate.002
+  lesson_content_key: fr.a1.unit56.lesson02.chacun_voyage_differemment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} 是本单元的词汇之一，出自“每个人的出行方式都不同”这一课。'
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson01.order.003
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: word_order
+  frame:
+    text: Mathieu va à son travail à {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_vélo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mathieu va à son travail à {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Mathieu骑自行车去上班。vélo 的意思是自行车。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson01.fill.004
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: fill_in_blank
+  frame:
+    text: Camille {item} en train. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voyage
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voyage
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Camille坐火车出行。voyage 的意思是旅行，出行。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson01.translate.005
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: translation
+  frame:
+    text: Thomas 开车。
+    language_code: zh
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voiture
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Thomas va en {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Thomas开车。voiture 的意思是汽车。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson03.order.002
+  lesson_content_key: fr.a1.unit56.lesson03.acheter_un_billet
+  type: word_order
+  frame:
+    text: Quel {item} de transport je prends pour aller au centre-ville ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_moyen
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quel {item} de transport je prends pour aller au centre-ville ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 我去市中心该坐什么交通工具？moyen 的意思是方式，手段。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-fr.fr.a1.unit56.lesson04.order.002
+  lesson_content_key: fr.a1.unit56.lesson04.lea_demande_a_mathieu
+  type: word_order
+  frame:
+    text: J'y vais {item} à vélo, ce n'est pas loin.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_surtout
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'y vais {item} à vélo, ce n'est pas loin.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 我通常骑自行车，不远。surtout 的意思是尤其，主要。
+    language_code: zh
+    direction: ltr

@@ -1,0 +1,476 @@
+schema_version: '1.0'
+pack_key: practice.zh-ar.a1.unit19
+source_language: zh
+target_language: ar
+unit_content_key: ar.a1.unit19.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_بيت
+    - w_غرفة
+    - w_مطبخ
+    - w_طاولة
+    - w_عندك
+    - w_بيتك
+    - w_الغرفة
+    - w_ومطبخ
+    - w_بيتي
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_بيت
+      - w_غرفة
+      - w_مطبخ
+      - w_طاولة
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_بيت
+      - w_غرفة
+      - w_مطبخ
+      - w_طاولة
+      - w_عندك
+      - w_بيتك
+  l2: &id006
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_طاولة
+      - w_الغرفة
+      - w_بيتك
+      - w_عندك
+      - w_ومطبخ
+  rooms: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_غرفة
+      - w_مطبخ
+  mine: &id011
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_بيتي
+      - w_بيتك
+  bayt:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بيت
+  bayti: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بيتي
+  baytak: &id008
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بيتك
+  ghurfa: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_غرفة
+  matbakh:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مطبخ
+  tawila: &id012
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_طاولة
+  alghurfa: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الغرفة
+  wamatbakh: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ومطبخ
+  indak: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_عندك
+templates:
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.choose.001
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: بيت 是房子，غرفة 是房间，مطبخ 是厨房；这里的名词都不带 ال。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.listen.002
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: في بيتي غرفة واحدة 的意思是“我家有一个房间”；غرفة 是“房间”这个名词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.match.003
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: بيتك 是 بيت（房子）加 ـك（你的）；عندك 的意思是“你有”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.order.004
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: word_order
+  frame:
+    text: في بيتي {item} واحدة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: في بيتي {item} واحدة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 数词“一”放在名词后面，并与名词保持一致：غرفة واحدة 是阴性。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.order.005
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: word_order
+  frame:
+    text: في بيتي {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: في بيتي {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: في بيتي 放在句首，意思是“在我家”；里面的东西放在后面。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.fill.006
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: fill_in_blank
+  frame:
+    text: في {item} غرفة واحدة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بيت 后面的 ـي 词尾表示“我的”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.translate.007
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 这是四个与家有关的名词：房子、房间、厨房和桌子。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson01.translate.008
+  lesson_content_key: ar.a1.unit19.lesson01.rooms
+  type: translation
+  frame:
+    text: 我家有一个房间。
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: في {a} {b} واحدة
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 阿拉伯语没有表示“有”的动词：في بيتي غرفة 字面意思是“在我家 一个房间”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.choose.001
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: طاولة 是桌子；الغرفة 中的 ال 表示特指“那个房间”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.listen.002
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: عندك 的意思是“你有”；它由 عند 加词尾 ـك 构成。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.order.003
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: word_order
+  frame:
+    text: عندي طاولة في {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: عندي طاولة في {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: في الغرفة 是“在房间里”，用 ال 表示特定的房间。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.order.004
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: word_order
+  frame:
+    text: أين {item} يا يوسف؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item} يا يوسف؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 词尾 ـك 表示“你的”，所以 أين بيتك؟ 的意思是“你家在哪里？”
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.order.005
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: word_order
+  frame:
+    text: هل {item} طاولة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} طاولة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل 用来构成是非疑问句：هل عندك طاولة؟ 的意思是“你有桌子吗？”
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.fill.006
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: fill_in_blank
+  frame:
+    text: في بيتي غرفة واحدة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: و 与后面的词连写：ومطبخ 的意思是“和一个厨房”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.translate.007
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 词尾 ـي（我的）和 ـك（你的）都加在 بيت 后面。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.translate.008
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: translation
+  frame:
+    text: 我在房间里有一张桌子。
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: عندي {a} في {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 在短语 في الغرفة 中，في 后面仍保留 ال。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.translate.009
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: translation
+  frame:
+    text: 你有桌子吗？
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id009
+    b: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل 放在句首构成疑问句，其余语序不变。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit19.lesson02.translate.010
+  lesson_content_key: ar.a1.unit19.lesson02.location_objects
+  type: translation
+  frame:
+    text: 优素福，你家在哪里？
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أين {item} يا يوسف
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 蕾拉用表示“你的”的 ـك 词尾向优素福提问。
+    language_code: zh
+    direction: ltr
