@@ -1,0 +1,479 @@
+schema_version: '1.0'
+pack_key: practice.zh-ru.a1.unit24
+source_language: zh
+target_language: ru
+unit_content_key: ru.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_карта
+    - w_картой
+    - w_наличными
+    - w_нужен
+    - w_нужны
+    - w_рубли
+    - w_только
+    - w_триста
+    - w_чек
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_картой
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужны
+  p4: &id004
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_наличными
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_рубли
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_нужен
+      - w_триста
+      - w_только
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужен
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_триста
+  p9: &id009
+    language_code: ru
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_только
+  p10: &id010
+    language_code: ru
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_триста
+      - w_только
+  p11: &id011
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+      - w_чек
+      - w_триста
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_чек
+templates:
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.choose.001
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными 表示用现金，картой 表示刷卡；两者都用工具格。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.order.002
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: word_order
+  frame:
+    text: Можно {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно 加工具格形式，用来询问能不能用那种方式付款。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.fill.003
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Можно {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 在 можно 之后，Карта 变成 картой，意思是“用卡”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.fill.004
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Мне {item} рубли. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужны 与复数名词 рубли 保持一致。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.translate.005
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 可以刷卡吗？
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно 加 картой 是在问能不能刷卡付款。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.translate.006
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 可以付现金。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно 的意思是“可以、允许”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.translate.007
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 我需要卢布。
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {a} {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужны 与复数 рубли 保持一致。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.choose.001
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Чек 是阳性名词，所以用 нужен；如果是复数事物，则用 нужны。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.order.002
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: word_order
+  frame:
+    text: Чек {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен 与阳性名词 чек 保持一致。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.fill.003
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: С вас {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Триста（三百）后面接复数 рублей。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.fill.004
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Сегодня {item} наличными. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Только 用来限定后面的内容，相当于“只”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.fill.005
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Чек {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужен 是阳性形式，与 чек 保持一致。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.translate.006
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 需要小票吗？
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен 是阳性形式，与 чек 相配。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.translate.007
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 一共三百卢布。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: С вас {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: С вас 字面意思是“从您这里”，是收银员报价时的礼貌说法。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.translate.008
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 今天只收现金。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} наличными.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Только 放在它所限定的内容之前。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.translate.009
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 这些都是收银台常用的词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson02.match.010
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Нужны 用于复数事物，нужен 用于阳性单数事物。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ru.ru.a1.unit24.lesson01.listen.008
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными 意思是“用现金”；карта、рубли 和 чек 只是与付款相关的普通名词。
+    language_code: zh
+    direction: ltr
