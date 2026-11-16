@@ -1,0 +1,340 @@
+schema_version: '1.0'
+pack_key: practice.it-fa.a2.unit10
+source_language: it
+target_language: fa
+unit_content_key: fa.a2.unit10.opinions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fa by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Italian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - proper_noun
+  - phrase
+  - adjective
+  - verb
+  - adverb
+  - particle
+  agreement_tags:
+    semantic:
+    - opinion_word
+    - family_message_word
+    - opinion_phrase
+    - en_fa_a2_unit10_lesson01_words
+    - en_fa_a2_unit10_lesson04_words
+slot_presets:
+  opinion_word: &id001
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: opinion_word
+  family_message_word: &id005
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic: family_message_word
+  family_or_opinion_word: &id004
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - family_message_word
+      - opinion_word
+  opinion_phrase: &id006
+    language_code: fa
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: opinion_phrase
+  dialogue_word: &id003
+    language_code: fa
+    part_of_speech:
+    - adjective
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic: en_fa_a2_unit10_lesson04_words
+  opinion_or_debate_noun: &id002
+    language_code: fa
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - en_fa_a2_unit10_lesson01_words
+      - en_fa_a2_unit10_lesson04_words
+templates:
+- content_key: practice.it-fa.fa.a2.unit10.lesson01.opinion_choice.001
+  lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{opinion_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    opinion_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: opinion_word
+  feedback_frame:
+    text: '{opinion_word} è una parola del vocabolario di questa unità per esprimere opinioni.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson01.opinion_match.002
+  lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+  type: matching_pairs
+  frame:
+    text: Abbina ogni parola al suo significato.
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Abbina ogni parola al suo significato in italiano.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson01.opinion_translate.003
+  lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+  type: translation
+  frame:
+    text: '{opinion_word}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      opinion_word: english_gloss
+  slots:
+    opinion_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: opinion_word
+  feedback_frame:
+    text: La parola in farsi è {opinion_word}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson04.dialogue_word_choice.001
+  lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+  type: multiple_choice
+  frame:
+    text: '{dialogue_word}'
+    language_code: fa
+    direction: rtl
+  slots:
+    dialogue_word: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: dialogue_word
+  feedback_frame:
+    text: '{dialogue_word} è una parola del dialogo di questa unità sul dibattito in ufficio.'
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson04.dialogue_word_match.002
+  lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+  type: matching_pairs
+  frame:
+    text: Abbina ogni parola al suo significato.
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+    seventh: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  feedback_frame:
+    text: Abbina ogni parola al suo significato in italiano.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson01.opinion_word_order.004
+  lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
+  type: word_order
+  frame:
+    text: '{opinion_word_one} و {opinion_word_two}'
+    language_code: fa
+    direction: rtl
+  slots:
+    opinion_word_one: *id001
+    opinion_word_two: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - opinion_word_one
+    - opinion_word_two
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{opinion_word_one} و {opinion_word_two}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: و unisce due parole, come نظر و دلیل.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson03.family_message_match.005
+  lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
+  type: matching_pairs
+  frame:
+    text: Abbina ogni parola al suo significato.
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Abbina ogni parola al suo significato in italiano.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson03.family_message_translate.006
+  lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
+  type: translation
+  frame:
+    text: '{family_message_word}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      family_message_word: english_gloss
+  slots:
+    family_message_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: family_message_word
+  feedback_frame:
+    text: La parola in farsi è {family_message_word}.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson04.opinion_phrase_choice.007
+  lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+  type: multiple_choice
+  frame:
+    text: '{opinion_phrase}'
+    language_code: fa
+    direction: rtl
+  slots:
+    opinion_phrase: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: opinion_phrase
+  feedback_frame:
+    text: Questa è una frase o un'espressione dello scenario di questa unità sul dibattito in ufficio.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson04.opinion_phrase_match.008
+  lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+  type: matching_pairs
+  frame:
+    text: Abbina ogni frase al suo significato.
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Abbina ogni frase al suo significato in italiano.
+    language_code: it
+    direction: ltr
+- content_key: practice.it-fa.fa.a2.unit10.lesson04.opinion_phrase_translate.009
+  lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
+  type: translation
+  frame:
+    text: '{opinion_phrase}'
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      opinion_phrase: english_gloss
+  slots:
+    opinion_phrase: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: opinion_phrase
+  feedback_frame:
+    text: Questa frase o espressione compare nello scenario di questa unità sul dibattito in ufficio.
+    language_code: it
+    direction: ltr
