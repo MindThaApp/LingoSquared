@@ -1,0 +1,466 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a2.unit75
+source_language: de
+target_language: nl
+unit_content_key: nl.a2.unit75.schermtijd
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - screen_time_vocab
+    - screen_time_verb
+    - schermtijd_scherm_single
+    - schermtijd_telefoon_single
+    - schermtijd_chat_single
+    - schermtijd_schermtijd_single
+    - schermtijd_doorbrengen_single
+    - schermtijd_gewoonte_single
+    - schermtijd_wegleggen_single
+slot_presets:
+  screen_time_vocab: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: screen_time_vocab
+  screen_time_verb:
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: screen_time_verb
+  scherm_single: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_scherm_single
+  telefoon_single:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_telefoon_single
+  chat_single: &id003
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_chat_single
+  schermtijd_single: &id004
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_schermtijd_single
+  doorbrengen_single: &id005
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_doorbrengen_single
+  gewoonte_single: &id006
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_gewoonte_single
+  wegleggen_single: &id007
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_wegleggen_single
+templates:
+- content_key: practice.de-nl.nl.a2.unit75.lesson01.choose.001
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: ein Wort zum Thema Bildschirmzeit.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson01.listen.002
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson01.order.003
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: word_order
+  frame:
+    text: Ik kijk vaak naar mijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik kijk vaak naar mijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Worauf Lotte oft schaut: {item}'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson02.choose.001
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - schermtijd_chat_single
+        - schermtijd_doorbrengen_single
+        - schermtijd_wegleggen_single
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Verb, das mit der Nutzung von Bildschirmen zu tun hat.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson02.match.002
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson02.order.003
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: word_order
+  frame:
+    text: Ik {item} vaak met vrienden op mijn telefoon.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik {item} vaak met vrienden op mijn telefoon.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} macht Lotte oft mit Freunden auf ihrem Handy.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson03.listen.001
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson03.translate.002
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: translation
+  frame:
+    text: Ich finde, dass ich zu viel Bildschirmzeit habe.
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische und verwenden Sie vinden für „glauben“.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson04.match.001
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+  feedback_frame:
+    text: Ordnen Sie jedem Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson04.fill.002
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: fill_in_blank
+  frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Volgens mij moet je minder tijd op je telefoon doorbrengen -- Meiner Meinung nach solltest du weniger Zeit an deinem Handy verbringen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson05.listen.001
+  lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dem Blog.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson05.translate.002
+  lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+  type: translation
+  frame:
+    text: Es ist eine schlechte Angewohnheit, ständig auf das Handy zu schauen.
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische (verwenden Sie „steeds“ und „op je telefoon“).
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is een slechte {item} om steeds op je telefoon te kijken.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het is een slechte {item} om steeds op je telefoon te kijken.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson06.listen.001
+  lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus diesem Dialog.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson06.fill.002
+  lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+  type: fill_in_blank
+  frame:
+    text: Misschien kun je 's avonds je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Misschien kun je 's avonds je telefoon wegleggen -- Vielleicht kannst du dein Handy abends weglegen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson03.translate.002.volume_order.009
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: word_order
+  frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: schermtijd_schermtijd_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson04.fill.002.volume_order.010
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: word_order
+  frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: schermtijd_doorbrengen_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Volgens mij moet je minder tijd op je telefoon {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit75.lesson01.choose.001.volume_listen.003
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: screen_time_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.de-nl.nl.a2.unit75.lesson03.translate.002.volume_translate.003
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: translation
+  frame:
+    text: Ich finde, dass ich zu viel Bildschirmzeit habe.
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische und verwenden Sie vinden für „glauben“.
+      language_code: de
+      direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: schermtijd_schermtijd_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr

@@ -1,0 +1,376 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a2.unit24
+source_language: de
+target_language: nl
+unit_content_key: nl.a2.unit24.gemeente
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - gemeente_vocab_noun
+    - gemeente_doc_noun
+    - gemeente_verb
+    - gemeente_schikken_single
+    - gemeente_huisarts_single
+    - gemeente_regelen_single
+slot_presets:
+  gemeente_vocab_noun: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: gemeente_vocab_noun
+  gemeente_doc_noun: &id004
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: gemeente_doc_noun
+  gemeente_verb: &id002
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: gemeente_verb
+  gemeente_noun_or_verb: &id007
+    language_code: nl
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - gemeente_vocab_noun
+      - gemeente_verb
+  gemeente_schikken_single: &id001
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: gemeente_schikken_single
+  gemeente_huisarts_single: &id005
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: gemeente_huisarts_single
+  gemeente_regelen_single: &id006
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: gemeente_regelen_single
+templates:
+- content_key: practice.de-nl.nl.a2.unit24.lesson01.fill.001
+  lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+  type: fill_in_blank
+  frame:
+    text: Zou woensdag om tien uur {item}?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Zou woensdag om tien uur schikken? -- Würde Ihnen Mittwoch um zehn Uhr passen?
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson01.choose.002
+  lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Verb, das man bei der Planung oder Abwicklung eines Termins verwendet.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson01.listen.003
+  lesson_content_key: nl.a2.unit24.lesson01.een_afspraak_maken
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson02.choose.001
+  lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dieser Einheit zur Anmeldung bei der Gemeinde.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson02.listen.002
+  lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson02.match.003
+  lesson_content_key: nl.a2.unit24.lesson02.wat_heb_je_nodig
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+    seventh: *id003
+    eighth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson03.order.001
+  lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+  type: word_order
+  frame:
+    text: Mag ik uw {item} zien?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mag ik uw {item} zien?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist das Dokument, nach dem gefragt wird.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson03.translate.002
+  lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+  type: translation
+  frame:
+    text: Darf ich {item} sehen? (Fragen Sie förmlich, mit „Ihr“.)
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mag ik uw {item} zien?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Mag ik uw {item} zien?
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson03.listen.003
+  lesson_content_key: nl.a2.unit24.lesson03.bij_de_balie
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Dokument, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson04.fill.001
+  lesson_content_key: nl.a2.unit24.lesson04.je_bsn_nummer
+  type: fill_in_blank
+  frame:
+    text: U heeft het nodig voor werk, de bank en de {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sie brauchen sie für die Arbeit, die Bank und den Hausarzt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson04.translate.002
+  lesson_content_key: nl.a2.unit24.lesson04.je_bsn_nummer
+  type: translation
+  frame:
+    text: Mit DigiD können Sie Angelegenheiten online erledigen. (Verwenden Sie die förmliche Anrede.)
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Met DigiD kunt u online zaken {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Met DigiD kunt u online zaken regelen.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson05.translate.001
+  lesson_content_key: nl.a2.unit24.lesson05.brief_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das niederländische Wort ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit24.lesson06.match.001
+  lesson_content_key: nl.a2.unit24.lesson06.gemeente_afspraak
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth} · {tenth} · {eleventh} · {twelfth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+    fourth: *id007
+    fifth: *id007
+    sixth: *id007
+    seventh: *id007
+    eighth: *id007
+    ninth: *id007
+    tenth: *id007
+    eleventh: *id007
+    twelfth: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort aus dieser Lektion seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr

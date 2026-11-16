@@ -25,7 +25,9 @@ def build(learner: str, target: str):
     lex = json.loads((REPO_ROOT / f"docs/content/lexicon/{pair}.json").read_text(encoding="utf-8"))
     sibling = importlib.import_module(f"backfill_lexemes_en_{target}")
     levels = {}
-    sib_levels = getattr(sibling, "LEVELS", None) or {"a1": f"en-{target}"}   # en-nl has no LEVELS table (one a1 group)
+    # en-nl / en-fa / en-prs have no LEVELS table: A1 is the bare `en-<Y>` group, later levels `en-<Y>-<level>`
+    sib_levels = getattr(sibling, "LEVELS", None) or {
+        "a1": f"en-{target}", **{lv: f"en-{target}-{lv}" for lv in ("a2", "b1", "b2", "c1")}}
     for level in lex:
         sib_group = sib_levels[level]
         group = sib_group.replace("en-", f"{learner}-", 1)
