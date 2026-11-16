@@ -821,7 +821,7 @@ FA_GLOSSES = {
     "مجردم": "I am single", "متأهلم": "I am married", "نوه": "grandchild", "برادرم": "my brother",
     "متأهله": "is married (spoken)", "پسر": "son", "داره": "he/she has (spoken)",
     "عکس": "photo", "خانواده‌ته": "is your family('s) (spoken)", "مامانمه": "is my mom (spoken)",
-    "باباهم": "is my dad too (spoken)", "آقا": "man / mister", "کیه": "who is it? (spoken)",
+    "بابامه": "is my dad (spoken)", "آقا": "man / mister", "کیه": "who is it? (spoken)",
     "داداشمه": "he's my brother (spoken)", "داداش": "brother (affectionate/everyday)",
     "برعکسه": "is the opposite (spoken)", "پس": "so; then", "شلوغه": "is crowded/lively (spoken)",
     "دارد": "he/she has (formal)", "ندارد": "he/she doesn't have (formal)",
@@ -2687,7 +2687,7 @@ FA_VERBS = {
     "چنده", "سالته", "سالمه", "می‌خوام", "تومنه", "کنیم", "باشه",
     "شماره‌ام", "هشته", "بنویسم", "درسته", "یکه", "می‌زنم", "کن",
     "دارم", "ندارم", "دارد", "ندارد", "نداره", "داره", "متأهله",
-    "متأهلین", "مجردم", "متأهلم", "خانواده‌ته", "مامانمه", "باباهم", "کیه",
+    "متأهلین", "مجردم", "متأهلم", "خانواده‌ته", "مامانمه", "بابامه", "کیه",
     "داداشمه", "پدرن", "مادرن", "نفرن", "نفریم", "داری",
     "کجاست", "راسته", "چپه", "برید", "رستورانه",
     # Units 6-8, added 2026-07-06.
