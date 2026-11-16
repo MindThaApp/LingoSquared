@@ -152,7 +152,7 @@ from app.review.grading import (
     is_arabic_hamza_only_difference,
     select_feedback,
 )
-from app.review.translit_nudge import NUDGE_MESSAGE, correct_answer_translit, feedback_code_for, is_romanized_almost, romanized_input_nudge
+from app.review.translit_nudge import NUDGE_MESSAGE, correct_answer_translit, feedback_code_for, is_romanized_almost, romanized_input_matches, romanized_input_nudge
 from app.review.placement import (
     PLACEMENT_BLOCK_SIZE,
     PLACEMENT_LEVELS,
@@ -251,7 +251,8 @@ def conversation_reply_result(
         )
         if result == "correct":
             return result, variant, False
-        if result == "almost" and is_romanized_almost(result, response, variant, language_code):
+        if result != "correct" and romanized_input_matches(response, variant, language_code):
+            # speak_response grading uses spoken tolerance, which never recognises a romanization itself.
             romanized = True
             continue  # romanized input earns no credit and never advances the conversation
         if result == "almost" and best_result == "incorrect":
