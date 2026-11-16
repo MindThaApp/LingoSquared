@@ -58,6 +58,10 @@ QUOTE_FOLD = str.maketrans({
     "“": '"', "”": '"', "„": '"', "«": '"', "»": '"',
 })
 INTERNAL_PUNCTUATION = frozenset(",;:.!?¿¡…،؛؟«»\"„")
+# Ramin's 2026-11-16 decision: a trailing sentence terminator is never graded,
+# in any language and even for punctuation_strict exercises. Punctuation inside
+# the answer is unaffected by this set.
+TRAILING_TERMINATORS = frozenset(".!?؟۔。！？．｡")
 
 
 def canonical_text(
@@ -85,6 +89,11 @@ def canonical_text(
             end -= 1
         text = text[start:end]
         text = "".join(" " if char in INTERNAL_PUNCTUATION else char for char in text)
+    else:
+        end = len(text)
+        while end > 0 and text[end - 1] in TRAILING_TERMINATORS:
+            end -= 1
+        text = text[:end].rstrip()
     text = text if case_sensitive else text.casefold()
     return " ".join(text.split())
 
@@ -93,7 +102,7 @@ def canonical_text(
 # terminal . ? ؟; the wider approved set covers the equivalent boundaries in
 # the other shipped scripts. Keep this in sync with scripts/compile_content.py.
 DICTATION_BOUNDARY_PUNCTUATION: frozenset[str] = frozenset(
-    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،"}
+    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،", "。", "！", "？", "．", "｡"}
 )
 
 # Exercise types that are always choice/selection-based and must never
