@@ -23,6 +23,7 @@ export function TranslitSettings() {
       </label>
       <select
         id={`${uid}-mode`}
+        style={{ minHeight: 44 }}
         value={mode}
         onChange={(e) => {
           const next = e.target.value as "auto" | "on" | "off";

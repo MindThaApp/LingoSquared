@@ -30,7 +30,7 @@ trap cleanup EXIT
 # 1. Frontend build (API on http://api:8010; no Sentry DSN, so Sentry never initialises).
 if [ "${E2E_SKIP_BUILD:-0}" != 1 ]; then
   docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e CI=1 \
-    -e VITE_API_BASE_URL=http://api:8010 -e VITE_AUDIO_BASE_URL=/media/audio \
+    -e VITE_API_BASE_URL=http://api:8010 -e VITE_AUDIO_BASE_URL=/media/audio -e VITE_PASSWORD_RESET_ENABLED=true \
     -v "$ROOT:/repo" -v "$WORK/dist:/out" -w /repo node:22-slim \
     sh -c 'npm ci --no-audit --no-fund >/dev/null && npm --workspace frontend exec -- vite build --outDir /out --emptyOutDir' \
     || { echo "frontend build failed" >&2; exit 2; }
@@ -55,6 +55,8 @@ services:
       LOGIN_RATE_LIMIT_MAX: "1000"
       TTS_RATE_LIMIT_MAX: "1000"
       STT_RATE_LIMIT_MAX: "1000"
+      EMAIL_PROVIDER: log
+      PASSWORD_RESET_BASE_URL: http://web
     depends_on: {db: {condition: service_healthy}}
     volumes: ["$ROOT/backend:/app:ro", "$ROOT/e2e/fixtures:/fixtures:ro", "$WORK/audio:/srv/media/audio:ro"]
     command: sh -c "alembic upgrade head && python -m app.content.seed --with-demo-courses && uvicorn app.main:app --host 0.0.0.0 --port 8010"
