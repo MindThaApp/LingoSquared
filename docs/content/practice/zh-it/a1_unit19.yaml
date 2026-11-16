@@ -1,0 +1,333 @@
+schema_version: '1.0'
+pack_key: practice.zh-it.a1.unit19
+source_language: zh
+target_language: it
+unit_content_key: it.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_biglietto
+    - w_binario
+    - w_parte
+    - w_treno
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+      - w_parte
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_biglietto
+      - w_binario
+  t_treno: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_treno
+  t_parte: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_parte
+  t_binario: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_binario
+  t_biglietto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_biglietto
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+templates:
+- content_key: practice.zh-it.it.a1.unit19.lesson01.choose.001
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il treno、il binario 和 il biglietto 都是阳性名词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.listen.002
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Parte 是“它出发”的形式，用于火车。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.choose.003
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: biglietto 是出行时要买的东西；binario 是火车停靠的地方。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.order.004
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il {item} è alla stazione.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è alla stazione.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla stazione 的意思是“在车站”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.order.005
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno {item} alle otto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Parte 是 partire 的第三人称形式：它出发。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.order.006
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno parte dal {item} tre.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal 是 da 加 il 的合并形式，用来表示出发的站台。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.fill.007
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} è per Roma. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per Roma 的意思是“去罗马”，表示目的地。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.fill.008
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: A che ora {item} il treno per Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Parte 与 il treno 搭配：火车几点开？
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.fill.009
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} per Roma parte alle otto. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno per Roma 是开往罗马的火车。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.translate.010
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 火车八点发车。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Parte 是第三人称单数：它出发。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.translate.011
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 你有去罗马的票吗？（非正式，tu）
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai il {item} per Roma?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai 是“有”的非正式 tu 形式。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.translate.012
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 火车从三号站台出发。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal binario tre 的意思是“从三号站台”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.translate.013
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 去罗马的火车八点开。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} per Roma parte alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Per Roma 告诉你火车开往哪里。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-it.it.a1.unit19.lesson01.translate.014
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno、il binario 和 il biglietto 是阳性名词。
+    language_code: zh
+    direction: ltr
