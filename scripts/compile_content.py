@@ -125,7 +125,7 @@ ACCEPTED_VARIANT_STATUSES = {"correct", "acceptable_with_note"}
 # Mirror backend/app/review/grading.py's Ramin-approved 2026-08-04
 # DICTATION_BOUNDARY_PUNCTUATION exactly: scripts cannot import backend code.
 DICTATION_BOUNDARY_PUNCTUATION = frozenset(
-    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،"}
+    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،", "。", "！", "？", "．", "｡"}
 )
 PRACTICE_EXERCISE_TYPES = {
     "multiple_choice",
