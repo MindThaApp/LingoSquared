@@ -145,6 +145,8 @@ def lose_heart(db: Session, user_id: str, now: datetime | None = None) -> int:
     if state.hearts > 0:
         if state.hearts >= HEARTS_MAX:
             state.hearts_anchor_at = now
+            # Practice done before the first heart was lost does not count.
+            state.last_practice_restore_at = now
         state.hearts -= 1
     return state.hearts
 
@@ -156,7 +158,9 @@ def restore_heart_for_practice(db: Session, user_id: str, now: datetime | None =
     if state.hearts >= HEARTS_MAX:
         return {"restored": False, "reason": "full"}
     since = _aware(state.last_practice_restore_at)
-    q = select(func.count(PracticeAttempt.id)).where(PracticeAttempt.user_id == user_id)
+    q = select(func.count(PracticeAttempt.id)).where(
+        PracticeAttempt.user_id == user_id, PracticeAttempt.correct.is_(True)
+    )
     if since is not None:
         q = q.where(PracticeAttempt.created_at > since)
     answered = db.scalar(q) or 0
@@ -255,6 +259,12 @@ def spend_gems(db: Session, user_id: str, item: str, operation_id: str) -> dict:
     if cost is None:
         raise SpendError("unknown_item", "Unknown item")
     now = datetime.now(timezone.utc)
+    # Lock order everywhere: user_stats first, then user_game_state.
+    stats = db.scalar(select(UserStats).where(UserStats.user_id == user_id).with_for_update())
+    if stats is None:
+        stats = UserStats(user_id=user_id, total_xp=0, streak_days=0, daily_goal=20, streak_freezes_available=0)
+        db.add(stats)
+        db.flush()
     state = game_state(db, user_id, for_update=True)
     key = f"spend:{item}:{operation_id}"
     already = db.scalar(
@@ -267,15 +277,7 @@ def spend_gems(db: Session, user_id: str, item: str, operation_id: str) -> dict:
     _settle(state, now)
     if item == "heart_refill" and state.hearts >= HEARTS_MAX:
         raise SpendError("hearts_full", "Your hearts are already full")
-    stats = None
     if item == "streak_freeze":
-        stats = db.scalar(
-            select(UserStats).where(UserStats.user_id == user_id).with_for_update()
-        )
-        if stats is None:
-            stats = UserStats(user_id=user_id, total_xp=0, streak_days=0, daily_goal=20, streak_freezes_available=0)
-            db.add(stats)
-            db.flush()
         if stats.streak_freezes_available >= MAX_STREAK_FREEZES:
             raise SpendError("freeze_limit", "You already have the maximum number of streak freezes")
     if state.gem_balance < cost:
@@ -315,11 +317,20 @@ def _weekly_totals(start: datetime, end: datetime):
     )
 
 
+def _public_name(name: str | None, email: str | None) -> str:
+    """Display name only. A name that is just the email local-part (the
+    registration default) would leak the email, so it shows as "Learner"."""
+    name = (name or "").strip()
+    if not name or (email and name.lower() == email.split("@")[0].lower()):
+        return "Learner"
+    return name
+
+
 def _eligible(totals):
     """Users with weekly XP > 0 who are active and have not opted out."""
     opted_out = func.coalesce(UserGameState.leaderboard_opt_out, False)
     return (
-        select(User.id, User.display_name, totals.c.xp)
+        select(User.id, User.display_name, totals.c.xp, User.email)
         .join(totals, totals.c.uid == User.id)
         .outerjoin(UserGameState, UserGameState.user_id == User.id)
         .where(User.is_active.is_(True), opted_out.is_(False), totals.c.xp > 0)
@@ -335,13 +346,13 @@ def weekly_leaderboard(db: Session, user_id: str, now: datetime | None = None) -
     opted_out = bool(state.leaderboard_opt_out) if state else False
     entries = []
     previous_xp, rank = None, 0
-    for index, (uid_, name, xp) in enumerate(rows, start=1):
+    for index, (uid_, name, xp, email) in enumerate(rows, start=1):
         if xp != previous_xp:
             rank, previous_xp = index, xp
         entries.append(
             {
                 "rank": rank,
-                "display_name": (name or "").strip() or "Learner",
+                "display_name": _public_name(name, email),
                 "xp": int(xp),
                 "is_me": uid_ == user_id,
             }

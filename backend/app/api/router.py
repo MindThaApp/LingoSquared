@@ -1668,6 +1668,7 @@ def complete(
     skill.mastery = skill.completed_lessons / total
 
     gems_awarded = 0
+    exercise_total = db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id == lesson_id, Exercise.retired_at.is_(None))) or 0
     if first_completion:
         record_activity(db, user.id, 0, user.timezone)
         # Gems (ENABLE_GEMS): earned once per lesson, keyed by lesson id, so a
@@ -1676,7 +1677,7 @@ def complete(
             db,
             user.id,
             lesson_id,
-            perfect=p.answer_count > 0 and p.correct_count == p.answer_count,
+            perfect=p.answer_count > 0 and p.correct_count == p.answer_count and p.answer_count >= exercise_total,
         )
 
     db.commit()
