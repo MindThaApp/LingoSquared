@@ -1,0 +1,398 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a2.unit25
+source_language: fa
+target_language: nl
+unit_content_key: nl.a2.unit25.meningen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - opinion_noun
+    - opinion_adj
+    - opinion_verb
+    - opinion_gedeeltelijk_single
+    - opinion_veiliger_single
+slot_presets:
+  opinion_noun: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: opinion_noun
+  opinion_adj: &id002
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: opinion_adj
+  opinion_verb: &id003
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: opinion_verb
+  opinion_noun_or_adj: &id006
+    language_code: nl
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - opinion_noun
+      - opinion_adj
+  opinion_gedeeltelijk_single: &id004
+    language_code: nl
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: opinion_gedeeltelijk_single
+  opinion_veiliger_single: &id005
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: opinion_veiliger_single
+templates:
+- content_key: practice.fa-nl.nl.a2.unit25.lesson01.choose.001
+  lesson_content_key: nl.a2.unit25.lesson01.wat_vind_je_daarvan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های این درس درباره‌ی نظر دادن است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson01.listen.002
+  lesson_content_key: nl.a2.unit25.lesson01.wat_vind_je_daarvan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson01.match.003
+  lesson_content_key: nl.a2.unit25.lesson01.wat_vind_je_daarvan
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+    eighth: *id001
+    ninth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+  feedback_frame:
+    text: هر کلمه را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson02.choose.001
+  lesson_content_key: nl.a2.unit25.lesson02.volgens_mij
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} صفتی است که برای توصیف مسیر دوچرخه‌سواری به کار می‌رود.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson02.listen.002
+  lesson_content_key: nl.a2.unit25.lesson02.volgens_mij
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson02.order.003
+  lesson_content_key: nl.a2.unit25.lesson02.volgens_mij
+  type: word_order
+  frame:
+    text: Volgens mij is het fietspad {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Volgens mij is het fietspad {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} نظری است که درباره‌ی مسیر دوچرخه‌سواری داده شده.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson02.translate.004
+  lesson_content_key: nl.a2.unit25.lesson02.volgens_mij
+  type: translation
+  frame:
+    text: به نظر من ("volgens mij")، مسیر دوچرخه‌سواری {item} است.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: به هلندی ترجمه کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Volgens mij is het fietspad {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Volgens mij is het fietspad {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a2.unit25.lesson03.choose.001
+  lesson_content_key: nl.a2.unit25.lesson03.eens_of_niet_eens
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از فعل‌های مکالمه‌های این درس درباره‌ی نظر دادن است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson03.listen.002
+  lesson_content_key: nl.a2.unit25.lesson03.eens_of_niet_eens
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson03.fill.003
+  lesson_content_key: nl.a2.unit25.lesson03.eens_of_niet_eens
+  type: fill_in_blank
+  frame:
+    text: Ik ben het {item} met je eens.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ik ben het gedeeltelijk met je eens. -- من تا حدی با شما موافقم.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson04.fill.001
+  lesson_content_key: nl.a2.unit25.lesson04.aan_de_andere_kant
+  type: fill_in_blank
+  frame:
+    text: Aan de andere kant is het fietspad wel {item} voor kinderen.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: از طرف دیگر، مسیر دوچرخه برای بچه‌ها امن‌تر است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson05.translate.001
+  lesson_content_key: nl.a2.unit25.lesson05.forumbericht_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: به هلندی ترجمه کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson06.translate.002
+  lesson_content_key: nl.a2.unit25.lesson06.fietspad_gesprek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: به هلندی ترجمه کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کلمه هلندی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit25.lesson06.match.001
+  lesson_content_key: nl.a2.unit25.lesson06.fietspad_gesprek
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth} · {tenth} · {eleventh} · {twelfth} · {thirteenth} · {fourteenth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+    seventh: *id006
+    eighth: *id006
+    ninth: *id006
+    tenth: *id006
+    eleventh: *id006
+    twelfth: *id006
+    thirteenth: *id006
+    fourteenth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
+    - thirteenth
+    - fourteenth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
+    - thirteenth
+    - fourteenth
+  feedback_frame:
+    text: هر کلمه این درس را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl

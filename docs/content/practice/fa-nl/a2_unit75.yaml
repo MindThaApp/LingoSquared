@@ -1,0 +1,466 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a2.unit75
+source_language: fa
+target_language: nl
+unit_content_key: nl.a2.unit75.schermtijd
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - screen_time_vocab
+    - screen_time_verb
+    - schermtijd_scherm_single
+    - schermtijd_telefoon_single
+    - schermtijd_chat_single
+    - schermtijd_schermtijd_single
+    - schermtijd_doorbrengen_single
+    - schermtijd_gewoonte_single
+    - schermtijd_wegleggen_single
+slot_presets:
+  screen_time_vocab: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: screen_time_vocab
+  screen_time_verb:
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: screen_time_verb
+  scherm_single: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_scherm_single
+  telefoon_single:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_telefoon_single
+  chat_single: &id003
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_chat_single
+  schermtijd_single: &id004
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_schermtijd_single
+  doorbrengen_single: &id005
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_doorbrengen_single
+  gewoonte_single: &id006
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: schermtijd_gewoonte_single
+  wegleggen_single: &id007
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: schermtijd_wegleggen_single
+templates:
+- content_key: practice.fa-nl.nl.a2.unit75.lesson01.choose.001
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای درباره‌ی زمان استفاده از صفحه‌نمایش است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson01.listen.002
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson01.order.003
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: word_order
+  frame:
+    text: Ik kijk vaak naar mijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik kijk vaak naar mijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} چیزی است که لوته اغلب به آن نگاه می‌کند.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson02.choose.001
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - schermtijd_chat_single
+        - schermtijd_doorbrengen_single
+        - schermtijd_wegleggen_single
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} فعلی درباره‌ی استفاده از صفحه‌نمایش است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson02.match.002
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+  feedback_frame:
+    text: هر کلمه را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson02.order.003
+  lesson_content_key: nl.a2.unit75.lesson02.ik_chat_met_vrienden
+  type: word_order
+  frame:
+    text: Ik {item} vaak met vrienden op mijn telefoon.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik {item} vaak met vrienden op mijn telefoon.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} کاری است که لوته اغلب با دوستانش روی گوشی‌اش انجام می‌دهد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson03.listen.001
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} کلمه‌ای است که شنیدید.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson03.translate.002
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: translation
+  frame:
+    text: فکر می‌کنم زمان صفحه‌نمایشم زیادی زیاد است.
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: به هلندی ترجمه کنید و برای «فکر کردن» از vinden استفاده کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a2.unit75.lesson04.match.001
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+  feedback_frame:
+    text: هر کلمه را به معنی فارسی‌اش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson04.fill.002
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: fill_in_blank
+  frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Volgens mij moet je minder tijd op je telefoon doorbrengen -- به نظر من باید زمان کمتری را پای گوشی‌ات بگذرانی.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson05.listen.001
+  lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای از وبلاگ است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson05.translate.002
+  lesson_content_key: nl.a2.unit75.lesson05.blog_lezen
+  type: translation
+  frame:
+    text: مدام به گوشی نگاه کردن عادت بدی است.
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: به هلندی ترجمه کنید (از steeds و op je telefoon استفاده کنید).
+      language_code: fa
+      direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Het is een slechte {item} om steeds op je telefoon te kijken.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Het is een slechte {item} om steeds op je telefoon te kijken.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a2.unit75.lesson06.listen.001
+  lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} یکی از واژه‌های این گفت‌وگو است.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson06.fill.002
+  lesson_content_key: nl.a2.unit75.lesson06.omar_en_lotte_praten
+  type: fill_in_blank
+  frame:
+    text: Misschien kun je 's avonds je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Misschien kun je 's avonds je telefoon wegleggen -- شاید بتوانی شب‌ها گوشی‌ات را کنار بگذاری.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit75.lesson03.translate.002.volume_order.009
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: word_order
+  frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: schermtijd_schermtijd_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a2.unit75.lesson04.fill.002.volume_order.010
+  lesson_content_key: nl.a2.unit75.lesson04.minder_tijd_op_je_telefoon
+  type: word_order
+  frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: schermtijd_doorbrengen_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Volgens mij moet je minder tijd op je telefoon {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Volgens mij moet je minder tijd op je telefoon {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.fa-nl.nl.a2.unit75.lesson01.choose.001.volume_listen.003
+  lesson_content_key: nl.a2.unit75.lesson01.ik_gebruik_mijn_telefoon_vaak
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: معنی درست را انتخاب کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: screen_time_vocab
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.fa-nl.nl.a2.unit75.lesson03.translate.002.volume_translate.003
+  lesson_content_key: nl.a2.unit75.lesson03.te_veel_schermtijd
+  type: translation
+  frame:
+    text: فکر می‌کنم زمان صفحه‌نمایشم زیادی زیاد است.
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: به هلندی ترجمه کنید و برای «فکر کردن» از vinden استفاده کنید.
+      language_code: fa
+      direction: rtl
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: schermtijd_schermtijd_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat ik te veel {item} heb.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat ik te veel {item} heb.
+    language_code: nl
+    direction: ltr
