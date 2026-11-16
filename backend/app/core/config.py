@@ -84,6 +84,7 @@ class Settings(BaseSettings):
     # Phase H4: /exercises/{id}/report and /practice/items/{id}/report
     # never had any rate limit at all.
     report_rate_limit_max: int = 20
+    export_rate_limit_max: int = 5
     # Web push (Phase E4) — VAPID keypair, same unset-by-default/graceful-
     # degradation convention as the TTS credentials above: empty until
     # provisioned (generate with `vapid --gen` from the py-vapid package,

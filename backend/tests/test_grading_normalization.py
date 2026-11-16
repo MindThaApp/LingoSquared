@@ -33,9 +33,34 @@ def test_dictation_keeps_internal_punctuation_strict():
 
 def test_punctuation_strict_disables_punctuation_normalization():
     assert grade(
-        "hello.", "hello", "translation", script="latin", punctuation_strict=True
+        "hello;", "hello", "translation", script="latin", punctuation_strict=True
     ) == "almost"
 
 
 def test_fill_in_blank_uses_typo_tolerance_for_long_words():
     assert grade("bannana", "banana", "fill_in_blank", script="latin") == "almost"
+
+
+def test_trailing_terminators_ignored_everywhere():
+    cases = [
+        ("hello!", "hello", "latin", "en"),
+        ("hello?", "hello.", "latin", "en"),
+        ("چطوری؟", "چطوری", "arabic", "fa"),
+        ("چطوری", "چطوری؟", "arabic", "prs"),
+        ("حالت خوبه۔", "حالت خوبه.", "arabic", "prs"),
+        ("你好！", "你好", "han", "zh"),
+        ("你好？", "你好。", "han", "zh"),
+    ]
+    for resp, correct, script, lang in cases:
+        for strict in (False, True):
+            assert grade(resp, correct, "translation", script=script, language_code=lang, punctuation_strict=strict) == "correct", (resp, correct, strict)
+
+
+def test_trailing_terminators_ignored_for_dictation():
+    for resp, correct in [("Hallo!", "Hallo"), ("你好！", "你好"), ("چطوری؟", "چطوری"), ("حالت خوبه۔", "حالت خوبه")]:
+        assert grade_answer(resp, correct, exercise_type="dictation") == "correct", (resp, correct)
+
+
+def test_internal_punctuation_still_counts_when_strict():
+    assert grade("Sí, quiero", "Sí quiero", "translation", script="latin", language_code="es", punctuation_strict=True) != "correct"
+    assert grade("a, b!", "a, b", "translation", script="latin", language_code="en", punctuation_strict=True) == "correct"
