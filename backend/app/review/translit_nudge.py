@@ -91,6 +91,8 @@ def romanized_input_matches(response: Any, correct: Any, language_code: str | No
     for answer in _strings(correct):
         if _is_latin(answer):
             continue  # a Latin correct answer is graded normally (e.g. romanize_* exercises)
+        if sum(c.isalpha() for c in answer) <= 2:
+            continue  # single letters / letter drills: typing the Latin sound is not the skill
         roman = entries.get(normalize_key(answer, language_code))
         if roman and fold_latin(roman) == wanted:
             return True

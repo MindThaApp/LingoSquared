@@ -71,6 +71,19 @@ def parse_output(text: str, rows):
 
 
 def run_job(lang, rows, work: Path, tag: str, model: str | None) -> dict[int, str]:
+    for attempt in range(4):
+        got = _run_job_once(lang, rows, work, tag, model)
+        if got:
+            return got
+        log = (work / "jobs" / tag / "log.txt")
+        text = log.read_text(errors="ignore") if log.exists() else ""
+        if "usage limit" in text or limited(work):
+            return {}
+        time.sleep(60 * (attempt + 1))  # 429 / transient: back off and retry
+    return {}
+
+
+def _run_job_once(lang, rows, work: Path, tag: str, model: str | None) -> dict[int, str]:
     jd = work / "jobs" / tag
     jd.mkdir(parents=True, exist_ok=True)
     (jd / "prompt.txt").write_text(prompt_for(lang, rows), encoding="utf-8")
