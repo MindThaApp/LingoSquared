@@ -24,7 +24,12 @@ vi.mock("@lingo/shared/api/endpoints", () => ({
 }));
 
 vi.mock("../components/exercises/ExerciseRenderer", () => ({
-  ExerciseRenderer: ({ exercise }: { exercise: { id: string } }) => <p>exercise:{exercise.id}</p>,
+  ExerciseRenderer: ({ exercise, onAnswer }: { exercise: { id: string }; onAnswer?: (r: string) => void }) => (
+    <div>
+      <p>exercise:{exercise.id}</p>
+      <button onClick={() => onAnswer?.("privet")}>answer-stub</button>
+    </div>
+  ),
 }));
 vi.mock("../components/TeachingCardView", () => ({
   TeachingCardView: ({ card }: { card: { title?: string } }) => <p>card:{card.title}</p>,
@@ -120,5 +125,43 @@ describe("LessonRunnerPage interleaving", () => {
     expect(await screen.findByText("card:c1")).toBeInTheDocument();
     expect(screen.queryByText(/^exercise:r/)).toBeNull();
     expect(ReviewApi.answer).not.toHaveBeenCalled();
+  });
+
+  it("romanized warm-up answer offers a script retry that reopens the item and grades normally", async () => {
+    vi.mocked(ReviewApi.due).mockResolvedValue({ by_course: [{ course_id: "c1", due_count: 1 }] } as never);
+    vi.mocked(ReviewApi.session).mockResolvedValue({
+      items: [{ id: "r1", type: "translation", prompt: { text_blocks: [] } }],
+    } as never);
+    vi.mocked(ReviewApi.answer)
+      .mockResolvedValueOnce({
+        correct: false,
+        result: "almost",
+        correct_response: "Привет",
+        feedback_code: "romanized_input",
+      } as never)
+      .mockResolvedValueOnce({ correct: true, result: "correct", correct_response: "Привет" } as never);
+    renderPage({ courseId: "c1" });
+    await screen.findByText("exercise:r1");
+    fireEvent.click(screen.getByText("answer-stub"));
+    fireEvent.click(await screen.findByText("review.try_again"));
+    // Same item is open again, banner gone, nothing credited yet.
+    expect(await screen.findByText("exercise:r1")).toBeInTheDocument();
+    expect(screen.queryByText("review.try_again")).toBeNull();
+    fireEvent.click(screen.getByText("answer-stub"));
+    expect(await screen.findByText("lesson_runner.correct")).toBeInTheDocument();
+    expect(ReviewApi.answer).toHaveBeenCalledTimes(2);
+  });
+
+  it("non-romanized almost in the warm-up has no retry button", async () => {
+    vi.mocked(ReviewApi.due).mockResolvedValue({ by_course: [{ course_id: "c1", due_count: 1 }] } as never);
+    vi.mocked(ReviewApi.session).mockResolvedValue({
+      items: [{ id: "r1", type: "translation", prompt: { text_blocks: [] } }],
+    } as never);
+    vi.mocked(ReviewApi.answer).mockResolvedValue({ correct: true, result: "almost", correct_response: "x" } as never);
+    renderPage({ courseId: "c1" });
+    await screen.findByText("exercise:r1");
+    fireEvent.click(screen.getByText("answer-stub"));
+    expect(await screen.findByText("lesson_runner.continue")).toBeInTheDocument();
+    expect(screen.queryByText("review.try_again")).toBeNull();
   });
 });

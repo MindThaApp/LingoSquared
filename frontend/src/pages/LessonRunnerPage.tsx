@@ -121,6 +121,7 @@ function LessonRunnerContent() {
   const [reviewItems, setReviewItems] = useState<PracticeItem[] | null>(null);
   const [reviewIndex, setReviewIndex] = useState(0);
   const [reviewResult, setReviewResult] = useState<PracticeAnswerResult | null>(null);
+  const [reviewAttempt, setReviewAttempt] = useState(0);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
 
   const [teachingIndex, setTeachingIndex] = useState(0);
@@ -261,6 +262,13 @@ function LessonRunnerContent() {
   function handleReviewSkip() {
     setReviewResult(null);
     setReviewIndex(reviewItems?.length ?? 0);
+  }
+
+  // Romanized input earned no credit (server wrote nothing): reopen the same warm-up item for a script retry.
+  function handleReviewTryInScript() {
+    setReviewResult(null);
+    setReviewResponse(undefined);
+    setReviewAttempt((n) => n + 1);
   }
 
   function handleReviewContinue() {
@@ -538,7 +546,7 @@ function LessonRunnerContent() {
           {t("lesson_runner.review_warmup_hint", { count: reviewItems.length })}
         </p>
         <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
-          key={item.id}
+          key={`${item.id}:${reviewAttempt}`}
           exercise={{ id: item.id, type: asExerciseType(item.type), order: 0, prompt: item.prompt }}
           onAnswer={handleReviewAnswer}
           disabled={reviewSubmitting || Boolean(reviewResult)}
@@ -569,6 +577,11 @@ function LessonRunnerContent() {
                   })}
                 />
                 <AnswerFeedbackExtras result={reviewResult} prompt={item.prompt} />
+                {reviewResult.feedback_code === "romanized_input" && (
+                  <button className="btn btn-secondary btn-block" style={{ marginBottom: 8 }} onClick={handleReviewTryInScript}>
+                    {t("review.try_again")}
+                  </button>
+                )}
                 <button className="btn btn-block" onClick={handleReviewContinue}>
                   {t("lesson_runner.continue")}
                 </button>
