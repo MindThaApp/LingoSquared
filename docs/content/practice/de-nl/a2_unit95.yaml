@@ -1,0 +1,142 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a2.unit95
+source_language: de
+target_language: nl
+unit_content_key: nl.a2.unit95.als_dan
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - als_condition_clause
+    - shop_rules_conditionals
+templates:
+- content_key: practice.de-nl.nl.a2.unit95.lesson01.choose.001
+  lesson_content_key: nl.a2.unit95.lesson01.als_het_regent
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      agreement_tags:
+        semantic:
+        - als_condition_clause
+        - shop_rules_conditionals
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wählen Sie die deutsche Bedeutung von {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit95.lesson01.match.002
+  lesson_content_key: nl.a2.unit95.lesson01.als_het_regent
+  type: matching_pairs
+  frame: &id002
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots: &id003
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations: &id004
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation: &id005
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame: &id006
+    text: Ordnen Sie jedem niederländischen Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit95.lesson01.translate.003
+  lesson_content_key: nl.a2.unit95.lesson01.als_het_regent
+  type: translation
+  frame: &id007
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame: &id008
+    text: Die niederländische Antwort lautet {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit95.lesson04.listen.001
+  lesson_content_key: nl.a2.unit95.lesson04.regels_in_de_winkel
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Wählen Sie die Bedeutung des niederländischen Wortes, das Sie gehört haben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit95.lesson04.match.002
+  lesson_content_key: nl.a2.unit95.lesson04.regels_in_de_winkel
+  type: matching_pairs
+  frame: *id002
+  slots: *id003
+  slot_relations: *id004
+  answer_derivation: *id005
+  feedback_frame: *id006
+- content_key: practice.de-nl.nl.a2.unit95.lesson04.translate.003
+  lesson_content_key: nl.a2.unit95.lesson04.regels_in_de_winkel
+  type: translation
+  frame: *id007
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame: *id008

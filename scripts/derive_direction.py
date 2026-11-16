@@ -426,7 +426,7 @@ def build_pack_occs(unit: Unit, src_code: str, y: dict, stats: dict) -> list[Occ
                 stats["pack_strings_total"] += 1
                 if not o.translatable:
                     stats["pack_strings_invariant"] += 1
-                return
+                # keep walking: the frame's text_blocks (practice instructions) are nested inside this node
             for v in node.values():
                 walk(v, tpl)
         elif isinstance(node, list):

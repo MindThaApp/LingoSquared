@@ -1,0 +1,98 @@
+schema_version: '1.0'
+pack_key: practice.fa-nl.a2.unit97
+source_language: fa
+target_language: nl
+unit_content_key: nl.a2.unit97.doorgeven_wat_iemand_zegt
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Farsi (Iran)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - reported_speech_statement_simple
+    - relay_message_dialogue
+templates:
+- content_key: practice.fa-nl.nl.a2.unit97.lesson01.choose.001
+  lesson_content_key: nl.a2.unit97.lesson01.wat_zegt_hij
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      agreement_tags:
+        semantic:
+        - reported_speech_statement_simple
+        - relay_message_dialogue
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit97.lesson01.translate.002
+  lesson_content_key: nl.a2.unit97.lesson01.wat_zegt_hij
+  type: translation
+  frame: &id002
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame: &id003
+    text: 'پاسخ هلندی این است: {item}'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit97.lesson04.listen.001
+  lesson_content_key: nl.a2.unit97.lesson04.een_bericht_doorgeven
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی کلمهٔ هلندی‌ای را که شنیدید انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-nl.nl.a2.unit97.lesson04.translate.002
+  lesson_content_key: nl.a2.unit97.lesson04.een_bericht_doorgeven
+  type: translation
+  frame: *id002
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame: *id003
