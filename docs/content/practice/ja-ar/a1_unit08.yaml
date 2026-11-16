@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.ja-ar.a1.unit08
+source_language: ja
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_سعر
+    - w_تفاح
+    - w_دراهم
+    - w_تفاحتين
+    - w_التفاح
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+      - w_تفاحتين
+  l01: &id002
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+  siir: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_سعر
+  darahim: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_دراهم
+  tuffah: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_التفاح
+  tufahatayn: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحتين
+templates:
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.choose.001
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سعر は「値段」という意味です。كم سعر ...؟ は、何かの値段を尋ねる言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.listen.002
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاح はりんご全般を表す集合名詞です。دراهم は dirham の複数形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.order.003
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: كم {item} التفاح؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item} التفاح؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم سعر التفاح؟ は「りんごの値段はどれくらいですか」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.order.004
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: التفاح بعشرة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 数字の前の ب は値段を表します。بعشرة は「10で」という意味で、そのあとに通貨が続きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.fill.005
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: كم {item} التفاح؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: سعر は「値段」です。この質問は、りんごの値段を尋ねています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.fill.006
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: التفاح بعشرة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: دراهم は dirham の複数形で、10のような数のあとに使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.translate.007
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: これらは名詞です。سعر は「値段」、تفاح は「りんご」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.translate.008
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: りんごはいくらですか。
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: التفاح の冠詞 ال は「そのりんご」を表すので、特定のりんごについての質問になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson01.translate.009
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: りんごは10ディルハムです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 数字の前の ب は値段を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson02.listen.001
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاحتين は تفاحة(りんご1個)に双数の語尾 ـين がついた形です。ة は ت に変わり、ちょうど2つのりんごを表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson02.order.002
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: アラビア語には特別な双数形があります。تفاحتين は「りんご2つ」を表し、「2」を表す別の単語は要りません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson02.fill.003
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: fill_in_blank
+  frame:
+    text: أريد {item} من فضلك. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 双数の語尾 ـين は「2つの〜」を表します。この語尾の前では、تفاحة の ة が ت と書かれ、تفاحتين となります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson02.translate.004
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاح はりんご全般ですが、双数の語尾がついた تفاحتين はちょうど2つを表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit08.lesson02.translate.005
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: りんごを2つください。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 双数の語尾 ـتين だけで「2つ」の意味が表せるので、数を表す別の単語は使いません。
+    language_code: ja
+    direction: ltr

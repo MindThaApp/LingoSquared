@@ -1,0 +1,463 @@
+schema_version: '1.0'
+pack_key: practice.ja-es.a1.unit03
+source_language: ja
+target_language: es
+unit_content_key: es.a1.unit03.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u03
+    - es_a1_u03_l01
+    - es_a1_u03_l03
+    - es_a1_u03_l06
+    - w_grande
+    - w_pequeña
+    - w_hermanas
+    - w_abuelos
+    - w_padres
+    - w_primos
+    - w_casa
+    - w_menor
+    - w_semana
+slot_presets:
+  close: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u03_l01
+  extended: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u03_l03
+  nouns: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u03
+  content: &id010
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u03
+  verbs_adj: &id013
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: es_a1_u03
+  dialogue: &id011
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u03_l06
+  size: &id003
+    language_code: es
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_grande
+      - w_pequeña
+  people_pl: &id006
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_abuelos
+      - w_padres
+      - w_primos
+  parents: &id008
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_padres
+      - w_abuelos
+  hermanas: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_hermanas
+  casa: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_casa
+  menor: &id009
+    language_code: es
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_menor
+  semana: &id012
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_semana
+templates:
+- content_key: practice.ja-es.es.a1.unit03.lesson01.choose.001
+  lesson_content_key: es.a1.unit03.lesson01.immediate_family
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 家族を表す言葉は、hermano と hermana、hijo と hija のように、性別でペアになることが多いです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson01.listen.002
+  lesson_content_key: es.a1.unit03.lesson01.immediate_family
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 男性複数形は男女の混ざったグループも表します。padres は両親、hermanos は兄弟姉妹の意味になることがあります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson01.translate.003
+  lesson_content_key: es.a1.unit03.lesson01.immediate_family
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 家庭では mamá と papá がふだんの呼び方で、madre と padre は中立的な言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson02.order.001
+  lesson_content_key: es.a1.unit03.lesson02.possessives_and_asking
+  type: word_order
+  frame:
+    text: Mi familia es {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi familia es {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: familia は女性名詞なので「小さい」は pequeña になります。grande は男女どちらでも形が変わりません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson02.translate.002
+  lesson_content_key: es.a1.unit03.lesson02.possessives_and_asking
+  type: translation
+  frame:
+    text: 私には姉妹が2人います。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Tengo dos {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: ¿Tienes hermanos? は男性複数形を使い、兄弟も姉妹も含めて尋ねます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson03.choose.001
+  lesson_content_key: es.a1.unit03.lesson03.extended_family
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: primo は男性のいとこ、prima は女性のいとこです。primos は男女混合のグループも表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson03.match.002
+  lesson_content_key: es.a1.unit03.lesson03.extended_family
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: abuelo と abuela を合わせて、複数形 abuelos(祖父母)になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson03.order.003
+  lesson_content_key: es.a1.unit03.lesson03.extended_family
+  type: word_order
+  frame:
+    text: Vivo con mis {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vivo con mis {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: mis は mi の複数形です:mi abuelo、mis abuelos。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson04.translate.001
+  lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+  type: translation
+  frame:
+    text: 私は{item}と住んでいます。
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vivo con mis {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Vivo だけで「私は住んでいます」という意味なので、yo は必要ありません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson04.fill.002
+  lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+  type: fill_in_blank
+  frame:
+    text: Somos cinco en {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Somos cinco は直訳すると「私たちは5人です」で、家族や仲間が5人いるという意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson04.order.003
+  lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+  type: word_order
+  frame:
+    text: ¿Vives cerca de tus {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Vives cerca de tus {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Cerca de は「~の近く」の意味です。tus は tu(あなたの)の複数形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson05.fill.001
+  lesson_content_key: es.a1.unit03.lesson05.reading_a_family_profile
+  type: fill_in_blank
+  frame:
+    text: Mi hermana {item} se llama Sofía. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: menor は名詞の後ろに置き、性別で形が変わりません:mi hermano menor、mi hermana menor。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson05.choose.002
+  lesson_content_key: es.a1.unit03.lesson05.reading_a_family_profile
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Vive は「彼/彼女は住んでいる」、viven は「彼らは住んでいる」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson06.listen.001
+  lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ¡Qué bonito! は写真を見たときの温かい反応で、「なんて素敵!」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson06.translate.002
+  lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+  type: translation
+  frame:
+    text: 私たちは毎週電話で話します。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hablamos por teléfono cada {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: スペイン語では「電話で」を por teléfono と言います。また cada は形が変わりません:cada día、cada semana。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson06.match.003
+  lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id013
+    second: *id013
+    third: *id013
+    fourth: *id013
+    fifth: *id013
+    sixth: *id013
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: somos と son はどちらも ser の活用形で、「私たちは~です」「彼らは~です」の意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-es.es.a1.unit03.lesson06.translate.004
+  lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: スペイン語では動詞の語尾で主語の人称がわかります:vivo、vives、vive、viven。
+    language_code: ja
+    direction: ltr
