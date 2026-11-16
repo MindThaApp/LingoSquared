@@ -194,16 +194,17 @@ def test_lesson_gems_once_and_perfect_bonus(client, auth, flags):
     client.post(f"/lessons/{lesson_id}/start", headers=auth)
     assert _answer(client, auth, exercises[0]["id"], "سلام").json()["correct"] is True
     first = client.post(f"/lessons/{lesson_id}/complete", headers=auth).json()
-    assert first["gems_awarded"] == g.GEMS_LESSON_COMPLETE + g.GEMS_PERFECT_LESSON
+    # one answer out of several exercises: no perfect bonus
+    assert first["gems_awarded"] == g.GEMS_LESSON_COMPLETE
     # retries / replays of the completion event cannot farm gems
     for _ in range(3):
         assert client.post(f"/lessons/{lesson_id}/complete", headers=auth).json()["gems_awarded"] == 0
     uid = _uid(client, auth)
     with SessionLocal() as db:
         rows = list(db.scalars(select(GemTransaction).where(GemTransaction.user_id == uid)))
-        assert {r.kind for r in rows} == {"lesson_complete", "perfect_lesson"}
-        assert db.get(UserGameState, uid).gem_balance == sum(r.amount for r in rows) == 10
-    assert client.get("/me/gamification", headers=auth).json()["gems"]["balance"] == 10
+        assert {r.kind for r in rows} == {"lesson_complete"}
+        assert db.get(UserGameState, uid).gem_balance == sum(r.amount for r in rows) == 5
+    assert client.get("/me/gamification", headers=auth).json()["gems"]["balance"] == 5
 
 
 def test_gems_flag_off_awards_nothing(client, auth):

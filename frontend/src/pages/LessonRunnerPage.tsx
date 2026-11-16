@@ -291,9 +291,7 @@ function LessonRunnerContent() {
       const res = await LessonApi.answer(current.exercise.id, response, meta);
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
-      if (res.hearts_remaining != null) {
-        void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
-      }
+      void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
     } catch (err) {
       if (err instanceof ApiError && err.code === "no_hearts") {
         void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });

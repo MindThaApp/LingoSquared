@@ -21,6 +21,17 @@ export function OutOfHearts({ onBack, onRefilled }: { onBack: () => void; onRefi
     return () => window.clearInterval(id);
   }, []);
 
+  const dueAt = state?.hearts.next_heart_at ? new Date(state.hearts.next_heart_at).getTime() : null;
+  useEffect(() => {
+    // A heart has arrived: refetch so the learner is not stuck on this screen.
+    if (dueAt !== null && now >= dueAt) {
+      void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
+    }
+  }, [now, dueAt, queryClient]);
+  useEffect(() => {
+    if ((state?.hearts.hearts ?? 0) > 0) onRefilled?.();
+  }, [state?.hearts.hearts, onRefilled]);
+
   const countdown = formatCountdown(state?.hearts.next_heart_at ?? null, now);
   const cost = state?.gems.costs.heart_refill ?? 0;
   const canRefill = !!state?.gems.enabled && cost > 0;
