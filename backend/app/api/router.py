@@ -44,6 +44,7 @@ from app.models import (
     PushSubscription,
     QuestCompletion,
     RefreshToken,
+    ReviewEvent,
     ReviewItem,
     SkillProgress,
     Unit,
@@ -140,6 +141,7 @@ from app.schemas.api import (
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
 from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
+from app.services.unreviewable import expire_stale_unreviewable
 from app.review.scheduler import schedule
 from app.review.events import apply_self_grade, schedule_and_log, schedule_practice_srs
 from app.review.grading import (
@@ -303,6 +305,9 @@ GENERATION_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.
 REPORT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.report_rate_limit_max, window_seconds=60))
 # Screenshot uploads are unauthenticated for the same reason as /feedback
 # itself, so they get their own per-IP limiter at the same ceiling/window.
+# GET /me/export builds a full per-user dump (many unbounded queries): keyed
+# per user (not IP), 5 per hour by default.
+EXPORT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.export_rate_limit_max, window_seconds=3600))
 FEEDBACK_ATTACHMENT_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.report_rate_limit_max, window_seconds=60))
 
 def client_ip(request: Request) -> str:
@@ -1195,6 +1200,7 @@ def export_me(response:Response,user=Depends(current_user),db:Session=Depends(ge
     # rows (session material, not personal data -- also revoked wholesale by
     # DELETE /me regardless) and push-subscription p256dh/auth values
     # (channel crypto keys, not personal data).
+    enforce_rate_limit(EXPORT_RATE_LIMIT,user.id,"export_rate_limited","Too many data exports. Please try again later.")
     stats=db.get(UserStats,user.id)
     lexeme_rows=db.execute(select(UserLexemeSRS,Lexeme).join(Lexeme,Lexeme.id==UserLexemeSRS.lexeme_id).where(UserLexemeSRS.user_id==user.id)).all()
     practice_rows=db.execute(select(PracticeAttempt,PracticeItem).join(PracticeItem,PracticeItem.id==PracticeAttempt.practice_item_id).where(PracticeAttempt.user_id==user.id).order_by(PracticeAttempt.created_at)).all()
@@ -1210,8 +1216,10 @@ def export_me(response:Response,user=Depends(current_user),db:Session=Depends(ge
         "exercise_attempts":[{"exercise_id":x.exercise_id,"response":x.response,"correct":x.correct,"outcome":x.outcome,"xp_awarded":x.xp_awarded,"created_at":x.created_at} for x in db.scalars(select(ExerciseAttempt).where(ExerciseAttempt.user_id==user.id).order_by(ExerciseAttempt.created_at))],
         "practice_attempts":[{"practice_item_id":a.practice_item_id,"course_id":i.course_id,"prompt":i.prompt,"response":a.response,"correct":a.correct,"xp_awarded":a.xp_awarded,"created_at":a.created_at} for a,i in practice_rows],
         "checkpoint_attempts":[{"unit_id":x.unit_id,"total_items":x.total_items,"passed":x.passed,"score":x.score,"weak_outcomes":x.weak_outcomes,"created_at":x.created_at,"scored_at":x.scored_at} for x in db.scalars(select(CheckpointAttempt).where(CheckpointAttempt.user_id==user.id).order_by(CheckpointAttempt.created_at))],
-        "lexeme_srs":[{"lexeme_id":s.lexeme_id,"token":lx.token,"english_gloss":lx.english_gloss,"language_code":lx.language_code,"course_id":s.course_id,"mastery":s.mastery,"ease_factor":s.ease_factor,"interval_days":s.interval_days,"repetitions":s.repetitions,"due_at":s.due_at,"last_reviewed_at":s.last_reviewed_at,"introduced_at":s.introduced_at,"suspended":s.suspended} for s,lx in lexeme_rows],
+        "lexeme_srs":[{"lexeme_id":s.lexeme_id,"token":lx.token,"english_gloss":lx.english_gloss,"language_code":lx.language_code,"course_id":s.course_id,"mastery":s.mastery,"ease_factor":s.ease_factor,"interval_days":s.interval_days,"repetitions":s.repetitions,"due_at":s.due_at,"last_reviewed_at":s.last_reviewed_at,"introduced_at":s.introduced_at,"suspended":s.suspended,"unreviewable_at":s.unreviewable_at} for s,lx in lexeme_rows],
         "review_items":[{"exercise_id":x.exercise_id,"ease_factor":x.ease_factor,"interval_days":x.interval_days,"repetitions":x.repetitions,"mastery":x.mastery,"due_at":x.due_at} for x in db.scalars(select(ReviewItem).where(ReviewItem.user_id==user.id))],
+        "review_events":[{"lexeme_id":x.lexeme_id,"exercise_id":x.exercise_id,"course_id":x.course_id,"source":x.source,"reviewed_at":x.reviewed_at,"result":x.result,"self_grade":x.self_grade,"rating":x.rating,"correct":x.correct,"previous_interval_days":x.previous_interval_days,"new_interval_days":x.new_interval_days,"new_due_at":x.new_due_at,"latency_ms":x.latency_ms} for x in db.scalars(select(ReviewEvent).where(ReviewEvent.user_id==user.id).order_by(ReviewEvent.reviewed_at))],
+        "identities":[{"provider":x.provider,"created_at":x.created_at} for x in db.scalars(select(UserIdentity).where(UserIdentity.user_id==user.id).order_by(UserIdentity.created_at))],
         "achievements":[{"code":ach.code,"title":ach.title,"earned_at":ua.earned_at} for ua,ach in earned],
         "quest_completions":[{"quest_code":x.quest_code,"date":x.date,"awarded_at":x.awarded_at} for x in db.scalars(select(QuestCompletion).where(QuestCompletion.user_id==user.id))],
         "vocabulary_progress":[{"content_item_id":x.content_item_id,"mastery":x.mastery,"last_reviewed_at":x.last_reviewed_at} for x in db.scalars(select(VocabularyProgress).where(VocabularyProgress.user_id==user.id))],
@@ -1711,6 +1719,8 @@ def lexeme_reviews_due(
     db: Session = Depends(get_db),
 ):
     now = datetime.now(timezone.utc)
+    if expire_stale_unreviewable(db, user.id, now):
+        db.commit()
     conditions = (
         UserLexemeSRS.user_id == user.id,
         UserLexemeSRS.due_at <= now,
