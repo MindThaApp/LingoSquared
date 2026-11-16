@@ -27,6 +27,7 @@ def cmd_rule(lang: str) -> None:
     store = load_store(lang)
     store.setdefault("lang", lang)
     store["scheme"] = SCHEMES[lang]
+    old_rule = {k: e for k, e in store.get("entries", {}).items() if e.get("source") == "rule"}
     store["entries"] = {k: e for k, e in store.get("entries", {}).items() if e.get("source") != "rule"}
     n = 0
     for key in collect_target_strings(lang):
@@ -36,7 +37,9 @@ def cmd_rule(lang: str) -> None:
         r = RULE_FN[lang](key)
         if not r.strip():
             continue
-        store["entries"][key] = {"romanization": r, "scheme": SCHEMES[lang], "source": "rule", "reviewed": False}
+        prev = old_rule.get(key)
+        keep_review = bool(prev and prev.get("reviewed") and prev["romanization"] == r)
+        store["entries"][key] = {"romanization": r, "scheme": SCHEMES[lang], "source": "rule", "reviewed": keep_review}
         n += 1
     save_store(lang, store)
     print(f"{lang}: {n} rule entries written ({len(store['entries'])} total)")

@@ -75,3 +75,12 @@ def test_mirror_in_sync_with_store_keys_are_normalised():
     for lang in ("ru", "hi"):
         for key in list(translit_nudge._entries(lang))[:500]:
             assert normalize_key(key, lang) == key
+
+
+def test_strict_and_choice_types_never_get_romanization_credit():
+    assert grade_answer("privet", "Привет", exercise_type="translation", script="cyrillic", language_code="ru", orthography_strict=True) == "incorrect"
+    assert grade_answer("privet", "Привет", exercise_type="multiple_choice", script="cyrillic", language_code="ru") == "incorrect"
+
+
+def test_single_letter_drills_not_credited():
+    assert grade_answer("a", "а", exercise_type="writing_prompt", script="cyrillic", language_code="ru") == "incorrect"

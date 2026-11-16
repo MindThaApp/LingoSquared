@@ -1197,7 +1197,11 @@ def grade_answer(
     # Romanized input (the Latin romanization of a correct target-script answer, per the pronunciation
     # store) is almost right: partial credit through the existing "almost" path; the answer endpoints
     # add the "Right — now write it in script" nudge.
-    if romanized_input_matches(response, correct, language_code):
+    if (
+        exercise_type in FREE_TEXT_EXERCISE_TYPES
+        and orthography_strict is not True
+        and romanized_input_matches(response, correct, language_code)
+    ):
         return "almost"
 
     normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict, language_code=language_code)
