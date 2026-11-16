@@ -2624,6 +2624,213 @@ for _tok, _gloss in {"15": "fifteen", "3": "three", "osiemdziesiąt": "eighty"}.
     GLOSSES.setdefault(_tok, _gloss)
 POS_SETS.setdefault("adjective", set()).update(['15', '3', 'osiemdziesiąt'])
 
+# --- A2 Block A (units 71-75): past tense, aspect, experience ---
+def _g(spec):
+    out = {}
+    for line in spec.strip().splitlines():
+        k, v = line.split("=", 1)
+        for tok in k.split("/"):
+            out[tok.strip()] = v.strip()
+    return out
+
+A2_BLOCK_A_GLOSSES = _g("""
+wypiłem/wypiłam=I drank (said by a man / a woman)
+wypiłeś/wypiłaś=you drank (informal, to a man / a woman)
+wypił/wypiła=he drank / she drank
+zjadł/zjadła=he ate / she ate
+zjadłam=I ate (said by a woman)
+zjadłeś/zjadłaś=you ate (informal, to a man / a woman)
+kanapkę=sandwich (object form)
+poranek=morning
+zabiegany=busy; hectic (masc.)
+obudzić=to wake up (perfective)
+umyć=to wash (perfective)
+ubrać=to dress (perfective)
+umyłam=I washed (said by a woman)
+umyłem=I washed (said by a man)
+umył/umyła=he washed / she washed
+umyłaś=you washed (informal, to a woman)
+umyłyśmy=we washed (women only)
+ubrał/ubrała=he got dressed / she got dressed
+ubrałem=I got dressed (said by a man)
+ubrałaś=you got dressed (informal, to a woman)
+obudziła=she woke up
+obudził=he woke up
+obudziłam=I woke up (said by a woman)
+obudziliśmy=we woke up (men or mixed group)
+obudziłeś/obudziłaś=you woke up (informal, to a man / a woman)
+wyjechać=to leave by vehicle (perfective)
+przyjechać=to arrive by vehicle (perfective)
+wyjechał=he left by vehicle
+dojechałam/dojechałem=I got there by vehicle (said by a woman / a man)
+dojechał/dojechała=he got there by vehicle / she got there by vehicle
+dojechaliśmy/dojechałyśmy=we got there by vehicle (men or mixed / women only)
+dojechałeś/dojechałaś=you got there by vehicle (informal, to a man / a woman)
+przyjechałem/przyjechałam=I arrived by vehicle (said by a man / a woman)
+przyjechał/przyjechała=he arrived by vehicle / she arrived by vehicle
+przyjechali=they arrived by vehicle (men or mixed group)
+wyjechałem/wyjechałam=I left by vehicle (said by a man / a woman)
+tramwaj=tram
+tramwajem=by tram
+autobusem=by bus
+wyszła=she went out
+wyszedł=he went out
+wyszedłeś=you went out (informal, to a man)
+wyszłam=I went out (said by a woman)
+wyszliśmy/wyszłyśmy=we went out (men or mixed / women only)
+budzę=I wake up (habitually; reflexive)
+budzi=he wakes up; she wakes up (habitually; reflexive)
+kiedyś=once; in the past; ever
+mieszkałem/mieszkałam=I used to live; I lived (said by a man / a woman)
+mieszkała/mieszkał=she lived / he lived
+mieszkali=they lived
+mieszkaliśmy/mieszkałyśmy=we lived (men or mixed / women only)
+mieszkałeś/mieszkałaś=you lived (informal, to a man / a woman)
+wsi=village; countryside (form after 'in' or 'of')
+wieś=village; countryside
+małym=small (form after 'in', masc.)
+małe=small (neuter)
+grał/grała=he played / she played
+grałem/grałam=I played (said by a man / a woman)
+grałeś/grałaś=you played (informal, to a man / a woman)
+czytała/czytał=she read / he read
+chodził=he went regularly; he used to go
+chodziłem=I went regularly; I used to go (said by a man)
+szkoły=school (form after 'to' or 'of')
+jeździła=she used to travel; she used to ride
+jeździliśmy=we used to travel (men or mixed group)
+jeździłam=I used to travel (said by a woman)
+jeździłaś=you used to ride (informal, to a woman)
+dawniej=formerly; in the old days
+jadłam/jadłaś=I ate / you ate (said by a woman / to a woman)
+jadł/jadła=he used to eat / she used to eat
+jedliśmy/jadłyśmy=we ate (men or mixed / women only)
+ogród=garden
+podwórko=yard; courtyard
+podwórku=yard (form after 'in' or 'on')
+byłyśmy/miałyśmy=we were / we had (women only)
+klasa=classroom; class
+klasie=classroom (form after 'in')
+bajki=cartoons; fairy tales
+oglądać=to watch
+piła=she drank (habitually)
+pije=drinks (he; she)
+piłam=I drank (said by a woman)
+oglądał/oglądała=he watched / she watched
+oglądałem=I watched (said by a man)
+oglądaliśmy=we watched (men or mixed group)
+kochać=to love
+gotowała/gotował=she cooked / he cooked
+ogrodzie=garden (form after 'in')
+robiłaś=you were doing (informal, to a woman)
+czekać=to wait
+szliśmy=we were walking (men or mixed group)
+spał/spała=he slept / she slept
+świecić=to shine
+słońce=sun
+padał=it was falling (masc.; as in rain)
+świeciło=it was shining (neuter)
+zgasnąć=to go out; to stop shining (perfective)
+spóźnić=to make late (reflexive: to be late)
+zepsuć=to break (perfective; reflexive: to break down)
+nagle=suddenly
+zaczął=he started
+zgasło=it went out (neuter)
+światło=light
+zepsuł=he broke; it broke (masc.)
+przyszła=she came; she arrived on foot
+zaczynać=to start (imperfective)
+ugotować=to cook (perfective)
+robiła=she was doing; she was making
+przeczytał=he read through (finished)
+ugotował=he cooked (finished)
+wracaliśmy=we were coming back (men or mixed group)
+wróciliśmy=we came back (men or mixed group)
+dzwonił=he was calling; he was ringing
+przeczytałam=I read through (said by a woman; finished)
+ugotowałam=I cooked (said by a woman; finished)
+szłam=I was walking (said by a woman)
+szedł=he was walking
+szła=she was walking
+przyszedł=he came; he arrived on foot
+ulicy=street (form after 'on')
+stał=he stood; it stood
+samochody=cars
+stały=they stood (not masc. persons)
+jechał=he was travelling; it was going
+przestać=to stop (perfective)
+mokry/mokra=wet (masc. / fem.)
+przestało=it stopped (neuter)
+działo=it was happening (neuter, in 'działo się')
+wysiąść=to get off; to get out (perfective)
+wysiadłem=I got off (said by a man)
+wróciłam=I came back (said by a woman)
+jechałem=I was travelling (said by a man)
+aż=until
+dzwoniłam=I was calling (said by a woman)
+odebrałeś=you picked up (informal, to a man; as a phone)
+wracałem=I was coming back (said by a man)
+deszczu=rain (form after 'in')
+zadzwoniłaś=you called (informal, to a woman; finished)
+słyszałem=I heard (said by a man)
+morzem=sea (form after 'by')
+jadłeś=you ate (informal, to a man)
+sushi=sushi
+pizzę=pizza (object form)
+bigos=bigos (a Polish stew)
+lecieć=to fly (by plane)
+samolotem=by plane
+konno=on horseback
+widziałeś=you saw (informal, to a man)
+próbowałeś/próbowałem/próbowałam=you tried / I tried (said by a man / a woman)
+leciałeś/leciałem/leciałam=you flew / I flew (to a man / said by a man / a woman)
+pływałeś/pływałem/pływałam=you swam / I swam (to a man / said by a man / a woman)
+jeździłeś=you travelled; you rode (informal, to a man)
+leciał/leciała=he flew / she flew
+spróbować=to try (perfective)
+spróbowałem=I tried (once; said by a man)
+zobaczył=he saw (once)
+kilka=several; a few
+ani=nor (in the phrase for 'not even once')
+opowiem=I will tell
+dojechała=she got there by vehicle
+kupiła=she bought
+wychodzić=to go out (imperfective)
+zgubić=to lose (perfective)
+gubić=to lose (imperfective)
+odjeżdżać=to depart (imperfective)
+kupował=he used to buy
+wychodził=he used to go out
+odjeżdżał=it used to depart
+klucze=keys
+zgubiła=she lost
+zapomniała=she forgot
+kupiłeś=you bought (informal, to a man)
+zgubiłem=I lost (said by a man)
+szukać=to look for
+spóźniła=she was late (reflexive)
+szukał=he was looking for
+kluczy=keys (form after 'for')
+czeka=waits (he; she)
+szukałem=I was looking for (said by a man)
+biletu=ticket (form after 'for')
+czekam=I wait
+spóźniłeś=you were late (informal, to a man)
+czekasz=you wait (informal)
+byłaś=you were (informal, to a woman)
+""")
+for _tok, _gloss in A2_BLOCK_A_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS.setdefault("verb", set()).update(
+    t for t in A2_BLOCK_A_GLOSSES
+    if t.endswith(("ć", "ł", "ła", "ło", "li", "ły", "łem", "łam", "łeś", "łaś", "liśmy", "łyśmy", "ęć", "ść"))
+    or t in {"budzę", "budzi", "pije", "czeka", "czekam", "czekasz", "opowiem", "stał", "szedł", "przyszedł",
+             "jechał", "wyszedł", "zaczął", "przyszła", "wyszła", "szła", "szłam", "szliśmy", "stały", "wyszliśmy",
+             "wyszłyśmy", "spał", "spała", "świecić", "lecieć"})
+POS_SETS.setdefault("adjective", set()).update({"zabiegany", "mokry", "mokra", "małym", "małe"})
+POS_SETS.setdefault("adverb", set()).update({"nagle", "dawniej", "kiedyś", "konno", "kilka", "aż", "ani"})
+# --- end A2 Block A ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_pl_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_pl_b2c1.json"
