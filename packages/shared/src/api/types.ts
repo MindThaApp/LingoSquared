@@ -101,6 +101,8 @@ export interface TextBlock {
   language_code: string;
   direction: Direction;
   speaker?: string;
+  /** Optional Latin romanization of `text` (ru/hi/ar/fa/prs); see docs/CONTRACT.md. */
+  translit?: string;
 }
 
 export interface ExercisePrompt {
@@ -108,6 +110,8 @@ export interface ExercisePrompt {
   options?: string[];
   word_bank?: string[];
   pairs?: { left: string; right: string }[];
+  /** Romanization for target strings used in options / word_bank / pairs, keyed by the exact string. */
+  translit_map?: Record<string, string>;
   audio_text?: string;
   audio_language_code?: string;
   answer_language_code?: string;
