@@ -1,0 +1,367 @@
+schema_version: '1.0'
+pack_key: practice.ko-es.a1.unit45
+source_language: ko
+target_language: es
+unit_content_key: es.a1.unit45.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_amable
+    - w_cambio
+    - w_dividimos
+    - w_efectivo
+    - w_euros
+    - w_paga
+    - w_pagar
+    - w_pago
+    - w_pedimos
+    - w_platos
+    - w_puedo
+    - w_separado
+    - w_tarjeta
+    - w_total
+templates:
+- content_key: practice.ko-es.es.a1.unit45.lesson01.choose.001
+  lesson_content_key: es.a1.unit45.lesson01.cuanto_cuesta_en_total
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: es
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_total
+        - w_euros
+        - w_pagar
+        - w_tarjeta
+        - w_efectivo
+        - w_puedo
+        - w_pago
+        - w_dividimos
+        - w_separado
+        - w_cambio
+        - w_platos
+        - w_pedimos
+        - w_amable
+        - w_paga
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원의 단어로, ''총 얼마예요?'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson02.listen.001
+  lesson_content_key: es.a1.unit45.lesson02.tarjeta_o_efectivo
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원의 단어로, ''카드 또는 현금?'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson03.translate.001
+  lesson_content_key: es.a1.unit45.lesson03.dividir_la_cuenta
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원의 단어로, ''계산 나누기'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson04.match.001
+  lesson_content_key: es.a1.unit45.lesson04.el_cambio
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 스페인어 단어를 알맞은 한국어 뜻과 연결하세요. 이 단원의 수업에 나온 단어들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson05.choose.001
+  lesson_content_key: es.a1.unit45.lesson05.leer_un_ticket_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원의 단어로, ''식당 영수증 읽기'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson06.translate.001
+  lesson_content_key: es.a1.unit45.lesson06.elena_y_mateo_pagan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이 단원의 단어로, ''엘레나와 마테오가 계산하기'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson01.order.002
+  lesson_content_key: es.a1.unit45.lesson01.cuanto_cuesta_en_total
+  type: word_order
+  frame:
+    text: ¿Cuánto cuesta en {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_total
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Cuánto cuesta en {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 총 얼마예요? En total은 물건 하나의 가격이 아니라 전체 합계 가격을 묻는다는 뜻을 분명하게 해 줘요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson01.fill.003
+  lesson_content_key: es.a1.unit45.lesson01.cuanto_cuesta_en_total
+  type: fill_in_blank
+  frame:
+    text: Cuesta veinticinco {item} en total. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_euros
+    hint:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_euros
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 총 25유로예요. Cuesta는 costar(값이 나가다)의 3인칭 단수형이에요. 강세가 올 때 어간 모음 o가 ue로 바뀌어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson02.order.002
+  lesson_content_key: es.a1.unit45.lesson02.tarjeta_o_efectivo
+  type: word_order
+  frame:
+    text: ¿Puedo {item} con tarjeta aquí?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_pagar
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Puedo {item} con tarjeta aquí?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 여기서 카드로 결제할 수 있나요? pagar는 '지불하다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson02.fill.003
+  lesson_content_key: es.a1.unit45.lesson02.tarjeta_o_efectivo
+  type: fill_in_blank
+  frame:
+    text: ¿Quiere pagar en efectivo o con {item}? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarjeta
+    hint:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tarjeta
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 현금으로 내시겠어요, 카드로 내시겠어요? Quiere는 querer의 격식체 usted 형태로, 모르는 계산원이 쓰는 말이에요. 친구에게는 ¿quieres pagar...?라고 말해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson02.translate.004
+  lesson_content_key: es.a1.unit45.lesson02.tarjeta_o_efectivo
+  type: translation
+  frame:
+    text: 현금으로 계산할게요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_efectivo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Pago en {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 현금으로 낼게요. efectivo는 '현금'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson03.order.002
+  lesson_content_key: es.a1.unit45.lesson03.dividir_la_cuenta
+  type: word_order
+  frame:
+    text: ¿Puedo pagar por {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_separado
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Puedo pagar por {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 따로 계산해도 될까요? Por separado(따로)는 어떻게 지불하는지를 나타내고, pagar(지불하다)는 그럴 때 쓰는 일상적인 동사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson04.order.002
+  lesson_content_key: es.a1.unit45.lesson04.el_cambio
+  type: word_order
+  frame:
+    text: Aquí tiene su {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cambio
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Aquí tiene su {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 거스름돈 여기 있어요. cambio는 '거스름돈'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit45.lesson06.order.002
+  lesson_content_key: es.a1.unit45.lesson06.elena_y_mateo_pagan
+  type: word_order
+  frame:
+    text: Mateo {item} la cuenta.
+    language_code: es
+    direction: ltr
+  slots:
+    item:
+      language_code: es
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_paga
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mateo {item} la cuenta.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: '마테오가 계산해요. Paga는 pagar(지불하다)의 3인칭 단수형이에요: Mateo paga la cuenta.'
+    language_code: ko
+    direction: ltr

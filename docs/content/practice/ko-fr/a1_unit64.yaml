@@ -1,0 +1,288 @@
+schema_version: '1.0'
+pack_key: practice.ko-fr.a1.unit64
+source_language: ko
+target_language: fr
+unit_content_key: fr.a1.unit64.personnalite
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_calme
+    - w_connaissez
+    - w_curieux
+    - w_différent
+    - w_drôle
+    - w_gentille
+    - w_notre
+    - w_parler
+    - w_patient
+    - w_raconte
+    - w_timide
+templates:
+- content_key: practice.ko-fr.fr.a1.unit64.lesson01.choose.001
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_gentille
+        - w_drôle
+        - w_calme
+        - w_patient
+        - w_curieux
+        - w_parler
+        - w_timide
+        - w_connaissez
+        - w_raconte
+        - w_différent
+        - w_notre
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. 친절함과 유머를 다룬 레슨에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson02.listen.001
+  lesson_content_key: fr.a1.unit64.lesson02.calme_et_patient
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. 차분함과 참을성을 다룬 레슨에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson03.translate.001
+  lesson_content_key: fr.a1.unit64.lesson03.curieux_et_timide
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. 호기심과 수줍음을 다룬 레슨에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson04.match.001
+  lesson_content_key: fr.a1.unit64.lesson04.nina_pose_des_questions
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 프랑스어 단어를 알맞은 한국어 뜻과 연결하세요. 이 단원의 수업에 나온 단어예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson05.choose.001
+  lesson_content_key: fr.a1.unit64.lesson05.nina_entend_parler_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. Nina가 모두에 대해 듣는 레슨에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson06.translate.001
+  lesson_content_key: fr.a1.unit64.lesson06.nina_se_decrit
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. Nina가 자신을 소개하는 레슨에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson01.order.002
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: word_order
+  frame:
+    text: Camille est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_gentille
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Camille est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'Camille은 친절해요. gentille: 친절한 (여성형).'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson01.fill.003
+  lesson_content_key: fr.a1.unit64.lesson01.gentil_et_drole
+  type: fill_in_blank
+  frame:
+    text: Thomas est {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_drôle
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_drôle
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Thomas는 재미있어요. drôle: 재미있는.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson02.order.002
+  lesson_content_key: fr.a1.unit64.lesson02.calme_et_patient
+  type: word_order
+  frame:
+    text: Mathieu est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_calme
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mathieu est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'Mathieu는 차분해요. calme: 차분한.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson03.order.002
+  lesson_content_key: fr.a1.unit64.lesson03.curieux_et_timide
+  type: word_order
+  frame:
+    text: Nina est un peu {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_timide
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina est un peu {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 'Nina는 조금 수줍음이 많아요. timide: 수줍음이 많은.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit64.lesson06.order.002
+  lesson_content_key: fr.a1.unit64.lesson06.nina_se_decrit
+  type: word_order
+  frame:
+    text: Bienvenue dans {item} café des langues !
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_notre
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bienvenue dans {item} café des langues !
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: '우리 언어 카페에 오신 걸 환영해요! notre: 우리의.'
+    language_code: ko
+    direction: ltr

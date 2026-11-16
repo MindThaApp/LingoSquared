@@ -1,0 +1,365 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit12
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_غدا
+    - w_نذهب
+    - w_جيد
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_غدا
+      - w_نذهب
+      - w_جيد
+  ghadan: &id002
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_غدا
+  nadhhab: &id003
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نذهب
+  jayyid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_جيد
+templates:
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.choose.001
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: غدا는 '내일', نذهب는 '우리가 가다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.listen.002
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: نذهب는 '가다'의 '우리' 형태이고, '우리' 형태는 ن으로 시작해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.order.003
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل نذهب إلى المقهى {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل نذهب إلى المقهى {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 'غدا(''내일'')는 보통 문장 끝에 와요. 예: 내일 카페에 갈까요?'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.order.004
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: word_order
+  frame:
+    text: هل {item} إلى المقهى غدا؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} إلى المقهى غدا؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هل 뒤에 '우리' 형태를 붙이면 약속을 묻는 예/아니요 의문문이 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.fill.005
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا는 '내일'이에요. 시간은 그 뒤에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.fill.006
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: fill_in_blank
+  frame:
+    text: هل {item} إلى المقهى غدا؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نذهب는 '우리가 가다'라는 뜻이고, '우리는 가는 중이다'라는 뜻도 될 수 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.translate.007
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: غدا는 '내일', نذهب는 '우리가 가다', جيد는 '좋다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.translate.008
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: 내일 카페에 갈까요?
+    language_code: ko
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {a} إلى المقهى {b}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 같은 동사 형태 نذهب가 '우리가 가요'와 '우리 갈까요'를 모두 나타내요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.choose.001
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: جيد는 '좋다'라는 뜻이에요. 여기서는 약속을 받아들이는 짧은 대답으로 쓰였어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.fill.002
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: fill_in_blank
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد. إلى اللقاء. 는 '좋아요. 안녕히 가세요.'라는 뜻으로, 약속에 동의하고 인사로 마무리하는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.translate.003
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: جيد는 '좋다'라는 형용사로, 여기서는 약속에 동의할 때 쓰였어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.translate.004
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: 우리는 내일 카페에 가요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: '''우리'' 형태 نذهب는 따로 대명사가 필요 없고 ''우리는 가는 중이다''라는 뜻도 돼요. 시간을 나타내는 말 غدا는 문장 끝에 와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.order.005
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نذهب إلى المقهى {item} في الساعة الخامسة.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 시간을 나타내는 말은 장소 뒤에 오고, 마지막에 몇 시인지가 와서 문장을 마무리해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.translate.006
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: translation
+  frame:
+    text: 우리는 내일 다섯 시에 카페에 가요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نذهب إلى المقهى {item} في الساعة الخامسة.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 아랍어는 시각을 맨 끝에 말해요. 직역하면 '다섯 번째 시간에'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.listen.007
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 모음과 마지막 소리를 잘 들으면 세 단어를 구별할 수 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson02.order.008
+  lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+  type: word_order
+  frame:
+    text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 짧은 동의의 말이 작별 인사 앞에서 약속을 마무리해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit12.lesson01.translate.009
+  lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+  type: translation
+  frame:
+    text: 네, 다섯 시에요. 좋아요. 나중에 봐요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نعم، في الساعة الخامسة. {item}. إلى اللقاء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 이 대답은 시간을 확인하고, 약속에 동의한 다음, 작별 인사를 해요.
+    language_code: ko
+    direction: ltr

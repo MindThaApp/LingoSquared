@@ -1,0 +1,561 @@
+schema_version: '1.0'
+pack_key: practice.ko-de.a1.unit01
+source_language: ko
+target_language: de
+unit_content_key: de.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-de by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_hallo
+    - w_Morgen
+    - w_Tag
+    - w_Abend
+    - w_tschüss
+    - w_Nacht
+    - w_bald
+    - w_später
+    - w_Sie
+    - w_du
+    - w_Ihnen
+    - w_dir
+    - w_danke
+    - w_gut
+    - w_sehr
+    - w_wie
+    - w_und
+    - w_es
+    - w_bitte
+    - w_Entschuldigung
+    - w_Problem
+    - w_gern
+slot_presets:
+  hello_words: &id001
+    language_code: de
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_hallo
+      - w_Morgen
+      - w_Tag
+      - w_Abend
+      - w_tschüss
+      - w_Nacht
+      - w_bald
+      - w_später
+  day_parts: &id007
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic:
+      - w_Morgen
+      - w_Tag
+      - w_Abend
+  bye_words: &id002
+    language_code: de
+    part_of_speech:
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_tschüss
+      - w_Nacht
+      - w_bald
+      - w_später
+      - w_hallo
+      - w_Abend
+  see_you: &id006
+    language_code: de
+    part_of_speech:
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_später
+      - w_bald
+  you_words: &id003
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - phrase
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_Sie
+      - w_du
+      - w_Ihnen
+      - w_dir
+      - w_danke
+      - w_gut
+      - w_sehr
+      - w_wie
+  you_match: &id008
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - phrase
+    - adjective
+    - adverb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_Sie
+      - w_du
+      - w_Ihnen
+      - w_dir
+      - w_danke
+      - w_gut
+      - w_sehr
+      - w_und
+      - w_es
+      - w_wie
+  polite_words: &id004
+    language_code: de
+    part_of_speech:
+    - particle
+    - phrase
+    - noun
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_bitte
+      - w_Entschuldigung
+      - w_Problem
+      - w_gern
+      - w_danke
+      - w_gut
+  polite_bare: &id011
+    language_code: de
+    part_of_speech:
+    - particle
+    - phrase
+    - noun
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_bitte
+      - w_Entschuldigung
+      - w_Problem
+      - w_gern
+  ihnen: &id005
+    language_code: de
+    part_of_speech:
+    - pronoun
+    agreement_tags:
+      semantic: w_Ihnen
+  dir: &id009
+    language_code: de
+    part_of_speech:
+    - pronoun
+    agreement_tags:
+      semantic: w_dir
+  gern: &id010
+    language_code: de
+    part_of_speech:
+    - adverb
+    agreement_tags:
+      semantic: w_gern
+templates:
+- content_key: practice.ko-de.de.a1.unit01.lesson01.choose.001
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Guten Morgen은 아침에, Guten Tag은 낮 동안, Guten Abend은 저녁부터 사용해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson02.listen.001
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Tschüss는 친근한 작별 인사이고, Auf Wiedersehen은 낯선 사람이나 격식을 차리는 자리에서 쓰는 정중한 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.choose.001
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 독일어에는 '당신'을 나타내는 두 단어가 있어요. Sie는 낯선 사람이나 공적인 관계에서 쓰는 높임말이고, du는 친구, 가족, 어린이에게 쓰는 반말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson04.listen.001
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Bitte는 부탁할 때의 말과 감사에 답하는 말을 모두 나타내며, Entschuldigung은 누군가의 주의를 끌거나 사과할 때 사용해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.order.002
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: word_order
+  frame:
+    text: Wie geht es {item}?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie geht es {item}?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Wie geht es Ihnen?은 어떻게 지내는지 정중하게 묻는 표현이고, 친구에게는 Wie geht's?라고 물어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson02.order.002
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: word_order
+  frame:
+    text: Bis {item}!
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bis {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Bis는 '~까지'라는 뜻이므로 Bis bald는 '곧 또 봐요', Bis später는 '나중에 봐요'와 같은 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson01.order.002
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: word_order
+  frame:
+    text: Guten {item}!
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Guten {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Morgen, Tag, Abend은 남성 명사이므로 Guten은 -n으로 끝나요. 여성 명사 Nacht에는 Gute Nacht를 사용해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson02.match.003
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tschüss는 친근한 표현이고, Auf Wiedersehen은 잘 모르는 사람에게 쓰는 정중한 작별 인사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.match.003
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 높임말의 Sie, Ihnen, Ihr는 대문자로 쓰지만, 반말의 du와 dir는 대문자로 쓰지 않아요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson04.match.002
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Danke와 bitte는 일상에서 쓰는 두 가지 예의 표현이며, bitte는 '천만에요'라는 뜻으로도 쓰여요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.fill.004
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: fill_in_blank
+  frame:
+    text: Und {item}? ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 여기서 반말 형태는 소문자로 쓰는 dir이고, 높임말 질문은 Und Ihnen?이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson04.fill.003
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: fill_in_blank
+  frame:
+    text: '{item} geschehen. ({hint})'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Gern geschehen은 danke에 답하는 일반적인 표현으로, 글자 그대로는 '기꺼이 일어난 일' 정도의 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson01.translate.003
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 독일어의 모든 명사는 대문자로 시작하므로 Morgen, Tag, Abend, Nacht도 첫 글자를 대문자로 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.translate.005
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sie와 du는 '당신'에 해당하는 주격 형태이고, Ihnen과 dir는 '당신에게'라는 뜻의 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson04.translate.004
+  lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Kein Problem은 감사나 가벼운 사과에 일상적으로 답하는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson01.translate.004
+  lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+  type: translation
+  frame:
+    text: 좋은 {item}이에요!
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Guten {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Guten Tag은 늦은 아침부터 사용할 수 있으며, 일반적인 인사말로도 쓰여요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson02.translate.004
+  lesson_content_key: de.a1.unit01.lesson02.abschied
+  type: translation
+  frame:
+    text: '{item}에 봐요!'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bis {item}!
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Bis bald와 Bis später는 둘 다 친근한 표현이고, Auf Wiedersehen은 정중한 작별 인사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit01.lesson03.translate.006
+  lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+  type: translation
+  frame:
+    text: 어떻게 지내세요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie geht es {item}?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: 높임말의 Sie와 Ihnen은 대문자로 쓰므로 Ihnen의 대문자 I도 철자의 일부예요.
+    language_code: ko
+    direction: ltr
