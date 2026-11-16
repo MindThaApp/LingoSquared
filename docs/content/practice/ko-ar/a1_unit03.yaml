@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit03
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit03.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - ar_a1_u03_l01
+    - ar_a1_u03_l02
+    - w_واحد
+    - w_اثنان
+    - w_ثلاثة
+    - w_أربعة
+    - w_خمسة
+    - w_ستة
+    - w_سبعة
+    - w_ثمانية
+    - w_تسعة
+    - w_عشرة
+    - w_كم
+    - w_هذا
+    - w_رقم
+    - w_بخمسة
+    - w_بعشرة
+    - w_وهذا
+slot_presets:
+  n1: &id001
+    language_code: ar
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic: ar_a1_u03_l01
+  n2: &id005
+    language_code: ar
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic: ar_a1_u03_l02
+  nums: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_واحد
+      - w_اثنان
+      - w_ثلاثة
+      - w_أربعة
+      - w_خمسة
+      - w_ستة
+      - w_سبعة
+      - w_ثمانية
+      - w_تسعة
+      - w_عشرة
+  l03mc: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_بعشرة
+  l03all: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_وهذا
+      - w_بعشرة
+  l03bare: &id010
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_كم
+      - w_هذا
+      - w_رقم
+      - w_بخمسة
+      - w_وهذا
+      - w_بعشرة
+  thalatha: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ثلاثة
+  ithnan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_اثنان
+  ashara: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_عشرة
+  haadha: &id009
+    language_code: ar
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_هذا
+  bikhamsa: &id011
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بخمسة
+  bi_ashara:
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بعشرة
+templates:
+- content_key: practice.ko-ar.ar.a1.unit03.lesson01.choose.001
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 아랍어 숫자 단어는 오른쪽에서 왼쪽으로 읽어요. ثلاثة는 ث로 시작하는데, 영어 think의 th와 비슷한 소리가 나요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson01.match.002
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: ثلاثة(셋)와 ثمانية(여덟)는 둘 다 th 소리가 나는 ث로 시작해요. 나머지 부분으로 구별하세요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson01.order.003
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: word_order
+  frame:
+    text: واحد، اثنان، {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: واحد، اثنان، {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 셋을 뜻하는 ثلاثة는 다른 많은 아랍어 명사에도 있는 ة로 끝나요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson01.fill.004
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: fill_in_blank
+  frame:
+    text: واحد، {item}، ثلاثة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 아랍어에는 둘을 나타내는 쌍수 어미 ـان이 있어요. اثنان은 '둘'이라는 단어 자체예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson01.translate.005
+  lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '3부터 10까지의 숫자는 수를 셀 때 ة로 끝나요. 예: ثلاثة, خمسة.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson02.listen.001
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سبعة(일곱)와 تسعة(아홉)는 عة로 끝나는 글자가 같아요. 그러니 첫소리가 s인지 t인지 잘 들어 보세요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson02.order.002
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: word_order
+  frame:
+    text: رقمي {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: رقمي {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: رقمي는 내 번호라는 뜻이에요. رقم은 번호이고, 어미 ـي는 '내'를 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson02.fill.003
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: fill_in_blank
+  frame:
+    text: ثمانية، تسعة، {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: عشرة는 열이에요. 3부터 10까지의 모든 숫자처럼 ة로 끝나요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson02.translate.004
+  lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ستة(여섯)와 سبعة(일곱)는 둘 다 س로 시작해요. 끝 글자를 읽고 구별하세요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.choose.001
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: كم은 얼마, 몇이라고 묻는 말이고, هذا는 가까이 있는 것을 가리켜요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.match.002
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: بخمسة와 بعشرة는 ب로 시작해요. 여기서 ب는 '~에', '~의 가격으로'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.fill.003
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: fill_in_blank
+  frame:
+    text: كم {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كم هذا는 물건 하나의 가격을 물어요. هذا(이것)는 남성형이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.translate.004
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وهذا는 و(그리고)와 هذا(이것)가 붙은 말로, '그리고 이것은'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.translate.005
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: 이거 얼마예요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 아랍어 문장에는 이 질문에서 '~이다'에 해당하는 단어가 없어요. كم هذا는 직역하면 '얼마 이것'이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit03.lesson03.translate.006
+  lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+  type: translation
+  frame:
+    text: 이건 5예요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 전치사 ب는 숫자에 붙여 써요. ب + خمسة는 بخمسة가 돼요.
+    language_code: ko
+    direction: ltr

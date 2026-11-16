@@ -1,0 +1,272 @@
+schema_version: '1.0'
+pack_key: practice.ko-prs.a1.unit45
+source_language: ko
+target_language: prs
+unit_content_key: prs.a1.unit45.accommodation
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - hotel_word
+    - stay_verb
+    - dialogue_word
+    - inclusion_word
+slot_presets:
+  hotel_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: hotel_word
+  stay_verb: &id004
+    language_code: prs
+    part_of_speech: verb
+    agreement_tags:
+      semantic: stay_verb
+  hotel_or_stay: &id003
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - hotel_word
+      - stay_verb
+  dialogue_word: &id002
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic: dialogue_word
+templates:
+- content_key: practice.ko-prs.prs.a1.unit45.lesson01.choose.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이번 단원의 숙박 어휘예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson04.choose.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) A1 서비스 대화(호텔, 가게, 병원 등)에 나오는 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson02.choose.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이번 단원의 호텔 숙박 어휘예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson04.fill.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: translation
+  frame:
+    text: 아침 차가 포함되어 있어요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: inclusion_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: چای صبح {item} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '"아침 차가 포함되어 있어요."는 다리어로 چای صبح شامل است예요. (شامل은 ''포함된''이라는 뜻이에요.)'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson03.order.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: word_order
+  frame:
+    text: دو شب {verb}
+    language_code: prs
+    direction: rtl
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دو شب {verb}
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '어순: دو شب می‌مانم (저는 이틀 밤 묵어요).'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson04.match.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: matching_pairs
+  frame:
+    text: '{a} — {b} — {c} — {d} — {e} — {f}'
+    language_code: prs
+    direction: rtl
+  slots:
+    a: *id003
+    b: *id003
+    c: *id003
+    d: *id003
+    e: *id003
+    f: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - a
+    - b
+    - c
+    - d
+    - e
+    - f
+  feedback_frame:
+    text: 각 단어를 알맞은 한국어 뜻과 연결하세요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson01.translate.001
+  lesson_content_key: prs.a1.unit45.lesson01.hotel_room_key_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이것을 뜻하는 다리어 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson02.translate.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이것을 뜻하는 다리어 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson03.translate.001
+  lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb}은(는) 이것을 뜻하는 다리어 형태예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson05.translate.001
+  lesson_content_key: prs.a1.unit45.lesson05.reading
+  type: translation
+  frame:
+    text: '{verb}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      verb: english_gloss
+  slots:
+    verb: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: verb
+  feedback_frame:
+    text: '{verb}은(는) 이것을 뜻하는 다리어 형태예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-prs.prs.a1.unit45.lesson06.translate.001
+  lesson_content_key: prs.a1.unit45.lesson06.wrap_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이것을 뜻하는 다리어 단어예요.'
+    language_code: ko
+    direction: ltr

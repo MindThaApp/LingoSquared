@@ -1,0 +1,456 @@
+schema_version: '1.0'
+pack_key: practice.ko-pl.a1.unit42
+source_language: ko
+target_language: pl
+unit_content_key: pl.a1.unit42.nocleg
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_hasło
+    - w_jedenastej
+    - w_karcie
+    - w_klucz
+    - w_mieliśmy
+    - w_minął
+    - w_noc
+    - w_recepcjonista
+    - w_rezerwację
+    - w_wifi
+    - w_wliczone
+    - w_wymeldowanie
+    - w_wymeldować
+    - w_zaczyna
+    - w_zameldować
+    - w_zameldujemy
+    - w_zarezerwowany
+    - w_zarezerwować
+    - w_ósmej
+    - w_ładny
+templates:
+- content_key: practice.ko-pl.pl.a1.unit42.lesson01.choose.001
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: pl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_zarezerwować
+        - w_zameldować
+        - w_zameldujemy
+        - w_zarezerwowany
+        - w_zaczyna
+        - w_ósmej
+        - w_wliczone
+        - w_klucz
+        - w_hasło
+        - w_wifi
+        - w_karcie
+        - w_recepcjonista
+        - w_rezerwację
+        - w_noc
+        - w_wymeldowanie
+        - w_jedenastej
+        - w_wymeldować
+        - w_minął
+        - w_mieliśmy
+        - w_ładny
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. 객실 예약하기 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson02.listen.001
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} : 아침 식사가 포함되어 있나요? 수업에 나오는 이 단원의 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson03.translate.001
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}: 이 단원의 단어예요. 열쇠와 와이파이 비밀번호 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson04.match.001
+  lesson_content_key: pl.a1.unit42.lesson04.zameldowanie_w_recepcji
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 폴란드어 단어를 그 뜻과 연결하세요. 이 단원의 수업에 나온 단어들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson05.choose.001
+  lesson_content_key: pl.a1.unit42.lesson05.czytanie_potwierdzenia
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이번 단원의 단어로, 확인서 읽기 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson06.translate.001
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 이번 단원의 단어예요. ''에바가 주말에 대해 전화해요'' 수업에 나왔어요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson01.order.002
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: word_order
+  frame:
+    text: Chcę {item} pokój.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zarezerwować
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chcę {item} pokój.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 방을 예약하고 싶어요. zarezerwować는 '예약하다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson01.fill.003
+  lesson_content_key: pl.a1.unit42.lesson01.rezerwacja_pokoju
+  type: fill_in_blank
+  frame:
+    text: Mam {item} pokój. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zarezerwowany
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zarezerwowany
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 방을 예약해 두었어요. zarezerwowany는 '예약된'(남성형)이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson02.order.002
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: word_order
+  frame:
+    text: Śniadanie {item} się o ósmej.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_zaczyna
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Śniadanie {item} się o ósmej.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 아침 식사는 8시에 시작해요. zaczyna는 '시작해요'(그/그녀/그것)라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson02.fill.003
+  lesson_content_key: pl.a1.unit42.lesson02.czy_sniadanie_jest_wliczone
+  type: fill_in_blank
+  frame:
+    text: Śniadanie jest {item}. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_wliczone
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_wliczone
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 아침 식사가 포함되어 있어요. wliczone는 '포함된'(중성형)이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson03.order.002
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: word_order
+  frame:
+    text: Oto pani {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_klucz
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Oto pani {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 여기 열쇠 있습니다. klucz는 '열쇠'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson03.fill.003
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: fill_in_blank
+  frame:
+    text: Jakie jest {item} do wifi? ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_hasło
+    hint:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_hasło
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 와이파이 비밀번호가 뭐예요? hasło는 '비밀번호'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson03.translate.004
+  lesson_content_key: pl.a1.unit42.lesson03.klucz_i_haslo_do
+  type: translation
+  frame:
+    text: 와이파이 비밀번호는 카드에 있어요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_wifi
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hasło do {item} jest na karcie.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 와이파이 비밀번호는 카드에 있어요. wifi는 '와이파이'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson04.order.002
+  lesson_content_key: pl.a1.unit42.lesson04.zameldowanie_w_recepcji
+  type: word_order
+  frame:
+    text: Na jedną {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_noc
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Na jedną {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 하룻밤이요. noc는 '밤'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson05.order.002
+  lesson_content_key: pl.a1.unit42.lesson05.czytanie_potwierdzenia
+  type: word_order
+  frame:
+    text: Wymeldowanie jest o {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_jedenastej
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wymeldowanie jest o {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 체크아웃은 11시예요. jedenastej는 '11시'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson06.order.002
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: word_order
+  frame:
+    text: Jak {item} weekend we Wrocławiu?
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_minął
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Jak {item} weekend we Wrocławiu?
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: 브로츠와프에서 주말은 어땠어요? minął는 '지나갔다'(남성 과거형)라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit42.lesson06.fill.003
+  lesson_content_key: pl.a1.unit42.lesson06.ewa_dzwoni_w_sprawie
+  type: fill_in_blank
+  frame:
+    text: Mieliśmy bardzo {item} weekend. ({hint})
+    language_code: pl
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_ładny
+    hint:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_ładny
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 우리는 아주 멋진 주말을 보냈어요. ładny는 '멋진, 예쁜'(남성형)이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
