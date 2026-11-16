@@ -4,6 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { learnPath } from "../../lib/activeCourse";
 import { NavIcon } from "./NavIcon";
 import { NAV_TABS } from "./navTabs";
+import { useGamification } from "../../lib/gamification";
 
 // Desktop-only (>= 1024px) left navigation rail. Rendered at every width but
 // hidden by CSS below 1024px so phones/tablets are unchanged. Same
@@ -12,8 +13,9 @@ export function SideRail() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { pathname } = useLocation();
+  const gamification = useGamification();
   if (!user) return null;
-  const tabs = NAV_TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
+  const tabs = NAV_TABS.filter((tab) => !tab.requires || gamification?.[tab.requires].enabled).map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
   return (
     <nav className="side-rail" aria-label={t("nav.main_nav")}>
       <Link to="/" className="side-rail-brand">

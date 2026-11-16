@@ -2096,3 +2096,50 @@ Again/Hard/Good. No API shape changed: `ease_factor`, `interval_days` and
 interval is the scheduled interval). New nullable DB columns `stability` and
 `difficulty` (user_lexeme_srs, review_items) and `rating`, `new_stability`,
 `new_difficulty` (review_events) are internal and not exposed.
+
+## Gamification: hearts, gems, weekly leaderboard (migration 0040)
+
+Free app: gems are **earned only** and spendable only on in-app things; nothing
+here involves money. Three independent server flags, all default `false`
+(`ENABLE_HEARTS`, `ENABLE_GEMS`, `ENABLE_LEADERBOARD`). With a flag off, its
+endpoints answer 404 `feature_disabled` and no gameplay rule changes. The
+server is authoritative; the client only displays. New tables only
+(`user_game_state`, `gem_transactions`); the ledger is append-only.
+
+`GET /me/gamification` (auth) always works and tells the client what to show:
+
+```json
+{ "hearts": { "enabled": true, "hearts": 3, "max_hearts": 5, "next_heart_at": "iso-or-null", "refill_seconds": 14400 },
+  "gems": { "enabled": true, "balance": 25, "costs": { "heart_refill": 10, "streak_freeze": 20 } },
+  "leaderboard": { "enabled": true, "opted_out": false } }
+```
+
+**Hearts** (5 max). A wrong (`result: "incorrect"`, not `"almost"`) lesson answer
+in a lesson the learner has NOT yet completed costs 1 heart, unless the exercise
+was already answered correctly before (replay). At 0 hearts, a first-time answer
+in a not-yet-completed lesson is refused: `409 no_hearts` with `next_heart_at`.
+Completed lessons, review, practice, checkpoints and SRS are never gated.
+Refill is lazy from timestamps: +1 per 4 hours, no cron. `AnswerOut` gains
+`hearts_remaining` (null when hearts are off or the answer was free).
+`POST /me/hearts/practice-restore` (rate-limited) restores 1 heart when the
+learner has made at least 5 practice/review answers since the last restore
+(server-counted); `{restored, reason: "full"|"not_enough_practice"|null, hearts, next_heart_at}`.
+
+**Gems.** Earned: 5 on the first completion of a lesson, +5 for a perfect lesson
+(no wrong answers), streak milestones (3/7/14/30/60/100 days: 5/10/15/30/50/100;
+every further 100 days: 100). Each award has a per-user unique idempotency key
+(`lesson:<id>`, `perfect:<id>`, `streak:<n>:<date>`), so replays and retries
+cannot post twice. `CompleteOut` gains `gems_awarded`. Spend:
+`POST /me/gems/spend {item: "heart_refill"|"streak_freeze", client_operation_id}`
+(rate-limited, idempotent per item+operation id; `applied:false` on a retry).
+`heart_refill` = 10 gems (refills to full; 409 `hearts_full` otherwise);
+`streak_freeze` = 20 gems (max 2 held; 409 `freeze_limit`). 409
+`insufficient_gems` when short. Never a negative balance.
+
+**Leaderboard.** `GET /leaderboard/weekly`: global top 20 by XP earned this week
+(lesson + practice attempts), week = Monday 00:00 UTC to next Monday. Entries are
+`{rank, display_name, xp, is_me}` only (no email or id); ties share a rank; plus
+`me: {rank|null, xp}` (null when opted out). `PUT /me/leaderboard-privacy
+{opted_out}` hides the account (default: shown).
+
+`GET /me/export` includes `game_state` and `gem_transactions`.

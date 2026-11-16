@@ -8,6 +8,7 @@ import { learnPath } from "../../lib/activeCourse";
 import { NAV_TABS } from "./navTabs";
 import { NavIcon } from "./NavIcon";
 import { SideRail } from "./SideRail";
+import { useGamification } from "../../lib/gamification";
 
 export function NavBar() {
   const { t } = useTranslation();
@@ -21,13 +22,14 @@ export function NavBar() {
     enabled: !!user,
   });
   const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp, enabled: !!user });
+  const gamification = useGamification();
   const streak = streakQuery.data?.streak_days ?? null;
   const xp = xpQuery.data?.total_xp ?? null;
 
   if (!user) return null;
 
   // Learn resumes the active course (per user, per device) when one is set.
-  const tabs = NAV_TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
+  const tabs = NAV_TABS.filter((tab) => !tab.requires || gamification?.[tab.requires].enabled).map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
 
   return (
     <>
@@ -69,6 +71,16 @@ export function NavBar() {
               aria-label={`${t("nav.total_xp")}: ${xp}`}
             >
               ⭐ {xp}
+            </span>
+          )}
+          {gamification?.gems.enabled && (
+            <span
+              className="stat-xp"
+              title={t("gamification.gems_title")}
+              role="img"
+              aria-label={t("gamification.gems_label", { count: gamification.gems.balance })}
+            >
+              💎 {gamification.gems.balance}
             </span>
           )}
           <LanguageSwitcher />

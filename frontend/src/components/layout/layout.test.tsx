@@ -8,6 +8,7 @@ import { NavBar } from "./NavBar";
 import { SideRail } from "./SideRail";
 import { DesktopSidebar } from "./DesktopSidebar";
 
+vi.mock("../../lib/gamification", () => ({ useGamification: () => undefined }));
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) =>

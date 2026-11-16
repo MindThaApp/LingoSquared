@@ -9,6 +9,8 @@ export interface NavTab {
   labelKey: string;
   icon: string;
   phone: boolean;
+  /** Only listed when the server has this gamification flag on. */
+  requires?: "leaderboard";
 }
 
 export const NAV_TABS: NavTab[] = [
@@ -17,5 +19,6 @@ export const NAV_TABS: NavTab[] = [
   { to: "/practice", labelKey: "nav.practice", icon: "practice", phone: true },
   { to: "/review", labelKey: "nav.review", icon: "review", phone: true },
   { to: "/vocabulary", labelKey: "nav.vocabulary", icon: "vocabulary", phone: false },
+  { to: "/leaderboard", labelKey: "nav.leaderboard", icon: "leaderboard", phone: false, requires: "leaderboard" },
   { to: "/profile", labelKey: "nav.profile", icon: "profile", phone: true },
 ];
