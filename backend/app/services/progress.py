@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 from app.models import UserStats, Achievement, UserAchievement
+from app.services.gamification import on_streak_advanced
 
 def valid_timezone_or_none(user_timezone: str | None) -> str | None:
     """Validate a client-supplied IANA timezone string before persisting
@@ -78,6 +79,8 @@ def record_activity(db:Session,user_id:str,xp:int,user_timezone:str|None=None):
         s.last_activity_date = today
         if s.streak_freezes_available == 0 and s.streak_days % STREAK_FREEZE_MILESTONE == 0:
             s.streak_freezes_available = 1
+        # Gem milestone (no-op unless ENABLE_GEMS); idempotent per streak/day.
+        on_streak_advanced(db,user_id,s.streak_days,today)
     award_xp(db,user_id,xp,s)
     return s
 

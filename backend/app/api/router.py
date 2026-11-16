@@ -33,6 +33,7 @@ from app.models import (
     ExerciseAttempt,
     ExerciseType,
     FeedbackAttachment,
+    GemTransaction,
     GrammarProgress,
     Language,
     Lesson,
@@ -53,6 +54,7 @@ from app.models import (
     UserAchievement,
     UserIdentity,
     SocialLoginNonce,
+    UserGameState,
     UserLexemeSRS,
     UserStats,
     VocabularyProgress,
@@ -60,6 +62,13 @@ from app.models import (
 from app.schemas.api import (
     AnswerIn,
     AnswerOut,
+    GamificationOut,
+    GemSpendIn,
+    GemSpendOut,
+    LeaderboardOut,
+    LeaderboardPrivacyIn,
+    LeaderboardPrivacyOut,
+    PracticeRestoreOut,
     AdminPasswordResetOut,
     AdminUserAdminIn,
     AdminUserCreateIn,
@@ -140,6 +149,7 @@ from app.schemas.api import (
 )
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
 from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
+from app.services import gamification
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.services.unreviewable import expire_stale_unreviewable
 from app.review.scheduler import schedule
@@ -299,6 +309,7 @@ REFRESH_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.ref
 # POST /auth/social/nonce: each call stores a row, so it is capped like
 # refresh rather than left open.
 SOCIAL_NONCE_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
+SPEND_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.spend_rate_limit_max, window_seconds=60))
 ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
 # Phase H2 (2026-07-07 integrity audit, docs/SONNET_BUILD_PROMPT_LAUNCH.md):
 # /tts, /stt/transcribe, and the three generation endpoints were completely
@@ -709,6 +720,28 @@ def exercise_answer(db, user, e, response, client_operation_id=None, input_mode=
         # answers in the user's local day.
         xp = 1 if correct_today < 20 else 0
 
+    # Hearts (ENABLE_HEARTS): only a wrong answer in a NEW lesson (not yet
+    # completed) costs a heart, and a first-time answer is refused at 0 hearts.
+    # Replays of an already-correct exercise, completed lessons, practice and
+    # review are always free. Checked before anything is written.
+    hearts_apply = False
+    if gamification.hearts_enabled() and not replay:
+        lesson_progress = db.scalar(
+            select(LessonProgress).where(
+                LessonProgress.user_id == user.id,
+                LessonProgress.lesson_id == e.lesson_id,
+            )
+        )
+        if lesson_progress is None or lesson_progress.completed_at is None:
+            hearts_apply = True
+            hearts_left, next_at = gamification.hearts_now(db, user.id)
+            if hearts_left <= 0:
+                fail(
+                    409,
+                    "no_hearts",
+                    "You are out of hearts. Practice to earn one back, or wait for one to refill.",
+                    next_heart_at=next_at.isoformat() if next_at else None,
+                )
     attempt = ExerciseAttempt(
             user_id=user.id,
             exercise_id=e.id,
@@ -790,8 +823,15 @@ def exercise_answer(db, user, e, response, client_operation_id=None, input_mode=
         award_xp(db, user.id, xp)
     else:
         record_activity(db, user.id, xp, user.timezone)
+    out = stored_exercise_answer(e, attempt)
+    if hearts_apply:
+        out["hearts_remaining"] = (
+            gamification.lose_heart(db, user.id)
+            if result == "incorrect"
+            else gamification.hearts_now(db, user.id)[0]
+        )
     db.commit()
-    return stored_exercise_answer(e, attempt)
+    return out
 
 PLACEMENT_RATE_LIMIT_MESSAGE = "Too many answers submitted too quickly. Please slow down."
 
@@ -1232,6 +1272,8 @@ def export_me(response:Response,user=Depends(current_user),db:Session=Depends(ge
         "vocabulary_progress":[{"content_item_id":x.content_item_id,"mastery":x.mastery,"last_reviewed_at":x.last_reviewed_at} for x in db.scalars(select(VocabularyProgress).where(VocabularyProgress.user_id==user.id))],
         "grammar_progress":[{"content_item_id":x.content_item_id,"mastery":x.mastery,"last_reviewed_at":x.last_reviewed_at} for x in db.scalars(select(GrammarProgress).where(GrammarProgress.user_id==user.id))],
         "push_subscriptions":[{"endpoint":x.endpoint,"created_at":x.created_at} for x in db.scalars(select(PushSubscription).where(PushSubscription.user_id==user.id))],
+        "game_state":(lambda g:{"hearts":g.hearts,"gem_balance":g.gem_balance,"leaderboard_opt_out":g.leaderboard_opt_out} if g else None)(db.get(UserGameState,user.id)),
+        "gem_transactions":[{"amount":x.amount,"kind":x.kind,"balance_after":x.balance_after,"created_at":x.created_at} for x in db.scalars(select(GemTransaction).where(GemTransaction.user_id==user.id).order_by(GemTransaction.created_at))],
         "content_issue_reports":[{"id":x.id,"exercise_id":x.exercise_id,"practice_item_id":x.practice_item_id,"page_path":x.page_path,"category":x.category,"description":x.description,"status":x.status,"created_at":x.created_at} for x in db.scalars(select(ContentIssueReport).where(ContentIssueReport.reporter_user_id==user.id))],
     }
 @router.delete("/me",status_code=204)
@@ -1625,8 +1667,18 @@ def complete(
     ) or 1
     skill.mastery = skill.completed_lessons / total
 
+    gems_awarded = 0
+    exercise_total = db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id == lesson_id, Exercise.retired_at.is_(None))) or 0
     if first_completion:
         record_activity(db, user.id, 0, user.timezone)
+        # Gems (ENABLE_GEMS): earned once per lesson, keyed by lesson id, so a
+        # replay or retry of this endpoint can never post again.
+        gems_awarded = gamification.award_lesson_gems(
+            db,
+            user.id,
+            lesson_id,
+            perfect=p.answer_count > 0 and p.correct_count == p.answer_count and p.answer_count >= exercise_total,
+        )
 
     db.commit()
     return {
@@ -1635,6 +1687,7 @@ def complete(
         "accuracy": (
             p.correct_count / p.answer_count if p.answer_count else 0
         ),
+        "gems_awarded": gems_awarded,
     }
 @router.get("/me/progress")
 def progress(user=Depends(current_user),db:Session=Depends(get_db)):
@@ -2734,6 +2787,48 @@ def xp(user=Depends(current_user),db:Session=Depends(get_db)):
         )
     )
     return {"total_xp":s.total_xp,"daily_goal":s.daily_goal,"xp_today":exercise_xp+practice_xp+quest_xp}
+# --- Gamification (hearts / gems / leaderboard), each behind its own flag --
+def _flag_or_404(enabled:bool):
+    if not enabled: fail(404,"feature_disabled","This feature is not enabled")
+@router.get("/me/gamification",response_model=GamificationOut)
+def gamification_state(user=Depends(current_user),db:Session=Depends(get_db)):
+    hearts,next_at=gamification.hearts_now(db,user.id)
+    state=db.get(UserGameState,user.id)
+    return {
+        "hearts":{"enabled":gamification.hearts_enabled(),"hearts":hearts,"max_hearts":gamification.HEARTS_MAX,"next_heart_at":next_at,"refill_seconds":gamification.HEART_REFILL_SECONDS},
+        "gems":{"enabled":gamification.gems_enabled(),"balance":state.gem_balance if state else 0,"costs":gamification.SPEND_COSTS},
+        "leaderboard":{"enabled":gamification.leaderboard_enabled(),"opted_out":bool(state.leaderboard_opt_out) if state else False},
+    }
+@router.post("/me/hearts/practice-restore",response_model=PracticeRestoreOut)
+def hearts_practice_restore(user=Depends(current_user),db:Session=Depends(get_db)):
+    _flag_or_404(gamification.hearts_enabled())
+    enforce_rate_limit(SPEND_RATE_LIMIT,user.id,"spend_rate_limited","Too many requests. Please slow down.")
+    result=gamification.restore_heart_for_practice(db,user.id)
+    db.commit()
+    hearts,next_at=gamification.hearts_now(db,user.id)
+    return {**result,"hearts":hearts,"next_heart_at":next_at}
+@router.post("/me/gems/spend",response_model=GemSpendOut)
+def gems_spend(body:GemSpendIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    _flag_or_404(gamification.gems_enabled())
+    enforce_rate_limit(SPEND_RATE_LIMIT,user.id,"spend_rate_limited","Too many requests. Please slow down.")
+    try:
+        result=gamification.spend_gems(db,user.id,body.item,body.client_operation_id)
+    except gamification.SpendError as exc:
+        db.rollback()
+        fail(409,exc.code,exc.message)
+    db.commit()
+    return result
+@router.get("/leaderboard/weekly",response_model=LeaderboardOut)
+def leaderboard_weekly(user=Depends(current_user),db:Session=Depends(get_db)):
+    _flag_or_404(gamification.leaderboard_enabled())
+    return gamification.weekly_leaderboard(db,user.id)
+@router.put("/me/leaderboard-privacy",response_model=LeaderboardPrivacyOut)
+def leaderboard_privacy(body:LeaderboardPrivacyIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    _flag_or_404(gamification.leaderboard_enabled())
+    state=gamification.game_state(db,user.id,for_update=True)
+    state.leaderboard_opt_out=body.opted_out
+    db.commit()
+    return {"opted_out":body.opted_out}
 @router.get("/me/daily-goal",response_model=DailyGoalOut)
 def get_daily_goal(user=Depends(current_user),db:Session=Depends(get_db)):
     return {"daily_goal_xp":stats_for(db,user.id).daily_goal}

@@ -46,6 +46,8 @@ EXPORT_COVERAGE = {
     "exercise_attempts": "exercise_attempts",
     "user_stats": "stats",
     "quest_completions": "quest_completions",
+    "user_game_state": "game_state",
+    "gem_transactions": "gem_transactions",
     "push_notification_guards": None,  # internal send de-dup guard
     "push_subscriptions": "push_subscriptions",
     "review_items": "review_items",

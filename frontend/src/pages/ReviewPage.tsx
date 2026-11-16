@@ -22,6 +22,7 @@ import { useAuth } from "../auth/AuthContext";
 import { learnPath } from "../lib/activeCourse";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
 import { ReviewInsights, nextReviewLabel } from "../components/ReviewInsights";
+import { useHeartRestore } from "../lib/gamification";
 
 const RATINGS_PREF_KEY = "lingo.review.ratings";
 
@@ -145,6 +146,12 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   }
 
   const current = items?.[index];
+  const restoreHeart = useHeartRestore();
+  const sessionDone = items !== null && items.length > 0 && !current;
+  useEffect(() => {
+    // Finishing a review session earns a heart back (the server checks the work).
+    if (sessionDone) restoreHeart();
+  }, [sessionDone, restoreHeart]);
   const currentId = current?.id;
 
   useEffect(() => {
