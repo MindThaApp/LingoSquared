@@ -152,7 +152,7 @@ from app.review.grading import (
     is_arabic_hamza_only_difference,
     select_feedback,
 )
-from app.review.translit_nudge import correct_answer_translit, feedback_code_for, is_romanized_almost, romanized_input_nudge
+from app.review.translit_nudge import NUDGE_MESSAGE, correct_answer_translit, feedback_code_for, is_romanized_almost, romanized_input_nudge
 from app.review.placement import (
     PLACEMENT_BLOCK_SIZE,
     PLACEMENT_LEVELS,
@@ -234,9 +234,12 @@ def conversation_reply_result(
     script,
     language_code: str | None,
     input_mode: str = "typed",
-) -> tuple[str, str | None]:
+) -> tuple[str, str | None, bool]:
+    """(result, matched variant, romanized). romanized=True means no variant matched but the learner
+    typed a romanization: no credit, the learner retries the same node in script."""
     best_result = "incorrect"
     best_variant = None
+    romanized = False
     for variant in node.get("accepted_variants") or []:
         result = grade(
             response,
@@ -247,13 +250,16 @@ def conversation_reply_result(
             input_mode=input_mode,
         )
         if result == "correct":
-            return result, variant
+            return result, variant, False
         if result == "almost" and is_romanized_almost(result, response, variant, language_code):
+            romanized = True
             continue  # romanized input earns no credit and never advances the conversation
         if result == "almost" and best_result == "incorrect":
             best_result = result
             best_variant = variant
-    return best_result, best_variant
+    if best_variant is None and romanized:
+        return "incorrect", None, True
+    return best_result, best_variant, False
 
 
 def conversation_next_node(
@@ -2850,7 +2856,7 @@ def practice_answer(
                 "Conversation node not found",
             )
         script = resolve_script(db, node.get("answer_language_code"))
-        result, matched_variant = conversation_reply_result(
+        result, matched_variant, romanized = conversation_reply_result(
             node=node,
             response=learner_response,
             script=script,
@@ -2858,6 +2864,17 @@ def practice_answer(
             input_mode=body.input_mode,
         )
         correct = result != "incorrect"
+        if romanized:
+            # Not credited, not advanced: the learner retries this same node in script.
+            return {
+                "correct": False,
+                "result": "almost",
+                "correct_response": node.get("accepted_variants") or [],
+                "xp_awarded": 0,
+                "feedback": NUDGE_MESSAGE,
+                "feedback_code": "romanized_input",
+                "next_node": conversation_public_node(node),
+            }
         next_node = conversation_next_node(
             node=node,
             matched_variant=matched_variant,
