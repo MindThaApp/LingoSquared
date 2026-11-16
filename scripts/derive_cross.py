@@ -1376,7 +1376,7 @@ GRAMMAR_ENGLISH = frozenset("""article articles accent infinitive lowercase uppe
 singular masculine feminine verb noun adjective pronoun gerund imperative subjunctive past future tense preposition conjunction
 vowel consonant syllable stress suffix prefix ending contraction question formal informal
 nominative accusative genitive dative instrumental prepositional locative vocative perfective imperfective case cases reflexive lesson""".split())
-_SPANS = re.compile(r"\{[^}]*\}|\*[^*]*\*|\"[^\"]*\"|\u00ab[^\u00bb]*\u00bb|\u201c[^\u201d]*\u201d")
+_SPANS = re.compile(r"\{[^}]*\}|\[[a-z_]+\]|\*[^*]*\*|\"[^\"]*\"|\u00ab[^\u00bb]*\u00bb|\u201c[^\u201d]*\u201d")
 
 
 def english_in_nonlatin(v: str, target: str, src: str | None = None) -> list[str]:
