@@ -1,0 +1,266 @@
+schema_version: '1.0'
+pack_key: practice.ru-prs.a2.unit10
+source_language: ru
+target_language: prs
+unit_content_key: prs.a2.unit10.opinions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-prs by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Russian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - noun
+  - proper_noun
+  - phrase
+  agreement_tags:
+    semantic:
+    - opinion_word
+    - person_name
+    - family_message_word
+    - opinion_phrase
+    - message_word
+    - en_prs_a2_unit10_lesson02_words
+    - en_prs_a2_unit10_lesson03_words
+slot_presets:
+  opinion_word: &id001
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: opinion_word
+  person_name: &id003
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  family_message_word:
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: family_message_word
+  opinion_phrase:
+    language_code: prs
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: opinion_phrase
+  clean_phrase: &id002
+    language_code: prs
+    part_of_speech: phrase
+    agreement_tags:
+      semantic:
+      - en_prs_a2_unit10_lesson02_words
+      - en_prs_a2_unit10_lesson03_words
+  message_or_opinion_word: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - message_word
+      - opinion_word
+  unit_noun: &id004
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - opinion_word
+      - family_message_word
+templates:
+- content_key: practice.ru-prs.prs.a2.unit10.lesson01.opinion_gloss.001
+  lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{opinion_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    opinion_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: opinion_word
+  feedback_frame:
+    text: '{opinion_word} употребляется, когда говорят о мнениях.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson01.opinion_translate.003
+  lesson_content_key: prs.a2.unit10.lesson01.opinions_vocabulary
+  type: translation
+  frame:
+    text: '{opinion_word}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      opinion_word: english_gloss
+  slots:
+    opinion_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: opinion_word
+  feedback_frame:
+    text: '{opinion_word} — это дарийское слово для этого понятия.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson01.opinion_order.005
+  lesson_content_key: prs.a2.unit10.lesson02.giving_an_opinion
+  type: word_order
+  frame:
+    text: '{opinion_phrase}'
+    language_code: prs
+    direction: rtl
+  slots:
+    opinion_phrase: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{opinion_phrase}'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: Мнение начинается со слов به نظر من, причина вводится словом چون; глагол стоит в конце.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson04.name_translate.002
+  lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+  type: translation
+  frame:
+    text: '{person_name}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      person_name: english_gloss
+  slots:
+    person_name: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: person_name
+  feedback_frame:
+    text: '{person_name} — имя этого говорящего на дари.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson04.name_order.005
+  lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+  type: word_order
+  frame:
+    text: این {person_name} است
+    language_code: prs
+    direction: rtl
+  slots:
+    person_name: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این {person_name} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Порядок слов: این [имя] است («это ___»).'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson03.message_noun_gloss.009
+  lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
+  type: multiple_choice
+  frame:
+    text: '{unit_noun}'
+    language_code: prs
+    direction: rtl
+  slots:
+    unit_noun: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: unit_noun
+  feedback_frame:
+    text: '{unit_noun} — существительное из уроков этого раздела о мнениях.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson03.family_message_translate.002
+  lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
+  type: translation
+  frame:
+    text: '{family_message_word}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      family_message_word: english_gloss
+  slots:
+    family_message_word: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: family_message_word
+  feedback_frame:
+    text: '{family_message_word} — это дарийское слово для этого понятия.'
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson04.opinion_phrase_choice.006
+  lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+  type: multiple_choice
+  frame:
+    text: '{opinion_phrase}'
+    language_code: prs
+    direction: rtl
+  slots:
+    opinion_phrase: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: opinion_phrase
+  feedback_frame:
+    text: Это предложение или выражение из спора об учёбе за границей в этом разделе.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson04.opinion_phrase_pair.007
+  lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+  type: matching_pairs
+  frame:
+    text: Соотнеси каждое предложение или слово на дари с его значением.
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+    seventh: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  - kind: distinct
+    slots:
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+  feedback_frame:
+    text: Соедини каждое предложение или слово на дари с его значением по-русски.
+    language_code: ru
+    direction: ltr
+- content_key: practice.ru-prs.prs.a2.unit10.lesson04.opinion_phrase_translate.008
+  lesson_content_key: prs.a2.unit10.lesson04.study_debate_dialogue
+  type: translation
+  frame:
+    text: '{opinion_phrase}'
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      opinion_phrase: english_gloss
+  slots:
+    opinion_phrase: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: opinion_phrase
+  feedback_frame:
+    text: Это предложение или выражение встречается в споре об учёбе за границей в этом разделе.
+    language_code: ru
+    direction: ltr

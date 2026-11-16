@@ -74,7 +74,7 @@ taalcafes taalcafés taalcafeetje""".split())
 # A few of the above are ordinary words of one of the checked languages; drop them per language of the text.
 SHARED = {
     "de": set("tot dank morgen alle dus zin erg sechs acht neun tisch kaffee frage antwort wort worte kamer huis "
-              "reise reisen station winkel klein groß zeit zonder vrij kan mag zal zou kon had waren wordt gewoon "
+              "worden reise reisen station winkel klein groß zeit zonder vrij kan mag zal zou kon had waren wordt gewoon "
               "vier fünf zeven nog bij klein bedankt reis lekker fijn plan station".split()),
     "en": set("fine station reis straat kamer perron plan gewoon".split()),
     "ru": set(),
