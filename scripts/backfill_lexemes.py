@@ -5755,15 +5755,28 @@ def main() -> int:
             }
             for level, course in courses_by_level.items()
         }
+        lessons_by_key = {
+            level: {
+                lesson.content_key: lesson
+                for lesson in lessons_by_level[level].values()
+                if lesson.content_key
+            }
+            for level in lessons_by_level
+        }
         created = 0
         updated = 0
         repointed = 0
         for spec in specs:
             level = spec.pop("level")
             course = courses_by_level[level]
-            lesson = lessons_by_level[level].get(
-                (spec.pop("unit_order"), spec.pop("lesson_order"))
-            )
+            # Resolve by content key first: the A2 manifest order was reordered (#275,
+            # banking/scenario interleave), so enumerate() positions over UNIT_FILES_A2 no
+            # longer equal Unit.order in the imported course. Fall back to the old
+            # (unit_order, lesson_order) lookup for lessons without a stored key.
+            lesson = lessons_by_key[level].get(spec["lesson_content_key"])
+            _pos = (spec.pop("unit_order"), spec.pop("lesson_order"))
+            if lesson is None:
+                lesson = lessons_by_level[level].get(_pos)
             if lesson is None:
                 print(
                     f"ERROR: imported course is missing {spec['lesson_content_key']}",
