@@ -106,8 +106,13 @@ export function ConversationRunner({
           romanized: res.feedback_code === "romanized_input",
         },
       ]);
-      onAnswered(res.correct, res.xp_awarded);
       setValue("");
+      if (res.feedback_code === "romanized_input") {
+        // Not credited and not advanced: keep the same turn open for a script retry
+        // (never finish, even on a terminal node; never report to the feed as answered).
+        return;
+      }
+      onAnswered(res.correct, res.xp_awarded);
       if (next) {
         setNode(next);
         // A terminal node still gets rendered — it's the app's closing line.
