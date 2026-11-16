@@ -1,0 +1,402 @@
+schema_version: '1.0'
+pack_key: practice.ja-nl.a1.unit06
+source_language: ja
+target_language: nl
+unit_content_key: nl.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - drink
+    - food_request
+    - polite_request
+    - menu_item
+    - food_dialogue
+slot_presets:
+  drink: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: drink
+  food_noun: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: food_request
+  polite_word: &id003
+    language_code: nl
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: polite_request
+templates:
+- content_key: practice.ja-nl.nl.a1.unit06.lesson01.choose.001
+  lesson_content_key: nl.a1.unit06.lesson01.dranken
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: 日本語の意味を選んでください。
+      language_code: ja
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} はこのユニットに出てきた飲み物の単語です。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson01.order.002
+  lesson_content_key: nl.a1.unit06.lesson01.dranken
+  type: word_order
+  frame:
+    text: Ik wil graag een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} でこの飲み物の注文文が完成します。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson01.translate.003
+  lesson_content_key: nl.a1.unit06.lesson01.dranken
+  type: translation
+  frame:
+    text: '{item} をください。'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} をください。'
+    slot_rendering:
+      item: english_gloss
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson02.listen.001
+  lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} は聞こえた食べ物または飲み物の単語です。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson02.order.002
+  lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+  type: word_order
+  frame:
+    text: Ik wil graag een {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} でこの注文文が完成します。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson02.translate.003
+  lesson_content_key: nl.a1.unit06.lesson02.ik_wil_graag
+  type: translation
+  frame:
+    text: '{item} をください。'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} をください。'
+    slot_rendering:
+      item: english_gloss
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson03.order.001
+  lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+  type: word_order
+  frame:
+    text: Ik wil graag twee thee, {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag twee thee, {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} によって、この注文が丁寧な言い方かくだけた言い方かが決まります。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson03.complete.002
+  lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+  type: fill_in_blank
+  frame:
+    text: Ik wil graag twee thee, {item}.
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: オランダ語の文を完成させてください。
+      language_code: ja
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} によって、この注文が丁寧な言い方かくだけた言い方かが決まります。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson03.translate.003
+  lesson_content_key: nl.a1.unit06.lesson03.aantallen_bestellen
+  type: translation
+  frame:
+    text: '{item} を使って訳してください：紅茶を2つお願いします。'
+    language_code: ja
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag twee thee, {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik wil graag twee thee, {item} は、指定された丁寧さの言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson04.choose.001
+  lesson_content_key: nl.a1.unit06.lesson04.wat_wilt_u
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: 日本語の意味を選んでください。
+      language_code: ja
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} はこのユニットに出てきた食べ物または飲み物の単語です。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson04.translate.003
+  lesson_content_key: nl.a1.unit06.lesson04.wat_wilt_u
+  type: translation
+  frame:
+    text: '{item} をもらえますか？(くだけた言い方)'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mag ik een {item}, alsjeblieft?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} をいただけますか？'
+    slot_rendering:
+      item: english_gloss
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson05.choose.001
+  lesson_content_key: nl.a1.unit06.lesson05.menukaart
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: 日本語の意味を選んでください。
+      language_code: ja
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} はメニューにある単語です。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson05.match.002
+  lesson_content_key: nl.a1.unit06.lesson05.menukaart
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: メニューの単語とその日本語の意味を組み合わせてください。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson06.listen.001
+  lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} は聞こえた食べ物または飲み物の単語です。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson06.order.002
+  lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+  type: word_order
+  frame:
+    text: Ik wil graag een {item}, alstublieft.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}, alstublieft.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} でこの丁寧な注文文が完成します。'
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-nl.nl.a1.unit06.lesson06.translate.003
+  lesson_content_key: nl.a1.unit06.lesson06.taalcafe_bestelling
+  type: translation
+  frame:
+    text: '{item} をお願いします。(丁寧な言い方)'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik wil graag een {item}, alstublieft.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} をお願いします。'
+    slot_rendering:
+      item: english_gloss
+    language_code: ja
+    direction: ltr

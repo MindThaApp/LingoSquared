@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.ja-ru.a1.unit12
+source_language: ja
+target_language: ru
+unit_content_key: ru.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Дима
+    - w_Настя
+    - w_встретимся
+    - w_давай
+    - w_кино
+    - w_кинотеатра
+    - w_могу
+    - w_мы
+    - w_не
+    - w_отлично
+    - w_пойдём
+    - w_согласен
+    - w_сожалению
+    - w_субботу
+    - w_субботы
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кино
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_пойдём
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботу
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_давай
+      - w_пойдём
+      - w_кино
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - particle
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_согласен
+      - w_могу
+      - w_мы
+      - w_встретимся
+      - w_не
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сожалению
+  p8: &id008
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_встретимся
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_могу
+  p10: &id010
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_согласен
+  p11: &id011
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_мы
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_кино
+      - w_субботу
+      - w_отлично
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_кинотеатра
+  p14: &id014
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_субботы
+  p15: &id015
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_Настя
+      - w_Дима
+      - w_отлично
+templates:
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.choose.001
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Давай は活動を誘うときの、親しい相手(ты)に使う言い方です。вы に対しては давайте になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.order.002
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: word_order
+  frame:
+    text: Давай пойдём в {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Кино は語尾が変わらないので、в の後でも кино のままです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.fill.003
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: fill_in_blank
+  frame:
+    text: Давай {item} в кино. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Давай と пойдём を合わせると、「行こう」という誘いになります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.translate.004
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: 明日映画に行こう。(親しい相手に)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай {item} в кино завтра.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Давай пойдём は、親しい相手(ты)への「行こう」という誘いです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.translate.005
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: 土曜日に映画に行こう。(親しい相手に)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай пойдём в кино в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 曜日に「~に」と言うとき、ロシア語では в + 対格を使います。суббота は субботу になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson01.translate.006
+  lesson_content_key: ru.a1.unit12.lesson01.davay_poydyom
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Кино は形が変わらず、давай は親しい相手への「~しよう」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.choose.001
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Согласен は話し手が男性なので子音で終わります。女性は согласна と言います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.fill.002
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: К {item}, я не могу. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: К сожалению は「残念ながら」を表す決まった言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.fill.003
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: fill_in_blank
+  frame:
+    text: Во сколько мы {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Встретимся は「私たち」の形なので、мы と一緒に使います：мы встретимся。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.order.004
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: word_order
+  frame:
+    text: К сожалению, я не {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: К сожалению, я не {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Не は動詞を否定し、могу は я に対応する「できる」の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.translate.005
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: わかりました、賛成です。(男性が言う場合)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хорошо, я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Согласен は男性形です。女性は согласна と言います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson02.translate.006
+  lesson_content_key: ru.a1.unit12.lesson02.soglasen_ne_mogu
+  type: translation
+  frame:
+    text: 何時に会いますか。
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id011
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Во сколько {a} {b}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Во сколько は直訳すると「いくらで」ですが、「何時に」という意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.listen.001
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ロシア語の名前には Настя や Дима のような短くて親しみやすい形があり、友達同士で使われます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.order.002
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: word_order
+  frame:
+    text: Давай в семь часов, у {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У は「~のそばで」という意味で、生格を取ります：кинотеатр は кинотеатра になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.fill.003
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: fill_in_blank
+  frame:
+    text: Отлично, до {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: До は「~まで」という意味で生格を取るので、суббота は субботы になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.translate.004
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: いいね、土曜日にね。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Отлично, до {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: До субботы は直訳で「土曜日まで」で、「じゃあその日に」という親しみのある言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.translate.005
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: 7時に映画館のところで会おう。(親しい相手に)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Давай в семь часов, у {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Давай в семь часов は時間の提案で、у кинотеатра が場所を加えます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit12.lesson03.translate.006
+  lesson_content_key: ru.a1.unit12.lesson03.plany_na_subbotu
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Отлично は「すばらしい」という意味の副詞で、性や数によって形が変わりません。
+    language_code: ja
+    direction: ltr
