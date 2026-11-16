@@ -16,10 +16,15 @@ test("forgot password: request form confirms generically, bogus reset link is re
   await page.getByRole("link", { name: "Forgot password?" }).click();
   await page.waitForURL(/\/forgot-password/);
   // Same answer for an address that has no account (no account enumeration).
-  await page.getByLabel("Email").fill(freshEmail("e2e-nobody"));
-  await page.getByRole("button", { name: "Send reset link" }).click();
-  await expect(page.getByText(/reset link is on its way/).or(page.getByRole("alert"))).toBeVisible({ timeout: 20_000 });
-  await expect(page.getByText(/reset link is on its way/), "request should be accepted").toBeVisible();
+  const nobody = freshEmail("e2e-nobody");
+  await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+  // The page can re-render once while the session bootstraps; retry fill+submit until it sticks.
+  await expect(async () => {
+    await page.getByLabel("Email").fill(nobody);
+    await expect(page.getByLabel("Email")).toHaveValue(nobody, { timeout: 1000 });
+    await page.getByRole("button", { name: "Send reset link" }).click({ timeout: 2000 });
+    await expect(page.getByText(/reset link is on its way/)).toBeVisible({ timeout: 3000 });
+  }).toPass({ timeout: 20_000 });
 
   await page.goto("/reset-password?token=not-a-real-token");
   await page.getByLabel("New password (at least 8 characters)").fill("e2e-launch-new-pass-2");
