@@ -9,6 +9,7 @@ let currentUser: { id: string } | null = { id: "user-1" };
 const streak = vi.fn();
 const xp = vi.fn();
 
+vi.mock("../../lib/gamification", () => ({ useGamification: () => undefined }));
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
