@@ -90,7 +90,7 @@ def test_conversation_romanized_reply_is_not_credited_and_flagged():
     from app.api.router import conversation_reply_result
 
     node = {"accepted_variants": ["Привет"], "answer_language_code": "ru"}
-    kw = dict(node=node, script=None, language_code="ru")
+    kw = dict(node=node, script="cyrillic", language_code="ru")
     assert conversation_reply_result(response="privet", **kw) == ("incorrect", None, True)
     assert conversation_reply_result(response="Привет", **kw) == ("correct", "Привет", False)
     assert conversation_reply_result(response="zzz", **kw) == ("incorrect", None, False)
