@@ -177,7 +177,9 @@ def _scan_en_fr(ck, tmp_path, monkeypatch, feedback):
     return hits
 
 
-def test_quoted_title_present_in_target_realization_is_not_a_leftover(ck):
+def test_quoted_title_present_in_target_realization_is_not_a_leftover(ck, monkeypatch):
+    # a cinema genuinely named in Dutch inside a target realization (the real es one was localised to 'La Película Nueva')
+    monkeypatch.setattr(ck, "target_blob", lambda t: "cartelera: de nieuwe film - ocho euros." if t == "es" else "")
     v = "Сколько, согласно афише, стоит «De Nieuwe Film»?"
     assert ck.nl_markers(v, "ru+es+en")                                     # flagged without the source-quote filter
     assert not ck.nl_markers(ck.drop_source_quotes(v, "es"), "ru+es+en")    # the es realization names that cinema itself
