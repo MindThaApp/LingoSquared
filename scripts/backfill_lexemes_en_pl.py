@@ -2945,6 +2945,66 @@ POS_SETS.setdefault("pronoun", set()).update({"my", "oni"})
 POS_SETS["verb"] -= {"rada", "radę", "okno", "drzwi", "pudła", "ręce", "słodycze", "seriale", "wycieczka", "kurtka", "kurtkę", "basenie", "rok", "lekcję", "wieczora"} | {"ciężkie", "trudne", "my", "oni"}
 # --- end A2 Block B/C ---
 
+# --- A2 Block D (units 82-87): reasons, sequence, purpose, conditions, indirect questions, reported messages ---
+A2_BLOCK_D_GLOSSES = _g("""
+spóźniłam=I was late (said by a woman)
+przyszłam=I came (said by a woman)
+przyszłaś=you came (said to a woman)
+odebrałam=I answered, picked up (a phone; said by a woman)
+odebrałaś=you answered, picked up (a phone; said to a woman)
+wreszcie=finally, at last
+zadzwoniłem=I called, I phoned (said by a man)
+wypić=to drink up, to finish drinking (infinitive)
+zrobiłeś=you did (said to a man)
+wrócił=he came back
+ugotowała=she cooked (a finished action)
+zadzwoniłam=I called, I phoned (said by a woman)
+ugotowałem=I cooked (a finished action; said by a man)
+zadzwoniła=she called, she phoned
+obiedzie=dinner (the form used after the word for after: after dinner)
+wracał=he was coming back
+wypiję=I will drink up
+zjemy=we will eat
+wracałam=I was coming back (said by a woman)
+wróciłaś=you came back (said to a woman)
+wyjdę=I will leave, I will go out
+odwiedzić=to visit (infinitive)
+babcię=grandmother (as the object of a verb)
+Polsce=Poland (the form used after the word for in: in Poland)
+zdrowy=healthy (masc.)
+chleba=bread (the form used after the word for no: no bread)
+mleka=milk (the form used after the word for no: no milk)
+zostaje=he stays; she stays
+ładna=nice, pretty (fem.)
+napiszesz=you will write
+zostań=stay (command to one person)
+napisz=write (command to one person)
+przyjdź=come (command to one person)
+niego=him (the form used after the word for to: to him)
+wie=he knows; she knows; you know (polite, to a stranger)
+pytam=I ask
+pytasz=you ask
+zapytam=I will ask
+powiedziałem=I said (said by a man)
+prosi=he asks; she asks (for something)
+napisała=she wrote (feminine past form)
+przekazać=to pass on (a message; infinitive)
+dzwoniła=she called, she phoned
+ktoś=someone, anyone
+""")
+for _tok, _gloss in A2_BLOCK_D_GLOSSES.items():
+    GLOSSES.setdefault(_tok, _gloss)
+PROPER_NOUNS.add("Polsce")
+_KEEP_BY_LOWER["polsce"] = "Polsce"
+POS_SETS.setdefault("verb", set()).update(
+    t for t in A2_BLOCK_D_GLOSSES
+    if t not in {"wreszcie", "obiedzie", "babcię", "Polsce", "zdrowy", "chleba", "mleka", "ładna", "niego", "ktoś"}
+)
+POS_SETS.setdefault("adjective", set()).update({"zdrowy", "ładna"})
+POS_SETS.setdefault("adverb", set()).update({"wreszcie"})
+POS_SETS.setdefault("pronoun", set()).update({"niego", "ktoś"})
+# --- end A2 Block D ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_pl_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_pl_b2c1.json"
