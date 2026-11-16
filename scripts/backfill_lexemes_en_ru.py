@@ -64,7 +64,7 @@ PROPER_NOUNS = {
     "Анна", "Максим", "Виктор", "Канады", "Канада", "Москвы", "Москва",
     "Ирина", "Петровна", "Джон", "Ольга", "Тверской", "Чайковского",
     "Пушкина", "Олег", "Мария", "Настя", "Дима", "Тулы",
-    "Настю", "Насти", "Диме",
+    "Настю", "Насти", "Диме", "Аня", "Ане",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -2556,6 +2556,69 @@ for _tok, (_gloss, _pos) in _BLOCK_BC.items():
     GLOSSES.setdefault(_tok, _gloss)
     if _pos != "noun":
         POS_SETS.setdefault(_pos, set()).add(_tok)
+# --- A2 Block D (units 79-84): reasons, sequencing, purpose, conditions, indirect questions, passing on ---
+_BLOCK_D: dict[str, tuple[str, str]] = {
+    'пьёт': ('he or she drinks', 'verb'),
+    'гуляет': ('he or she walks; goes for a walk', 'verb'),
+    'устали': ('(we, you, they) are tired; got tired', 'verb'),
+    'пьёшь': ('you drink (informal)', 'verb'),
+    'пьём': ('we drink', 'verb'),
+    'болела': ('was ill (fem.)', 'verb'),
+    'обедает': ('he or she has lunch', 'verb'),
+    'работой': ("work (instrumental case, as in 'before work')", 'noun'),
+    'обедом': ("lunch (instrumental case, as in 'before lunch')", 'noun'),
+    'сном': ("sleep (instrumental case, as in 'before bed')", 'noun'),
+    'завтрака': ("breakfast (genitive case, as in 'after breakfast')", 'noun'),
+    'поужинал': ('had dinner (masc.)', 'verb'),
+    'поужинали': ('had dinner (plural)', 'verb'),
+    'поужинаем': ('we will have dinner', 'verb'),
+    'уйти': ('to leave; to go away', 'verb'),
+    'закрыла': ('closed (fem.)', 'verb'),
+    'закрыл': ('closed (masc.)', 'verb'),
+    'затем': ('then; after that', 'adverb'),
+    'пошла': ('went; set off (fem.)', 'verb'),
+    'пошли': ('went; set off (plural)', 'verb'),
+    'ужинали': ('had dinner (plural, process)', 'verb'),
+    'идёшь': ('you go; you are going (informal)', 'verb'),
+    'идёте': ('you go; you are going (formal or plural)', 'verb'),
+    'опоздать': ('to be late', 'verb'),
+    'опоздаю': ('I will be late', 'verb'),
+    'опоздаешь': ('you will be late', 'verb'),
+    'список': ('list', 'noun'),
+    'будильник': ('alarm clock', 'noun'),
+    'ставлю': ('I set; I put', 'verb'),
+    'ужина': ("dinner (genitive case, as in 'for dinner')", 'noun'),
+    'чего': ("what (genitive case, as in 'what for')", 'pronoun'),
+    'покупаешь': ('you buy (informal)', 'verb'),
+    'почту': ('post office (accusative case, as in "to the post office")', 'noun'),
+    'аптеку': ('pharmacy (accusative case, as in "to the pharmacy")', 'noun'),
+    'встаёшь': ('you get up (informal)', 'verb'),
+    'отвечает': ('he or she answers', 'verb'),
+    'приходи': ('come (informal command)', 'verb'),
+    'надень': ('put on (informal command)', 'verb'),
+    'куртку': ('jacket (accusative case)', 'noun'),
+    'спроси': ('ask (informal command)', 'verb'),
+    'сделает': ('he or she will do', 'verb'),
+    'пойдёт': ('will go; (of rain) starts', 'verb'),
+    'останусь': ('I will stay', 'verb'),
+    'надену': ('I will put on', 'verb'),
+    'делаем': ('we do; we are doing', 'verb'),
+    'сказала': ('said (fem.)', 'verb'),
+    'сказали': ('said (plural)', 'verb'),
+    'спросил': ('asked (masc.)', 'verb'),
+    'передай': ('pass on; tell (informal command)', 'verb'),
+    'передайте': ('pass on; tell (formal or plural command)', 'verb'),
+    'передам': ('I will pass on', 'verb'),
+    'просит': ('he or she asks; requests', 'verb'),
+    'передать': ('to pass on; to hand over', 'verb'),
+    'Аня': ('Anya (short for Anna)', 'noun'),
+    'Ане': ('to Anya (dative case)', 'noun'),
+}
+for _tok, (_gloss, _pos) in _BLOCK_D.items():
+    GLOSSES.setdefault(_tok, _gloss)
+    if _pos != "noun":
+        POS_SETS.setdefault(_pos, set()).add(_tok)
+
 for _key, _gloss in {
     ("a2_unit73_zavtra_budet", "обязательно"): "definitely; without fail",
     ("a2_unit77_luchshe_stoit", "стоит"): "it is worth (as in 'you should')",
