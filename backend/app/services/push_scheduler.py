@@ -10,6 +10,7 @@ from app.core.config import get_settings
 from app.db.session import SessionLocal
 from app.models import PushNotificationGuard, PushSubscription, User, UserLexemeSRS, UserStats
 from app.services import push as push_service
+from app.services.unreviewable import expire_stale_unreviewable
 from app.services.progress import effective_streak_days, resolve_user_tz
 
 
@@ -56,6 +57,8 @@ def run_push_scheduler_once(now: datetime | None = None, db: Session | None = No
     notified_users = 0
     notifications_sent = 0
     try:
+        if expire_stale_unreviewable(db, now=instant):
+            db.commit()
         users = db.scalars(
             select(User)
             .join(PushSubscription, PushSubscription.user_id == User.id)
