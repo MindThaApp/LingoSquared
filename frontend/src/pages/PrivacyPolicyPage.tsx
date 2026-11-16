@@ -23,7 +23,7 @@ import { LegalDocument } from "./LegalDocument";
 //   writes/logs it (backend/app/services/stt.py's own docstring).
 export function PrivacyPolicyPage() {
   return (
-    <LegalDocument>
+    <LegalDocument doc="privacy">
       <h1>Privacy Policy</h1>
       <p className="muted">
         Draft for the Auvel beta — last updated 10 July 2026. This policy may

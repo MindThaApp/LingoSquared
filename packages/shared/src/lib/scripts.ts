@@ -50,7 +50,7 @@ const PERSO_ARABIC_LETTERS = [
 // Digit order ۱..۹ then ۰, matching the number row on real fa keyboards.
 const PERSO_ARABIC_SYMBOLS = [
   "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹", "۰",
-  "،", "؛", "؟",
+  "،", "؛", "؟", ".", "!",
 ];
 
 // True (Modern Standard) Arabic alphabet, traditional order -- for `ar`
@@ -89,7 +89,7 @@ const ARABIC_MSA_LETTERS = [
 // codepoints, borrowed by Persian from Arabic).
 const ARABIC_MSA_SYMBOLS = [
   "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩", "٠",
-  "،", "؛", "؟",
+  "،", "؛", "؟", ".", "!",
 ];
 
 // Devanagari (Hindi) characters, ordered per the InScript standard — India's
