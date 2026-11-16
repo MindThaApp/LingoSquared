@@ -1,0 +1,324 @@
+schema_version: '1.0'
+pack_key: practice.zh-ar.a1.unit08
+source_language: zh
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_سعر
+    - w_تفاح
+    - w_دراهم
+    - w_تفاحتين
+    - w_التفاح
+slot_presets:
+  mc: &id001
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+      - w_تفاحتين
+  l01: &id002
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_سعر
+      - w_تفاح
+      - w_دراهم
+  siir: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_سعر
+  darahim: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_دراهم
+  tuffah: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_التفاح
+  tufahatayn: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحتين
+templates:
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.choose.001
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: سعر 的意思是“价格”;كم سعر ...؟ 用来询问某物多少钱。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.listen.002
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاح 是泛指苹果的集合名词;دراهم 是 dirham(迪拉姆)的复数。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.order.003
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: كم {item} التفاح؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item} التفاح؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم سعر التفاح؟ 的意思是“苹果的价格是多少?”
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.order.004
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: word_order
+  frame:
+    text: التفاح بعشرة {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 数字前加 ب 表示价格:بعشرة 是“十(迪拉姆)”,后面接货币。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.fill.005
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: كم {item} التفاح؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: سعر 是“价格”;这个问句问的是苹果的价格。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.fill.006
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: fill_in_blank
+  frame:
+    text: التفاح بعشرة {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: دراهم 是 dirham(迪拉姆)的复数,用在十这样的数字之后。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.translate.007
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 这些都是名词:سعر 是“价格”,تفاح 是“苹果”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.translate.008
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: 苹果多少钱?
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: التفاح 中的冠词 ال 表示特指的那些苹果,所以这个问句问的是特定苹果的价格。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson01.translate.009
+  lesson_content_key: ar.a1.unit08.lesson01.prices
+  type: translation
+  frame:
+    text: 苹果十迪拉姆。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: التفاح بعشرة {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 数字前加 ب 表示价格。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson02.listen.001
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفاحتين 是 تفاحة(一个苹果)加上双数词尾 ـين;前面的 ة 变成 ت,所以正好表示两个苹果。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson02.order.002
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: word_order
+  frame:
+    text: أريد {item} من فضلك.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 阿拉伯语有专门的双数形式:تفاحتين 就是“两个苹果”,不需要另外的“二”字。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson02.fill.003
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: fill_in_blank
+  frame:
+    text: أريد {item} من فضلك. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 双数词尾 ـين 表示两个;在它之前,تفاحة 的 ة 写成 ت:تفاحتين。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson02.translate.004
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاح 泛指苹果,而带双数词尾的 تفاحتين 正好是两个。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit08.lesson02.translate.005
+  lesson_content_key: ar.a1.unit08.lesson02.purchase
+  type: translation
+  frame:
+    text: 我要两个苹果,谢谢。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أريد {item} من فضلك
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 双数词尾 ـتين 本身就表示“二”,所以不再另用数词。
+    language_code: zh
+    direction: ltr
