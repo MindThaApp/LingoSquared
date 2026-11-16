@@ -1368,8 +1368,10 @@ def canonical_order_tokens(value,case_sensitive=False):
     since both sides go through the identical split, not a separate
     punctuation-stripping step."""
     if isinstance(value, str):
-        collapsed = normalized(value,case_sensitive,True)
-        return collapsed.split(" ") if collapsed else []
+        # Normalize per token (not the whole string) so the trailing-terminator
+        # rule applies to each token exactly as it does to submitted tiles.
+        tokens = [normalized(t,case_sensitive,True) for t in value.split()]
+        return [t for t in tokens if t]
     if isinstance(value, list):
         return normalized(value,case_sensitive,True)
     return None
