@@ -3,6 +3,7 @@ import { seededShuffleNotOriginal } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { TargetText } from "../TargetText";
 import { isListeningExercise } from "../../lib/listeningTypes";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
@@ -59,14 +60,14 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
       <div className="word-answer-row" dir={direction} lang={exercise.prompt.answer_language_code}>
         {chosen.map((word, i) => (
           <button type="button" key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
-            {word}
+            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} />
           </button>
         ))}
       </div>
       <div className="word-bank" dir={direction} lang={exercise.prompt.answer_language_code}>
         {available.map((word, i) => (
           <button type="button" key={i} ref={i === 0 ? firstTileRef : undefined} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
-            {word}
+            <TargetText text={word} lang={exercise.prompt.answer_language_code ?? "und"} bare translit={exercise.prompt.translit_map?.[word]} />
           </button>
         ))}
       </div>

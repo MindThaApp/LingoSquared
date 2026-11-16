@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { optionClassName, optionGradeState } from "./optionHighlight";
 import type { GradedResult } from "./types";
+import { TargetText } from "../TargetText";
 
 interface ChoiceOptionsProps {
   options: string[];
@@ -13,6 +14,8 @@ interface ChoiceOptionsProps {
   direction?: "ltr" | "rtl";
   /** BCP-47 code of the option text (target language), for screen readers. */
   lang?: string;
+  /** prompt.translit_map: romanization by exact option text (shown when "Show pronunciation" is on). */
+  translitMap?: Record<string, string>;
 }
 
 /**
@@ -30,6 +33,7 @@ export function ChoiceOptions({
   correctOption,
   direction,
   lang,
+  translitMap,
 }: ChoiceOptionsProps) {
   const { t } = useTranslation();
   const firstRef = useRef<HTMLButtonElement | null>(null);
@@ -54,7 +58,7 @@ export function ChoiceOptions({
             onClick={() => !disabled && onSelect(option)}
             disabled={disabled}
           >
-            {option}
+            <TargetText text={option} lang={lang ?? "und"} bare translit={translitMap?.[option]} />
             {state && (
               <>
                 {" "}
