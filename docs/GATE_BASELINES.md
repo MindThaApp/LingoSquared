@@ -54,11 +54,13 @@ Other gates at b4641f864 (shipped 2026-11-06, includes #179-#185, alembic 0037 F
 hindi-name, note-language checks 0; practice packs 0 errors; scripts/tests 224; vitest 508; backend pytest full suite pass; lint and build pass;
 `scripts/e2e.sh` 5 passed; `scripts/a11y_check.sh` 0 serious/critical axe violations. Leakage threshold is now <= 11.
 
-### WARN baseline 2026-11-15: 6140 (CI_WARN_MAX=6140)
+### WARN baseline 2026-11-15: 6142 (CI_WARN_MAX=6142)
 
 Measured per course (validate + compile, as verify.sh does): 5804 at decae0fd5 (live), 6140 at the 2026-11-15 ship = 5804 + 336. The +336 is entirely the 12 new X-en A1/B2 learner pairs (ar, de, es, fr, hi, it, ja, ko, pl, ro, ru, zh -> en); no pre-existing course changed, and the en-nl-a2, en-fr-a2, en-it-a2 etc. A2 courses add 0.
 - X-en a1: 24 lines each (12 unique WARNs, printed by both validate and compile) = 288. Types: 10 x "card has example sentence(s) but the overlay entry has no example_gloss" (a1 unit30 hobbies/frequency cards, AUTHORING_GUIDE #19, becomes a hard error at the schema 1.1 retrofit; follow-up: author the 10 glosses per pair) and 2 x "media asset text does not match tested_text" (units 18 and 19; tested_text is a third-person paraphrase of the first-person audio line, same two WARNs as nl-en).
 - X-en b2: 4 lines each (2 unique: "no example sentence contains any of the card's introduced_tokens", inflected forms in b2 unit01 and unit03 shared realization) = 48.
+
+- +2 at 85f4a732d: en-de-a2 unit105 matching_pairs pair-side English text 'Anna is organising a party at the cafe.' (untaught tokens cafe, party; 1 unique WARN, printed by validate and compile). Expected from the new A2 units; total 6142.
 
 ## Running all gates locally
 
