@@ -42,6 +42,10 @@ from app.models import (
 # membership; Dari (prs) has zero coverage from either provider and is
 # correctly still excluded either way.
 from app.services.tts import tts_actually_configured
+from app.services.unreviewable import (
+    UNREVIEWABLE_RETRY_DAYS,
+    expire_stale_unreviewable,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -1326,6 +1330,12 @@ def _generate_prioritized(
     rng: random.Random,
 ) -> list[PracticeItem]:
     now = datetime.now(timezone.utc)
+    # Self-heal: a flag older than the retry window is cleared so this pass
+    # re-attempts generation (and re-flags below if it still fails).
+    expire_stale_unreviewable(db, user_id, now)
+    for row in srs_rows:
+        if row.unreviewable_at is not None and row.unreviewable_at <= now - timedelta(days=UNREVIEWABLE_RETRY_DAYS):
+            row.unreviewable_at = None
     lexeme_by_id = {lexeme.id: lexeme for lexeme in lexemes}
     unreviewable_ids = {
         row.lexeme_id for row in srs_rows if row.unreviewable_at is not None
