@@ -1,0 +1,459 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit20
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit20.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_الجو
+    - w_مشمس
+    - w_بارد
+    - w_حار
+    - w_هيا
+    - w_نشرب
+    - w_وحار
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+  adj: &id003
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - w_مشمس
+      - w_بارد
+      - w_حار
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_الجو
+      - w_مشمس
+      - w_بارد
+      - w_حار
+      - w_هيا
+      - w_نشرب
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_حار
+      - w_هيا
+      - w_نشرب
+      - w_الجو
+  jaw: &id005
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الجو
+  mushmis: &id006
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_مشمس
+  barid: &id004
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_بارد
+  har: &id009
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_حار
+  hayya: &id011
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_هيا
+  nashrab: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_نشرب
+  wahar: &id010
+    language_code: ar
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_وحار
+templates:
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.choose.001
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو는 날씨, مشمس는 화창한, بارد는 추운이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.listen.002
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: الجو مشمس اليوم은 '오늘은 날씨가 화창해요'라는 뜻이고, مشمس가 الجو를 설명해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.match.003
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: الجو(날씨)는 명사이고, مشمس, بارد, حار는 이를 설명하는 형용사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.order.004
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 형용사는 '~이다'에 해당하는 단어 없이 الجو 바로 뒤에 와요. الجو بارد는 '날씨가 추워요'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.fill.005
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: الجو {item} اليوم. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بارد는 '추운'이라는 뜻이고, الجو에 맞춰 남성형이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.fill.006
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: fill_in_blank
+  frame:
+    text: كيف {item} اليوم؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: كيف الجو اليوم؟는 '오늘 날씨가 어때요?'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.translate.007
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: الجو에는 ال이 있어 '그 날씨'라는 뜻이고, 나머지 두 단어는 이를 설명해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.translate.008
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: 오늘은 날씨가 화창해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: '형용사는 명사 뒤에 와요: الجو مشمس.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson01.translate.009
+  lesson_content_key: ar.a1.unit20.lesson01.weather_today
+  type: translation
+  frame:
+    text: 오늘은 날씨가 추워요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: بارد는 '추운'이라는 뜻이고, '~이다'에 해당하는 단어는 필요 없어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.choose.001
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: حار는 '더운'이라는 뜻이고, 남성형 الجو를 설명해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.listen.002
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: هيا نشرب ماء는 '물을 마시자요'라는 뜻이고, نشرب는 '마시다'의 '우리' 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.order.003
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: هيا {item} ماء.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {item} ماء.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هيا(~하자) 뒤에는 '우리' 형태의 동사가 와요. نشرب는 '우리가 마신다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.order.004
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: word_order
+  frame:
+    text: الجو {item} اليوم.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: حار는 '더운'이라는 뜻이고, 설명하는 명사 뒤에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.fill.005
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو مشمس {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: و는 다음 단어에 붙여 써요. وحار는 '그리고 더운'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.fill.006
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: fill_in_blank
+  frame:
+    text: الجو حار. {item} نشرب ماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا는 다른 사람에게 함께 하자고 권할 때 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.translate.007
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: هيا는 '~하자'를 뜻하는 불변화사이고, نشرب는 '우리' 형태의 동사이며, حار는 형용사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.translate.008
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: 오늘은 날씨가 더워요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: الجو {item} اليوم
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: الجو는 남성 명사라서 형용사도 남성형을 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit20.lesson02.translate.009
+  lesson_content_key: ar.a1.unit20.lesson02.weather_plan
+  type: translation
+  frame:
+    text: 물 마셔요.
+    language_code: ko
+    direction: ltr
+  slots:
+    b: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هيا {b} ماء
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: هيا 뒤에 '우리' 형태의 동사를 쓰면 제안하는 말이 돼요.
+    language_code: ko
+    direction: ltr
