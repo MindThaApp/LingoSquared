@@ -103,6 +103,8 @@ export interface TextBlock {
   speaker?: string;
   /** Optional Latin romanization of `text` (ru/hi/ar/fa/prs); see docs/CONTRACT.md. */
   translit?: string;
+  /** True when that romanization was native-reviewed; the client shows the beta marker only when it is not. */
+  translit_reviewed?: boolean;
 }
 
 export interface ExercisePrompt {
@@ -112,6 +114,8 @@ export interface ExercisePrompt {
   pairs?: { left: string; right: string }[];
   /** Romanization for target strings used in options / word_bank / pairs, keyed by the exact string. */
   translit_map?: Record<string, string>;
+  /** The subset of translit_map keys whose romanization was native-reviewed (absent = none). */
+  translit_reviewed_list?: string[];
   audio_text?: string;
   audio_language_code?: string;
   answer_language_code?: string;
@@ -196,6 +200,10 @@ export interface AnswerResult {
   correct_response: unknown;
   xp_awarded: number;
   feedback?: string;
+  /** "romanized_input": the learner typed the romanization (almost-right, NOT correct: no XP/SRS, retry in script). */
+  feedback_code?: string;
+  /** Romanization of the correct answer for the post-answer line (ru/hi/ar/fa/prs). */
+  correct_response_translit?: string;
 }
 
 export interface LessonStartResult {
@@ -292,6 +300,8 @@ export interface PracticeAnswerResult {
   xp_awarded: number;
   /** Authored explanation from the practice template's feedback_frame. */
   feedback?: string;
+  feedback_code?: string;
+  correct_response_translit?: string;
   /** Present for scheduled (review/practice) items: when it is due next. */
   next_due_at?: string;
   next_interval_days?: number;

@@ -26,10 +26,14 @@ def _store(lang: str) -> dict[str, dict]:
     return _STORES[lang]
 
 
-def lookup(text: Any, lang: str) -> str | None:
+def lookup_entry(text: Any, lang: str) -> dict | None:
     if not isinstance(text, str) or not _store(lang):
         return None
-    e = _store(lang).get(normalize_key(text, lang))
+    return _store(lang).get(normalize_key(text, lang))
+
+
+def lookup(text: Any, lang: str) -> str | None:
+    e = lookup_entry(text, lang)
     return e["romanization"] if e else None
 
 
@@ -54,9 +58,10 @@ def attach_card(card: dict[str, Any], lang: str) -> None:
     def blocks(bs: list[dict[str, Any]]) -> None:
         for b in bs:
             if str(b.get("language_code", "")).split("-")[0] == lang:
-                r = lookup(b.get("text"), lang)
-                if r:
-                    b["translit"] = r
+                e = lookup_entry(b.get("text"), lang)
+                if e:
+                    b["translit"] = e["romanization"]
+                    b["translit_reviewed"] = bool(e.get("reviewed"))
 
     blocks(card.get("text_blocks", []))
     for ex in card.get("examples", []) or []:
@@ -80,21 +85,25 @@ def attach_exercise(ex: dict[str, Any], lang: str, module_kind: str | None = Non
                 continue
             if normalize_key(str(b.get("text", "")), lang) in answers:
                 continue
-            r = lookup(b.get("text"), lang)
-            if r:
-                b["translit"] = r
+            e = lookup_entry(b.get("text"), lang)
+            if e:
+                b["translit"] = e["romanization"]
+                b["translit_reviewed"] = bool(e.get("reviewed"))
 
     if ex["type"] not in _NO_PROMPT_TRANSLIT:
         blocks(prompt.get("text_blocks", []))
         blocks(prompt.get("back_text_blocks", []) or [])
 
     tmap: dict[str, str] = {}
+    reviewed: list[str] = []
 
     def add(s: Any) -> None:
         if isinstance(s, str) and s not in tmap:
-            r = lookup(s, lang)
-            if r:
-                tmap[s] = r
+            e = lookup_entry(s, lang)
+            if e:
+                tmap[s] = e["romanization"]
+                if e.get("reviewed"):
+                    reviewed.append(s)
 
     for o in prompt.get("options", []) or []:
         add(o)
@@ -106,3 +115,5 @@ def attach_exercise(ex: dict[str, Any], lang: str, module_kind: str | None = Non
             add(p.get("right"))
     if tmap:
         prompt["translit_map"] = tmap
+        if reviewed:
+            prompt["translit_reviewed_list"] = reviewed

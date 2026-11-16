@@ -78,6 +78,9 @@ def cmd_export_backend(lang: str) -> None:
     out = REPO / "backend" / "app" / "data" / "translit" / f"{lang}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     payload = {"v": 1, "lang": lang, "entries": dict(sorted(keep.items()))}
+    reviewed = sorted(k for k in keep if store[k].get("reviewed"))
+    if reviewed:
+        payload["reviewed"] = reviewed  # additive: keys whose romanization was native-reviewed
     out.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"{lang}: {len(keep)} entries -> {out.relative_to(REPO)} ({out.stat().st_size // 1024} KiB)")
 

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Direction } from "@lingo/shared/api/types";
 import { diffAnswers, type DiffSegment } from "../lib/answerDiff";
+import { Pronunciation } from "./TargetText";
 
 function Segments({ segments, kind }: { segments: DiffSegment[]; kind: "wrong" | "right" }) {
   return (
@@ -30,22 +31,36 @@ export function AlmostFeedback({
   correct,
   dir,
   spoken = false,
+  romanized = false,
+  correctTranslit,
+  lang,
 }: {
   learner?: string;
   correct?: string;
   dir: Direction;
   /** The submitted answer came from the mic: say we heard something close, not a spelling slip. */
   spoken?: boolean;
+  /** The learner typed the romanization (server feedback_code "romanized_input"): not counted correct,
+   *  nudge them to write it in script. No spelling diff (Latin vs script is meaningless). */
+  romanized?: boolean;
+  /** Romanization of the correct answer (server correct_response_translit), shown under it. */
+  correctTranslit?: string;
+  /** Answer language, for the beta marker on the romanization line. */
+  lang?: string;
 }) {
   const { t } = useTranslation();
   const hasCorrect = typeof correct === "string" && correct.length > 0;
   const hasLearner = typeof learner === "string" && learner.trim().length > 0;
-  const heard = spoken && hasLearner;
-  const diff = hasCorrect && !heard && hasLearner ? diffAnswers(learner!, correct!) : null;
+  const heard = spoken && hasLearner && !romanized;
+  const diff = hasCorrect && !heard && !romanized && hasLearner ? diffAnswers(learner!, correct!) : null;
   return (
     <div className="almost-feedback">
       <span className="visually-hidden">
-        {heard
+        {romanized
+          ? hasCorrect
+            ? t("almost_feedback.sr_romanized", { answer: correct })
+            : t("almost_feedback.title_romanized")
+          : heard
           ? hasCorrect
             ? t("almost_feedback.sr_heard", { heard: learner, answer: correct })
             : t("almost_feedback.sr_heard_plain", { heard: learner })
@@ -54,7 +69,7 @@ export function AlmostFeedback({
             : t("almost_feedback.sr_plain")}
       </span>
       <p className="almost-title" aria-hidden="true">
-        <span className="almost-icon">≈</span> {heard ? t("almost_feedback.title_heard") : t("almost_feedback.title")}
+        <span className="almost-icon">≈</span> {romanized ? t("almost_feedback.title_romanized") : heard ? t("almost_feedback.title_heard") : t("almost_feedback.title")}
       </p>
       {heard && !hasCorrect && (
         <div className="almost-lines" dir={dir} aria-hidden="true">
@@ -68,6 +83,7 @@ export function AlmostFeedback({
           <p className="almost-line">
             {t("almost_feedback.correct_answer")}{" "}
             <bdi dir={dir}>{diff ? <Segments segments={diff.correct} kind="right" /> : correct}</bdi>
+            {correctTranslit && <Pronunciation translit={correctTranslit} lang={lang ?? "und"} />}
           </p>
           {hasLearner && (
             <p className="almost-line almost-line-learner">
