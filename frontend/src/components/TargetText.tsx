@@ -15,6 +15,7 @@ export function TargetText({
   lang,
   dir,
   translit,
+  reviewed,
   nativeClassName,
   bare,
   children,
@@ -23,6 +24,8 @@ export function TargetText({
   lang: string;
   dir?: "ltr" | "rtl";
   translit?: string | null;
+  /** The API's reviewed flag for this romanization: native-reviewed text carries no beta marker. */
+  reviewed?: boolean;
   /** Class for the native-script span (e.g. "text-block"). */
   nativeClassName?: string;
   /** Option / tile / pair call sites: the surrounding control already carries dir/lang, so the
@@ -44,17 +47,26 @@ export function TargetText({
   return (
     <span className="target-text">
       {bare ? <span>{children ?? text}</span> : native}
-      <Pronunciation translit={translit} lang={lang} />
+      <Pronunciation translit={translit} lang={lang} reviewed={reviewed} />
     </span>
   );
 }
 
 /** The romanization line alone, for call sites that lay out the native text themselves. */
-export function Pronunciation({ translit, lang }: { translit?: string | null; lang: string }) {
+export function Pronunciation({
+  translit,
+  lang,
+  reviewed,
+}: {
+  translit?: string | null;
+  lang: string;
+  reviewed?: boolean;
+}) {
   const { t } = useTranslation();
   const { show } = useTranslit();
   if (!show || !translit) return null;
-  const beta = TRANSLIT_BETA_LANGUAGES.has(lang.split("-")[0]);
+  // Beta marker: machine-drafted languages only, and only while that entry is unreviewed.
+  const beta = TRANSLIT_BETA_LANGUAGES.has(lang.split("-")[0]) && reviewed !== true;
   return (
     <span className="translit" dir="ltr" lang="und-Latn" role="note" aria-label={t("translit.aria", { text: translit })}>
       <span aria-hidden="true">{translit}</span>

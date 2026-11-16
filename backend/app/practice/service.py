@@ -41,6 +41,7 @@ from app.models import (
 # tts_actually_configured() checks real credentials, not just language
 # membership; Dari (prs) has zero coverage from either provider and is
 # correctly still excluded either way.
+from app.review.translit_nudge import attach_prompt_translit
 from app.services.tts import tts_actually_configured
 
 
@@ -1285,6 +1286,13 @@ def _generate_target_item(
                     and not allow_existing_signature
                 ):
                     continue
+                # Pronunciation (additive): romanization for target text / options / tiles where
+                # it does not give the answer away. After the signature, so it never changes it.
+                attach_prompt_translit(
+                    prompt, correct_response, course.target_language,
+                    str(getattr(template.type, "value", template.type)),
+                    getattr(template, "content_key", None),
+                )
 
                 item = PracticeItem(
                     user_id=user_id,
