@@ -2402,6 +2402,66 @@ for _tok, (_gloss, _pos) in A2_BLOCK_A.items():
         POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end A2 Block A ---
 
+# --- A2 Block B/C (units 82-87): modals, requests, advice, habits ---
+A2_BLOCK_BC: dict[str, tuple[str, str]] = {
+    'aduc': ('I bring', 'verb'),
+    'aduci': ('you bring (informal)', 'verb'),
+    'ajungem': ('we arrive', 'verb'),
+    'alerge': ('he or she runs (after să)', 'verb'),
+    'altceva': ('anything else; something else', 'pronoun'),
+    'bravo': ('well done', 'phrase'),
+    'chelnerul': ('the waiter', 'noun'),
+    'chitară': ('guitar', 'noun'),
+    'citească': ('he or she reads (after să)', 'verb'),
+    'culci': ('you put to bed (te culci: you go to bed)', 'verb'),
+    'cânt': ('I sing; I play (an instrument)', 'verb'),
+    'cânte': ('he or she sings (after să)', 'verb'),
+    'cânți': ('you sing (informal)', 'verb'),
+    'dai': ('you give (informal)', 'verb'),
+    'doarmă': ('he or she sleeps (after să)', 'verb'),
+    'gratis': ('free of charge', 'adverb'),
+    'gătim': ('we cook', 'verb'),
+    'intri': ('you enter (informal)', 'verb'),
+    'intru': ('I enter; I come in', 'verb'),
+    'lucrezi': ('you work (informal)', 'verb'),
+    'muncă': ('work; job', 'noun'),
+    'mâncăm': ('we eat', 'verb'),
+    'mănânci': ('you eat (informal)', 'verb'),
+    'odihnești': ('you rest (te odihnești: you rest yourself)', 'verb'),
+    'plătească': ('he or she pays (after să)', 'verb'),
+    'plătești': ('you pay (informal)', 'verb'),
+    'prietenul': ('the friend', 'noun'),
+    'promit': ('I promise', 'verb'),
+    'păcat': ('what a pity; a shame', 'phrase'),
+    'regulile': ('the rules', 'noun'),
+    'repetați': ('you repeat (plural or formal)', 'verb'),
+    'returnez': ('I return (give back)', 'verb'),
+    'returneze': ('he or she returns (after să)', 'verb'),
+    'returnezi': ('you return (informal)', 'verb'),
+    'răcit': ('having a cold (masc.)', 'adjective'),
+    'răcită': ('having a cold (fem.)', 'adjective'),
+    'sfătuiesc': ('I advise', 'verb'),
+    'stai': ('you stay; you sit (informal)', 'verb'),
+    'sune': ('he or she calls (after să)', 'verb'),
+    'tușesc': ('I cough', 'verb'),
+    'venim': ('we come', 'verb'),
+    'vină': ('he or she comes (after să)', 'verb'),
+    'voie': ('permission (a avea voie: to be allowed)', 'noun'),
+    'vorbește': ('he or she speaks; speaks', 'verb'),
+    'încep': ('I begin; I start', 'verb'),
+    'încet': ('slowly; quietly', 'adverb'),
+    'încetat': ('stopped (past participle of a înceta)', 'verb'),
+    'înoți': ('you swim (informal)', 'verb'),
+    'știe': ('he or she knows; knows how to', 'verb'),
+    'știm': ('we know; we know how to', 'verb'),
+    'știți': ('you know; you know how to (plural or formal)', 'verb'),
+}
+for _tok, (_gloss, _pos) in A2_BLOCK_BC.items():
+    GLOSSES.setdefault(_tok, _gloss)
+    if _pos != "noun":
+        POS_SETS.setdefault(_pos, set()).add(_tok)
+# --- end A2 Block B/C ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_ro_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_ro_b2c1.json"
