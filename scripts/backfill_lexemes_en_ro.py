@@ -2462,6 +2462,30 @@ for _tok, (_gloss, _pos) in A2_BLOCK_BC.items():
         POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end A2 Block B/C ---
 
+# --- A2 Block D (units 88-93): reasons, sequence, purpose, conditions, indirect questions, reported speech ---
+A2_BLOCK_D: dict[str, tuple[str, str]] = {
+    'ploaie': ('rain', 'noun'),
+    'motiv': ('reason', 'noun'),
+    'româna': ('Romanian (the language)', 'noun'),
+    'jacheta': ('the jacket', 'noun'),
+    'port': ('I wear', 'verb'),
+    'mănâncă': ('eat! (informal command); he or she eats', 'verb'),
+    'ți-e': ('is to you (as in "you are hungry")', 'phrase'),
+    'sună-mă': ('call me! (informal command)', 'verb'),
+    'singuri': ('on our own; alone (masc. plural)', 'adjective'),
+    'întreb': ('I ask', 'verb'),
+    'bolnavă': ('ill (fem.)', 'adjective'),
+    'spune-i': ('tell him or her! (informal command)', 'verb'),
+    'mâinile': ('the hands', 'noun'),
+    'mâini': ('hands', 'noun'),
+    'dinții': ('the teeth', 'noun'),
+}
+for _tok, (_gloss, _pos) in A2_BLOCK_D.items():
+    GLOSSES.setdefault(_tok, _gloss)
+    if _pos != "noun":
+        POS_SETS.setdefault(_pos, set()).add(_tok)
+# --- end A2 Block D ---
+
 # B2/C1 data (token -> {gloss, pos}) from scripts/lexdata/en_ro_b2c1.json.
 import json as _json
 _B2C1_JSON = __import__("pathlib").Path(__file__).resolve().parents[1] / "scripts/lexdata/en_ro_b2c1.json"
