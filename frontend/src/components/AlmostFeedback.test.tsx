@@ -34,4 +34,15 @@ describe("AlmostFeedback", () => {
       "Close. We heard: huis. Correct answer: huize",
     );
   });
+
+  it("romanized input shows the script nudge, no spelling diff, and the correct answer", () => {
+    const { container } = render(<AlmostFeedback learner="privet" correct="Привет" dir="ltr" romanized />);
+    expect(container.textContent).toContain("Right — now write it in script");
+    expect(container.textContent).not.toContain("Almost!");
+    expect(container.querySelector("mark")).toBeNull();
+    expect(container.textContent).toContain("Привет");
+    expect(container.querySelector(".visually-hidden")?.textContent).toBe(
+      "Right, but write it in script. Correct answer: Привет",
+    );
+  });
 });

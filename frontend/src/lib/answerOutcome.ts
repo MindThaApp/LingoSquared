@@ -1,14 +1,20 @@
 import type { GradingStatus } from "@lingo/shared/api/types";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 
-/** "almost" is a PASS (server accepts it, XP awarded) - only "incorrect" is a miss. */
+/** "almost" is a PASS (server accepts it, XP awarded) - only "incorrect" is a miss (see resultPassed for romanized input). */
 export function isPassingStatus(status: GradingStatus): boolean {
   return status !== "incorrect";
 }
 
-/** True when a graded result should be treated as passed (correct or almost). */
+/**
+ * True when a graded result should be treated as passed (correct or almost). The one exception:
+ * "almost" with correct:false is romanized input (server feedback_code "romanized_input"), which
+ * is almost-right but NOT a pass: the learner retries in script.
+ */
 export function resultPassed(result: { correct: boolean; result?: GradingStatus }): boolean {
-  return result.correct || isPassingStatus(resultStatus(result));
+  const status = resultStatus(result);
+  if (status === "almost") return result.correct;
+  return result.correct || isPassingStatus(status);
 }
 
 export interface AnswerOutcome {

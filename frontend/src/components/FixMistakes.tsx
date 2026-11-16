@@ -1,3 +1,4 @@
+import { resultPassed } from "../lib/answerOutcome";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -109,7 +110,7 @@ function FixMistakesRunner({ items, onDone }: { items: ReviewItem[]; onDone: () 
   }
 
   function handleContinue() {
-    if (result) setOutcomes((o) => [...o, resultStatus(result) !== "incorrect"]);
+    if (result) setOutcomes((o) => [...o, resultPassed(result)]);
     setResult(null);
     setLastResponse(undefined);
     setIndex((i) => i + 1);

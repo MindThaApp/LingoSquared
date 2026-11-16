@@ -703,8 +703,20 @@ leak the answer: a prompt block equal to a correct answer, `romanize*` exercises
 `script_ramp` lessons (letter-sound drills), and the prompt of listen_*/dictation
 exercises. Display (client): `<TargetText>`, per-user "Show pronunciation" preference
 (on by default at A1, off from A2); unreviewed LLM drafts (fa/prs/ar) carry a "beta"
-marker. Grading: a Latin answer matching the stored romanization of a correct target-script
-answer returns `result: "almost"` with the nudge "Right — now write it in script".
+marker (only while unreviewed). Grading: a Latin answer matching the stored romanization of
+a correct target-script answer returns `result: "almost"` with `correct: false` (almost-right,
+NOT correct: no XP, no correct count, no SRS scheduling; practice/review items stay open for a
+script retry) and `feedback_code: "romanized_input"` (+ English `feedback` fallback); clients
+localize the nudge "Right — now write it in script" from the code.
+
+**Pronunciation follow-up (2026-11-16, additive)**: `text_block.translit_reviewed` (bool,
+present with `translit`) and `prompt.translit_reviewed_list` (keys of `translit_map` whose
+romanization is native-reviewed) let the client show the beta marker only on unreviewed
+romanization. Answer responses (`AnswerOut`, review and practice answers) may carry
+`correct_response_translit` (romanization of the single target-script correct answer, for the
+post-answer line) and `feedback_code`. Runtime-generated Endless Practice prompts get
+`translit` / `translit_map` from the backend mirror `backend/app/data/translit/<lang>.json`
+(compact `entries` + optional `reviewed` key list) under the same answer-leak rules.
 
 **Vocabulary-example addition (2026-07-07, additive, no breaking
 change)**: every teaching card may carry an optional `examples` array —
