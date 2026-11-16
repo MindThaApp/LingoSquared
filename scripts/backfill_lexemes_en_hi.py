@@ -2432,6 +2432,11 @@ A2_BLOCK_D: dict[str, tuple[str, str]] = {
     'बताता': ('tells (masc., habitual)', 'verb'),
     'बताती': ('tells (fem., habitual)', 'verb'),
     'नेहा': ('Neha (a name)', 'proper_noun'),
+    'डाकघर': ('post office', 'noun'),
+    'अस्पताल': ('hospital', 'noun'),
+    'पुस्तकालय': ('library', 'noun'),
+    'स्कूल': ('school', 'noun'),
+    'परीक्षा': ('exam; test', 'noun'),
 }
 for _tok, (_gloss, _pos) in A2_BLOCK_D.items():
     GLOSSES_A2.setdefault(_tok, _gloss)
