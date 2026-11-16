@@ -81,6 +81,7 @@ function BankAwareInput({
     <>
       <WordBankInput
         translitMap={exercise.prompt.translit_map}
+        translitReviewed={exercise.prompt.translit_reviewed_list}
         lang={exercise.prompt.answer_language_code}
         tiles={bank.tiles}
         direction={answerDirectionForExercise(exercise)}

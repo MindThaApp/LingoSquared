@@ -1195,8 +1195,8 @@ def grade_answer(
         return "incorrect"
 
     # Romanized input (the Latin romanization of a correct target-script answer, per the pronunciation
-    # store) is almost right: partial credit through the existing "almost" path; the answer endpoints
-    # add the "Right — now write it in script" nudge.
+    # store) is almost right but NOT correct: grade "almost"; the answer endpoints record it as not correct (no XP/SRS) and add the endpoints
+    # "Right — now write it in script" nudge.
     if (
         exercise_type in FREE_TEXT_EXERCISE_TYPES
         and orthography_strict is not True

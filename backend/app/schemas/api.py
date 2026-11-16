@@ -129,10 +129,14 @@ class TextBlock(BaseModel):
     # romanization of `text`, attached at compile time. Omitted from serialization when absent so
     # content without it stays byte-identical (no import churn).
     translit:str|None=None
+    # Whether that romanization was native-reviewed (False = machine/rule draft; clients show the
+    # beta marker only for unreviewed ar/fa/prs). Additive; omitted when there is no translit.
+    translit_reviewed:bool|None=None
     @model_serializer(mode="wrap")
     def _omit_empty_translit(self, handler):
         data=handler(self)
         if data.get("translit") is None: data.pop("translit",None)
+        if data.get("translit_reviewed") is None: data.pop("translit_reviewed",None)
         return data
 # 2026-07-07 vocabulary-example addition (CONTRACT.md, AUTHORING_GUIDE.md #19):
 # optional example sentences showing the card's word in real context —
@@ -150,7 +154,7 @@ class AnswerIn(BaseModel):
     @model_validator(mode="after")
     def bounded_response(self):
         _bounded_payload_size(self.response); return self
-class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None
+class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None; feedback_code:str|None=None; correct_response_translit:str|None=None
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
 class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int; recommended:bool=False
 class CourseDetail(CourseOut): description:str
@@ -325,7 +329,7 @@ class PracticeBatchIn(BaseModel):
         return self
 class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
-class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None; feedback:str|None=None; next_due_at:datetime|None=None; next_interval_days:int|None=None
+class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None; feedback:str|None=None; next_due_at:datetime|None=None; next_interval_days:int|None=None; feedback_code:str|None=None; correct_response_translit:str|None=None
 class ReviewDueCourseOut(BaseModel):
     course_id: str
     due_count: int

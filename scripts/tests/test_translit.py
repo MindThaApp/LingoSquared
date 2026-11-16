@@ -87,3 +87,18 @@ def test_attach_no_answer_leak(monkeypatch):
     card = {"text_blocks": [blk("Привет"), {"text": "Hi", "language_code": "en", "direction": "ltr"}]}
     attach.attach_card(card, "ru")
     assert card["text_blocks"][0]["translit"] == "Privet" and "translit" not in card["text_blocks"][1]
+
+
+def test_attach_carries_reviewed_flag(monkeypatch):
+    monkeypatch.setitem(
+        attach._STORES, "ru",
+        {"Привет": {"romanization": "Privet", "reviewed": True}, "Пока": {"romanization": "Poka", "reviewed": False}},
+    )
+    blk = lambda t: {"text": t, "language_code": "ru", "direction": "ltr"}
+    card = {"text_blocks": [blk("Привет"), blk("Пока")]}
+    attach.attach_card(card, "ru")
+    assert card["text_blocks"][0]["translit_reviewed"] is True
+    assert card["text_blocks"][1]["translit_reviewed"] is False
+    ex = _ex("multiple_choice", "ru.q", {"text_blocks": [], "options": ["Привет", "Пока"]}, "Привет")
+    attach.attach_exercise(ex, "ru")
+    assert ex["prompt"]["translit_reviewed_list"] == ["Привет"]

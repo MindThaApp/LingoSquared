@@ -60,6 +60,7 @@ export function TextBlockView({
         lang={block.language_code}
         dir={block.direction}
         translit={block.translit}
+        reviewed={block.translit_reviewed}
         nativeClassName="text-block"
       >
         <EmphasizedText text={block.text} />

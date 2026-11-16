@@ -4,6 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
+import { TranslitProvider } from "../components/translitContext";
+import { Pronunciation } from "../components/TargetText";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
 import { setReportContext } from "../lib/reportContext";
@@ -103,6 +105,7 @@ function PracticeCard({
   const [submitting, setSubmitting] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [lastSpoken, setLastSpoken] = useState(false);
   useEffect(() => setReportContext({ courseId: courseId ?? undefined, itemId: item.id }), [courseId, item.id]);
@@ -116,7 +119,8 @@ function PracticeCard({
       const res = await PracticeApi.answer(item.id, response, meta);
       setResult(res);
       invalidateProgressQueries(queryClient);
-      onAnswered(res.correct, res.xp_awarded);
+      // Romanized input is not an answer yet (nothing was recorded): keep the item open for a retry.
+      if (res.feedback_code !== "romanized_input") onAnswered(res.correct, res.xp_awarded);
     } catch (err) {
       if (err instanceof ApiError && PERMANENT_ANSWER_ERROR_CODES.has(err.code)) {
         // Item may have expired mid-scroll (or already been answered/is
@@ -131,6 +135,12 @@ function PracticeCard({
     } finally {
       setSubmitting(false);
     }
+  }
+
+  function handleTryInScript() {
+    setResult(null);
+    setLastResponse(undefined);
+    setAttempt((n) => n + 1);
   }
 
   function handleRetryAnswer() {
@@ -159,6 +169,7 @@ function PracticeCard({
   return (
     <div className="card practice-card">
       <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
+        key={attempt}
         exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result) || unavailable || submitError}
@@ -187,10 +198,19 @@ function PracticeCard({
                 <AlmostFeedback
                   learner={typeof lastResponse === "string" ? lastResponse : undefined}
                   spoken={lastSpoken}
+                  romanized={result.feedback_code === "romanized_input"}
+                  correctTranslit={result.correct_response_translit}
+                  lang={item.prompt.answer_language_code}
                   correct={formatCorrectResponse(result.correct_response)}
                   dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
                 />
                 <AnswerFeedbackExtras result={result} prompt={item.prompt} />
+                {/* Romanized input is not credited (the item stays open server-side): retry in script. */}
+                {result.feedback_code === "romanized_input" && (
+                  <button className="btn btn-block" onClick={handleTryInScript}>
+                    {t("review.try_again")}
+                  </button>
+                )}
               </div>
             );
           }
@@ -202,6 +222,9 @@ function PracticeCard({
                   t("lesson_runner.correct_answer", {
                     answer: formatCorrectResponse(result.correct_response),
                   })}
+                {status === "incorrect" && (
+                  <Pronunciation translit={result.correct_response_translit} lang={item.prompt.answer_language_code ?? "und"} />
+                )}
               </p>
               {result.feedback && (
                 <p dir={sourceTextDirection(item.prompt.text_blocks, item.prompt.answer_language_code)} style={{ margin: "6px 0 0", fontWeight: 400 }}>
@@ -525,6 +548,7 @@ export function PracticeFeedPage() {
             else cardRefs.current.delete(item.id);
           }}
         >
+          <TranslitProvider courseId={courseId}>
           <PracticeCard
             courseId={courseId}
             item={item}
@@ -533,6 +557,7 @@ export function PracticeFeedPage() {
               handleAnswered(correct, xp);
             }}
           />
+          </TranslitProvider>
         </div>
       ))}
 

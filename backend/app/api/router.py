@@ -150,7 +150,7 @@ from app.review.grading import (
     is_arabic_hamza_only_difference,
     select_feedback,
 )
-from app.review.translit_nudge import romanized_input_nudge
+from app.review.translit_nudge import correct_answer_translit, feedback_code_for, is_romanized_almost, romanized_input_nudge
 from app.review.placement import (
     PLACEMENT_BLOCK_SIZE,
     PLACEMENT_LEVELS,
@@ -246,6 +246,8 @@ def conversation_reply_result(
         )
         if result == "correct":
             return result, variant
+        if result == "almost" and is_romanized_almost(result, response, variant, language_code):
+            continue  # romanized input earns no credit and never advances the conversation
         if result == "almost" and best_result == "incorrect":
             best_result = result
             best_variant = variant
@@ -627,6 +629,8 @@ def stored_exercise_answer(e,attempt):
         "correct_response": correct_response,
         "xp_awarded": attempt.xp_awarded,
         "feedback": feedback,
+        "feedback_code": feedback_code_for(result, attempt.response, e.correct_response, language_code),
+        "correct_response_translit": correct_answer_translit(e.correct_response, language_code),
     }
 
 
@@ -665,7 +669,9 @@ def exercise_answer(db, user, e, response, client_operation_id=None, input_mode=
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
         punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
     )
-    correct = result != "incorrect"
+    # Romanized input is almost-right, not correct: no correct count, no XP (xp below keys off
+    # `correct`); the learner retries in script.
+    correct = result != "incorrect" and not is_romanized_almost(result, response, e.correct_response, language_code)
     previously_correct = db.scalar(
         select(ExerciseAttempt.id)
         .where(
@@ -721,7 +727,7 @@ def exercise_answer(db, user, e, response, client_operation_id=None, input_mode=
             if previous:
                 return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
         raise
-    if result != "correct" and not replay:
+    if result != "correct" and not replay and not is_romanized_almost(result, response, e.correct_response, language_code):  # romanized input: no review item
         existing_review = db.scalar(
             select(ReviewItem.id).where(
                 ReviewItem.user_id == user.id,
@@ -1478,7 +1484,7 @@ def seed_params_for_lesson(db: Session, user_id: str, lesson_id: str, since: dat
             else:
                 found_attempt = True
                 outcome = attempt.outcome or ("correct" if attempt.correct else "incorrect")
-                scores.append(1.0 if outcome == "correct" else 0.5 if outcome == "almost" else 0.0)
+                scores.append(1.0 if outcome == "correct" else 0.5 if outcome == "almost" and attempt.correct else 0.0)
     score = sum(scores) / len(exercises) if exercises and scores and found_attempt else None
     if score is None or 0.6 <= score < 0.9:
         return {"ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "mastery": 0.0, "due_at": now + timedelta(days=1), "last_reviewed_at": None}
@@ -1688,15 +1694,17 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     language_code=e.prompt.get("answer_language_code")
     script=resolve_script(db,language_code)
     result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")),input_mode=body.input_mode)
+    if is_romanized_almost(result,body.response,e.correct_response,language_code):
+        # Almost-right, not correct: no XP and no SRS scheduling/log; the learner retries in script
+        # (a later script answer is the one that schedules). Nothing is written.
+        return {"correct":False,"result":"almost","correct_response":display_correct_response(e.correct_response),"xp_awarded":0,"feedback":romanized_input_nudge(body.response,e.correct_response,language_code),"feedback_code":feedback_code_for(result,body.response,e.correct_response,language_code),"correct_response_translit":correct_answer_translit(e.correct_response,language_code),"next_due_at":r.due_at}
     correct=result!="incorrect"
     xp=e.xp if correct else 0
     schedule_and_log(db,r,result,user=user,source="legacy",exercise_id=r.exercise_id,latency_ms=body.latency_ms); record_activity(db,user.id,xp,user.timezone); db.commit()
     feedback = select_feedback(feedback_meta,body.response,result)
     if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
         feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
-    if result == "almost":
-        feedback = romanized_input_nudge(body.response,e.correct_response,language_code) or feedback
-    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":feedback,"next_due_at":r.due_at}
+    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":feedback,"correct_response_translit":correct_answer_translit(e.correct_response,language_code),"next_due_at":r.due_at}
 @router.get("/me/reviews/due", response_model=ReviewDueOut)
 def lexeme_reviews_due(
     user=Depends(current_user),
@@ -2936,6 +2944,18 @@ def practice_answer(
         ),
     )
     result = apply_self_grade(result, item_type, body)
+    if is_romanized_almost(result, body.response, item.correct_response, language_code):
+        # Almost-right, not correct: no XP, no SRS scheduling, no attempt row and the item stays
+        # unanswered so the learner can retry in script. Nothing is written.
+        return {
+            "correct": False,
+            "result": "almost",
+            "correct_response": display_correct_response(item.correct_response),
+            "xp_awarded": 0,
+            "feedback": romanized_input_nudge(body.response, item.correct_response, language_code),
+            "feedback_code": feedback_code_for(result, body.response, item.correct_response, language_code),
+            "correct_response_translit": correct_answer_translit(item.correct_response, language_code),
+        }
     correct = result != "incorrect"
 
     xp_awarded = 0
@@ -3016,14 +3036,11 @@ def practice_answer(
             item.correct_response
         ),
         "xp_awarded": xp_awarded,
-        "feedback": (
-            romanized_input_nudge(body.response, item.correct_response, language_code)
-            if result == "almost"
-            else None
-        ) or render_item_feedback(
+        "feedback": render_item_feedback(
             db, template, item.course_id, item.filled_slots,
             item.target_lexeme_id,
         ),
+        "correct_response_translit": correct_answer_translit(item.correct_response, language_code),
         **next_due,
     }
 

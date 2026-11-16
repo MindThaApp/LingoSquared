@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
+import { TranslitProvider } from "../components/translitContext";
+import { Pronunciation } from "../components/TargetText";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { EmphasizedText } from "../components/EmphasizedText";
@@ -61,6 +63,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [courseId, setCourseId] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [autoPicked, setAutoPicked] = useState(false);
   const [items, setItems] = useState<PracticeItem[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -213,6 +216,14 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
     }
   }
 
+  // Romanized input earned no credit: clear the result and remount the exercise for a script retry.
+  function handleTryInScript() {
+    setResult(null);
+    setLastResponse(undefined);
+    setAttempt((n) => n + 1);
+    shownAtRef.current = Date.now();
+  }
+
   function handleContinue() {
     setResult(null);
     setLastResponse(undefined);
@@ -328,6 +339,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   const pct = (index / items.length) * 100;
 
   return (
+    <TranslitProvider courseId={courseId}>
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
         <div className="progress-track" style={{ flex: 1 }}>
@@ -346,7 +358,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         {t("review.progress", { current: index + 1, total: items.length })}
       </span>
       <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
-        key={current.id}
+        key={`${current.id}:${attempt}`}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
         ratings={ratings}
@@ -380,13 +392,24 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
               <AlmostFeedback
                 learner={typeof lastResponse === "string" ? lastResponse : undefined}
                 spoken={lastSpoken}
+                romanized={result.feedback_code === "romanized_input"}
+                correctTranslit={result.correct_response_translit}
+                lang={current.prompt.answer_language_code}
                 correct={formatCorrectResponse(result.correct_response)}
                 dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
               />
               {nextLine}
-              <button className="btn btn-block" onClick={handleContinue}>
-                {t("review.continue")}
-              </button>
+              <div style={{ display: "flex", gap: 8 }}>
+                {/* Romanized input is not credited (server wrote nothing): retry the same item in script. */}
+                {result.feedback_code === "romanized_input" && (
+                  <button className="btn btn-secondary btn-block" onClick={handleTryInScript}>
+                    {t("review.try_again")}
+                  </button>
+                )}
+                <button className="btn btn-block" onClick={handleContinue}>
+                  {t("review.continue")}
+                </button>
+              </div>
             </div>
           );
         }
@@ -399,6 +422,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
             {status !== "correct" && (
               <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
                 {t("review.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+                <Pronunciation translit={result.correct_response_translit} lang={current.prompt.answer_language_code ?? "und"} />
               </p>
             )}
             {result.feedback && (
@@ -455,5 +479,6 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         />
       )}
     </div>
+    </TranslitProvider>
   );
 }
