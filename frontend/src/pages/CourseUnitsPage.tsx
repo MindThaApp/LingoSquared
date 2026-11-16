@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { isBetaCourse } from "../lib/beta";
+import { BetaNote } from "../components/BetaNote";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -253,6 +255,7 @@ export function CourseUnitsPage() {
     <div className="page-with-aside">
       <div className="page-main-col">
       <h1 style={{ marginBottom: 4 }}>{courseQuery.data?.title ?? t("course_units.default_title")}</h1>
+      {courseQuery.data && isBetaCourse(courseQuery.data) && <BetaNote />}
       {courseQuery.data && <p className="muted">{courseQuery.data.description}</p>}
       {skillProgress && totalLessons > 0 && (
         <p className="muted course-units__progress-summary">
