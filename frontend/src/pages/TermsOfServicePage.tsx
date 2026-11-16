@@ -17,7 +17,7 @@ import { LegalDocument } from "./LegalDocument";
 //   actual pre-launch state.
 export function TermsOfServicePage() {
   return (
-    <LegalDocument>
+    <LegalDocument doc="terms">
       <h1>Terms of Service</h1>
       <p className="muted">
         Draft for the Auvel beta — last updated 10 July 2026. These terms may
