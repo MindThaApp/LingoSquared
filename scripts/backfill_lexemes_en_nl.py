@@ -5826,14 +5826,18 @@ def main() -> int:
             }
             for level, course in courses_by_level.items()
         }
+        lessons_by_key = {
+            level: {l.content_key: l for l in by_pos.values() if l.content_key}
+            for level, by_pos in lessons_by_level.items()
+        }
         created = updated = 0
         for raw_spec in specs:
             spec = dict(raw_spec)
             level = spec.pop("level")
             course = courses_by_level[level]
-            lesson = lessons_by_level[level].get(
-                (spec.pop("unit_order"), spec.pop("lesson_order"))
-            )
+            _pos = (spec.pop("unit_order"), spec.pop("lesson_order"))
+            # content key first: manifest reorders break (unit, lesson) position lookup
+            lesson = lessons_by_key[level].get(spec["lesson_content_key"]) or lessons_by_level[level].get(_pos)
             if lesson is None:
                 print(f"ERROR: imported course is missing {spec['lesson_content_key']}", file=sys.stderr)
                 db.rollback(); return 1
