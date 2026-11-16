@@ -85,4 +85,27 @@ describe("ConversationRunner", () => {
     expect(line).toHaveTextContent("Hallo, hoe gaat het?");
     expect(line).toHaveAttribute("dir", "rtl");
   });
+
+  it("romanized reply shows the script nudge, stays on the same turn, and a script retry is accepted", async () => {
+    const node = makePrompt("ltr").current_node;
+    answer
+      .mockResolvedValueOnce({
+        correct: false,
+        result: "almost",
+        correct_response: ["goed"],
+        xp_awarded: 0,
+        feedback_code: "romanized_input",
+        next_node: node,
+      })
+      .mockResolvedValueOnce({ correct: true, result: "correct", correct_response: ["goed"], xp_awarded: 5, next_node: null });
+    const onAnswered = vi.fn();
+    render(<ConversationRunner itemId="item-1" prompt={makePrompt("ltr")} onAnswered={onAnswered} />);
+    await sendReply("goed");
+    expect(await screen.findByText(/almost_feedback.title_romanized/, { selector: ".almost-title" })).toBeInTheDocument();
+    // Input is still open for the retry; the reply was not counted correct.
+    expect(screen.getByPlaceholderText("practice.conversation_reply_placeholder")).toBeInTheDocument();
+    expect(onAnswered).not.toHaveBeenCalled();
+    await sendReply("goed");
+    await waitFor(() => expect(onAnswered).toHaveBeenLastCalledWith(true, 5));
+  });
 });
