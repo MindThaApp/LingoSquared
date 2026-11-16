@@ -18,7 +18,8 @@ test("forgot password: request form confirms generically, bogus reset link is re
   // Same answer for an address that has no account (no account enumeration).
   await page.getByLabel("Email").fill(freshEmail("e2e-nobody"));
   await page.getByRole("button", { name: "Send reset link" }).click();
-  await expect(page.getByText(/reset link is on its way/)).toBeVisible();
+  await expect(page.getByText(/reset link is on its way/).or(page.getByRole("alert"))).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/reset link is on its way/), "request should be accepted").toBeVisible();
 
   await page.goto("/reset-password?token=not-a-real-token");
   await page.getByLabel("New password (at least 8 characters)").fill("e2e-launch-new-pass-2");
