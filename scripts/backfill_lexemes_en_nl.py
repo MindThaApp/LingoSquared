@@ -1481,6 +1481,39 @@ PRONOUNS.update({"degene", "Jouw"})
 PHRASES.update({"Succes"})
 PROPER_NOUNS.update({"Strand", "Tuin", "lotte"})
 
+# A2 Block G units 106-108 (integration units), added 2026-11-16.
+NL_GLOSSES.update({
+    "Hé": "hey",
+    "Liefs": "love (sign-off)",
+    "feestje": "the party",
+    "dansen": "to dance",
+    "gedanst": "danced (past participle)",
+    "Gezellig": "cosy; nice (sentence-initial)",
+    "daarvan": "of that",
+    "prima": "great; fine",
+    "afgesproken": "agreed; arranged (past participle)",
+    "apen": "monkeys",
+    "olifanten": "elephants",
+    "pinguïn": "the penguin",
+    "pinguïns": "penguins",
+    "foto": "the photo",
+    "ijsje": "the ice cream",
+    "aten": "ate (plural)",
+    "lachen": "to laugh",
+    "dronk": "drank",
+    "maakten": "made (plural)",
+    "lachte": "laughed",
+    "kochten": "bought (plural)",
+    "wachtten": "waited (plural)",
+    "gewacht": "waited (past participle)",
+    "gelachen": "laughed (past participle)",
+})
+VERBS.update({"dansen", "gedanst", "afgesproken", "aten", "lachen", "dronk", "maakten", "lachte", "kochten", "wachtten", "gewacht", "gelachen"})
+NOUNS.update({"feestje", "apen", "olifanten", "pinguïn", "pinguïns", "foto", "ijsje"})
+ADJECTIVES.update({"Gezellig", "prima"})
+ADVERBS.update({"daarvan"})
+PHRASES.update({"Hé", "Liefs"})
+
 # A2 Block F units 103-105 (verb systems), added 2026-11-15.
 NL_GLOSSES.update({
     "hoofd": "the head",
@@ -4012,6 +4045,25 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "weet_u_of": "indirect_question_of",
         "kunt_u_mij_zeggen": "polite_indirect_request",
         "omars_bericht": "indirect_question_message_reading",
+        # A2 Block G units 106-108, added 2026-11-16.
+        "hoi_lotte_groetjes": "informal_message_greetings",
+        "wat_is_er_gebeurd": "informal_message_what_happened",
+        "wat_gaan_we_doen": "informal_message_plans",
+        "omdat_want_dus": "informal_message_reasons",
+        "berichten_lezen": "informal_message_reading",
+        "een_bericht_schrijven": "informal_message_writing",
+        "een_uitnodiging": "invitation_events",
+        "ja_graag": "invitation_accepting",
+        "helaas_ik_kan_niet": "invitation_declining",
+        "zullen_we_zondag": "invitation_alternative",
+        "noors_uitnodiging": "invitation_reading",
+        "lotte_en_omar_plannen": "invitation_dialogue",
+        "eerst_daarna_toen": "story_sequence_words",
+        "verhaal_in_het_imperfectum": "story_past_simple",
+        "opschrijven_of_vertellen": "story_perfect_retelling",
+        "een_boottocht": "story_boat_trip",
+        "een_dag_in_het_pretpark": "story_theme_park",
+        "vertel_eens": "story_retell_dialogue",
         # A2 Block F units 103-105, added 2026-11-15.
         "hoe_voel_je_je": "reflexive_feelings",
         "het_hele_rijtje": "reflexive_pronoun_paradigm",
