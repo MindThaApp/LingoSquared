@@ -225,8 +225,8 @@ through in a live browser yet:
 
 Auth; all 10 languages (fa/prs fully separate, correct RTL + script
 metadata); courses → units → lessons → all 20 exercise types (dictation added
-2026-08-03); SM-2 review
-(being replaced by lexeme-level SRS); gamification (XP/streak/achievements);
+2026-08-03); FSRS-4.5 review
+(lexeme-level SRS, replaced SM-2 in #184); gamification (XP/streak/achievements);
 reading/writing vs. speaking sections with server-enforced unlock; CEFR
 A1–C2; teaching phase before exercises; in-app content-issue reporting +
 admin triage + coverage dashboard; Endless Practice generative feed (all 6
