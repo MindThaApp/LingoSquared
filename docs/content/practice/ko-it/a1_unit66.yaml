@@ -1,0 +1,336 @@
+schema_version: '1.0'
+pack_key: practice.ko-it.a1.unit66
+source_language: ko
+target_language: it
+unit_content_key: it.a1.unit66.museo
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chiudere
+    - w_concerto
+    - w_guida
+    - w_mostra
+    - w_quadri
+    - w_quadro
+    - w_sala
+    - w_serve
+    - w_visitare
+    - w_visito
+templates:
+- content_key: practice.ko-it.it.a1.unit66.lesson01.choose.001
+  lesson_content_key: it.a1.unit66.lesson01.voglio_andare_al_museo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: it
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_visitare
+        - w_mostra
+        - w_visito
+        - w_chiudere
+        - w_guida
+        - w_serve
+        - w_sala
+        - w_quadro
+        - w_quadri
+        - w_concerto
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — 이 단원의 단어예요. ''박물관에 가고 싶어요'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson02.listen.001
+  lesson_content_key: it.a1.unit66.lesson02.voglio_comprare_un_biglietto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 표를 사고 싶어요 수업에 나온 이 단원의 단어 중 하나예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson03.translate.001
+  lesson_content_key: it.a1.unit66.lesson03.a_che_ora_chiude
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} — 이 단원의 단어예요. ''박물관은 몇 시에 문을 닫아요?'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson04.match.001
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 이탈리아어 단어를 알맞은 한국어 뜻과 연결하세요. 이 단원의 수업에 나온 단어들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson05.choose.001
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — 이 단원의 단어예요. ''안내판 읽기'' 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson06.translate.001
+  lesson_content_key: it.a1.unit66.lesson06.marco_nina_e_giulia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 박물관에 간 Marco, Nina, Giulia의 수업에 나오는 이번 단원의 단어예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson01.order.002
+  lesson_content_key: it.a1.unit66.lesson01.voglio_andare_al_museo
+  type: word_order
+  frame:
+    text: Voglio {item} il museo.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_visitare
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voglio {item} il museo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 박물관을 방문하고 싶어요. visitare는 '방문하다'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson02.order.002
+  lesson_content_key: it.a1.unit66.lesson02.voglio_comprare_un_biglietto
+  type: word_order
+  frame:
+    text: Visito la {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mostra
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Visito la {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 전시를 관람하고 있어요. mostra는 '전시'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson04.order.002
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: word_order
+  frame:
+    text: Bene, e vuole anche una {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_guida
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bene, e vuole anche una {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 좋아요, 가이드도 필요하세요? guida는 '가이드'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson04.fill.003
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: fill_in_blank
+  frame:
+    text: No, grazie, non {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_serve
+    hint:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_serve
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 아니요, 괜찮아요. 필요 없어요. serve는 '필요하다'라는 뜻이에요 (non serve = 필요 없다).
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson05.order.002
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: word_order
+  frame:
+    text: La {item} è grande.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_sala
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} è grande.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 홀이 커요. sala는 '홀', '방'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson05.fill.003
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: fill_in_blank
+  frame:
+    text: Il {item} è bello. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_quadro
+    hint:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_quadro
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 그림이 아름다워요. quadro는 '그림'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit66.lesson06.order.002
+  lesson_content_key: it.a1.unit66.lesson06.marco_nina_e_giulia
+  type: word_order
+  frame:
+    text: Vado a un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_concerto
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vado a un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 콘서트에 가요. concerto는 '콘서트'라는 뜻이에요.
+    language_code: ko
+    direction: ltr

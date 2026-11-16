@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit24
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مال
+    - w_بطاقة
+    - w_نقدا
+    - w_أدفع
+    - w_المبلغ
+    - w_أستطيع
+    - w_بالبطاقة
+    - w_سأدفع
+    - w_الدفع
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_بطاقة
+      - w_نقدا
+      - w_أدفع
+  m6: &id003
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_أدفع
+      - w_بطاقة
+      - w_نقدا
+      - w_المبلغ
+      - w_أستطيع
+  how: &id004
+    language_code: ar
+    part_of_speech:
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_بالبطاقة
+      - w_نقدا
+  tense: &id002
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_أدفع
+      - w_سأدفع
+      - w_أستطيع
+      - w_نقدا
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_المبلغ
+      - w_أستطيع
+      - w_الدفع
+      - w_مال
+  mal:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مال
+  adfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أدفع
+  bitaqa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بطاقة
+  bilbitaqa: &id005
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بالبطاقة
+  sadfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_سأدفع
+  naqdan: &id006
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_نقدا
+  mablagh: &id008
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المبلغ
+  astatii3: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أستطيع
+  dafe: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الدفع
+templates:
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.choose.001
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مال은 '돈', بطاقة는 '카드', نقدا는 '현금'이고, أدفع는 '(제가) 내요'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.listen.002
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 동사 앞에 접두사 س가 붙으면 미래가 돼요. سأدفع는 '낼 거예요', أدفع는 '내요'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.match.003
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أدفع와 أستطيع는 1인칭 동사예요. المبلغ에는 ال가 붙어 있고 '금액'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.order.004
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: word_order
+  frame:
+    text: سأدفع {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 결제 방법은 동사 뒤에 와요. بالبطاقة는 '카드로', نقدا는 '현금으로'예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.fill.005
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: سأدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بالبطاقة의 ب는 '~로'라는 뜻이며 명사에 붙여 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.fill.006
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: أدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نقدا는 '현금으로'라는 뜻이며 동사 뒤에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.translate.007
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مال, بطاقة, نقدا는 돈과 결제를 나타내고, أدفع는 '(제가) 내요'라는 동사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.translate.008
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: 카드로 낼게요. ('저는'에 해당하는 별도의 단어는 없어요.)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 접두사 س는 동사를 미래로 만들고, بالبطاقة는 '카드로'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson01.translate.009
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: 현금으로 내요. ('저는'에 해당하는 별도의 단어는 없어요.)
+    language_code: ko
+    direction: ltr
+  slots:
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أدفع {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 현재형 동사 أدفع에는 이미 '제가'라는 뜻이 들어 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.choose.001
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: المبلغ는 ال가 붙은 '금액'이라는 뜻으로, 판매자가 كم 뒤에 말하는 것이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.listen.002
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أستطيع는 '(제가) ~할 수 있어요'라는 뜻이고, 뒤에 '결제하기'라는 뜻의 الدفع가 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.order.003
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: كم {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم المبلغ؟는 '금액이 얼마예요?'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.order.004
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل {item} الدفع بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} الدفع بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 의문사 هل이 맨 앞에 오고, 그다음에 '할 수 있다'는 동사가 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.order.005
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل أستطيع {item} بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {item} بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: الدفع는 ال가 붙은 '결제하기'라는 명사예요. أستطيع 뒤에서 할 수 있는 일을 나타내요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.fill.006
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: fill_in_blank
+  frame:
+    text: هل {item} الدفع بالبطاقة؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أستطيع는 '(제가) ~할 수 있어요'라는 뜻이라 '제가'에 해당하는 별도의 단어는 필요 없어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.translate.007
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: المبلغ와 الدفع는 ال가 붙은 명사이고, أستطيع는 '(제가) ~할 수 있어요'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.translate.008
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: 금액이 얼마예요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 아랍어에는 '~이다'에 해당하는 단어가 필요 없어요. كم المبلغ؟는 문자 그대로 '얼마 금액'이라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit24.lesson02.translate.009
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: 카드로 결제해도 될까요? ('저는'에 해당하는 별도의 단어는 없어요.)
+    language_code: ko
+    direction: ltr
+  slots:
+    a: *id010
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 이 문형은 هل + '할 수 있어요' + 명사 '결제하기'로 이루어져요.
+    language_code: ko
+    direction: ltr

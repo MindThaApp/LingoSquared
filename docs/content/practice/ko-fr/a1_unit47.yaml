@@ -1,0 +1,363 @@
+schema_version: '1.0'
+pack_key: practice.ko-fr.a1.unit47
+source_language: ko
+target_language: fr
+unit_content_key: fr.a1.unit47.meteo
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chaud
+    - w_ensoleillé
+    - w_faisons
+    - w_film
+    - w_froid
+    - w_journée
+    - w_météo
+    - w_nuageux
+    - w_pleut
+    - w_promenade
+    - w_toute
+    - w_tranquillement
+templates:
+- content_key: practice.ko-fr.fr.a1.unit47.lesson01.choose.001
+  lesson_content_key: fr.a1.unit47.lesson01.quel_temps_fait_il
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_ensoleillé
+        - w_pleut
+        - w_nuageux
+        - w_froid
+        - w_chaud
+        - w_météo
+        - w_toute
+        - w_journée
+        - w_promenade
+        - w_faisons
+        - w_tranquillement
+        - w_film
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어 {item}: ''날씨가 어때요?'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson02.listen.001
+  lesson_content_key: fr.a1.unit47.lesson02.froid_ou_chaud
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어 {item}: ''춥나요, 따뜻한가요?'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson03.translate.001
+  lesson_content_key: fr.a1.unit47.lesson03.la_meteo
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어 {item}: 일기예보 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson04.match.001
+  lesson_content_key: fr.a1.unit47.lesson04.faire_des_projets_selon
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 프랑스어 단어를 알맞은 한국어 뜻과 연결하세요. 이 단원의 수업에 나온 단어예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson06.choose.001
+  lesson_content_key: fr.a1.unit47.lesson06.faire_des_projets_pour
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어 {item}: 주말 계획 세우기 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson01.translate.002
+  lesson_content_key: fr.a1.unit47.lesson01.quel_temps_fait_il
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어 {item}: ''날씨가 어때요?'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson01.order.003
+  lesson_content_key: fr.a1.unit47.lesson01.quel_temps_fait_il
+  type: word_order
+  frame:
+    text: Le temps est {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_ensoleillé
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le temps est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 날씨가 맑아요. Le temps est + 형용사는 기본 패턴이고, 형용사는 남성 명사 temps에 일치해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson01.fill.004
+  lesson_content_key: fr.a1.unit47.lesson01.quel_temps_fait_il
+  type: fill_in_blank
+  frame:
+    text: S'il {item}, on reste à l'intérieur. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_pleut
+    hint:
+      language_code: fr
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_pleut
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '비가 오면 실내에 있어요. S''il pleut(비가 오면): si + il은 s''il이 되고, on reste à l''intérieur는 무엇을 하는지 말해 줘요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson01.translate.005
+  lesson_content_key: fr.a1.unit47.lesson01.quel_temps_fait_il
+  type: translation
+  frame:
+    text: 날씨가 흐려요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_nuageux
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le temps est {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 날씨가 흐려요. ensoleillé와 같은 le temps est + 형용사 패턴이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson02.order.002
+  lesson_content_key: fr.a1.unit47.lesson02.froid_ou_chaud
+  type: word_order
+  frame:
+    text: Il fait {item} aujourd'hui.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_froid
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il fait {item} aujourd'hui.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 오늘은 추워요. Aujourd'hui(오늘)는 날씨의 시점을 나타내고, il fait froid는 être가 아니라 faire를 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson02.fill.003
+  lesson_content_key: fr.a1.unit47.lesson02.froid_ou_chaud
+  type: fill_in_blank
+  frame:
+    text: Il fait {item} aujourd'hui. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_chaud
+    hint:
+      language_code: fr
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_chaud
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 오늘은 따뜻해요. Il fait chaud는 일상적인 날씨 이야기에서 '따뜻하다'와 '덥다'를 모두 나타내요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson03.order.002
+  lesson_content_key: fr.a1.unit47.lesson03.la_meteo
+  type: word_order
+  frame:
+    text: Quelle est la {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_météo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quelle est la {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 일기예보가 어때요? météo는 일기예보를 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson04.order.002
+  lesson_content_key: fr.a1.unit47.lesson04.faire_des_projets_selon
+  type: word_order
+  frame:
+    text: On fait une {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_promenade
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: On fait une {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 우리 산책할까요? promenade는 산책, 나들이를 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit47.lesson06.order.002
+  lesson_content_key: fr.a1.unit47.lesson06.faire_des_projets_pour
+  type: word_order
+  frame:
+    text: Parfait, alors on regarde un {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_film
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Parfait, alors on regarde un {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 좋아요, 그럼 영화를 봐요. Regarder(보다)는 un film(영화)과 자연스럽게 어울려요.
+    language_code: ko
+    direction: ltr

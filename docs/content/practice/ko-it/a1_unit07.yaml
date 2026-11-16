@@ -1,0 +1,493 @@
+schema_version: '1.0'
+pack_key: practice.ko-it.a1.unit07
+source_language: ko
+target_language: it
+unit_content_key: it.a1.unit07.food_and_drink
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_basta
+    - w_conto
+    - w_cosa
+    - w_così
+    - w_desidera
+    - w_favore
+    - w_l'acqua
+    - w_menù
+    - w_panino
+    - w_un'acqua
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_desidera
+      - w_favore
+      - w_cosa
+  t_panino: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_panino
+  t_favore: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_favore
+  t_desidera: &id005
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_desidera
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_menù
+      - w_conto
+      - w_favore
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_conto
+      - w_menù
+      - w_favore
+  t_basta: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_basta
+  pool9: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_menù
+      - w_conto
+      - w_un'acqua
+      - w_panino
+  t_conto: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_conto
+  t_un_acqua: &id011
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_un'acqua
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+      - w_menù
+      - w_conto
+  pool13: &id013
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_menù
+      - w_conto
+      - w_favore
+      - w_un'acqua
+templates:
+- content_key: practice.ko-it.it.a1.unit07.lesson01.choose.001
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cosa desidera?는 바에서 일하는 사람이 무엇을 원하는지 공손하게 묻는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson01.listen.002
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Per favore는 모든 주문에 덧붙이는 공손한 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson01.order.003
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: word_order
+  frame:
+    text: Vorrei un caffè e un {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Vorrei는 '~을 주세요'라는 뜻으로, 공손하게 주문하는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson01.fill.004
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: fill_in_blank
+  frame:
+    text: Vorrei un caffè, per {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per favore는 '부탁해요'라는 뜻이고, 요청의 맨 끝에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson01.translate.005
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: 커피 한 잔과 크루아상 하나 주세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un cornetto, per {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: un은 caffè와 cornetto 같은 남성 명사와 함께 쓰고, per favore로 요청을 마무리해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson01.translate.006
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: 무엇을 드릴까요? (공손한 말, Lei)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cosa {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Desidera는 점원이 쓰는 공손한 Lei 형태이고, 친근한 tu 형태가 아니에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.choose.001
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Basta così는 '이걸로 충분해요, 더 필요 없어요'라는 뜻의 굳어진 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.listen.002
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Così는 '이렇게, 그렇게'라는 뜻이고, basta così에서는 주문을 마무리하는 역할을 해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson02.fill.001
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: fill_in_blank
+  frame:
+    text: Grazie, {item} così. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Basta는 '충분하다'라는 뜻이고, basta così는 점원에게 그만 주셔도 된다고 알리는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson02.translate.002
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: translation
+  frame:
+    text: 됐어요, 감사합니다.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} così, grazie.'
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Basta così, grazie는 주문을 공손하게 마무리하는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.choose.003
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: acqua는 여성 명사이고 모음으로 시작해서 un'acqua처럼 아포스트로피가 남아요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.listen.004
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: il menù와 il conto는 남성 명사라서 il을 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.fill.005
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: fill_in_blank
+  frame:
+    text: Il {item}, per favore. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il conto, per favore는 계산서를 부탁할 때 쓰는 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.order.006
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: word_order
+  frame:
+    text: Un panino e {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Un'acqua는 여성형이에요. 모음 앞에서 una가 un'로 줄어들어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.match.007
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: il panino와 il conto는 남성이고, l'acqua는 여성이며 모음 앞에서 줄여 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.translate.008
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: 샌드위치 하나와 물 한 병 주세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Acqua는 여성 명사라서 '물 한 병'은 una acqua이고, 축약되어 un'acqua가 됩니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.translate.009
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: 계산서 부탁드려요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Il conto는 식사를 마칠 때 달라고 하는 계산서입니다.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit07.lesson03.translate.010
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '이탈리아어 명사는 관사와 함께 쓰입니다: il panino, l''acqua, il menù, il conto.'
+    language_code: ko
+    direction: ltr
