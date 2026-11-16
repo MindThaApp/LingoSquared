@@ -2991,6 +2991,7 @@ napisała=she wrote (feminine past form)
 przekazać=to pass on (a message; infinitive)
 dzwoniła=she called, she phoned
 ktoś=someone, anyone
+zapisuję=I write down, I note down
 """)
 for _tok, _gloss in A2_BLOCK_D_GLOSSES.items():
     GLOSSES.setdefault(_tok, _gloss)
