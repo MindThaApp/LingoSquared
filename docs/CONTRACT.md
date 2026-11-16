@@ -691,6 +691,21 @@ existing exercise-answering phase begins. Legacy lessons with an empty or
 missing `teaching` array just skip straight to exercises (backwards
 compatible), but all new/reseeded content should include it.
 
+**Pronunciation (romanization) addition (2026-11-16, additive, no breaking
+change)**: a `text_block` may carry an optional `translit` string — a learner-friendly
+Latin romanization of `text` (scheme: `docs/content/translit/SCHEME.md`). It is attached
+at compile time from the pair-independent store `docs/content/translit/<lang>.json`
+(keyed on the normalised target string; fields `romanization`, `scheme`, `source`
+rule|llm|human, `reviewed`) for target languages ru, hi, ar, fa, prs, and omitted entirely
+when absent. Exercise `prompt` may carry `translit_map`: `{exact target string as it
+appears in options / word_bank / pairs : romanization}`. Never attached where it would
+leak the answer: a prompt block equal to a correct answer, `romanize*` exercises,
+`script_ramp` lessons (letter-sound drills), and the prompt of listen_*/dictation
+exercises. Display (client): `<TargetText>`, per-user "Show pronunciation" preference
+(on by default at A1, off from A2); unreviewed LLM drafts (fa/prs/ar) carry a "beta"
+marker. Grading: a Latin answer matching the stored romanization of a correct target-script
+answer returns `result: "almost"` with the nudge "Right — now write it in script".
+
 **Vocabulary-example addition (2026-07-07, additive, no breaking
 change)**: every teaching card may carry an optional `examples` array —
 one entry per example sentence showing the card's word used in real

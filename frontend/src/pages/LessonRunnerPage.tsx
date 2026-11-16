@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
+import { TranslitProvider } from "../components/translitContext";
+import { TranslitToggle } from "../components/TranslitToggle";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
@@ -89,7 +91,19 @@ function missedWordFromResult(exercise: Exercise, result: AnswerResult): MissedW
   };
 }
 
+// Resolves the learner's "Show pronunciation" setting for this lesson's course (per-user
+// choice, else ON at A1 / OFF from A2) and exposes it to every text block below.
 export function LessonRunnerPage() {
+  const location = useLocation();
+  const courseId = (location.state as { courseId?: string } | null)?.courseId;
+  return (
+    <TranslitProvider courseId={courseId}>
+      <LessonRunnerContent />
+    </TranslitProvider>
+  );
+}
+
+function LessonRunnerContent() {
   const { t } = useTranslation();
   const { lessonId = "" } = useParams();
   const location = useLocation();
@@ -687,6 +701,7 @@ export function LessonRunnerPage() {
           <div className="progress-track" style={{ flex: 1 }}>
             <div className="progress-fill" style={{ width: `${pct}%` }} />
           </div>
+          <TranslitToggle />
           <button
             type="button"
             className="btn-icon-toggle"
@@ -749,6 +764,7 @@ export function LessonRunnerPage() {
         <span className="stat-xp" style={{ fontWeight: 700, whiteSpace: "nowrap" }}>
           ⭐ {totalXp}
         </span>
+        <TranslitToggle />
         <button
           type="button"
           className="btn-icon-toggle"

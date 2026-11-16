@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { SpeakButton } from "./SpeakButton";
 import { EmphasizedText } from "./EmphasizedText";
 import { useTargetLanguage } from "./targetLanguageContext";
+import { TargetText } from "./TargetText";
 
 export function shouldShowSpeaker(
   blockLanguage: string,
@@ -54,9 +55,15 @@ export function TextBlockView({
   return (
     <span className="text-block-row">
       {block.speaker && <span className="speaker-label">{block.speaker}:</span>}
-      <span dir={block.direction} lang={block.language_code} className="text-block">
+      <TargetText
+        text={block.text}
+        lang={block.language_code}
+        dir={block.direction}
+        translit={block.translit}
+        nativeClassName="text-block"
+      >
         <EmphasizedText text={block.text} />
-      </span>
+      </TargetText>
       {showSpeaker && (
         <SpeakButton text={block.text} languageCode={block.language_code} mediaAssetKey={mediaAssetKey} />
       )}
