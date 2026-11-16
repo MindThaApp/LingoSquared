@@ -308,6 +308,11 @@ def english_side_score(texts, target: str) -> float:
     return sum(1 for t in texts if looks_english(t, target)) / len(texts)
 
 
+def side_is_learner_mode(side: str, mode: str) -> bool:
+    """Is `side` of a matching_pairs exercise the learner side?  mode "both" = English on both sides (clue and meaning)."""
+    return mode == "both" or (mode != "none" and (side == "left") == (mode == "reverse"))
+
+
 def matching_sides(real_path: Path, target: str) -> dict[str, str]:
     """matching_pairs exercise content_key -> "reverse" (English clues on the LEFT), "normal" (English meanings on the right) or
     "none" (both sides target-language text or numbers: nothing to translate)."""
@@ -318,7 +323,7 @@ def matching_sides(real_path: Path, target: str) -> dict[str, str]:
                 if ex.get("type") == "matching_pairs" and ex.get("pairs"):
                     sl = english_side_score([p["left"] for p in ex["pairs"]], target)
                     sr = english_side_score([p["right"] for p in ex["pairs"]], target)
-                    out[ex["content_key"]] = "reverse" if (sl >= 0.6 and sl - sr >= 0.3) else ("normal" if (sr >= 0.5 and sr > sl) else "none")
+                    out[ex["content_key"]] = "both" if (sl >= 0.6 and sr >= 0.6) else "reverse" if (sl >= 0.6 and sl - sr >= 0.3) else ("normal" if (sr >= 0.5 and sr > sl) else "none")
     return out
 
 
@@ -402,7 +407,7 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
         for pd in ex["pairs"]:
             for side in ("left", "right"):                 # the learner side holds the English; mixed exercises exist
                 text = pd[side]
-                if not pair_text_is_learner(text, (side == "left") == reverse and sides[ck] != "none", target_of(unit)):
+                if not pair_text_is_learner(text, side_is_learner_mode(side, sides[ck]), target_of(unit)):
                     continue
                 if side == "left":
                     ex["localize_pair_lefts"] = "yes"
@@ -423,7 +428,7 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
                 side_name = "right"                          # dict form {left: right}
             else:
                 side_name = path[-1] if path[-1] in ("left", "right") else ("right" if role == "pair_right" else "left")
-            learner = pair_text_is_learner(val, (side_name == "left") == (sides[key] == "reverse") and sides[key] != "none",
+            learner = pair_text_is_learner(val, side_is_learner_mode(side_name, sides[key]),
                                            target_of(unit))
         elif not dd.has_words(val):
             learner = False
@@ -492,7 +497,9 @@ Rules (checked by `inject`):
    in the same script, including accents. Keep the `*asterisk*` spans (same number) around them.
 3. Roles: `gloss` = shortest natural {n_en} equivalent of the {t_en} card (never contains the {t_en} word). `correct_option`,
    `distractor`, `accepted`, `pair_right` = {n_en} meaning strings; options of one exercise stay mutually distinct, wrong ones stay wrong.
-   `instruction` asks for exactly what the exercise tests and must not reveal the answer. `feedback`/`note` explain the {t_en} point.
+   `instruction` asks for exactly what the exercise tests and must not reveal the answer. A sentence the learner is asked to
+   translate ("Translate into {t_en}: I am going home.") is an English sentence to translate into {n_en} (the learner's own
+   language), NEVER into {t_en}: the {t_en} version is the answer. `feedback`/`note` explain the {t_en} point.
 4. Contrast with English (flagged `CONTRAST`, or any remark about how English does it): the learner does not speak English. Rewrite it
    as a TRUE remark about {n_en} versus {t_en}, or state the {t_en} rule neutrally when {n_en} has no useful parallel. Never claim
    something false about {n_en}. Never mention English as the learner's language.
@@ -501,7 +508,7 @@ Rules (checked by `inject`):
 6. Learner-facing text only: no authoring jargon, no ids, no notes to the reviewer, no remark that the text was translated.
 7. Course titles read like "<{t_en} in {n_en}> A1" in the {n_en} naming style of the other courses of the app.
 {"8. " + ("RTL language: logical-order text, no bidi control characters; " if new_code in dd.RTL else "") + f"{t_en} words quoted in the text stay in Latin script (inside the *asterisk* spans); never transliterate them into the {n_en} script and never leave English words in the text. Grammar terms (article, infinitive, present perfect, subject, plural...) are written in {n_en} script, never as Latin-script English words or in parentheses after the {n_en} term." if new_code in dd.NON_LATIN and target not in dd.NON_LATIN else ""}
-{"9. Dari (prs) is NOT Iranian Farsi: use Afghan Dari vocabulary, forms and the colloquial register above (no Tehrani contractions such as mikhoram/mitoonam, no Iranian-only words, no copied Farsi sentences); the Dari register checker (scripts/check_dari_register.py) must report 0 findings." if new_code == "prs" else ""}
+{"9. Dari (prs) is NOT Iranian Farsi: use Afghan Dari vocabulary, forms and the colloquial register above (no Tehrani contractions such as mikhoram/mitoonam, no Iranian-only words, no copied Farsi sentences; address the learner with the Dari plural ending -ین, e.g. بنویسین / بگویین / می‌کنین, never -ید; copula استند/استین not هستند/هستید; بلی not بله); the Dari register checker (scripts/check_dari_register.py) must report 0 findings." if new_code == "prs" else ""}
 {"9. Farsi (fa) is Iranian Persian, not Dari: no Afghan-only vocabulary." if new_code == "fa" else ""}
 10. `translation` exercises ("Translate into English: <{t_en} text>"): the sibling asks English learners to translate into English. Here the learner
    translates INTO {n_en}: the `instruction` says "Translate into {n_en}: <the {t_en} text unchanged>" (in {n_en}), the `answer_language_code`

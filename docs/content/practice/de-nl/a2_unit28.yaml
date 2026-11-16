@@ -1,0 +1,402 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a2.unit28
+source_language: de
+target_language: nl
+unit_content_key: nl.a2.unit28.probleem_melden
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - housing_report_noun
+    - housing_report_noun_pure
+    - heating_word
+    - technician_word
+    - arrival_time_word
+    - housing_time_adverb
+    - duration_number
+    - room_word
+slot_presets:
+  housing_report_noun:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: housing_report_noun
+  housing_report_noun_pure: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: housing_report_noun_pure
+  heating_word: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: heating_word
+  technician_word: &id004
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: technician_word
+  arrival_time_word: &id005
+    language_code: nl
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: arrival_time_word
+  housing_time_adverb: &id007
+    language_code: nl
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: housing_time_adverb
+  duration_number: &id006
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: duration_number
+  room_word: &id002
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: room_word
+templates:
+- content_key: practice.de-nl.nl.a2.unit28.lesson01.choose.001
+  lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort, um ein Problem zu melden.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson01.listen.002
+  lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson01.match.003
+  lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Ordnen Sie jedem Wort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson01.translate.004
+  lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+  type: translation
+  frame:
+    text: 'In meiner Wohnung gibt es ein Problem mit: {item}.'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Er is een probleem in mijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Er is een probleem in mijn {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson01.order.005
+  lesson_content_key: nl.a2.unit28.lesson01.er_is_een_probleem
+  type: word_order
+  frame:
+    text: Er is een probleem in mijn {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Er is een probleem in mijn {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Hier liegt das Problem: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson02.translate.001
+  lesson_content_key: nl.a2.unit28.lesson02.de_verwarming_werkt_niet
+  type: translation
+  frame:
+    text: 'Ich höre, dass es nicht funktioniert: {item}.'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik hoor dat de {item} niet werkt.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik hoor dat de {item} niet werkt.
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson02.order.002
+  lesson_content_key: nl.a2.unit28.lesson02.de_verwarming_werkt_niet
+  type: word_order
+  frame:
+    text: De {item} werkt niet.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De {item} werkt niet.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Das funktioniert nicht: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson03.order.001
+  lesson_content_key: nl.a2.unit28.lesson03.wanneer_komt_de_monteur
+  type: word_order
+  frame:
+    text: Wanneer komt de {item} langs?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wanneer komt de {item} langs?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Nach dieser Person wird gefragt: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson03.order.002
+  lesson_content_key: nl.a2.unit28.lesson03.wanneer_komt_de_monteur
+  type: word_order
+  frame:
+    text: De monteur komt {item} langs.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De monteur komt {item} langs.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Dann kommt der Techniker: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson04.choose.001
+  lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eine Zahl.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson04.order.002
+  lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+  type: word_order
+  frame:
+    text: Wij nemen binnen {item} uur contact met u op.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wij nemen binnen {item} uur contact met u op.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Die Anzahl der Stunden in diesem Satz: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson04.listen.003
+  lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson04.translate.004
+  lesson_content_key: nl.a2.unit28.lesson04.een_melding_doen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Übersetzen Sie ins Niederländische.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das niederländische Wort ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson05.listen.001
+  lesson_content_key: nl.a2.unit28.lesson05.bevestiging_lezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Diese Zahl haben Sie gehört: {item}.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson06.listen.001
+  lesson_content_key: nl.a2.unit28.lesson06.verwarming_melden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a2.unit28.lesson06.match.002
+  lesson_content_key: nl.a2.unit28.lesson06.verwarming_melden
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+  feedback_frame:
+    text: Ordnen Sie jedem Zeit- bzw. Ortswort seine deutsche Bedeutung zu.
+    language_code: de
+    direction: ltr
