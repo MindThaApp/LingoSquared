@@ -8,6 +8,8 @@ import { LANGUAGE_FLAG } from "@lingo/shared/lib/flags";
 import { localizedLanguageName } from "@lingo/shared/lib/localizedLanguageName";
 import { pickerTargetLanguages, sortLanguagesByLocalizedName } from "../lib/languageSort";
 import { getLevelPreference } from "../lib/levelPreferences";
+import { isBetaLanguage } from "../lib/beta";
+import { BetaBadge, BetaNote } from "../components/BetaNote";
 import type { CourseSummary, Language } from "@lingo/shared/api/types";
 
 const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
@@ -105,6 +107,7 @@ function LangTile({
       <span className="lang-native" dir={lang.direction}>
         {lang.native_name}
       </span>
+      {isBetaLanguage(lang.code) && <BetaBadge className="beta-badge--tile" />}
     </button>
   );
 }
@@ -263,6 +266,7 @@ export function CoursePickerPage({ onPickCourse }: { onPickCourse?: (course: Cou
               {t("common.change")}
             </button>
           </p>
+          {targetLanguages.some((l) => isBetaLanguage(l.code)) && <BetaNote />}
           <div className="lang-grid">
             {targetLanguages.map((lang) => (
               <LangTile
