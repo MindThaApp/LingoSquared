@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.ja-ru.a1.unit17
+source_language: ja
+target_language: ru
+unit_content_key: ru.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_больница
+    - w_больнице
+    - w_врач
+    - w_инженер
+    - w_кем
+    - w_магазине
+    - w_он
+    - w_офис
+    - w_офисе
+    - w_повар
+    - w_работает
+    - w_работаешь
+    - w_ресторане
+    - w_учитель
+    - w_школа
+    - w_школе
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_больница
+      - w_учитель
+      - w_школа
+      - w_инженер
+      - w_офис
+      - w_он
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_больница
+      - w_школа
+      - w_офис
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работает
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_больнице
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_офисе
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_врач
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_школе
+  p8: &id008
+    language_code: ru
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_кем
+      - w_работаешь
+      - w_повар
+      - w_магазине
+      - w_ресторане
+  p9: &id009
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_работаешь
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_ресторане
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_магазине
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_повар
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_врач
+      - w_учитель
+      - w_инженер
+      - w_офис
+templates:
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.choose.001
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: врач や инженер のようなロシア語の職業名は、「ひとつの」にあたる語を必要としません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.match.002
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 職業は名詞だけで表します。Я врач は「私は医者です」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.order.003
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: word_order
+  frame:
+    text: Он {item} в офисе.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он {item} в офисе.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работает は работать「働く」の「彼・彼女は」の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.fill.004
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Я работаю в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 「~で」を表す в の後ろでは、名詞は前置格の語尾 -е になります。больница は больнице になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.fill.005
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: fill_in_blank
+  frame:
+    text: Он инженер. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Офис も в の後ろでは前置格の語尾 -е がつき、в офисе になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.translate.006
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: 私は医者です。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 職業名の前に「ひとつの」にあたる語は必要ありません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.translate.007
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: 彼はオフィスで働いています。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Он работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: В + 前置格の語尾 -е は、「どこで」を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.translate.008
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: 彼女は教師です。学校で働いています。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она учитель. Она работает в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Школа は в の後ろで школе になり、「学校で」の意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.translate.009
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: врач や инженер などの職業名は、男性にも女性にも同じ形を使います。Она врач.
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.choose.001
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Кем ты работаешь? は直訳すると「何者として働いていますか」で、ロシア人が職業をたずねるときの言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.order.002
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: word_order
+  frame:
+    text: Кем ты {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Работаешь は работать の親しい間柄の ты の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.fill.003
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Кем ты {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ты の語尾 -ешь は、「あなたが」働くことを表し、くだけた言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.fill.004
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: fill_in_blank
+  frame:
+    text: Он повар. Он работает в {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ресторан も в の後ろでは前置格の語尾 -е がつき、в ресторане になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.translate.005
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: お仕事は何ですか?(親しい間柄)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кем ты {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Кем は職業をたずね、ты はくだけた言い方の質問であることを示します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.translate.006
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: 私は店で働いています。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я работаю в {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Магазин は в の後ろで магазине になり、「店で」の意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson02.translate.007
+  lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+  type: translation
+  frame:
+    text: 彼女は料理人です。レストランで働いています。
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Она {a}. Она работает в {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Повар は女性を指す場合でも、形は男性形のままです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit17.lesson01.listen.010
+  lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: これらの職業名や職場を表す名詞には、「ひとつの」や「その」にあたる語は必要ありません。
+    language_code: ja
+    direction: ltr

@@ -1,0 +1,416 @@
+schema_version: '1.0'
+pack_key: practice.ja-ru.a1.unit15
+source_language: ja
+target_language: ru
+unit_content_key: ru.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_больше
+    - w_дом
+    - w_кафе
+    - w_лучше
+    - w_меньше
+    - w_то
+    - w_тот
+    - w_хуже
+    - w_чем
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_лучше
+      - w_хуже
+      - w_чем
+  p2: &id002
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_лучше
+  p3: &id003
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_хуже
+  p4: &id004
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_больше
+      - w_меньше
+      - w_кафе
+      - w_дом
+      - w_то
+      - w_тот
+  p5: &id005
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_больше
+  p6: &id006
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_меньше
+  p7: &id007
+    language_code: ru
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_тот
+  p8: &id008
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_кафе
+      - w_дом
+      - w_больше
+      - w_меньше
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_больше
+      - w_меньше
+      - w_кафе
+      - w_дом
+templates:
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.choose.001
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Лучше は「より良い」、хуже は「より悪い」です。чем は「〜より」で、比較級のあとにコンマを挟んで使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.order.002
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: word_order
+  frame:
+    text: Кофе {item}, чем чай.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кофе {item}, чем чай.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: ロシア語では、比較の文で чем(〜より)の前にコンマを置きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.fill.003
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: fill_in_blank
+  frame:
+    text: Чай {item}, чем кофе. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Хуже は лучше の反対の意味です。そのあとの чем が比べる対象を導きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.translate.004
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: translation
+  frame:
+    text: コーヒーはお茶よりいいです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Кофе {item}, чем чай.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: ロシア語では「です」にあたる語を入れません。Кофе лучше と、二つのものを並べるだけです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.translate.005
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: translation
+  frame:
+    text: お茶はコーヒーより悪いです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чай {item}, чем кофе.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Чем は必ず比較級のあとに、コンマを挟んで置きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson01.translate.006
+  lesson_content_key: ru.a1.unit15.lesson01.luchshe_huzhe
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: лучше、хуже、чем の三つで、簡単な比較文がすべて作れます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.choose.001
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: То は中性の「あの」で кафе に合い、тот は男性の「あの」で дом に合います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.match.002
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Больше は「より大きい」または「より多い」、меньше は「より小さい」または「より少ない」です。то と тот はどちらも「あの」ですが、名詞の性によって使い分けます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.order.003
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: word_order
+  frame:
+    text: Это кафе {item}, чем то.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Это кафе {item}, чем то.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Кафе は中性名詞で形が変わらないため、это や то と一緒に使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.order.004
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: word_order
+  frame:
+    text: Тот дом {item}, чем этот.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Тот дом {item}, чем этот.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Дом は男性名詞なので、тот や этот と一緒に使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.fill.005
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: fill_in_blank
+  frame:
+    text: То кафе {item}, чем это. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Меньше は больше の反対の意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.fill.006
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: fill_in_blank
+  frame:
+    text: Этот дом больше, чем {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Тот は男性の「あの」で дом に合います。кафе に合うのは中性の то です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.translate.007
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: translation
+  frame:
+    text: このカフェはあのカフェより大きいです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Это кафе {item}, чем то.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Больше は文脈によって「より大きい」にも「より多い」にもなります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.translate.008
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: translation
+  frame:
+    text: あの家はこの家より小さいです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Тот дом {item}, чем этот.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Тот と этот は男性形で、дом に合わせています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.translate.009
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Кафе は中性名詞で形が変わりません。дом は男性名詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit15.lesson02.listen.010
+  lesson_content_key: ru.a1.unit15.lesson02.bolshe_menshe
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Больше と меньше は反対の意味で、どちらも「より多い」「より少ない」の意味にもなります。
+    language_code: ja
+    direction: ltr

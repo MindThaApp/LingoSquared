@@ -1,0 +1,445 @@
+schema_version: '1.0'
+pack_key: practice.ja-ar.a1.unit13
+source_language: ja
+target_language: ar
+unit_content_key: ar.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ذهبت
+    - w_أمس
+    - w_اشتريت
+    - w_تفاحا
+    - w_فعلت
+    - w_شربت
+slot_presets:
+  all6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+      - w_فعلت
+      - w_شربت
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_ذهبت
+      - w_أمس
+      - w_اشتريت
+      - w_تفاحا
+  l02: &id007
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_فعلت
+      - w_شربت
+      - w_أمس
+      - w_ذهبت
+  dhahabtu: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_ذهبت
+  ams: &id003
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_أمس
+  ishtaraytu: &id006
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_اشتريت
+  tuffahan: &id004
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_تفاحا
+  faalta: &id008
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_فعلت
+  shariba: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_شربت
+templates:
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.choose.001
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ذهبت は「私は行った」、اشتريت は「私は買った」で、どちらも一人称の過去形の動詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.listen.002
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أمس は「昨日」という意味で、過去形の動詞と一緒に使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.match.003
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 過去形の語尾 -ت は「私」を表します(ذهبت、اشتريت、شربت)。فعلت は、この単元の質問では「あなたはした」の意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.order.004
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: word_order
+  frame:
+    text: ذهبت إلى السوق {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ذهبت إلى السوق {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أمس(昨日)は、たいてい文の最後に置きます。例:昨日、市場に行きました。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.fill.005
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق ثم اشتريت {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تفاحا は「買ったもの」としてのりんごなので、語尾にアリフが付きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.translate.006
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ذهبت は「私は行きました」、اشتريت は「私は買いました」、تفاحا は「買ったもの」としてのりんごです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.translate.007
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: 昨日、市場に行きました。(「私」にあたる単語はありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} إلى السوق {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 過去形の語尾 -ت がすでに「私は」を表すので、代名詞は不要です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson01.translate.008
+  lesson_content_key: ar.a1.unit13.lesson01.yesterday
+  type: translation
+  frame:
+    text: りんごを買いました。(「私」にあたる単語はありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id006
+    b: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 買ったものにはアリフの語尾が付きます:تفاحا。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.choose.001
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: فعلت は「あなたはしました」という意味です。例:ماذا فعلت أمس؟(昨日、何をしましたか?)
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.listen.002
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: شربت は「私は飲みました」という意味です。同じ -ت で終わる ذهبت と比べてみましょう。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.match.003
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: ذهبت、اشتريت、شربت では、同じ -ت の語尾が過去を表します。فعلت(あなたはしました)は疑問文で使われています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.order.004
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: word_order
+  frame:
+    text: ماذا {item} أمس؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} أمس؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: ماذا に過去形の動詞を続けると「何をしましたか」という質問になり、أمس で「昨日」の出来事にします。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.fill.005
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ذهبت إلى السوق. اشتريت تفاحا. {item} قهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شربت は「私は飲みました」という意味で、過去形の語尾 -ت が「私は」を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.fill.006
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: fill_in_blank
+  frame:
+    text: ماذا {item} أمس؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت は「する」の過去形です。この質問は、昨日何をしたかをたずねています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.translate.007
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: فعلت(あなたはしました)と شربت(私は飲みました)は、どちらも -ت の語尾が付いた過去形の動詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.translate.008
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: ユースフがライラにたずねます。「昨日、何をしましたか?」
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id008
+    b: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: فعلت は過去形の「あなたは」の形で、男性に対しても女性に対しても書き方は同じです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit13.lesson02.translate.009
+  lesson_content_key: ar.a1.unit13.lesson02.recent_event
+  type: translation
+  frame:
+    text: コーヒーを飲みました。(「私」にあたる単語はありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} قهوة'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 過去形では「私は」を -ت の語尾で表します。شربت は「私は飲みました」です。
+    language_code: ja
+    direction: ltr
