@@ -1,0 +1,417 @@
+schema_version: '1.0'
+pack_key: practice.zh-es.a1.unit04
+source_language: zh
+target_language: es
+unit_content_key: es.a1.unit04.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u04
+    - es_a1_u04_l01
+    - es_a1_u04_l02
+    - w_enero
+    - w_febrero
+    - w_marzo
+    - w_abril
+    - w_mayo
+    - w_junio
+    - w_julio
+    - w_agosto
+    - w_septiembre
+    - w_octubre
+    - w_noviembre
+    - w_diciembre
+    - w_fecha
+    - w_veintidós
+    - w_veintinueve
+    - w_tuyo
+slot_presets:
+  weekday: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u04_l01
+  month: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_enero
+      - w_febrero
+      - w_marzo
+      - w_abril
+      - w_mayo
+      - w_junio
+      - w_julio
+      - w_agosto
+      - w_septiembre
+      - w_octubre
+      - w_noviembre
+      - w_diciembre
+  month_words: &id003
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: es_a1_u04_l02
+  content: &id006
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    - phrase
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u04
+  words: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic: es_a1_u04
+  fecha: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_fecha
+  veintidos: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_veintidós
+  veintinueve: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_veintinueve
+  tuyo: &id009
+    language_code: es
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_tuyo
+templates:
+- content_key: practice.zh-es.es.a1.unit04.lesson01.choose.001
+  lesson_content_key: es.a1.unit04.lesson01.dias_de_la_semana
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 西班牙语的星期名称用小写字母书写，并且是阳性：el lunes、los martes。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson01.listen.002
+  lesson_content_key: es.a1.unit04.lesson01.dias_de_la_semana
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: lunes 到 viernes 以 -s 结尾，复数形式不变；sábado 和 domingo 加 -s：los sábados。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson01.order.003
+  lesson_content_key: es.a1.unit04.lesson01.dias_de_la_semana
+  type: word_order
+  frame:
+    text: Hoy es {day}.
+    language_code: es
+    direction: ltr
+  slots:
+    day: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoy es {day}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: hoy es 后面的星期名称不需要冠词；表示“每逢星期二”要用 los：los martes。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson01.translate.004
+  lesson_content_key: es.a1.unit04.lesson01.dias_de_la_semana
+  type: translation
+  frame:
+    text: 今天是{day}。
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      day: english_gloss
+  slots:
+    day: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoy es {day}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 记住要用小写字母：hoy es lunes，不能写成 Lunes。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson02.match.001
+  lesson_content_key: es.a1.unit04.lesson02.los_meses_del_ano
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 西班牙语的月份名称也用小写字母书写：enero、julio、diciembre。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson02.translate.002
+  lesson_content_key: es.a1.unit04.lesson02.los_meses_del_ano
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 很多西班牙语月份的词形有规律可循：marzo、abril、septiembre、octubre。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson02.order.003
+  lesson_content_key: es.a1.unit04.lesson02.los_meses_del_ano
+  type: word_order
+  frame:
+    text: Mi cumpleaños es en {month}.
+    language_code: es
+    direction: ltr
+  slots:
+    month: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi cumpleaños es en {month}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 只说月份时用 en（en marzo），说完整日期时用 el（el diez de marzo）。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson03.fill.001
+  lesson_content_key: es.a1.unit04.lesson03.preguntar_y_decir_la_fecha
+  type: fill_in_blank
+  frame:
+    text: ¿Qué {item} es hoy? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 西班牙语的日期顺序是：日、de、月：el veintidós de julio。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson03.translate.002
+  lesson_content_key: es.a1.unit04.lesson03.preguntar_y_decir_la_fecha
+  type: translation
+  frame:
+    text: 今天是7月22日。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoy es el {item} de julio.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 西班牙语的日期用基数词，不用序数词：el veintidós，即“二十二日”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson05.choose.001
+  lesson_content_key: es.a1.unit04.lesson05.leer_el_horario_del_taller
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: hay 既表示“有”（单数），也表示“有”（复数）：hay una clase、hay dos clases。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson05.fill.002
+  lesson_content_key: es.a1.unit04.lesson05.leer_el_horario_del_taller
+  type: fill_in_blank
+  frame:
+    text: Después hay una clase el {item} de julio. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 二十一到二十九写成一个词：veintiuno、veintidós、veintinueve。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson06.listen.001
+  lesson_content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Por cierto（顺便说一句）是转换话题时很实用的说法。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson06.translate.002
+  lesson_content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: cumpleaños 是一个词，单复数形式相同：el cumpleaños、los cumpleaños。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson06.translate.003
+  lesson_content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
+  type: translation
+  frame:
+    text: 你的呢？（非正式）
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Y el {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: el tuyo 指的是 tu cumpleaños，这是阳性名词；如果是阴性名词，则用 la tuya。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-es.es.a1.unit04.lesson06.match.004
+  lesson_content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: ¿Cuándo es...? 用来问某事在何时；回答以 es el + 日期或 es en + 月份开头。
+    language_code: zh
+    direction: ltr

@@ -1,0 +1,447 @@
+schema_version: '1.0'
+pack_key: practice.zh-ar.a1.unit14
+source_language: zh
+target_language: ar
+unit_content_key: ar.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_أحب
+    - w_القهوة
+    - w_شاي
+    - w_الماء
+    - w_ولا
+    - w_أفضل
+    - w_تفضل
+    - w_الشاي
+slot_presets:
+  l01: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+  m6: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - particle
+    agreement_tags:
+      semantic:
+      - w_أحب
+      - w_القهوة
+      - w_شاي
+      - w_الماء
+      - w_ولا
+      - w_أفضل
+  l02: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_أفضل
+      - w_تفضل
+      - w_القهوة
+      - w_الشاي
+  drinks: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_القهوة
+      - w_الشاي
+      - w_الماء
+  qahwa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_القهوة
+  shay: &id007
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_شاي
+  shayd:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الشاي
+  maa: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الماء
+  uhibb: &id005
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أحب
+  wala: &id004
+    language_code: ar
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_ولا
+  ufaddil: &id010
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أفضل
+  tufaddil: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_تفضل
+templates:
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.choose.001
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أحب 是动词“我喜欢”；后面直接接所喜欢的东西。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.listen.002
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ولا 由 و（和）加 لا（不）构成：意思是“而不；也不”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.match.003
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أحب 是“我喜欢”，أفضل 是“我更喜欢”；ولا（而不）把否定的内容接在前一句之后。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.order.004
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 所喜欢的东西跟在 أحب 后面，泛指时带 ال：أحب القهوة 是“我喜欢咖啡”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.order.005
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: word_order
+  frame:
+    text: لا أحب {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: لا أحب {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 动词前加 لا 表示否定：لا أحب 是“我不喜欢”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.fill.006
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أحب القهوة {item} أحب الشاي. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ولا 连接否定分句：我喜欢咖啡，不喜欢茶。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.fill.007
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: fill_in_blank
+  frame:
+    text: أنا {item} الماء. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 可以加上 أنا（我）来强调，但单独一个 أحب 就已经表示“我喜欢”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.translate.008
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: شاي 没有冠词，是“茶”；الماء 带 ال，是“水”；أحب 是“我喜欢”。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.translate.009
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: 我喜欢水。（没有单独表示“我”的词）
+    language_code: zh
+    direction: ltr
+  slots:
+    a: *id005
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{a} {b}'
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 在 أحب 之后，阿拉伯语用 ال 泛指某种东西，所以“我喜欢水”是 أحب الماء。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson01.translate.010
+  lesson_content_key: ar.a1.unit14.lesson01.likes
+  type: translation
+  frame:
+    text: 这是茶。
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هذا {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 没有 ال 时，شاي 就是单纯的“茶”，而且阿拉伯语不需要表示“是”的词：هذا شاي。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.choose.001
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أفضل 是“我更喜欢”；带前缀 ت 的 تفضل 是对男性说的“你”的形式。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.listen.002
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: تفضل 是“你更喜欢”，对男性说：ماذا تفضل يا يوسف؟
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.order.003
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: ماذا {item} يا يوسف؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 前缀 ت 表示“你”；ماذا تفضل؟ 是问一位男性更喜欢什么。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.order.004
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: word_order
+  frame:
+    text: أفضل {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أفضل {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: أفضل 后面接所偏好的东西，并带 ال：أفضل القهوة。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.fill.005
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: fill_in_blank
+  frame:
+    text: أنا {item} القهوة. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل 是“我更喜欢”；前缀 أ 表示“我”，如 أحب 和 أريد。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.translate.006
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: zh
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أفضل 是“我更喜欢”，تفضل 是“你（男）更喜欢”；前缀 أ 或 ت 表示是谁。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-ar.ar.a1.unit14.lesson02.translate.007
+  lesson_content_key: ar.a1.unit14.lesson02.choices
+  type: translation
+  frame:
+    text: 你更喜欢什么，优素福？
+    language_code: zh
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ماذا {item} يا يوسف
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 优素福是男性，所以“你”的形式用 تفضل。
+    language_code: zh
+    direction: ltr

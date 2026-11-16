@@ -66,6 +66,7 @@ def skeleton(word: str) -> str:
 
 
 LATIN_WORD = re.compile(r"[A-Za-z\u00c0-\u00ff]")
+CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]")
 TOKEN = re.compile(r"\S+")
 NAME_TOKEN = re.compile(r"[\W_]*([A-Z\u00c0-\u00dd][A-Za-z\u00c0-\u00ff]+)(?:['\u2019]s)?[\W_]*")
 SENT_END = re.compile(r"[.?!][\"'\u2019\u201d*)]*:?$")
@@ -87,6 +88,8 @@ def latin_names(line: str, names, *, target: bool = False, key_line_skip: bool =
         dev = len(re.findall(r"[\u0900-\u097F]", body))
         lat = len(re.findall(r"[A-Za-z]", body))
         if dev < 2 * lat or line.lstrip().startswith("#"):
+            return []
+        if len(CJK.findall(body)) >= 1:  # ja/ko/zh learner prose around Hindi quotes: Latin names there are correct
             return []
     toks = [(m.start(), m.end(), m.group()) for m in TOKEN.finditer(line)]
     kind = ["D" if DEV.search(t) else ("L" if LATIN_WORD.search(t) else "P") for _, _, t in toks]
