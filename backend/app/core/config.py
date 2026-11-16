@@ -94,6 +94,14 @@ class Settings(BaseSettings):
     vapid_private_key: str = ""
     vapid_subject: str = "mailto:admin@example.com"
     enable_push_scheduler: bool = False
+    # Gamification (free app: gems are earned only, never bought). Each piece
+    # sits behind its own flag, off by default; with a flag off the matching
+    # endpoints answer 404 and no gameplay rule changes. See
+    # app/services/gamification.py.
+    enable_hearts: bool = False
+    enable_gems: bool = False
+    enable_leaderboard: bool = False
+    spend_rate_limit_max: int = 10
     # Master switch for Google/Apple sign-in. Off by default: /auth/social
     # and /auth/social/link answer 503 until it is true AND the provider's
     # audience list below is non-empty. Apple in particular needs a real

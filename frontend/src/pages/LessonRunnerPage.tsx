@@ -34,6 +34,9 @@ import type {
 import { asExerciseType } from "@lingo/shared/api/types";
 import { buildLessonBlocks, flattenBlocks } from "../lib/interleave";
 import { useCourseLevel } from "../lib/useCourseLevel";
+import { GAMIFICATION_KEY } from "../lib/gamification";
+import { HeartsBadge } from "../components/HeartsBadge";
+import { OutOfHearts } from "../components/OutOfHearts";
 
 interface QueueItem {
   exercise: Exercise;
@@ -141,6 +144,8 @@ function LessonRunnerContent() {
   const [completedCount, setCompletedCount] = useState(0);
   const missedExerciseIds = useState(() => new Set<string>())[0];
   const [submitError, setSubmitError] = useState(false);
+  // Server refused a new-lesson answer at 0 hearts (display only; the server decides).
+  const [outOfHearts, setOutOfHearts] = useState(false);
   const [finishError, setFinishError] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
@@ -286,7 +291,15 @@ function LessonRunnerContent() {
       const res = await LessonApi.answer(current.exercise.id, response, meta);
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
-    } catch {
+      if (res.hearts_remaining != null) {
+        void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
+      }
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "no_hearts") {
+        void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
+        setOutOfHearts(true);
+        return;
+      }
       // Network failure or unexpected server error mid-lesson: don't let it
       // become an unhandled rejection that leaves the UI just sitting there.
       // The learner's chosen answer (lastResponse) is preserved so Retry can
@@ -759,6 +772,10 @@ function LessonRunnerContent() {
 
   if (!current) return <p>{t("lesson_runner.no_exercises")}</p>;
 
+  if (outOfHearts && result === null) {
+    return <OutOfHearts onBack={handleQuit} onRefilled={() => setOutOfHearts(false)} />;
+  }
+
   // Progress reflects the growing queue honestly: completed exercises out
   // of (completed + still-queued), so a recycled miss visibly grows the
   // denominator instead of the bar silently jumping backward or lying
@@ -782,6 +799,7 @@ function LessonRunnerContent() {
         <div className="progress-track" style={{ flex: 1 }}>
           <div className="progress-fill" style={{ width: `${Math.min(100, Math.max(0, pct))}%` }} />
         </div>
+        <HeartsBadge />
         <span className="stat-xp" style={{ fontWeight: 700, whiteSpace: "nowrap" }}>
           ⭐ {totalXp}
         </span>

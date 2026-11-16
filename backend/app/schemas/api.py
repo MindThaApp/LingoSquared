@@ -154,14 +154,14 @@ class AnswerIn(BaseModel):
     @model_validator(mode="after")
     def bounded_response(self):
         _bounded_payload_size(self.response); return self
-class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None; feedback_code:str|None=None; correct_response_translit:str|None=None
+class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None; feedback_code:str|None=None; correct_response_translit:str|None=None; hearts_remaining:int|None=None
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
 class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int; recommended:bool=False
 class CourseDetail(CourseOut): description:str
 class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None; track:Literal["core","situation"]="core"
 class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
 class StartOut(BaseModel): started_at:datetime
-class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float
+class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float; gems_awarded:int=0
 class ReviewAnswerOut(AnswerOut): next_due_at:datetime
 class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak_freezes_available:int=0; freeze_used_today:bool=False; active_today:bool=False
 class XPOut(BaseModel): total_xp:int; daily_goal:int; xp_today:int=0
@@ -439,3 +439,20 @@ class PushSubscribeIn(BaseModel): endpoint:str=Field(min_length=1,max_length=102
 class PushUnsubscribeIn(BaseModel): endpoint:str=Field(min_length=1,max_length=1024)
 class PushVapidKeyOut(BaseModel): public_key:str|None; configured:bool
 class PushNotifyOut(BaseModel): notified_users:int; notifications_sent:int
+
+
+# Gamification (hearts / gems / weekly leaderboard) - each behind its own flag.
+class HeartsOut(BaseModel): enabled:bool; hearts:int; max_hearts:int; next_heart_at:datetime|None=None; refill_seconds:int
+class GemsOut(BaseModel): enabled:bool; balance:int; costs:dict[str,int]
+class LeaderboardFlagOut(BaseModel): enabled:bool; opted_out:bool
+class GamificationOut(BaseModel): hearts:HeartsOut; gems:GemsOut; leaderboard:LeaderboardFlagOut
+class PracticeRestoreOut(BaseModel): restored:bool; reason:str|None=None; hearts:int; next_heart_at:datetime|None=None
+class GemSpendIn(BaseModel):
+    item:Literal["heart_refill","streak_freeze"]
+    client_operation_id:str=Field(min_length=8,max_length=64,pattern=r"^[A-Za-z0-9_-]+$")
+class GemSpendOut(BaseModel): applied:bool; item:str; cost:int; gem_balance:int
+class LeaderboardEntryOut(BaseModel): rank:int; display_name:str; xp:int; is_me:bool=False
+class LeaderboardMeOut(BaseModel): rank:int|None=None; xp:int
+class LeaderboardOut(BaseModel): week_start:datetime; week_end:datetime; opted_out:bool; entries:list[LeaderboardEntryOut]; me:LeaderboardMeOut|None=None
+class LeaderboardPrivacyIn(BaseModel): opted_out:bool
+class LeaderboardPrivacyOut(BaseModel): opted_out:bool

@@ -1088,3 +1088,59 @@ class FeedbackAttachment(Base):
     report: Mapped[ContentIssueReport | None] = relationship(
         back_populates="attachments"
     )
+
+
+class UserGameState(Base):
+    """Per-user gamification state (hearts, gem balance, privacy opt-out).
+
+    Created lazily on first use. `hearts`/`hearts_anchor_at` hold the stored
+    heart count and the instant the current refill interval started; the live
+    count is derived from them (see app/services/gamification.py).
+    `gem_balance` is a denormalised sum of this user's GemTransaction rows,
+    only ever changed in the same transaction as a ledger insert.
+    """
+
+    __tablename__ = "user_game_state"
+    __table_args__ = (
+        CheckConstraint("hearts >= 0 AND hearts <= 5", name="ck_user_game_state_hearts"),
+        CheckConstraint("gem_balance >= 0", name="ck_user_game_state_gems"),
+    )
+
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    hearts: Mapped[int] = mapped_column(Integer, default=5)
+    hearts_anchor_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    last_practice_restore_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    gem_balance: Mapped[int] = mapped_column(Integer, default=0)
+    leaderboard_opt_out: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class GemTransaction(Base):
+    """Append-only gem ledger. Rows are never updated or deleted by the app.
+
+    `idempotency_key` is unique per user, so a replayed or retried event
+    (lesson completion, streak milestone, spend request) cannot post twice.
+    """
+
+    __tablename__ = "gem_transactions"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "idempotency_key", name="uq_gem_transactions_user_key"
+        ),
+        Index("ix_gem_transactions_user_created", "user_id", "created_at"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE")
+    )
+    amount: Mapped[int] = mapped_column(Integer)
+    kind: Mapped[str] = mapped_column(String(32))
+    idempotency_key: Mapped[str] = mapped_column(String(128))
+    balance_after: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
