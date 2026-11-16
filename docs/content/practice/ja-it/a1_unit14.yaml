@@ -1,0 +1,425 @@
+schema_version: '1.0'
+pack_key: practice.ja-it.a1.unit14
+source_language: ja
+target_language: it
+unit_content_key: it.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_me
+    - w_piace
+    - w_preferire
+    - w_preferisci
+    - w_preferisco
+    - w_te
+    - w_tè
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+  t_te: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tè
+  t_preferisco: &id003
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_preferisco
+  pool4: &id004
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+      - w_piace
+      - w_te
+      - w_me
+  pool5: &id005
+    language_code: it
+    part_of_speech:
+    - verb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_piace
+      - w_te
+      - w_me
+      - w_preferisco
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_piace
+      - w_preferisco
+      - w_preferisci
+      - w_tè
+  t_piace: &id007
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_piace
+  t_tex: &id008
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_te
+  t_me: &id009
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_me
+  pool10: &id010
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_tè
+      - w_preferire
+      - w_preferisco
+      - w_preferisci
+templates:
+- content_key: practice.ja-it.it.a1.unit14.lesson01.choose.001
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Preferisco は preferire の「私」の形、preferisci は親しい相手に使う「あなた」の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson01.listen.002
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Preferisco と preferisci は、最後の母音だけが違います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson01.order.003
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: word_order
+  frame:
+    text: Preferisci il caffè o il {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Preferisci il caffè o il {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Tè にはアクセント記号があり、te(あなた)と区別します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson01.fill.004
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: fill_in_blank
+  frame:
+    text: Io {item} il caffè. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 主語が「私」なので、Preferisco は -o で終わります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson01.translate.005
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: translation
+  frame:
+    text: コーヒーと紅茶、どちらが好きですか？(親しい相手に、tu)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Preferisci il caffè o il {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Preferisci は、動詞の親しい相手に使う tu の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson03.translate.001
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: translation
+  frame:
+    text: 私もコーヒーが好きです！
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Anch'io {item} il caffè!
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Anch'io は「私も」という意味で、preferisco は「私」の形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson03.match.002
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Tè は「紅茶」で、te は前置詞の後に使う代名詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson03.choose.003
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Piace は mi piace の形で使われ、「私は好きです」という意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson02.listen.001
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mi piace molto は「とても好きです」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson02.order.002
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: word_order
+  frame:
+    text: Mi {item} molto il cornetto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi {item} molto il cornetto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Piace は好きなもの(ここでは単数)に合わせた形です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson02.fill.003
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: fill_in_blank
+  frame:
+    text: E a {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A te は「あなたには」という意味で、同じことを親しい相手にたずね返すときの言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson02.translate.004
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: translation
+  frame:
+    text: クロワッサンがとても好きです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mi {item} molto il cornetto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Mi piace molto は「とても好きです」という意味で、直訳すると「私にはとても好ましい」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson02.translate.005
+  lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+  type: translation
+  frame:
+    text: あなたは？(親しい相手に、好きなものを言った後で聞き返す)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: E a {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: a などの前置詞の後では、tu は te になります：a te(あなたに)。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson03.fill.004
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: fill_in_blank
+  frame:
+    text: A {item} no, preferisco il tè. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: A me は「私に」という意味で、前置詞の後では io は me になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson03.translate.005
+  lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+  type: translation
+  frame:
+    text: 私は違います、紅茶の方が好きです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A {item} no, preferisco il tè.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A me no は「私は違う」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-it.it.a1.unit14.lesson01.translate.006
+  lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Preferire は「好む」、preferisco は「私は好む」です。
+    language_code: ja
+    direction: ltr

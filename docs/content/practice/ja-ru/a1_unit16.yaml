@@ -1,0 +1,506 @@
+schema_version: '1.0'
+pack_key: practice.ja-ru.a1.unit16
+source_language: ja
+target_language: ru
+unit_content_key: ru.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_болит
+    - w_воды
+    - w_голова
+    - w_горло
+    - w_ещё
+    - w_живот
+    - w_много
+    - w_нужно
+    - w_отдыхать
+    - w_плохо
+    - w_простуда
+    - w_температура
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_болит
+      - w_голова
+      - w_живот
+      - w_горло
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_голова
+      - w_живот
+      - w_горло
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_голова
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_живот
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_горло
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    agreement_tags:
+      semantic:
+      - w_температура
+      - w_простуда
+      - w_плохо
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_плохо
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_температура
+  p9: &id009
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_простуда
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_температура
+      - w_простуда
+  p11: &id011
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_болит
+      - w_голова
+      - w_живот
+      - w_горло
+      - w_температура
+      - w_простуда
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_ещё
+      - w_нужно
+      - w_отдыхать
+      - w_много
+      - w_воды
+  p13: &id013
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_отдыхать
+  p14: &id014
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_ещё
+  p15: &id015
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужно
+  p16: &id016
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_много
+  p17: &id017
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_воды
+templates:
+- content_key: practice.ja-ru.ru.a1.unit16.lesson01.choose.001
+  lesson_content_key: ru.a1.unit16.lesson01.u_menya_bolit_golova
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: У меня болитの後に体の部分を置くと、その部分が痛いという意味になります。痛むものがболитの主語です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson01.order.002
+  lesson_content_key: ru.a1.unit16.lesson01.u_menya_bolit_golova
+  type: word_order
+  frame:
+    text: У меня болит {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У меня болит {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 体の部分が女性名詞でも男性名詞でも中性名詞でも、Болитの形は変わりません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson01.fill.003
+  lesson_content_key: ru.a1.unit16.lesson01.u_menya_bolit_golova
+  type: fill_in_blank
+  frame:
+    text: У меня болит {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: ロシア語では「頭痛がある」とは言わず、「私のところで痛む、頭が」という言い方をします。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson01.translate.004
+  lesson_content_key: ru.a1.unit16.lesson01.u_menya_bolit_golova
+  type: translation
+  frame:
+    text: おなかが痛いです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У меня болит {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Животは男性名詞ですが、болитは変わりません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson01.translate.005
+  lesson_content_key: ru.a1.unit16.lesson01.u_menya_bolit_golova
+  type: translation
+  frame:
+    text: 喉が痛いです。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У меня болит {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У меня+болитは、症状を伝える日常的な言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.choose.001
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Мне плохоは「具合が悪い」という一般的な言い方で、мнеは「私に」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.order.002
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: word_order
+  frame:
+    text: Мне {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Мне плохоは、「私は」ではなく「私に」という形で気分を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.fill.003
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: fill_in_blank
+  frame:
+    text: У меня {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: У меня+температураで「熱があります」という意味になります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.translate.004
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: translation
+  frame:
+    text: 風邪をひいています。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У меня {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У меня+名詞は、У меня простудаのように病気にも使えます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.translate.005
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: translation
+  frame:
+    text: 具合が悪いです。(2語)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Мне плохоは、特定の痛みではなく、全般的な気分を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.translate.006
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Температураは、文脈によって「温度」にも「熱」にもなります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson02.match.007
+  lesson_content_key: ru.a1.unit16.lesson02.u_menya_temperatura
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Болитは「痛む」という意味の動詞で、голова、живот、горлоは痛むものを表す体の部分です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.choose.001
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: много водыのводыは、многоの後で使うводаの形で、「たくさんの水」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.order.002
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: word_order
+  frame:
+    text: Вам нужно {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Вам нужно {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Вам нужно+不定詞で「〜する必要があります」という意味です。вамは丁寧な「あなた」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.fill.003
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: fill_in_blank
+  frame:
+    text: Да, и {item} температура. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ещёは、前に言ったことにさらに何かを付け加えます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.fill.004
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: fill_in_blank
+  frame:
+    text: Вам {item} отдыхать. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id015
+    hint: *id015
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Вам нужно+不定詞(〜する必要があります)は、医者がする丁寧なアドバイスです。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.translate.005
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: translation
+  frame:
+    text: 休む必要があります。(丁寧な言い方)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Вам {item} отдыхать.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Вамは丁寧な「あなた」で、医者が患者に対して使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ru.ru.a1.unit16.lesson03.translate.006
+  lesson_content_key: ru.a1.unit16.lesson03.u_vracha
+  type: translation
+  frame:
+    text: 水をたくさん飲む必要があります。(丁寧な言い方)
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id016
+    b: *id017
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Вам нужно пить {a} {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: многоの後では名詞がводыの形になり、「たくさんの水」という意味になります。
+    language_code: ja
+    direction: ltr

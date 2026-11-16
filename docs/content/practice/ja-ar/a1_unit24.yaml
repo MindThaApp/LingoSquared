@@ -1,0 +1,483 @@
+schema_version: '1.0'
+pack_key: practice.ja-ar.a1.unit24
+source_language: ja
+target_language: ar
+unit_content_key: ar.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_مال
+    - w_بطاقة
+    - w_نقدا
+    - w_أدفع
+    - w_المبلغ
+    - w_أستطيع
+    - w_بالبطاقة
+    - w_سأدفع
+    - w_الدفع
+slot_presets:
+  l1: &id001
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_بطاقة
+      - w_نقدا
+      - w_أدفع
+  m6: &id003
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_مال
+      - w_أدفع
+      - w_بطاقة
+      - w_نقدا
+      - w_المبلغ
+      - w_أستطيع
+  how: &id004
+    language_code: ar
+    part_of_speech:
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_بالبطاقة
+      - w_نقدا
+  tense: &id002
+    language_code: ar
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic:
+      - w_أدفع
+      - w_سأدفع
+      - w_أستطيع
+      - w_نقدا
+  l2: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_المبلغ
+      - w_أستطيع
+      - w_الدفع
+      - w_مال
+  mal:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_مال
+  adfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أدفع
+  bitaqa:
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_بطاقة
+  bilbitaqa: &id005
+    language_code: ar
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: w_بالبطاقة
+  sadfa3:
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_سأدفع
+  naqdan: &id006
+    language_code: ar
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_نقدا
+  mablagh: &id008
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_المبلغ
+  astatii3: &id009
+    language_code: ar
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_أستطيع
+  dafe: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الدفع
+templates:
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.choose.001
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: مال は「お金」、بطاقة は「カード」、نقدا は「現金で」、أدفع は「私は払う」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.listen.002
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 動詞の前に接頭辞 س を付けると未来を表します。سأدفع は「払います(これから)」、أدفع は「払う」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.match.003
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: أدفع と أستطيع は一人称の動詞です。المبلغ には ال が付いていて、「その金額」を表します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.order.004
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: word_order
+  frame:
+    text: سأدفع {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 支払い方法は動詞のあとに置きます。بالبطاقة は「カードで」、نقدا は「現金で」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.fill.005
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: سأدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: بالبطاقة の ب は「〜で」を表し、名詞にくっつけて書きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.fill.006
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: fill_in_blank
+  frame:
+    text: أدفع {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نقدا は「現金で」という意味で、動詞のあとに置きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.translate.007
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: مال、بطاقة、نقدا はお金と支払いに関する語で、أدفع は「私は払う」という動詞です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.translate.008
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: カードで払います。(「私」にあたる単語は別にありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: سأدفع {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 接頭辞 س は動詞を未来にし、بالبطاقة は「カードで」という意味です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson01.translate.009
+  lesson_content_key: ar.a1.unit24.lesson01.pay_method
+  type: translation
+  frame:
+    text: 現金で払います。(「私」にあたる単語は別にありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    b: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أدفع {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 現在形の動詞 أدفع には、すでに「私」の意味が含まれています。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.choose.001
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: المبلغ は ال が付いた「金額」で、店員が كم(いくら)の答えとして言う語です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.listen.002
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: أستطيع は「私はできる」という意味で、そのあとに「支払うこと」を表す الدفع が続きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.order.003
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: كم {item}؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: كم المبلغ؟ は「金額はいくらですか」とたずねる文です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.order.004
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل {item} الدفع بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل {item} الدفع بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 疑問を表す語 هل が最初に来て、そのあとに「私はできる」という動詞が続きます。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.order.005
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: word_order
+  frame:
+    text: هل أستطيع {item} بالبطاقة؟
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {item} بالبطاقة؟
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: الدفع は ال が付いた名詞で「支払うこと」を表し、أستطيع のあとで「できること」を示します。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.fill.006
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: fill_in_blank
+  frame:
+    text: هل {item} الدفع بالبطاقة؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: أستطيع は「私はできる」という意味で、「私」にあたる単語は別に必要ありません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.translate.007
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ja
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: المبلغ と الدفع は ال が付いた名詞で、أستطيع は「私はできる」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.translate.008
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: 金額はいくらですか。
+    language_code: ja
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كم {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: アラビア語には「である」にあたる語が要りません。كم المبلغ؟ は直訳すると「いくら 金額」です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-ar.ar.a1.unit24.lesson02.translate.009
+  lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+  type: translation
+  frame:
+    text: カードで払えますか。(「私」にあたる単語は別にありません)
+    language_code: ja
+    direction: ltr
+  slots:
+    a: *id010
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هل أستطيع {a} {b}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 型は、هل +「私はできる」+「支払うこと」という名詞です。
+    language_code: ja
+    direction: ltr
