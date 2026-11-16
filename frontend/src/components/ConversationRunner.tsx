@@ -51,6 +51,8 @@ type Exchange = {
   correct: boolean;
   status: GradingStatus;
   correction?: string;
+  /** Romanized reply: not credited, same node stays open for a script retry. */
+  romanized?: boolean;
 };
 
 export function ConversationRunner({
@@ -101,10 +103,16 @@ export function ConversationRunner({
           status: resultStatus(res),
           // Only a plain-string answer key can be shown/diffed; never invent one.
           correction: typeof res.correct_response === "string" ? res.correct_response : undefined,
+          romanized: res.feedback_code === "romanized_input",
         },
       ]);
-      onAnswered(res.correct, res.xp_awarded);
       setValue("");
+      if (res.feedback_code === "romanized_input") {
+        // Not credited and not advanced: keep the same turn open for a script retry
+        // (never finish, even on a terminal node; never report to the feed as answered).
+        return;
+      }
+      onAnswered(res.correct, res.xp_awarded);
       if (next) {
         setNode(next);
         // A terminal node still gets rendered — it's the app's closing line.
@@ -152,8 +160,9 @@ export function ConversationRunner({
               </p>
               {h.status === "almost" && (
                 // Amber pass: the reply was accepted; conversation continues as after a correct one.
+                // Romanized reply: not accepted; the same turn stays open below for a script retry.
                 <div className="feedback-banner almost" role="status">
-                  <AlmostFeedback learner={h.learner} correct={h.correction} dir={dir} />
+                  <AlmostFeedback learner={h.learner} correct={h.correction} dir={dir} romanized={h.romanized} />
                 </div>
               )}
             </div>
