@@ -525,7 +525,7 @@ lexemes. It does not weaken normal unlock rules for anyone else.
 `GET /me/export` (auth required) returns the authenticated account's complete
 data export as one JSON document — the data-portability counterpart to
 `DELETE /me` (export before deleting; deletion is irreversible). Served with a
-`Content-Disposition: attachment; filename="lingosquared-export-<date>.json"`
+`Content-Disposition: attachment; filename="auvel-export-<date>.json"`
 hint. Arrays are complete row listings, not paginated — an export is a
 snapshot, not a browsing API. Top-level shape:
 
@@ -540,8 +540,10 @@ snapshot, not a browsing API. Top-level shape:
   "exercise_attempts": [ { "exercise_id": "uuid", "response": "any-json", "correct": true, "outcome": "string-or-null", "xp_awarded": 0, "created_at": "iso-datetime" } ],
   "practice_attempts": [ { "practice_item_id": "uuid", "course_id": "uuid", "prompt": {}, "response": "any-json", "correct": true, "xp_awarded": 0, "created_at": "iso-datetime" } ],
   "checkpoint_attempts": [ { "unit_id": "uuid", "total_items": 12, "passed": true, "score": 0.9, "weak_outcomes": [], "created_at": "iso-datetime", "scored_at": "iso-datetime-or-null" } ],
-  "lexeme_srs": [ { "lexeme_id": "uuid", "token": "string", "english_gloss": "string", "language_code": "string", "course_id": "uuid", "mastery": 0.0, "ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "due_at": "iso-datetime", "last_reviewed_at": "iso-datetime-or-null", "introduced_at": "iso-datetime", "suspended": false } ],
+  "lexeme_srs": [ { "lexeme_id": "uuid", "token": "string", "english_gloss": "string", "language_code": "string", "course_id": "uuid", "mastery": 0.0, "ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "due_at": "iso-datetime", "last_reviewed_at": "iso-datetime-or-null", "introduced_at": "iso-datetime", "suspended": false, "unreviewable_at": "iso-datetime-or-null" } ],
   "review_items": [ { "exercise_id": "uuid", "ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "mastery": 0.0, "due_at": "iso-datetime" } ],
+  "review_events": [ { "lexeme_id": "uuid-or-null", "exercise_id": "uuid-or-null", "course_id": "uuid-or-null", "source": "string", "reviewed_at": "iso-datetime", "result": "string", "self_grade": "string-or-null", "rating": "1-4-or-null", "correct": true, "previous_interval_days": 0, "new_interval_days": 0, "new_due_at": "iso-datetime", "latency_ms": "int-or-null" } ],
+  "identities": [ { "provider": "string", "created_at": "iso-datetime" } ],
   "achievements": [ { "code": "string", "title": "string", "earned_at": "iso-datetime" } ],
   "quest_completions": [ { "quest_code": "string", "date": "date", "awarded_at": "iso-datetime" } ],
   "vocabulary_progress": [ { "content_item_id": "uuid", "mastery": 0.0, "last_reviewed_at": "iso-datetime-or-null" } ],
@@ -552,6 +554,12 @@ snapshot, not a browsing API. Top-level shape:
 ```
 
 `stats` is `null` for an account that somehow has no `user_stats` row.
+The endpoint is rate-limited per account (default 5 per hour,
+`EXPORT_RATE_LIMIT_MAX`); over the limit it returns 429 with code
+`export_rate_limited` and `retry_after_seconds`. `review_events` and
+`identities` were added to the document without changing `format_version`
+(additive); `identities` lists linked sign-in providers only, never the
+provider subject.
 `achievements` lists earned achievements only (the catalog itself isn't user
 data). `lexeme_srs` inlines each lexeme's `token`/`english_gloss`/
 `language_code` so the export is meaningful standalone, not a bag of opaque
@@ -1167,7 +1175,10 @@ push reminders. Their FSRS schedule fields are never modified. The flag is
 cleared for the course's rows when `POST /admin/content/import` or
 `POST /admin/courses/{course_id}/practice/import` changes content, so the
 lexeme is tried again. No request/response field is added or changed; the
-flag is internal.
+flag is internal. Self-heal: a flag older than 7 days
+(`UNREVIEWABLE_RETRY_DAYS`) is cleared lazily by `GET /me/reviews/due`, by
+review-session generation (which re-flags if the word still cannot be built)
+and by the push reminder scheduler, so a flagged word is never stranded.
 
 `POST /reviews/session` request:
 

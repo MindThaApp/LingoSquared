@@ -13,7 +13,16 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DEFAULT_PORT="$(grep -m1 '^API_PORT=' "$REPO_ROOT/backend/.env" 2>/dev/null | cut -d= -f2)"
+# A missing backend/.env or API_PORT line is fine (fall back to 8000), but any
+# other failure must not be swallowed: no `|| true`, no 2>/dev/null.
+DEFAULT_PORT=""
+if [ -f "$REPO_ROOT/backend/.env" ]; then
+  # grep exits 1 on "no API_PORT line" (acceptable); >=2 is a real error.
+  rc=0
+  port_line="$(grep -m1 '^API_PORT=' "$REPO_ROOT/backend/.env")" || rc=$?
+  [ "$rc" -le 1 ] || { echo "ERROR: cannot read $REPO_ROOT/backend/.env (grep exit $rc)" >&2; exit "$rc"; }
+  DEFAULT_PORT="${port_line#API_PORT=}"
+fi
 # Phase selection. Default: all three, in the order the runbook mandates
 # (content -> lexemes -> practice). Individual phases are opt-in-able so a
 # long sync can be resumed without redoing the ~25min content import.
