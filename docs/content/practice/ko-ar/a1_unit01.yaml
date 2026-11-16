@@ -1,0 +1,530 @@
+schema_version: '1.0'
+pack_key: practice.ko-ar.a1.unit01
+source_language: ko
+target_language: ar
+unit_content_key: ar.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ar by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - ar_a1_u01_l01
+    - w_صباح
+    - w_الخير
+    - w_مساء
+    - w_مع
+    - w_السلامة
+    - w_شكرا
+    - w_عفوا
+    - w_تصبح
+    - w_أهلا
+    - w_وسهلا
+    - w_بك
+    - w_اللقاء
+    - w_النور
+    - w_يوما
+    - w_سعيدا
+    - w_كيف
+    - w_حالك
+    - w_بخير
+    - w_الحمد
+    - w_لله
+    - w_وأنت
+    - w_ممتاز
+    - w_لا
+    - w_بأس
+    - w_خير
+slot_presets:
+  letters: &id001
+    language_code: ar
+    part_of_speech:
+    - symbol
+    - phrase
+    agreement_tags:
+      semantic: ar_a1_u01_l01
+  l02: &id002
+    language_code: ar
+    part_of_speech:
+    - noun
+    - preposition
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_صباح
+      - w_الخير
+      - w_مساء
+      - w_مع
+      - w_السلامة
+      - w_شكرا
+      - w_عفوا
+  l03: &id004
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - preposition
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تصبح
+      - w_أهلا
+      - w_وسهلا
+      - w_بك
+      - w_اللقاء
+      - w_النور
+      - w_يوما
+      - w_سعيدا
+  l03w: &id007
+    language_code: ar
+    part_of_speech:
+    - noun
+    - verb
+    - preposition
+    - phrase
+    agreement_tags:
+      semantic:
+      - w_تصبح
+      - w_أهلا
+      - w_وسهلا
+      - w_بك
+      - w_اللقاء
+      - w_النور
+  l04: &id008
+    language_code: ar
+    part_of_speech:
+    - noun
+    - pronoun
+    - adjective
+    - adverb
+    - preposition
+    - particle
+    agreement_tags:
+      semantic:
+      - w_كيف
+      - w_حالك
+      - w_بخير
+      - w_الحمد
+      - w_لله
+      - w_وأنت
+      - w_ممتاز
+      - w_لا
+      - w_بأس
+  salama: &id003
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_السلامة
+  bik: &id005
+    language_code: ar
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_بك
+  khayr: &id006
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_خير
+  alhamd: &id009
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_الحمد
+  halak: &id010
+    language_code: ar
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_حالك
+templates:
+- content_key: practice.ko-ar.ar.a1.unit01.lesson01.choose.001
+  lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 아랍어는 오른쪽에서 왼쪽으로 쓰고, ر와 ا는 뒤에 오는 글자와 이어지지 않아요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson01.match.002
+  lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 아랍어는 오른쪽에서 왼쪽으로 읽기 때문에 مرحبا는 오른쪽의 م에서 시작해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson01.translate.003
+  lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 아랍어 철자에서는 짧은 모음을 보통 쓰지 않고, 독자가 단어를 보고 알아서 채워 읽어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson02.listen.001
+  lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 아랍어는 시간대에 따라 인사가 달라요. 아침에는 صباح الخير, 오후부터는 مساء الخير를 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson02.match.002
+  lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: عفوا는 شكرا에 대한 표준 답이고, مع السلامة는 일상적인 작별 인사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson02.order.003
+  lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+  type: word_order
+  frame:
+    text: شكرا، مع {item}!
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: شكرا، مع {item}!
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: مع السلامة는 직역하면 "안녕(평안)과 함께"라는 뜻이에요. ال은 "그"에 해당하는 정관사로, 명사에 붙여 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson02.translate.004
+  lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+  type: translation
+  frame:
+    text: 고마워요, 안녕히 가세요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: شكرا، مع {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 정관사 ال은 명사 앞에 붙어요. سلامة(평안)는 السلامة(그 평안)가 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson03.choose.001
+  lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 많은 인사말은 인사와 그에 대한 관용적인 답이 짝을 이뤄요. 예를 들어 صباح الخير와 صباح النور가 있어요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson03.order.002
+  lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+  type: word_order
+  frame:
+    text: أهلا وسهلا! أهلا {item}.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: أهلا وسهلا! أهلا {item}.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: بك은 "당신에게"라는 뜻이에요. 남성에게든 여성에게든 쓰는 형태가 같아요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson03.fill.003
+  lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+  type: fill_in_blank
+  frame:
+    text: تصبح على {item}. ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: تصبح على خير는 직역하면 "좋은 상태로 아침을 맞이하길"이라는 바람이에요. 밤에 헤어질 때 말해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson03.translate.004
+  lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: النور와 اللقاء의 ال은 "그"에 해당하는 아랍어 정관사로, 명사에 붙여 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson03.translate.005
+  lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+  type: translation
+  frame:
+    text: 안녕히 주무세요! (남성에게)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: تصبح على {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: '여성에게는 동사에 어미 ـين이 붙어요: تصبحين على خير.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.choose.001
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: ممتاز는 남성형이고, 여성은 ممتازة라고 말해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.match.002
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ar
+    direction: rtl
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: الحمد لله는 직역하면 "하느님께 찬양을"이라는 뜻이고, "어떻게 지내세요?"에 대한 아주 흔한 답이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.order.003
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: word_order
+  frame:
+    text: بخير، {item} لله.
+    language_code: ar
+    direction: rtl
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: بخير، {item} لله.
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: الحمد 뒤에는 لله가 와요. ل(~를 위해)과 الله(하느님)가 합쳐진 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.fill.004
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: fill_in_blank
+  frame:
+    text: كيف {item}؟ ({hint})
+    language_code: ar
+    direction: rtl
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: حال은 "상태"를 뜻하고 어미 ـك은 "당신의"를 뜻해요. 그래서 이 질문은 직역하면 "당신의 상태가 어때요?"예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.translate.005
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: وأنت은 و(그리고)가 أنت(당신)에 붙어 쓰인 형태로, "그리고 당신은요?"라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ar.ar.a1.unit01.lesson04.translate.006
+  lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+  type: translation
+  frame:
+    text: 어떻게 지내세요? (남성에게)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: كيف {item}
+      language_code: ar
+      direction: rtl
+  feedback_frame:
+    text: 글로 쓴 حالك은 남성에게든 여성에게든 같아요. 말할 때만 끝의 짧은 모음이 달라요.
+    language_code: ko
+    direction: ltr

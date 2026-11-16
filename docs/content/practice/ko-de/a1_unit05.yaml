@@ -1,0 +1,554 @@
+schema_version: '1.0'
+pack_key: practice.ko-de.a1.unit05
+source_language: ko
+target_language: de
+unit_content_key: de.a1.unit05.uhrzeit
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-de by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_spät
+    - w_Uhr
+    - w_halb
+    - w_Viertel
+    - w_nach
+    - w_vor
+    - w_Mittag
+    - w_Nachmittag
+    - w_Mitternacht
+    - w_Laden
+    - w_um
+    - w_morgens
+    - w_schließt
+    - w_sie
+    - w_dann
+    - w_Öffnungszeiten
+slot_presets:
+  clock_words: &id001
+    language_code: de
+    part_of_speech:
+    - adjective
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_spät
+      - w_Uhr
+      - w_halb
+      - w_Viertel
+      - w_nach
+      - w_vor
+  daytime_words: &id002
+    language_code: de
+    part_of_speech:
+    - noun
+    - preposition
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_um
+      - w_morgens
+      - w_schließt
+  shop_words: &id003
+    language_code: de
+    part_of_speech:
+    - pronoun
+    - adverb
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_sie
+      - w_dann
+      - w_Öffnungszeiten
+      - w_schließt
+      - w_Laden
+      - w_morgens
+  clock_listen: &id004
+    language_code: de
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_Uhr
+      - w_spät
+      - w_halb
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+  nach_vor: &id006
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_nach
+      - w_vor
+  halb: &id008
+    language_code: de
+    part_of_speech:
+    - adjective
+    agreement_tags:
+      semantic: w_halb
+  schliesst: &id009
+    language_code: de
+    part_of_speech:
+    - verb
+    agreement_tags:
+      semantic: w_schließt
+  um: &id010
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic: w_um
+  viertel: &id014
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Viertel
+  vor: &id015
+    language_code: de
+    part_of_speech:
+    - preposition
+    agreement_tags:
+      semantic: w_vor
+  uhr: &id012
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Uhr
+  laden: &id005
+    language_code: de
+    part_of_speech:
+    - noun
+    agreement_tags:
+      semantic: w_Laden
+  spaet: &id013
+    language_code: de
+    part_of_speech:
+    - adjective
+    agreement_tags:
+      semantic: w_spät
+  shop_match: &id007
+    language_code: de
+    part_of_speech:
+    - noun
+    - adverb
+    - verb
+    - pronoun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_morgens
+      - w_schließt
+      - w_sie
+      - w_dann
+      - w_Öffnungszeiten
+      - w_um
+  shop_bare: &id011
+    language_code: de
+    part_of_speech:
+    - noun
+    - adverb
+    - verb
+    agreement_tags:
+      semantic:
+      - w_Mittag
+      - w_Nachmittag
+      - w_Mitternacht
+      - w_Laden
+      - w_morgens
+      - w_schließt
+      - w_dann
+      - w_Öffnungszeiten
+templates:
+- content_key: practice.ko-de.de.a1.unit05.lesson01.choose.001
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Uhr는 형태가 바뀌지 않아요: es ist ein Uhr, zwei Uhr, drei Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.listen.001
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Um은 ‘몇 시에’라는 질문에 답할 때 써요: um neun Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson04.choose.001
+  lesson_content_key: de.a1.unit05.lesson04.im_gespraech_ueber_die_bibliothekszeiten
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dann은 ‘그러고 나서’를 뜻하며 사건의 순서를 나타낼 때 유용해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson01.listen.002
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mittag, Nachmittag, Mitternacht는 대문자로 시작하는 명사이고, morgens는 소문자로 시작하는 부사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.order.002
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: word_order
+  frame:
+    text: Der {item} schließt um achtzehn Uhr.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Der {item} schließt um achtzehn Uhr.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: '주절에서는 동사가 두 번째 자리에 와요: Der Laden schließt um achtzehn Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson02.order.001
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: word_order
+  frame:
+    text: Es ist Viertel {item} drei.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist Viertel {item} drei.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Nach는 정각에서 몇 분이 지났는지를, vor는 다음 정각까지 몇 분 남았는지를 나타내요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson02.match.002
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Halb는 다음 시각을 기준으로 하므로 halb vier는 3시 30분이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.match.003
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: de
+    direction: ltr
+  slots:
+    first: *id007
+    second: *id007
+    third: *id007
+    fourth: *id007
+    fifth: *id007
+    sixth: *id007
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Mittag, Nachmittag, Mitternacht는 대문자로 시작하는 명사이고, morgens는 소문자로 시작하는 부사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson01.fill.003
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: fill_in_blank
+  frame:
+    text: Es ist {item} vier. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 독일어에서는 다음 시각까지 절반 남았다는 식으로 세므로 Es ist halb vier는 3:30을 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.fill.004
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: fill_in_blank
+  frame:
+    text: Der Laden {item} um achtzehn Uhr. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '동사는 두 번째 자리에 와요: Der Laden schließt um achtzehn Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.fill.005
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: fill_in_blank
+  frame:
+    text: Der Laden öffnet {item} neun Uhr morgens. ({hint})
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Um은 시각 앞에 써요: um neun Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson02.translate.003
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Viertel은 명사이므로 문장 중간에서도 첫 글자를 대문자로 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson03.translate.006
+  lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Öffnungszeiten은 ‘열다’라는 뜻의 동사 öffnen과 ‘시간들’이라는 뜻의 Zeiten이 합쳐진 말이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson01.translate.004
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: 3시예요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist drei {item}.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: 'Uhr는 형태가 바뀌지 않아요: ein Uhr, zwei Uhr, drei Uhr.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson01.translate.005
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: '몇 시예요? (직역: 얼마나 늦었나요?)'
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Wie {item} ist es?
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Wie spät ist es?는 직역하면 얼마나 늦었는지를 묻는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson01.translate.006
+  lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+  type: translation
+  frame:
+    text: 3시 30분이에요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist {item} vier.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Halb vier는 4시까지 절반 남았다는 뜻이므로 3:30이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson02.translate.004
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: 3시 15분이에요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist {item} nach drei.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Viertel nach drei는 3:15예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-de.de.a1.unit05.lesson02.translate.005
+  lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+  type: translation
+  frame:
+    text: 4시 15분 전이에요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Es ist Viertel {item} vier.
+      language_code: de
+      direction: ltr
+  feedback_frame:
+    text: Viertel vor vier는 3:45예요.
+    language_code: ko
+    direction: ltr

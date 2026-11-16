@@ -1,0 +1,479 @@
+schema_version: '1.0'
+pack_key: practice.ko-ru.a1.unit24
+source_language: ko
+target_language: ru
+unit_content_key: ru.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_карта
+    - w_картой
+    - w_наличными
+    - w_нужен
+    - w_нужны
+    - w_рубли
+    - w_только
+    - w_триста
+    - w_чек
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_картой
+  p3: &id003
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужны
+  p4: &id004
+    language_code: ru
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_наличными
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_рубли
+  p6: &id006
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_нужен
+      - w_триста
+      - w_только
+  p7: &id007
+    language_code: ru
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: w_нужен
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_триста
+  p9: &id009
+    language_code: ru
+    part_of_speech: particle
+    agreement_tags:
+      semantic: w_только
+  p10: &id010
+    language_code: ru
+    part_of_speech:
+    - noun
+    - particle
+    agreement_tags:
+      semantic:
+      - w_чек
+      - w_триста
+      - w_только
+  p11: &id011
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_нужны
+      - w_чек
+      - w_триста
+  p12: &id012
+    language_code: ru
+    part_of_speech:
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_карта
+      - w_наличными
+      - w_рубли
+      - w_чек
+templates:
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.choose.001
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными는 '현금으로', картой는 '카드로'라는 뜻이에요. 둘 다 조격을 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.order.002
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: word_order
+  frame:
+    text: Можно {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно 뒤에 조격 형태를 쓰면 그 방법으로 결제해도 되는지 묻는 말이 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.fill.003
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Можно {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Карта는 можно 뒤에서 картой, 즉 '카드로'가 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.fill.004
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: fill_in_blank
+  frame:
+    text: Мне {item} рубли. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужны는 복수 명사 рубли에 맞춘 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.translate.005
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 카드로 결제해도 되나요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно 뒤에 картой를 붙이면 카드로 결제할 수 있는지 묻는 말이 돼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.translate.006
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 현금으로 내셔도 돼요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Можно {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Можно는 '~해도 돼요, 가능해요'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.translate.007
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: translation
+  frame:
+    text: 루블이 필요해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    a: *id003
+    b: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Мне {a} {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужны는 복수형 рубли에 맞춘 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.choose.001
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Чек는 남성 명사라서 нужен을 써요. 복수 명사에는 нужны를 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.order.002
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: word_order
+  frame:
+    text: Чек {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен은 남성 명사 чек에 맞춘 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.fill.003
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: С вас {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Триста('삼백') 뒤에는 복수 속격 рублей가 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.fill.004
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Сегодня {item} наличными. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Только는 뒤에 오는 말을 '~만'으로 한정해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.fill.005
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: fill_in_blank
+  frame:
+    text: Чек {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Нужен은 남성형이고 чек에 맞춘 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.translate.006
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 영수증 필요하세요?
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Чек {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Нужен은 чек에 맞춘 남성형이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.translate.007
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 삼백 루블입니다.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: С вас {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: С вас는 직역하면 '당신에게서'라는 뜻으로, 계산원이 금액을 말할 때 쓰는 공손한 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.translate.008
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: 오늘은 현금만 가능해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сегодня {item} наличными.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Только는 한정하는 말 앞에 와요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.translate.009
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 계산대에서 늘 쓰는 단어들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson02.match.010
+  lesson_content_key: ru.a1.unit24.lesson02.chek_nuzhen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Нужны는 복수인 사물에, нужен은 남성 단수인 사물에 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-ru.ru.a1.unit24.lesson01.listen.008
+  lesson_content_key: ru.a1.unit24.lesson01.mozhno_kartoy
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Наличными는 '현금으로'라는 뜻이고, карта, рубли, чек는 결제와 관련된 기본 명사예요.
+    language_code: ko
+    direction: ltr

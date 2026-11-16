@@ -1,0 +1,307 @@
+schema_version: '1.0'
+pack_key: practice.ko-fr.a1.unit80
+source_language: ko
+target_language: fr
+unit_content_key: fr.a1.unit80.salle_de_sport
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_abonnement
+    - w_coach
+    - w_pass
+    - w_plage
+    - w_planning
+    - w_poids
+    - w_soulève
+    - w_tapis
+    - w_voudrions
+templates:
+- content_key: practice.ko-fr.fr.a1.unit80.lesson01.choose.001
+  lesson_content_key: fr.a1.unit80.lesson01.on_va_a_la
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_abonnement
+        - w_tapis
+        - w_poids
+        - w_soulève
+        - w_coach
+        - w_planning
+        - w_pass
+        - w_voudrions
+        - w_plage
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이번 단원의 단어예요. ''체육관에 갈까요?'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson02.listen.001
+  lesson_content_key: fr.a1.unit80.lesson02.les_appareils_de_la
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이번 단원의 단어예요. ''체육관 기구'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson03.translate.001
+  lesson_content_key: fr.a1.unit80.lesson03.le_cours_de_yoga
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}: 이번 단원의 단어예요. ''요가 수업'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson04.match.001
+  lesson_content_key: fr.a1.unit80.lesson04.le_planning_a_l
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 프랑스어 단어를 알맞은 한국어 뜻과 연결하세요. 이 단원의 수업에 나온 단어예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson05.choose.001
+  lesson_content_key: fr.a1.unit80.lesson05.a_l_accueil_de
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}: 이번 단원의 단어예요. ''체육관 안내 데스크에서'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson06.translate.001
+  lesson_content_key: fr.a1.unit80.lesson06.mathieu_et_nina_apres
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}: 이번 단원의 단어예요. ''운동 후의 마티유와 니나'' 수업에서 배워요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson01.order.002
+  lesson_content_key: fr.a1.unit80.lesson01.on_va_a_la
+  type: word_order
+  frame:
+    text: J'ai un {item} à la salle de sport.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_abonnement
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'ai un {item} à la salle de sport.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 저는 체육관 회원권이 있어요. abonnement = 회원권
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson02.order.002
+  lesson_content_key: fr.a1.unit80.lesson02.les_appareils_de_la
+  type: word_order
+  frame:
+    text: Je cours sur le {item} de course.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_tapis
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je cours sur le {item} de course.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 저는 러닝머신에서 달려요. tapis = 매트, 카펫
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson02.fill.003
+  lesson_content_key: fr.a1.unit80.lesson02.les_appareils_de_la
+  type: fill_in_blank
+  frame:
+    text: Je soulève les {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_poids
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_poids
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 저는 웨이트를 들어요. poids = 웨이트, 무게
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson03.order.002
+  lesson_content_key: fr.a1.unit80.lesson03.le_cours_de_yoga
+  type: word_order
+  frame:
+    text: Le {item} m'aide.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_coach
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Le {item} m'aide.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 강사가 저를 도와줘요. coach = 강사, 코치
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson04.order.002
+  lesson_content_key: fr.a1.unit80.lesson04.le_planning_a_l
+  type: word_order
+  frame:
+    text: Je lis le {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_planning
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je lis le {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 저는 일정표를 읽어요. planning = 일정표
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-fr.fr.a1.unit80.lesson06.order.002
+  lesson_content_key: fr.a1.unit80.lesson06.mathieu_et_nina_apres
+  type: word_order
+  frame:
+    text: J'aime aller à la {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_plage
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'aime aller à la {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: 저는 해변에 가는 걸 좋아해요. plage = 해변
+    language_code: ko
+    direction: ltr

@@ -1,0 +1,284 @@
+schema_version: '1.0'
+pack_key: practice.ko-pl.a1.unit50
+source_language: ko
+target_language: pl
+unit_content_key: pl.a1.unit50.koncert
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-pl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_miejsce
+    - w_początek
+    - w_publiczność
+    - w_scena
+    - w_trwa
+    - w_trwać
+    - w_wspaniały
+    - w_wędrowcy
+    - w_zadowolona
+    - w_zespołu
+    - w_zespół
+templates:
+- content_key: practice.ko-pl.pl.a1.unit50.lesson01.choose.001
+  lesson_content_key: pl.a1.unit50.lesson01.chce_isc_na_koncert
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: pl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_zespół
+        - w_zespołu
+        - w_miejsce
+        - w_trwać
+        - w_trwa
+        - w_scena
+        - w_publiczność
+        - w_zadowolona
+        - w_wędrowcy
+        - w_początek
+        - w_wspaniały
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어: {item} (수업: 콘서트에 가고 싶어요)'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson02.listen.001
+  lesson_content_key: pl.a1.unit50.lesson02.chce_kupic_bilet
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item}은(는) 표를 사고 싶어요 수업에 나온 이 단원의 단어 중 하나예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson03.translate.001
+  lesson_content_key: pl.a1.unit50.lesson03.o_ktorej_zaczyna_sie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어: {item} (수업: 콘서트는 몇 시에 시작해요?)'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson05.match.001
+  lesson_content_key: pl.a1.unit50.lesson05.czytanie_repertuaru
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: pl
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: 각 폴란드어 단어를 그 뜻과 연결하세요. 이 단원의 수업에 나온 단어들이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson06.choose.001
+  lesson_content_key: pl.a1.unit50.lesson06.marek_nina_i_ewa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: pl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} — 이 단원의 단어로, Marek, Nina, Ewa가 콘서트에 가는 수업에 나와요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson01.translate.002
+  lesson_content_key: pl.a1.unit50.lesson01.chce_isc_na_koncert
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '이 단원의 단어: {item} (수업: 콘서트에 가고 싶어요)'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson01.order.003
+  lesson_content_key: pl.a1.unit50.lesson01.chce_isc_na_koncert
+  type: word_order
+  frame:
+    text: Chciałabym iść na koncert {item}, poproszę.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_zespołu
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Chciałabym iść na koncert {item}, poproszę.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: '그 밴드의 콘서트에 가고 싶어요. zespołu: 밴드의'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson02.order.002
+  lesson_content_key: pl.a1.unit50.lesson02.chce_kupic_bilet
+  type: word_order
+  frame:
+    text: Mam dobre {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_miejsce
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mam dobre {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: '좋은 자리가 있어요. miejsce: 자리, 장소'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson03.order.002
+  lesson_content_key: pl.a1.unit50.lesson03.o_ktorej_zaczyna_sie
+  type: word_order
+  frame:
+    text: Koncert {item} dwie godziny.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_trwa
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koncert {item} dwie godziny.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: '콘서트는 두 시간 동안 해요. trwa: 계속되다'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson05.order.002
+  lesson_content_key: pl.a1.unit50.lesson05.czytanie_repertuaru
+  type: word_order
+  frame:
+    text: Publiczność jest {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_zadowolona
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Publiczność jest {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: '관객이 만족해해요. zadowolona: 만족한 (여성형)'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-pl.pl.a1.unit50.lesson06.order.002
+  lesson_content_key: pl.a1.unit50.lesson06.marek_nina_i_ewa
+  type: word_order
+  frame:
+    text: Koncert był {item}.
+    language_code: pl
+    direction: ltr
+  slots:
+    item:
+      language_code: pl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_wspaniały
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Koncert był {item}.
+      language_code: pl
+      direction: ltr
+  feedback_frame:
+    text: '콘서트가 훌륭했어요. wspaniały: 훌륭한 (남성형)'
+    language_code: ko
+    direction: ltr

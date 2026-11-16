@@ -1,0 +1,333 @@
+schema_version: '1.0'
+pack_key: practice.ko-it.a1.unit19
+source_language: ko
+target_language: it
+unit_content_key: it.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_biglietto
+    - w_binario
+    - w_parte
+    - w_treno
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+      - w_parte
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_biglietto
+      - w_binario
+  t_treno: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_treno
+  t_parte: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_parte
+  t_binario: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_binario
+  t_biglietto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_biglietto
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+templates:
+- content_key: practice.ko-it.it.a1.unit19.lesson01.choose.001
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario, il biglietto는 모두 남성 명사예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.listen.002
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Parte는 '출발한다'에 해당하는 형태로, 기차에 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.choose.003
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Biglietto는 여행하려고 사는 표이고, binario는 기차가 서는 곳이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.order.004
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il {item} è alla stazione.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è alla stazione.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla stazione은 '역에서'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.order.005
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno {item} alle otto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Parte는 partire의 3인칭 단수형으로, '출발한다'는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.order.006
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno parte dal {item} tre.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal은 da와 il이 합쳐진 형태로, 출발하는 승강장을 말할 때 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.fill.007
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} è per Roma. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per Roma는 '로마행', 즉 목적지를 뜻해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.fill.008
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: A che ora {item} il treno per Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Parte는 il treno와 함께 써요: 기차는 몇 시에 출발해요?'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.fill.009
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} per Roma parte alle otto. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno per Roma는 로마로 가는 기차예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.translate.010
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 기차는 8시에 출발해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Parte는 3인칭 단수형이에요: 출발한다.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.translate.011
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 로마행 표 있어요? (친한 사이, tu)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai il {item} per Roma?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai는 '가지고 있다'의 친근한 tu 형태예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.translate.012
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 기차는 3번 승강장에서 출발해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal binario tre는 '3번 승강장에서'라는 뜻이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.translate.013
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: 로마행 기차는 8시에 출발해요.
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} per Roma parte alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Per Roma는 기차가 어디로 가는지 알려 줘요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-it.it.a1.unit19.lesson01.translate.014
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario, il biglietto는 남성 명사예요.
+    language_code: ko
+    direction: ltr

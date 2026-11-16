@@ -1,0 +1,473 @@
+schema_version: '1.0'
+pack_key: practice.ko-es.a1.unit01
+source_language: ko
+target_language: es
+unit_content_key: es.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Korean). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u01
+    - es_a1_u01_l02
+    - es_a1_u01_l03
+    - w_Lucía
+    - w_Diego
+    - w_Carlos
+    - w_Ana
+    - w_México
+    - w_Colombia
+    - w_España
+    - w_Londres
+    - w_aprendiendo
+    - w_vez
+    - w_cocinar
+    - w_gusto
+    - w_igualmente
+    - w_luego
+    - w_usted
+    - w_tú
+slot_presets:
+  content: &id001
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    - adverb
+    - phrase
+    agreement_tags:
+      semantic: es_a1_u01
+  words: &id003
+    language_code: es
+    part_of_speech:
+    - noun
+    - adverb
+    - phrase
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u01
+  greeting: &id004
+    language_code: es
+    part_of_speech:
+    - noun
+    - adjective
+    - adverb
+    - phrase
+    - verb
+    agreement_tags:
+      semantic: es_a1_u01_l02
+  name_m: &id007
+    language_code: es
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - w_Carlos
+      - w_Diego
+  name_f: &id008
+    language_code: es
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - w_Ana
+      - w_Lucía
+  name: &id006
+    language_code: es
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - w_Carlos
+      - w_Diego
+      - w_Ana
+      - w_Lucía
+  country: &id010
+    language_code: es
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - w_México
+      - w_Colombia
+      - w_España
+  aprendiendo: &id011
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_aprendiendo
+  vez: &id012
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_vez
+  cocinar: &id013
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_cocinar
+  gusto: &id009
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_gusto
+  igualmente:
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_igualmente
+  luego: &id005
+    language_code: es
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: w_luego
+  usted: &id002
+    language_code: es
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_usted
+templates:
+- content_key: practice.ko-es.es.a1.unit01.lesson01.choose.001
+  lesson_content_key: es.a1.unit01.lesson01.tu_and_usted
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 스페인어에는 상대를 가리키는 '너/당신'이 두 가지 있어요. tú는 친구나 가족에게, usted는 낯선 사람에게 또는 존중을 나타낼 때 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson01.fill.002
+  lesson_content_key: es.a1.unit01.lesson01.tu_and_usted
+  type: fill_in_blank
+  frame:
+    text: ¿Cómo está {item}? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Está는 usted와 함께 쓰고, tú와 함께 쓰면 동사가 estás로 바뀌어요: ¿Cómo estás?'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson01.translate.003
+  lesson_content_key: es.a1.unit01.lesson01.tu_and_usted
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 스페인어 인사말과 일상 표현에는 cómo, adiós, también처럼 악센트 부호가 붙는 말이 많아요. 악센트 부호는 강세가 있는 음절을 보여 줘요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson02.listen.001
+  lesson_content_key: es.a1.unit01.lesson02.greetings_by_time
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Buenos días는 점심때까지(스페인에서는 대략 오후 2시까지), buenas tardes는 오후에, buenas noches는 저녁과 밤에 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson02.match.002
+  lesson_content_key: es.a1.unit01.lesson02.greetings_by_time
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Día는 남성 명사라서 buenos días이고, tarde와 noche는 여성 명사라서 buenas tardes, buenas noches예요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson02.order.003
+  lesson_content_key: es.a1.unit01.lesson02.greetings_by_time
+  type: word_order
+  frame:
+    text: Adiós, hasta {item}.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Adiós, hasta {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Hasta luego는 글자 그대로 '나중까지'라는 뜻이고, 일상에서 '나중에 봐요'라는 인사로 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson03.order.001
+  lesson_content_key: es.a1.unit01.lesson03.names_and_introductions
+  type: word_order
+  frame:
+    text: Hola, me llamo {name}.
+    language_code: es
+    direction: ltr
+  slots:
+    name: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hola, me llamo {name}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Me llamo는 글자 그대로 '나 자신을 ~라고 부른다'는 뜻이고, 이름을 말할 때 일상적으로 쓰는 표현이에요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson03.translate.002
+  lesson_content_key: es.a1.unit01.lesson03.names_and_introductions
+  type: translation
+  frame:
+    text: 이쪽은 {name} 씨예요. (남자를 소개할 때)
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      name: token
+  slots:
+    name: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Este es {name}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: '남자를 소개할 때는 este, 여자를 소개할 때는 esta를 써요: Esta es Ana.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson03.order.003
+  lesson_content_key: es.a1.unit01.lesson03.names_and_introductions
+  type: word_order
+  frame:
+    text: Esta es {name}.
+    language_code: es
+    direction: ltr
+  slots:
+    name: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Esta es {name}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Esta는 여자를 소개할 때 쓰고, 남자를 소개할 때는 este를 써요: Este es Carlos.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson03.fill.004
+  lesson_content_key: es.a1.unit01.lesson03.names_and_introductions
+  type: fill_in_blank
+  frame:
+    text: Mucho {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mucho gusto는 '만나서 반가워요'라는 뜻이고, 보통 igualmente('저도요')라고 답해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson04.order.001
+  lesson_content_key: es.a1.unit01.lesson04.origin_and_language
+  type: word_order
+  frame:
+    text: Soy de {place}, pero vivo en Londres.
+    language_code: es
+    direction: ltr
+  slots:
+    place: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Soy de {place}, pero vivo en Londres.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Ser de + 장소는 출신을, vivir en + 장소는 지금 사는 곳을 말해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson04.translate.002
+  lesson_content_key: es.a1.unit01.lesson04.origin_and_language
+  type: translation
+  frame:
+    text: 저는 {place}에서 왔어요.
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      place: english_gloss
+  slots:
+    place: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Soy de {place}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 같은 질문을 할 때는 ¿De dónde eres?(친근한 말) 또는 ¿De dónde es usted?(격식 있는 말)라고 해요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson04.fill.003
+  lesson_content_key: es.a1.unit01.lesson04.origin_and_language
+  type: fill_in_blank
+  frame:
+    text: Todavía estoy {item}. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Estoy + -ando/-iendo는 지금 진행 중인 일을 나타내요. 예를 들어 '아직 배우는 중이에요'처럼요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson05.order.001
+  lesson_content_key: es.a1.unit01.lesson05.shared_activity_small_talk
+  type: word_order
+  frame:
+    text: Sí, es mi primera {item} aquí.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sí, es mi primera {item} aquí.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Vez는 ''번, 횟수''라는 뜻이에요: primera vez는 ''처음'', otra vez는 ''다시''예요.'
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson05.translate.002
+  lesson_content_key: es.a1.unit01.lesson05.shared_activity_small_talk
+  type: translation
+  frame:
+    text: 요리하는 것을 좋아해요? (친근한 말)
+    language_code: ko
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Te gusta {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 스페인어는 gustar로 좋아하는 것을 말해요. 그 활동이 나를 기쁘게 한다는 구조라서 te gusta + 동사원형을 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson06.listen.001
+  lesson_content_key: es.a1.unit01.lesson06.cooking_workshop_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 엘레나와 마테오는 같은 워크숍에 온 동료라서 서로 tú를 써요.
+    language_code: ko
+    direction: ltr
+- content_key: practice.ko-es.es.a1.unit01.lesson06.translate.002
+  lesson_content_key: es.a1.unit01.lesson06.cooking_workshop_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ko
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '스페인어는 동사 어미만으로 누구인지 알 수 있을 때 주어 대명사를 생략해요: vivo는 ''저는 살아요''라는 뜻이에요.'
+    language_code: ko
+    direction: ltr
