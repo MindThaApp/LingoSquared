@@ -7,6 +7,7 @@ const PATHS: Record<string, ReactElement> = {
   practice: <path d="M13 3 5 13.5h6L10 21l9-11h-6z" />,
   review: <path d="M20 12a8 8 0 0 1-13.7 5.6M4 12a8 8 0 0 1 13.7-5.6M18 3v4h-4M6 21v-4h4" />,
   vocabulary: <path d="M5 4h14v16H5zM9 9h6M9 13h6" />,
+  leaderboard: <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3" />,
   profile: (
     <>
       <circle cx="12" cy="8" r="3.5" />

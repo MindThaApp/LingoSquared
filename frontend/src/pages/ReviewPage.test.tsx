@@ -6,6 +6,7 @@ import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { setActiveCourse } from "../lib/activeCourse";
 import { ReviewPage } from "./ReviewPage";
 
+vi.mock("../lib/gamification", () => ({ useHeartRestore: () => () => {} }));
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: { defaultValue?: string }) => opts?.defaultValue ?? key,

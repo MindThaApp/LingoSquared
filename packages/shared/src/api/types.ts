@@ -204,6 +204,8 @@ export interface AnswerResult {
   feedback_code?: string;
   /** Romanization of the correct answer for the post-answer line (ru/hi/ar/fa/prs). */
   correct_response_translit?: string;
+  /** Hearts left after this answer (null/absent when hearts are off or the answer was free). */
+  hearts_remaining?: number | null;
 }
 
 export interface LessonStartResult {
@@ -214,6 +216,8 @@ export interface LessonCompleteResult {
   completed_at: string;
   xp_awarded: number;
   accuracy: number;
+  /** Gems earned by this completion (0 unless ENABLE_GEMS and a first completion). */
+  gems_awarded?: number;
 }
 
 export interface ReviewItem {
@@ -650,4 +654,50 @@ export interface CoverageRow {
   total_unit_count: number;
   total_lesson_count: number;
   open_issue_count: number;
+}
+
+// Gamification (hearts / gems / weekly leaderboard). Each part is behind its own
+// server flag; `enabled: false` means hide the UI. Server-authoritative: the
+// client only displays these values.
+export interface GamificationState {
+  hearts: {
+    enabled: boolean;
+    hearts: number;
+    max_hearts: number;
+    next_heart_at: string | null;
+    refill_seconds: number;
+  };
+  gems: { enabled: boolean; balance: number; costs: Record<string, number> };
+  leaderboard: { enabled: boolean; opted_out: boolean };
+}
+
+export interface HeartRestoreResult {
+  restored: boolean;
+  reason: "full" | "not_enough_practice" | null;
+  hearts: number;
+  next_heart_at: string | null;
+}
+
+export type GemSpendItem = "heart_refill" | "streak_freeze";
+
+export interface GemSpendResult {
+  applied: boolean;
+  item: GemSpendItem;
+  cost: number;
+  gem_balance: number;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  display_name: string;
+  xp: number;
+  is_me: boolean;
+}
+
+export interface Leaderboard {
+  week_start: string;
+  week_end: string;
+  opted_out: boolean;
+  entries: LeaderboardEntry[];
+  me: { rank: number | null; xp: number } | null;
 }

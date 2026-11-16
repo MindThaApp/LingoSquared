@@ -172,6 +172,11 @@ export function LessonCompletePage() {
       ) : (
         <p className="muted">{t("lesson_complete.finished")}</p>
       )}
+      {(state?.completion.gems_awarded ?? 0) > 0 && (
+        <p style={{ fontWeight: 700, margin: "12px 0 4px" }} data-testid="lesson-gems-earned">
+          <span aria-hidden="true">💎</span> {t("gamification.gems_earned", { count: state?.completion.gems_awarded })}
+        </p>
+      )}
       {state?.missedWords && <MissedWordsSummary words={state.missedWords} />}
       {streakDays > 0 && (
         <p style={{ fontWeight: 700, margin: "12px 0 4px" }}>

@@ -56,6 +56,9 @@ const CheckpointPage = lazy(() =>
 const PracticeFeedPage = lazy(() =>
   import("./pages/PracticeFeedPage").then((m) => ({ default: m.PracticeFeedPage })),
 );
+const LeaderboardPage = lazy(() =>
+  import("./pages/LeaderboardPage").then((m) => ({ default: m.LeaderboardPage })),
+);
 const ShowcasePage = lazy(() => import("./pages/ShowcasePage"));
 const AdminContentPage = lazy(() =>
   import("./pages/AdminContentPage").then((m) => ({ default: m.AdminContentPage })),
@@ -190,6 +193,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <VocabularyPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <LeaderboardPage />
                   </ProtectedRoute>
                 }
               />

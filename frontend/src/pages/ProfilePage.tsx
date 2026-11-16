@@ -18,6 +18,7 @@ import { CrashReportSettings } from "../components/CrashReportSettings";
 import { ReportProblem } from "../components/ReportProblem";
 import { ConnectedSignIns } from "../components/ConnectedSignIns";
 import { ChangePassword } from "../components/ChangePassword";
+import { GamificationSettings } from "../components/GamificationSettings";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function ProfilePage() {
@@ -147,6 +148,8 @@ export function ProfilePage() {
           <span className="stat-label">{t("profile.daily_goal")}</span>
         </div>
       </div>
+
+      <GamificationSettings />
 
       {progressQuery.data && (
         <div className="card">

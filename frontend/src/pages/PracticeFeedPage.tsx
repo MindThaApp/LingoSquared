@@ -12,6 +12,7 @@ import { setReportContext } from "../lib/reportContext";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { EmphasizedText } from "../components/EmphasizedText";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
+import { useHeartRestore } from "../lib/gamification";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { AnswerFeedbackExtras } from "../components/AnswerFeedbackExtras";
@@ -429,7 +430,13 @@ export function PracticeFeedPage() {
     return () => observer.disconnect();
   }, [items, loadMore, feedError]);
 
+  // Every 5th practice answer asks the server for a heart back (best effort; the
+  // server counts the real answers itself and is a no-op at full hearts).
+  const restoreHeart = useHeartRestore();
+  const answeredCountRef = useRef(0);
   function handleAnswered(correct: boolean, xp: number) {
+    answeredCountRef.current += 1;
+    if (answeredCountRef.current % 5 === 0) restoreHeart();
     setCombo((c) => (correct ? c + 1 : 0));
     if (xp > 0) {
       setXpToast(xp);
