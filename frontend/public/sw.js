@@ -4,9 +4,21 @@
  * offline-sync APIs (POST /sync/batch) — do NOT cache authenticated
  * API responses here; personalized state must stay fresh.
  */
-// Bump the version suffix to invalidate everything cached by older workers;
-// the activate handler deletes every cache whose name is not this one.
-const SHELL_CACHE = "lingo2-shell-v2";
+// Bump a version suffix to invalidate what older workers cached under that
+// name. The activate handler deletes ONLY this app's own caches (names that
+// start with OWN_CACHE_PREFIX) that are not in CURRENT_CACHES; any other
+// cache on the origin is left alone.
+const OWN_CACHE_PREFIX = "lingo2-";
+const SHELL_CACHE = "lingo2-shell-v3";
+// Vite's content-hashed build output (/assets/<name>-<hash>.js|css|...).
+// A hashed URL never changes content, so it is served cache-first. Capped
+// like the audio cache so old deploys' chunks do not pile up forever.
+const ASSET_CACHE = "lingo2-assets-v1";
+const MAX_ASSET_ENTRIES = 300;
+const ASSET_PATH = /^\/assets\//;
+// Shown for a navigation when the network is down and nothing is cached.
+const OFFLINE_URL = "/offline.html";
+const PRECACHE_URLS = ["/", "/manifest.webmanifest", OFFLINE_URL, "/offline.css", "/icons/icon-192.png"];
 
 // Never cached: the API, and the big on-device speech files (ONNX wasm,
 // model weights, sourcemaps) which would blow the storage quota.
@@ -34,10 +46,20 @@ function safeSameOriginUrl(raw) {
 // capped: oldest entries go first once MAX_AUDIO_ENTRIES is exceeded.
 const AUDIO_CACHE = "lingo2-audio-v1";
 const MAX_AUDIO_ENTRIES = 400;
+const CURRENT_CACHES = [SHELL_CACHE, ASSET_CACHE, AUDIO_CACHE];
+
+// Defence in depth for user data: never store a response the server marked
+// no-store/private (authenticated JSON, account pages). The API itself is
+// never intercepted at all (NO_CACHE_PATH + cross-origin early returns).
+function isStorable(res) {
+  if (res.status !== 200 || res.type !== "basic") return false;
+  const cc = (res.headers && res.headers.get && res.headers.get("cache-control")) || "";
+  return !/no-store|private/i.test(cc);
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(SHELL_CACHE).then((cache) => cache.addAll(["/", "/manifest.webmanifest"])),
+    caches.open(SHELL_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)),
   );
   // No skipWaiting(): a new worker waits until every tab running the old one
   // is closed or navigated away, so a lesson in progress is never swapped
@@ -50,7 +72,11 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== SHELL_CACHE && k !== AUDIO_CACHE).map((k) => caches.delete(k))),
+        Promise.all(
+          keys
+            .filter((k) => k.startsWith(OWN_CACHE_PREFIX) && !CURRENT_CACHES.includes(k))
+            .map((k) => caches.delete(k)),
+        ),
       )
       .then(() => self.clients.claim()),
   );
@@ -99,9 +125,25 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
-async function trimAudioCache(cache) {
+// Evicts the oldest entries of one of this app's own caches (audio clips,
+// hashed build assets) once it holds more than `max` entries.
+async function trimCache(cache, max) {
   const keys = await cache.keys(); // insertion order: oldest first
-  for (let i = 0; i < keys.length - MAX_AUDIO_ENTRIES; i++) await cache.delete(keys[i]);
+  for (let i = 0; i < keys.length - max; i++) await cache.delete(keys[i]);
+}
+const trimAudioCache = (cache) => trimCache(cache, MAX_AUDIO_ENTRIES);
+
+// Cache-first for content-hashed build assets; fills the cache on a miss.
+async function assetResponse(request, waitUntil) {
+  const cache = await caches.open(ASSET_CACHE);
+  const hit = await cache.match(request);
+  if (hit) return hit;
+  const res = await fetch(request);
+  if (isStorable(res)) {
+    const copy = res.clone();
+    waitUntil(cache.put(request, copy).then(() => trimCache(cache, MAX_ASSET_ENTRIES)).catch(() => {}));
+  }
+  return res;
 }
 
 // <audio> asks for byte ranges (and Safari insists on 206 answers). Serve a
@@ -164,12 +206,21 @@ self.addEventListener("fetch", (event) => {
   // heavy whisper wasm/model files (see NO_CACHE_PATH).
   if (url.origin !== self.location.origin || !isCacheablePath(url.pathname)) return;
 
+  if (ASSET_PATH.test(url.pathname)) {
+    event.respondWith(assetResponse(event.request, (p) => event.waitUntil(p)));
+    return;
+  }
+
+  // Navigation and other static files: network-first, cache as fallback.
+  // Offline navigation: the cached page, else the cached app shell "/",
+  // else the offline fallback page.
+  const isNavigate = event.request.mode === "navigate";
   event.respondWith(
     fetch(event.request)
       .then((res) => {
         // Only successful same-origin ("basic") responses; never partial
-        // (206), error, opaque or redirected results.
-        if (res.status === 200 && res.type === "basic") {
+        // (206), error, opaque, redirected or no-store/private results.
+        if (isStorable(res)) {
           const copy = res.clone();
           caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, copy)).catch(() => {});
         }
@@ -178,7 +229,8 @@ self.addEventListener("fetch", (event) => {
       .catch(() =>
         caches
           .match(event.request)
-          .then((hit) => hit ?? (event.request.mode === "navigate" ? caches.match("/") : undefined))
+          .then((hit) => hit ?? (isNavigate ? caches.match("/") : undefined))
+          .then((hit) => hit ?? (isNavigate ? caches.match(OFFLINE_URL) : undefined))
           .then((hit) => hit ?? Response.error()),
       ),
   );

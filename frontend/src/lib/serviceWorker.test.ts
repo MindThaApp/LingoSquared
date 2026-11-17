@@ -10,7 +10,13 @@ const SRC = readFileSync(resolve(__dirname, "../../public/sw.js"), "utf8");
 function load() {
   const handlers: Record<string, (e: any) => void> = {};
   const store = new Map<string, any>();
-  const cache = { addAll: vi.fn(async () => {}), put: vi.fn(async (r: any, v: any) => { store.set(r.url, v); }) };
+  const cache = {
+    addAll: vi.fn(async (_urls: string[]) => {}),
+    put: vi.fn(async (r: any, v: any) => { store.set(r.url, v); }),
+    match: vi.fn(async (): Promise<any> => undefined),
+    keys: vi.fn(async () => []),
+    delete: vi.fn(async () => true),
+  };
   const deleted: string[] = [];
   const self: any = {
     location: { origin: "https://app.test" },
@@ -21,24 +27,43 @@ function load() {
   };
   const caches = {
     open: vi.fn(async () => cache),
-    keys: vi.fn(async () => ["lingo2-shell-v1", "lingo2-shell-v2", "other"]),
+    keys: vi.fn(async () => [
+      "lingo2-shell-v1",
+      "lingo2-shell-v2",
+      "lingo2-shell-v3",
+      "lingo2-assets-v1",
+      "lingo2-audio-v1",
+      "transformers-cache",
+      "other",
+    ]),
     delete: vi.fn(async (k: string) => { deleted.push(k); return true; }),
-    match: vi.fn(async () => undefined),
+    match: vi.fn(async (_req: any): Promise<any> => undefined),
   };
   const fetchMock = vi.fn();
   runInNewContext(SRC, { self, caches, URL, Response, fetch: fetchMock, Promise });
   return { handlers, self, cache, caches, deleted, fetchMock };
 }
 
-async function doFetch(env: ReturnType<typeof load>, url: string, res: any, method = "GET") {
+async function doFetch(env: ReturnType<typeof load>, url: string, res: any, method = "GET", mode = "navigate") {
   env.fetchMock.mockResolvedValue(res);
   let p: Promise<any> | undefined;
-  env.handlers.fetch({ request: { url, method, mode: "navigate" }, respondWith: (x: any) => (p = x) });
+  const waits: Promise<unknown>[] = [];
+  env.handlers.fetch({
+    request: { url, method, mode },
+    respondWith: (x: any) => (p = x),
+    waitUntil: (x: Promise<unknown>) => waits.push(x),
+  });
   if (p) await p;
+  await Promise.all(waits);
   await Promise.resolve();
   return p !== undefined;
 }
-const fakeRes = (status: number, type = "basic") => ({ status, type, clone: () => ({}) });
+const fakeRes = (status: number, type = "basic", cacheControl = "") => ({
+  status,
+  type,
+  clone: () => ({}),
+  headers: { get: (h: string) => (h.toLowerCase() === "cache-control" ? cacheControl : null) },
+});
 
 describe("sw.js", () => {
   it("does not skipWaiting on install", async () => {
@@ -49,12 +74,61 @@ describe("sw.js", () => {
     expect(env.self.skipWaiting).not.toHaveBeenCalled();
   });
 
-  it("deletes old caches on activate and keeps the current one", async () => {
+  it("activate deletes only this app's own old caches", async () => {
     const env = load();
     let p: Promise<unknown> = Promise.resolve();
     env.handlers.activate({ waitUntil: (x: Promise<unknown>) => (p = x) });
     await p;
-    expect(env.deleted.sort()).toEqual(["lingo2-shell-v1", "other"]);
+    // Current lingo2-* caches stay; foreign caches (e.g. transformers.js
+    // model cache) are never touched.
+    expect(env.deleted.sort()).toEqual(["lingo2-shell-v1", "lingo2-shell-v2"]);
+  });
+
+  it("precaches the offline fallback page on install", async () => {
+    const env = load();
+    const waits: Promise<unknown>[] = [];
+    env.handlers.install({ waitUntil: (p: Promise<unknown>) => waits.push(p) });
+    await Promise.all(waits);
+    expect(env.cache.addAll.mock.calls[0][0]).toEqual(expect.arrayContaining(["/", "/offline.html"]));
+  });
+
+  it("serves hashed /assets/ cache-first and fills the cache on a miss", async () => {
+    const env = load();
+    await doFetch(env, "https://app.test/assets/index-abc123.js", fakeRes(200), "GET", "no-cors");
+    expect(env.fetchMock).toHaveBeenCalledTimes(1);
+    expect(env.cache.put).toHaveBeenCalledTimes(1);
+    const cached = { cached: true };
+    env.caches.match.mockResolvedValue(undefined);
+    env.cache.match.mockResolvedValue(cached);
+    let p: Promise<any> | undefined;
+    env.handlers.fetch({
+      request: { url: "https://app.test/assets/index-abc123.js", method: "GET", mode: "no-cors" },
+      respondWith: (x: any) => (p = x),
+      waitUntil: () => {},
+    });
+    expect(await p).toBe(cached);
+    expect(env.fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("offline navigation falls back to the offline page when nothing is cached", async () => {
+    const env = load();
+    const offline = { offline: true };
+    env.caches.match.mockImplementation(async (r: any) => (r === "/offline.html" ? offline : undefined));
+    env.fetchMock.mockRejectedValue(new TypeError("offline"));
+    let p: Promise<any> | undefined;
+    env.handlers.fetch({
+      request: { url: "https://app.test/lessons/5", method: "GET", mode: "navigate" },
+      respondWith: (x: any) => (p = x),
+      waitUntil: () => {},
+    });
+    expect(await p).toBe(offline);
+  });
+
+  it("never stores no-store or private responses", async () => {
+    const env = load();
+    await doFetch(env, "https://app.test/profile", fakeRes(200, "basic", "no-store"));
+    await doFetch(env, "https://app.test/assets/x-1.js", fakeRes(200, "basic", "private, max-age=0"), "GET", "no-cors");
+    expect(env.cache.put).not.toHaveBeenCalled();
   });
 
   it("caches only 200 basic responses", async () => {
