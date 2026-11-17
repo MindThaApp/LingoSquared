@@ -315,3 +315,324 @@ velocity becomes the bottleneck again.
 3. Any red flags in the free/open-source-material-as-reference idea in
    §6 — licensing, quality, or otherwise — before it's built into the
    actual authoring pipeline?
+
+## 9. Delight / polish (Apple-quality feel)
+
+Added 2026-11-17 (Ramin: "make the app delightful to use, like macOS /
+iOS apps"). This is a product requirement, not a nice-to-have: the app
+should feel calm, fast and physical, the way a good native iOS/macOS app
+does. Every rule below is written so a reviewer can check it in a
+browser. "Delight" never overrides correctness, accessibility (WCAG AA,
+the 2026-07/09 a11y passes) or the RTL rules in `frontend/CLAUDE.md`.
+
+Scope: the web/PWA frontend (`frontend/src/**`). All tokens live in
+`frontend/src/index.css` `:root`; no animation library is required (CSS
+`linear()` springs or hand-tuned `cubic-bezier` are enough).
+
+Note on §1: hearts, gems and the weekly leaderboard were listed there as
+rejected scope, but shipped flag-gated and default-off in PR #329
+(`docs/CONTRACT.md` → "Gamification"). Where they are switched on, the
+rules in §9.2 apply to them. Whether §1's list should be reworded is
+Ramin's call.
+
+### 9.1 Motion
+
+- **Tokens, not literals.** Durations and easings come from CSS custom
+  properties; no raw `0.12s ease` in component rules.
+
+  | Token | Value | Use |
+  |---|---|---|
+  | `--dur-instant` | 80ms | press/active state |
+  | `--dur-fast` | 150ms | hover, focus, colour, selection |
+  | `--dur-base` | 250ms | banners, cards, sheets entering |
+  | `--dur-slow` | 400ms | progress bar, page-level moves |
+  | `--dur-celebrate` | 600–2400ms | lesson-complete only |
+  | `--ease-standard` | `cubic-bezier(0.2, 0, 0, 1)` | most transitions |
+  | `--ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | things leaving |
+  | `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` (or a `linear()` spring, ~0.55 damping, one overshoot ≤ 8%) | pops, tiles, sheets, banners |
+
+- **Springs for things the user moved or earned** (tile placed in a
+  word bank, option selected, feedback banner rising, XP/gem counters,
+  path node completing). Plain `--ease-standard` for colour and opacity.
+- **Animate only `transform` and `opacity`.** The one existing exception,
+  the progress bar's `width`, moves to `transform: scaleX()`.
+- **Exits are faster than entrances** (exit ≈ 60% of the enter duration).
+- **Nothing blocks input.** No animation longer than 250ms may delay the
+  next tap; Continue is usable the moment feedback appears.
+- **Reduced motion.** With `prefers-reduced-motion: reduce`: no
+  translate/scale/rotate, no confetti, no count-up (final value shown at
+  once). Opacity cross-fades ≤ 150ms may stay so state changes are still
+  visible. The existing global `* { animation: none; transition: none }`
+  rule is an acceptable floor; nothing may rely on an animation finishing
+  to become visible or usable.
+
+Acceptance:
+- [ ] `grep -nE 'transition|animation' frontend/src/index.css` shows only token-based durations/easings.
+- [ ] Selecting an option, placing a tile and the feedback banner each visibly ease (no instant jump), and none uses layout properties (DevTools Performance: no Layout in the animation frames).
+- [ ] With reduced motion emulated, a full lesson plus the complete screen shows zero movement and every element is visible and usable.
+- [ ] Continue responds to a tap made while the feedback banner is still animating in.
+
+### 9.2 Feedback and micro-interactions
+
+- **Answer check.** Pressing Check gives a press state within 100ms. If
+  grading takes longer than 300ms the button shows a quiet in-button
+  spinner; it never looks dead.
+- **Correct.** Chosen option/tiles pulse once (scale 1 → 1.04 → 1,
+  `--ease-spring`, 250ms) in `--correct`; the banner slides up 12px and
+  fades in (`--dur-base`); the progress bar advances with `--dur-slow`.
+- **Wrong.** The answer area does one short horizontal shake (±6px, 2
+  cycles, 300ms; opacity-only under reduced motion). Colour is never the
+  only signal: icon + text stay as today. The correct answer is readable
+  without scrolling on a 375×667 screen.
+- **Almost.** Amber banner, no shake, no negative sound.
+- **Streak.** When today's first lesson extends the streak, the flame
+  and number pop once on the complete screen and the home streak card.
+  A streak at risk is stated calmly, never with alarm styling.
+- **Hearts (when enabled).** Losing a heart animates the header badge
+  (pop + count change) at the moment of the wrong answer, with a polite
+  live-region announcement. Reaching 0 leads to the existing
+  `OutOfHearts` screen, never a dead end.
+- **Gems (when enabled).** A gem award counts up on the complete screen
+  and the nav balance updates without a reload. Spending shows the new
+  balance immediately.
+- **Sound and haptics are optional and never required.** One setting
+  ("Sound and vibration on answers", exists today) covers both; default
+  on; stored per device. Sounds are short (≤ 250ms), quiet (peak gain ≤
+  0.15) and never play over TTS audio. Haptics use `navigator.vibrate`
+  where available (Android; iOS Safari has no vibrate API, so iOS stays
+  silent-safe): correct 30ms, wrong `[60, 40, 60]`, lesson complete
+  `[30, 40, 30, 40, 80]`. All calls are feature-detected and wrapped so
+  they can never throw.
+
+Acceptance:
+- [ ] Correct, almost and wrong are each distinguishable with sound off, with colour removed (greyscale) and with reduced motion on.
+- [ ] Wrong answer: shake plays once, correct answer visible without scrolling at 375×667, focus lands on Continue.
+- [ ] With hearts on, a wrong answer changes the badge within 300ms and a screen reader announces the new count.
+- [ ] Turning the setting off silences sound and vibration everywhere (lesson, review, practice, checkpoint, placement).
+- [ ] On an Android phone the three vibration patterns fire; on iOS and desktop nothing errors in the console.
+
+### 9.3 Typography and spacing rhythm
+
+- **System fonts.** Latin UI uses the platform face: `system-ui,
+  -apple-system, "Segoe UI", Roboto, sans-serif` (San Francisco on
+  Apple devices). `"Vazirmatn"` stays first in the root stack (it is
+  unicode-ranged to Arabic script, so Latin never renders in it). Per
+  script stacks for hi/ko/zh/ja stay as they are.
+- **Type scale** (rem, 16px root): 0.8125 caption · 0.9375 secondary ·
+  1 body · 1.125 emphasised · 1.375 title · 1.75 large title · 2.25
+  display. No text below 13px. Body line-height 1.5–1.6; headings
+  1.2–1.3. Numbers that change (XP, timers, counts) use
+  `font-variant-numeric: tabular-nums`.
+- **Spacing scale.** 4px base: 4, 8, 12, 16, 24, 32, 48. Tokens
+  `--space-1` … `--space-7`. New code uses tokens; inline `style={{
+  margin: … }}` literals are migrated when a file is touched.
+- **Rhythm.** Page gutter 16px on phones, 24px from 600px. Cards use
+  `--radius` (14px) and 16px inner padding; one primary button per
+  screen, full width on phones.
+- **RTL (fa/prs UI and content).** `dir`/`lang` are set on `<html>` from
+  the UI language and explicitly on every target-language container (the
+  existing rule). Layout uses logical properties (`margin-inline`,
+  `padding-inline`, `inset-inline`, `text-align: start`). Directional
+  icons (back, next, progress direction) mirror in RTL; brand marks,
+  media controls and digits do not. Arabic-script text is never
+  letter-spaced, never italic, and gets line-height ≥ 1.7. Mixed
+  Latin/Persian runs are bidi-isolated.
+
+Acceptance:
+- [ ] On macOS/iOS the Latin UI renders in San Francisco; on Windows Segoe UI; on Android Roboto. No web font is downloaded for Latin.
+- [ ] No computed font-size below 13px on any page (DevTools audit or a unit test over the stylesheet).
+- [ ] With UI language fa and prs: no physical `left`/`right` layout bugs on Home, lesson runner, complete screen and Profile; back/next icons point the right way; the progress bar fills right-to-left.
+- [ ] Persian text shows true bold (Vazirmatn variable weights), no letter-spacing, no clipped diacritics.
+
+### 9.4 Perceived performance
+
+- **Budgets.** Tap/key → visible press state ≤ 100ms. Check → verdict
+  shown ≤ 400ms at p95 on the LAN/live server; beyond 300ms a pending
+  state shows. Route change → meaningful content or skeleton ≤ 200ms.
+  Animations hold 60fps (frame time ≤ 16.7ms) on a mid-range Android
+  phone; no long task > 50ms during a lesson. Lab targets on the lesson
+  route: INP ≤ 200ms, CLS ≤ 0.05, LCP ≤ 2.5s on Fast 4G.
+- **Optimistic UI for user-owned, reversible state:** daily goal,
+  settings toggles, quest claims, gem spends, marking a word. The UI
+  changes at once and rolls back with a short, friendly message if the
+  server refuses. Answer grading is **not** optimistic: the verdict
+  always comes from the grader.
+- **Skeletons, not text spinners,** for anything that loads in more
+  than 200ms: Home stat cards, course path, unit lessons, vocabulary
+  list, leaderboard, lesson first paint. Skeletons match the final
+  box size.
+- **No layout shift.** Stat cards, nav balance, hearts badge, feedback
+  banner and virtual keyboard reserve their space before data arrives.
+  The feedback banner never pushes the answer off screen. Fonts use
+  `font-display: swap` with metric-compatible fallbacks.
+- **Prefetch the next step.** The next exercise's audio and the next
+  lesson's data are warmed while the learner reads feedback.
+
+Acceptance:
+- [ ] Lighthouse (mobile, lesson route, logged in): CLS ≤ 0.05, INP/TBT within budget.
+- [ ] DevTools Performance recording of 5 answers at 4× CPU throttle: no dropped-frame run longer than 2 frames during animations, no long task > 50ms.
+- [ ] On Slow 4G, Home, course path, lesson and vocabulary show a skeleton (not blank, not "Loading…" text) and nothing jumps when data lands.
+- [ ] Changing the daily goal and toggling a setting update instantly; with the network blocked they roll back with a message.
+
+### 9.5 Empty, error and loading states
+
+- Every data view has all four states designed: loading (skeleton),
+  empty, error, content. No blank areas and no raw error codes.
+- **Copy rules.** Say what happened in plain words, then the one thing
+  to do next. No blame, no jargon, no "Oops", no exclamation marks in
+  errors. Empty states point forward ("No words yet. Finish a lesson
+  and they will show up here." + a Start lesson button). All strings
+  are in every UI locale (the locale-parity test stays green).
+- **Errors are recoverable in place:** a Retry button, the learner's
+  typed answer preserved, and offline detected and named ("You're
+  offline. Your progress is saved; we'll retry when you're back.").
+- **A failed submit never reads as a wrong answer** (the existing
+  neutral `.feedback-banner.error` style is the model).
+- The crash screen (`ErrorBoundary`) and 404 follow the same rules and
+  always offer a way home.
+
+Acceptance:
+- [ ] For Home, Courses, Unit, Lesson, Review, Practice, Vocabulary, Leaderboard, Profile: each of loading / empty / error is reachable (throttle, fresh account, blocked request) and has copy plus a next action.
+- [ ] Blocking the answer request keeps the typed answer and shows Retry; unblocking and retrying succeeds without a reload.
+- [ ] No user-visible string contains a status code, exception name or "undefined".
+- [ ] fa and prs show translated state copy, right-aligned.
+
+### 9.6 Dark mode parity
+
+- Dark mode follows the system (`prefers-color-scheme`); a manual
+  Light / Dark / System choice in Profile is the target.
+- Every colour comes from a token with a dark value; no hard-coded hex
+  in components or inline styles. Contrast meets WCAG AA in both themes
+  (`frontend/src/a11yTokens.test.ts` covers the token pairs; new tokens
+  are added to it).
+- Elevation in dark mode comes from lighter surfaces, not heavier
+  shadows. Confetti, badges (including the Beta badge), charts and
+  illustrations are checked in both themes.
+- The browser chrome matches: `theme-color` and the PWA manifest have a
+  dark variant; `color-scheme` is set so form controls and scrollbars
+  follow.
+
+Acceptance:
+- [ ] Side-by-side screenshots of every route in light and dark: no unreadable text, no white flashes on navigation, no light-only borders or shadows.
+- [ ] `a11yTokens.test.ts` passes and covers every foreground/background token pair in use.
+- [ ] `grep -rnE '#[0-9a-fA-F]{3,6}' frontend/src --include=*.tsx` returns no colour literals outside tests.
+- [ ] On a phone in dark mode the status bar / title bar is dark, not `#4a3bff`.
+
+### 9.7 Touch targets
+
+- Every interactive element has a hit area of at least 44×44 CSS px
+  (Apple's 44pt), with ≥ 8px between adjacent targets. Small glyphs
+  (speaker, report flag, gloss words, close ×) get padding or a
+  pseudo-element to reach it.
+- Documented exception: virtual-keyboard keys are 42px wide × 48px high
+  so 7 keys fit a 375px line (see the comment in `index.css`).
+- No hover-only affordances; `:active` gives a visible press state on
+  touch. The 300ms tap delay and double-tap zoom are off on controls
+  (`touch-action: manipulation`).
+
+Acceptance:
+- [ ] An automated check (Playwright, 375×667) finds no visible button/link/input smaller than 44×44 except the listed exception.
+- [ ] Words-tab search/sort controls (40px today) and range sliders (24px) meet 44px.
+- [ ] Every control shows a press state on a real phone.
+
+### 9.8 Keyboard shortcuts (desktop)
+
+| Key | Action |
+|---|---|
+| `Enter` | Check answer; when feedback is showing, Continue |
+| `1`–`9` | Pick option n (multiple choice, matching, word-bank tile n) |
+| `Backspace` | Remove last word-bank tile |
+| `Space` | Play / replay audio (when focus is not in a text field) |
+| `Ctrl/⌘ + Enter` | Submit a multi-line writing answer (exists) |
+| `Esc` | Close a popover or dialog; in a lesson, open the quit confirm |
+| `?` | Show the shortcut sheet |
+
+- Shortcuts never fire while a text input, the virtual keyboard or an
+  IME composition has focus, and never with modifier keys unless listed.
+- Number hints show on options only on devices with a fine pointer and
+  a hardware keyboard (`(hover: hover) and (pointer: fine)`).
+- Focus is always visible (`:focus-visible` ring) and moves sensibly:
+  to the answer field on a new exercise, to Continue after a verdict.
+- `aria-keyshortcuts` is set on the controls that have one.
+
+Acceptance:
+- [ ] A full lesson with every exercise type can be completed on desktop without the mouse.
+- [ ] Typing digits or space in a text answer types them and triggers nothing.
+- [ ] `?` opens a sheet listing exactly the table above; `Esc` closes it.
+- [ ] Shortcuts work the same with UI language fa (RTL) and are inactive during IME composition (ja/ko/zh).
+
+### 9.9 Lesson-complete celebration
+
+- Plays once, only after a real completion (the existing route-state
+  gate), never on refresh or back.
+- Sequence, ≤ 2.5s in total and skippable at any moment by pressing
+  Continue: confetti burst → XP counts up (700ms) → gems (if any) →
+  streak flame pop if the streak grew → daily-goal bar fills. One short
+  success sound and the completion haptic at the start, under the
+  feedback setting.
+- Continue is focused and tappable from the first frame. The screen
+  shows what was achieved (XP, accuracy, words to revisit) and one
+  clear next step.
+- Reduced motion: no confetti, no count-up, same information.
+- Bigger moments scale up modestly: a perfect lesson, a daily goal met,
+  a unit finished and streak milestones (7, 30, 100, 365) get a distinct
+  headline and colour, not a longer animation.
+
+Acceptance:
+- [ ] Completing a lesson shows the sequence once; refreshing the page shows the static summary.
+- [ ] Pressing Enter at any point during the celebration continues immediately.
+- [ ] Reduced motion: static screen, all numbers present.
+- [ ] Sound/haptic respect the setting; nothing plays when it is off.
+- [ ] A perfect lesson and a met daily goal each show their distinct headline, in light and dark, LTR and RTL.
+
+### 9.10 Onboarding: first exercise fast
+
+- **Target: a new learner answers a first exercise within 60 seconds
+  and at most 3 taps after choosing a language**, with no typing beyond
+  what sign-up needs.
+- Order: pick language → first lesson starts. The daily goal defaults
+  to a sensible value and is offered after the first lesson, when it
+  means something. The placement test is an offer ("Know some already?
+  Find my level"), not a gate.
+- No permission prompts (push, microphone) before the first lesson is
+  done; each is asked in context, the first time it is useful.
+- Progress made before any interruption is kept; leaving and returning
+  resumes at the same step (the per-device onboarding state does this).
+- First-run screens have one decision each and one primary button.
+- fa/prs courses keep the Beta badge and note visible at the choice
+  point, without adding a step.
+
+Acceptance:
+- [ ] Fresh account, stopwatch: registered → first exercise on screen in ≤ 60s and ≤ 3 taps after language choice, on a phone.
+- [ ] No browser permission prompt appears before the first lesson-complete screen.
+- [ ] Skipping, reloading mid-onboarding and returning all land somewhere sensible, never on an empty Home.
+- [ ] The same flow passes with UI language fa.
+
+### 9.11 Current gaps (2026-11-17, ranked by user impact)
+
+From a read of `frontend/src` at `fix/wsl-handover-followups`
+(ac3d97671). Effort: S ≤ ½ day, M 1–2 days, L 3+ days. Nothing here is
+implemented by this section.
+
+What already meets the bar: WCAG-AA colour tokens in both themes with a
+unit test, a global reduced-motion rule, safe-area insets, 44px
+buttons, self-hosted Vazirmatn with correct unicode-range, sound +
+vibration cues with a setting (`lib/answerCue.ts`), confetti + XP
+count-up on completion, a neutral submit-error banner with Retry,
+`:focus-visible` rings, Enter-to-submit on typed exercises.
+
+| # | Gap | Effort | Files |
+|---|---|---|---|
+| 1 | Answer feedback is static: the banner appears with no motion, no correct pulse, no wrong shake; option state changes snap. The most repeated moment in the app has the least polish. | M | `frontend/src/index.css` (`.feedback-banner`, `.exercise-option`), `components/AnswerFeedbackExtras.tsx`, `components/exercises/ChoiceOptions.tsx`, `WordBankInput.tsx`, `WordOrder.tsx`, `MatchingPairs.tsx`, `pages/LessonRunnerPage.tsx` |
+| 2 | Loading is plain "Loading…" text (`.page-loading` has no style rule) or nothing at all: Home, course path and unit pages render without placeholders, so numbers and cards pop in and shift. No skeletons anywhere. | M | `App.tsx` (Suspense fallback), `pages/HomePage.tsx`, `CourseUnitsPage.tsx`, `UnitLessonsPage.tsx`, `VocabularyPage.tsx`, `ReviewPage.tsx`, `LeaderboardPage.tsx`, `LessonRunnerPage.tsx`, `index.css` |
+| 3 | Onboarding is 3 stages (course → goal → start/placement) and then drops the learner on the course page; first exercise is several screens away. | M | `pages/OnboardingPage.tsx`, `lib/onboarding.ts`, `lib/nextLesson.ts`, `pages/CoursePickerPage.tsx`, `components/DailyGoalPicker.tsx` |
+| 4 | Desktop shortcuts are minimal: Enter (form submit), Ctrl/⌘+Enter in writing, Esc in two components. No number keys for options or tiles, no audio key, no shortcut sheet. | M | new `lib/useLessonShortcuts.ts`, `components/exercises/ChoiceOptions.tsx`, `WordBankInput.tsx`, `MatchingPairs.tsx`, `components/SpeakButton.tsx`, `pages/LessonRunnerPage.tsx`, `ReviewPage.tsx`, `PracticeFeedPage.tsx` |
+| 5 | No motion tokens: hand-written durations/easings (`0.05s`–`0.45s`, `ease`, one bounce bezier) and the progress bar animates `width`. No spring system. | S | `frontend/src/index.css` |
+| 6 | Hearts and gems have no "moment": `HeartsBadge` is a static emoji + number, losing a heart is silent, gems on the complete screen are a plain line, the nav balance just changes. | S–M | `components/HeartsBadge.tsx`, `OutOfHearts.tsx`, `components/layout/NavBar.tsx`, `pages/LessonCompletePage.tsx`, `lib/gamification.ts`, `index.css` |
+| 7 | No optimistic updates: there is no `onMutate`/`setQueryData` in app code; goal changes, gem spends and settings wait on the server (buttons go `busy`). | M | `components/DailyGoalPicker.tsx`, `GamificationSettings.tsx`, `OutOfHearts.tsx`, `pages/ProfilePage.tsx`, `queryClient.ts` |
+| 8 | Lesson-complete has confetti and count-up but no sound or haptic, no perfect-lesson / goal-met / milestone variants, and gems do not count up. | S | `pages/LessonCompletePage.tsx`, `lib/answerCue.ts`, `index.css` |
+| 9 | Dark mode is system-only (no in-app choice) and `theme-color` is a single `#4a3bff`, so phone chrome stays purple in dark mode. | S | `frontend/index.html`, `public/manifest.webmanifest`, `index.css`, `pages/ProfilePage.tsx` |
+| 10 | Spacing and type are ad hoc: no spacing or type-scale tokens and many inline `style={{ margin… }}` literals. | M | `frontend/src/index.css`, most `pages/*.tsx` and `components/*.tsx` (migrate on touch) |
+| 11 | Touch targets below 44px remain: Words-tab controls (40px), range inputs (24px); small icon buttons need an audit. No automated size check. | S | `frontend/src/index.css`, `pages/VocabularyPage.tsx`, new check in `e2e/` |
+| 12 | RTL polish not audited against logical properties and icon mirroring (direction handling itself is solid). | M | `frontend/src/index.css`, `components/layout/NavIcon.tsx`, `NavBar.tsx`, `pages/LessonRunnerPage.tsx` |
+| 13 | No performance budget is measured: no Lighthouse/INP/CLS check in CI or `scripts/verify.sh`. | M | `e2e/`, `.github/workflows/ci.yml`, `scripts/verify.sh` |
