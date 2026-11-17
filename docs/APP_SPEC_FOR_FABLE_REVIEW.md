@@ -74,11 +74,17 @@ phase, reusing the same JSON API. Per-language-audience app variants
 (e.g. a Dari-focused build) are supported as build-config flavors of
 the same codebase, not separate forks.
 
-**Explicitly rejected scope** (don't re-propose without a strong new
-reason): hearts/lives, leagues/leaderboards, gems/currency, an
-elaborate mascot cast. Accepted instead: daily quests, one earned
-streak freeze, light recurring dialogue characters, and (new this
-session) an endless AI-assisted practice feed — see §6.
+**In scope: hearts, gems and the weekly leaderboard.** They were once
+listed here as rejected scope, but they shipped flag-gated (default-off
+in code) in PR #329, with follow-up work in PR #364, and have been
+enabled on the live server since 2026-11-17 (`docs/CONTRACT.md` →
+"Gamification"). The leaderboard has a per-user opt-out. The §9.2 polish
+rules apply to all three. Also accepted: daily quests, one earned streak
+freeze, light recurring dialogue characters, and an endless AI-assisted
+practice feed (§6).
+
+**Still rejected scope** (don't re-propose without a strong new
+reason): an elaborate mascot cast.
 
 ## 2. Content architecture (the actual hard part of this product)
 
@@ -329,11 +335,10 @@ Scope: the web/PWA frontend (`frontend/src/**`). All tokens live in
 `frontend/src/index.css` `:root`; no animation library is required (CSS
 `linear()` springs or hand-tuned `cubic-bezier` are enough).
 
-Note on §1: hearts, gems and the weekly leaderboard were listed there as
-rejected scope, but shipped flag-gated and default-off in PR #329
-(`docs/CONTRACT.md` → "Gamification"). Where they are switched on, the
-rules in §9.2 apply to them. Whether §1's list should be reworded is
-Ramin's call.
+Note on §1: hearts, gems and the weekly leaderboard are in scope. They
+shipped flag-gated in PR #329 (follow-up PR #364) and are enabled on the
+server since 2026-11-17 (`docs/CONTRACT.md` → "Gamification"). The rules
+in §9.2 apply to them wherever the flags are on.
 
 ### 9.1 Motion
 
