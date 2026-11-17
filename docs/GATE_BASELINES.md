@@ -54,6 +54,10 @@ Other gates at b4641f864 (shipped 2026-11-06, includes #179-#185, alembic 0037 F
 hindi-name, note-language checks 0; practice packs 0 errors; scripts/tests 224; vitest 508; backend pytest full suite pass; lint and build pass;
 `scripts/e2e.sh` 5 passed; `scripts/a11y_check.sh` 0 serious/critical axe violations. Leakage threshold is now <= 11.
 
+### WARN baseline 2026-11-16: 8300 (CI_WARN_MAX=8300)
+
+Measured 8220 at d956e8793 (was 6142 at 85f4a732d, +2078). No new WARN class and no authoring change: about 51 new course manifests (cross A2 pairs, ja/ko/zh cross packs, ar-pl and similar A1 pairs) re-validate and re-compile pre-existing shared realization files, so the same advisory lints are printed once more per new pair. Breakdown of all 8220 lines: matching_pairs below AUTHORING_GUIDE #16 aim 4434; vocabulary card has no example sentence / no example_gloss (#19, becomes an error at the schema 1.1 retrofit) 2626+336; media asset text does not match tested text 412 (en a1 unit18/19, nl a1 unit04, known); no example contains introduced_tokens (inflected forms) 238; order accepted_answers matching word_bank order (pl/ru free word order alternatives) 122; label-prefix in example 30; fill_in_blank candidates 8. Biggest files: fr/es a1 numbers and family (2400 lines), counted once per course pair. These are tooling/authoring advisories, not wrong answers or missing text. Baseline raised to 8300 (margin 80).
+
 ### WARN baseline 2026-11-15: 6142 (CI_WARN_MAX=6142)
 
 Measured per course (validate + compile, as verify.sh does): 5804 at decae0fd5 (live), 6140 at the 2026-11-15 ship = 5804 + 336. The +336 is entirely the 12 new X-en A1/B2 learner pairs (ar, de, es, fr, hi, it, ja, ko, pl, ro, ru, zh -> en); no pre-existing course changed, and the en-nl-a2, en-fr-a2, en-it-a2 etc. A2 courses add 0.
