@@ -76,8 +76,8 @@ the same codebase, not separate forks.
 
 **In scope: hearts, gems and the weekly leaderboard.** They were once
 listed here as rejected scope, but they shipped flag-gated (default-off
-in code) in PR #329, with follow-up work in PR #364, and have been
-enabled on the live server since 2026-11-17 (`docs/CONTRACT.md` →
+in code) in PR #329 and have been enabled on the live server since
+2026-11-17 (`docs/CONTRACT.md` →
 "Gamification"). The leaderboard has a per-user opt-out. The §9.2 polish
 rules apply to all three. Also accepted: daily quests, one earned streak
 freeze, light recurring dialogue characters, and an endless AI-assisted
@@ -336,8 +336,8 @@ Scope: the web/PWA frontend (`frontend/src/**`). All tokens live in
 `linear()` springs or hand-tuned `cubic-bezier` are enough).
 
 Note on §1: hearts, gems and the weekly leaderboard are in scope. They
-shipped flag-gated in PR #329 (follow-up PR #364) and are enabled on the
-server since 2026-11-17 (`docs/CONTRACT.md` → "Gamification"). The rules
+shipped flag-gated in PR #329 and are enabled on the server since
+2026-11-17 (`docs/CONTRACT.md` → "Gamification"). The rules
 in §9.2 apply to them wherever the flags are on.
 
 ### 9.1 Motion
