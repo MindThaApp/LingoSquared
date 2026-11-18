@@ -143,6 +143,26 @@ export function HomePage() {
           </button>
         </div>
       )}
+      <div className="card continue-card home-primary">
+        <div className="continue-info">
+          <h3>{inProgressLesson ? t("home.restart_title") : t("home.start_learning")}</h3>
+          <span className="muted">
+            {inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}
+          </span>
+        </div>
+        {inProgressLesson ? (
+          <Link
+            className="btn"
+            to={`/lessons/${inProgressLesson.lesson_id}`}
+          >
+            {t("home.restart")}
+          </Link>
+        ) : (
+          <Link className="btn" to={learnPath(user?.id)}>
+            {t("home.learn")}
+          </Link>
+        )}
+      </div>
       {streakAtRisk && (
         <div
           className="card continue-card"
@@ -235,7 +255,7 @@ export function HomePage() {
             {Boolean(streak?.streak_freezes_available) && (
               <Snowflake
                 size={16}
-                style={{ color: "var(--accent)", verticalAlign: -2, marginLeft: 4 }}
+                style={{ color: "var(--accent)", verticalAlign: -2, marginInlineStart: 4 }}
                 aria-label={t("home.streak_freeze_available")}
               />
             )}
@@ -333,32 +353,11 @@ export function HomePage() {
             <h3>{t("home.review_cta_title", { count: dueReviews })}</h3>
             <span className="muted">{t("home.review_cta_body")}</span>
           </div>
-          <Link className="btn" to="/review">
+          <Link className="btn btn-secondary" to="/review">
             {t("home.review")}
           </Link>
         </div>
       )}
-
-      <div className="card continue-card">
-        <div className="continue-info">
-          <h3>{inProgressLesson ? t("home.restart_title") : t("home.start_learning")}</h3>
-          <span className="muted">
-            {inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}
-          </span>
-        </div>
-        {inProgressLesson ? (
-          <Link
-            className={dueReviews ? "btn btn-secondary" : "btn"}
-            to={`/lessons/${inProgressLesson.lesson_id}`}
-          >
-            {t("home.restart")}
-          </Link>
-        ) : (
-          <Link className={dueReviews ? "btn btn-secondary" : "btn"} to={learnPath(user?.id)}>
-            {t("home.learn")}
-          </Link>
-        )}
-      </div>
 
       {user?.is_admin === true && (
       <div className="card continue-card">
