@@ -23,3 +23,10 @@ describe("answerBody self-grade and latency", () => {
     expect(answerBody("known")).toEqual({ response: "known" });
   });
 });
+
+describe("answerBody client_operation_id", () => {
+  it("adds client_operation_id only when provided", () => {
+    expect(answerBody("eet", { clientOperationId: "op-1" })).toEqual({ response: "eet", client_operation_id: "op-1" });
+    expect("client_operation_id" in answerBody("eet")).toBe(false);
+  });
+});

@@ -210,6 +210,7 @@ export function ConversationRunner({
               aria-label={t("practice.conversation_reply_placeholder")}
               lang={answerLang}
               dir={dir}
+              enterKeyHint="done"
               {...inputProps}
             />
           </div>
