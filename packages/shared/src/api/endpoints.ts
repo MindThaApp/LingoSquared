@@ -206,6 +206,7 @@ export function answerBody(response: AnswerResponse, meta?: AnswerMeta) {
     ...(meta?.inputMode ? { input_mode: meta.inputMode } : {}),
     ...(meta?.selfGrade ? { self_grade: meta.selfGrade } : {}),
     ...(meta?.latencyMs !== undefined ? { latency_ms: Math.round(meta.latencyMs) } : {}),
+    ...(meta?.clientOperationId ? { client_operation_id: meta.clientOperationId } : {}),
   };
 }
 
