@@ -171,3 +171,26 @@ describe("LessonRunnerPage finish", () => {
     await waitFor(() => expect(cont).toHaveFocus());
   });
 });
+
+describe("LessonRunnerPage answer client_operation_id", () => {
+  it("sends a UUID per attempt and reuses it on Retry", async () => {
+    mocked.answer.mockRejectedValueOnce(new Error("net"));
+    renderPage();
+    fireEvent.click(await screen.findByText("answer-btn"));
+    fireEvent.click(await screen.findByText("common.retry"));
+    await screen.findByText("lesson_runner.continue");
+    expect(mocked.answer).toHaveBeenCalledTimes(2);
+    const first = mocked.answer.mock.calls[0][2]?.clientOperationId;
+    const second = mocked.answer.mock.calls[1][2]?.clientOperationId;
+    expect(first).toBeTruthy();
+    expect(second).toBe(first);
+  });
+
+  it("exposes the lesson bar as a labelled progressbar", async () => {
+    renderPage();
+    const bar = await screen.findByRole("progressbar");
+    expect(bar).toHaveAttribute("aria-valuemin", "0");
+    expect(bar).toHaveAttribute("aria-valuemax", "100");
+    expect(bar).toHaveAttribute("aria-valuenow");
+  });
+});

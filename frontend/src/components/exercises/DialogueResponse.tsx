@@ -62,6 +62,7 @@ export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, le
               aria-label={t("exercise.type_your_reply")}
               lang={exercise.prompt.answer_language_code}
               dir={scriptDirection(script)}
+              enterKeyHint="done"
               {...inputProps}
             />
           </div>

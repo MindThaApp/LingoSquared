@@ -79,6 +79,13 @@ const ANSWER_MARK = "\uE000";
 
 // Where "back" goes: navigate(-1) only when there is in-app history to go
 // back to; a deep-linked / refreshed runner has history.state.idx === 0.
+function newOperationId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
 function canGoBackInApp(): boolean {
   const idx = (window.history.state as { idx?: unknown } | null)?.idx;
   return typeof idx === "number" && idx > 0;
@@ -135,6 +142,9 @@ function LessonRunnerContent() {
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [lastSpoken, setLastSpoken] = useState(false);
+  // client_operation_id of the in-flight/last lesson answer attempt: a fresh
+  // UUID per attempt, reused by Retry so the server dedupes a double-send.
+  const lastOpIdRef = useRef<string | null>(null);
   const [reviewResponse, setReviewResponse] = useState<AnswerResponse | undefined>();
   const [reviewSpoken, setReviewSpoken] = useState(false);
   const [totalXp, setTotalXp] = useState(0);
@@ -281,14 +291,22 @@ function LessonRunnerContent() {
     setReviewIndex((i) => i + 1);
   }
 
-  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
+  async function handleAnswer(
+    response: AnswerResponse,
+    meta?: { inputMode?: "spoken" },
+    opts?: { reuseOperationId?: boolean },
+  ) {
     if (!current) return;
+    if (!opts?.reuseOperationId || !lastOpIdRef.current) {
+      lastOpIdRef.current = newOperationId();
+    }
+    const clientOperationId = lastOpIdRef.current;
     setSubmitting(true);
     setLastResponse(response);
     setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
-      const res = await LessonApi.answer(current.exercise.id, response, meta);
+      const res = await LessonApi.answer(current.exercise.id, response, { ...meta, clientOperationId });
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
       void queryClient.invalidateQueries({ queryKey: GAMIFICATION_KEY });
@@ -309,7 +327,7 @@ function LessonRunnerContent() {
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined, { reuseOperationId: true });
   }
 
   async function finishLesson() {
@@ -730,7 +748,15 @@ function LessonRunnerContent() {
               <ChevronLeft size={18} aria-hidden="true" />
             </button>
           )}
-          <div className="progress-track" style={{ flex: 1 }}>
+          <div
+            className="progress-track"
+            style={{ flex: 1 }}
+            role="progressbar"
+            aria-label={t("lesson_runner.progress_label", { defaultValue: "Lesson progress" })}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pct)}
+          >
             <div className="progress-fill" style={{ width: `${pct}%` }} />
           </div>
           <TranslitToggle />
@@ -794,7 +820,15 @@ function LessonRunnerContent() {
             <ChevronLeft size={18} aria-hidden="true" />
           </button>
         )}
-        <div className="progress-track" style={{ flex: 1 }}>
+        <div
+          className="progress-track"
+          style={{ flex: 1 }}
+          role="progressbar"
+          aria-label={t("lesson_runner.progress_label", { defaultValue: "Lesson progress" })}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(Math.min(100, Math.max(0, pct)))}
+        >
           <div className="progress-fill" style={{ width: `${Math.min(100, Math.max(0, pct))}%` }} />
         </div>
         <HeartsBadge />
