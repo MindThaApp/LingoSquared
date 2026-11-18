@@ -185,6 +185,8 @@ export interface AnswerMeta {
   selfGrade?: SelfGrade;
   /** Milliseconds from showing the item to answering it. */
   latencyMs?: number;
+  /** One UUID per answer attempt, reused when the same attempt is retried. */
+  clientOperationId?: string;
 }
 
 // Phase C (docs/CONTRACT.md): "almost" means a free-text answer was within

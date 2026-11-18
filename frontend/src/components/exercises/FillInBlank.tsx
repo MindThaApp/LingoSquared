@@ -34,6 +34,7 @@ export function FillInBlank({ exercise, onAnswer, disabled }: ExerciseComponentP
           aria-label={t("exercise.fill_in_blank_placeholder")}
           lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
+          enterKeyHint="done"
           {...inputProps}
         />
       </div>
