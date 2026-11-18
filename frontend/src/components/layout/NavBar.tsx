@@ -1,6 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Flame, Gem, Star } from "lucide-react";
 import { useAuth } from "../../auth/AuthContext";
 import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
@@ -60,7 +61,7 @@ export function NavBar() {
               role="img"
               aria-label={`${t("nav.day_streak")}: ${streak}`}
             >
-              🔥 {streak}
+              <Flame size={16} aria-hidden="true" /> {streak}
             </span>
           )}
           {xp !== null && (
@@ -70,7 +71,7 @@ export function NavBar() {
               role="img"
               aria-label={`${t("nav.total_xp")}: ${xp}`}
             >
-              ⭐ {xp}
+              <Star size={16} aria-hidden="true" /> {xp}
             </span>
           )}
           {gamification?.gems.enabled && (
@@ -80,7 +81,7 @@ export function NavBar() {
               role="img"
               aria-label={t("gamification.gems_label", { count: gamification.gems.balance })}
             >
-              💎 {gamification.gems.balance}
+              <Gem size={16} aria-hidden="true" /> {gamification.gems.balance}
             </span>
           )}
           <LanguageSwitcher />
