@@ -6,6 +6,7 @@
 // behavior (persist + apply direction on every language change, including
 // the very first load) on top of the shared init function.
 import { initI18n, RTL_LANGUAGES } from "@lingo/shared/i18n";
+import { detectUiLanguage } from "./detectLocale";
 
 const STORAGE_KEY = "ui-language";
 
@@ -14,7 +15,11 @@ function applyDocumentDirection(language: string) {
   document.documentElement.lang = language;
 }
 
-const storedLanguage = localStorage.getItem(STORAGE_KEY) ?? "en";
+// An explicit stored choice always wins; only a first run (nothing stored)
+// falls back to the browser locale.
+const storedLanguage =
+  localStorage.getItem(STORAGE_KEY) ??
+  detectUiLanguage(typeof navigator === "undefined" ? undefined : navigator.languages);
 
 const i18n = initI18n({
   language: storedLanguage,

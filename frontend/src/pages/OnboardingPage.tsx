@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { useAuth } from "../auth/AuthContext";
 import { CoursePickerPage } from "./CoursePickerPage";
 import { DailyGoalPicker } from "../components/DailyGoalPicker";
@@ -39,6 +40,28 @@ export function OnboardingPage() {
     if (!courseId) return;
     update({ ...state, status: "done", stage: "start" });
     navigate(path(courseId), { replace: true });
+  }
+
+  // "Start from the beginning" lands on the first lesson of the first unit
+  // (read-only catalog lookups); any failure falls back to the course map.
+  async function startFirstLesson() {
+    const id = state.courseId;
+    if (!id) return;
+    setLevelPreference(id, "beginner");
+    let target = `/courses/${id}`;
+    let navState: { courseId: string } | undefined;
+    try {
+      const units = await CatalogApi.units(id);
+      const lessons = units[0] ? await CatalogApi.lessons(units[0].id) : [];
+      if (lessons[0]) {
+        target = `/lessons/${lessons[0].id}`;
+        navState = { courseId: id };
+      }
+    } catch {
+      /* fall back to the course map */
+    }
+    update({ ...state, status: "done", stage: "start" });
+    navigate(target, { replace: true, state: navState });
   }
 
   const stepNumber = STAGES.indexOf(state.stage) + 1;
@@ -105,10 +128,7 @@ export function OnboardingPage() {
             type="button"
             className="card continue-card"
             style={{ width: "100%", textAlign: "start", font: "inherit", color: "inherit", cursor: "pointer", marginTop: 12 }}
-            onClick={() => {
-              if (courseId) setLevelPreference(courseId, "beginner");
-              finish((id) => `/courses/${id}`);
-            }}
+            onClick={() => void startFirstLesson()}
           >
             <div className="continue-info">
               <h3 style={{ margin: "0 0 4px" }}>{t("onboarding.beginning_title")}</h3>

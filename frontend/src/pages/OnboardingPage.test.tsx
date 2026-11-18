@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { OnboardingPage } from "./OnboardingPage";
 import { getOnboarding, setOnboarding } from "../lib/onboarding";
@@ -16,6 +16,11 @@ vi.mock("./CoursePickerPage", () => ({
     <button onClick={() => onPickCourse({ id: "c1" })}>pick</button>
   ),
 }));
+const units = vi.fn();
+const lessons = vi.fn();
+vi.mock("@lingo/shared/api/endpoints", () => ({
+  CatalogApi: { units: (...a: unknown[]) => units(...a), lessons: (...a: unknown[]) => lessons(...a) },
+}));
 vi.mock("../components/DailyGoalPicker", () => ({ DailyGoalPicker: () => <div>goal-picker</div> }));
 
 function renderAt() {
@@ -24,6 +29,7 @@ function renderAt() {
       <Routes>
         <Route path="/welcome" element={<OnboardingPage />} />
         <Route path="/" element={<div>home</div>} />
+        <Route path="/lessons/:id" element={<div>first-lesson</div>} />
         <Route path="/courses/:id" element={<div>units</div>} />
         <Route path="/courses/:id/placement" element={<div>placement</div>} />
       </Routes>
@@ -31,18 +37,33 @@ function renderAt() {
   );
 }
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  units.mockReset();
+  lessons.mockReset();
+  units.mockResolvedValue([{ id: "u1" }]);
+  lessons.mockResolvedValue([{ id: "l1" }]);
+});
 
 describe("OnboardingPage", () => {
-  it("walks course -> goal -> start from the beginning", () => {
+  it("walks course -> goal -> start from the beginning", async () => {
     renderAt();
     fireEvent.click(screen.getByText("pick"));
     expect(getActiveCourse("u1")).toBe("c1");
     expect(screen.getByText("goal-picker")).toBeInTheDocument();
     fireEvent.click(screen.getByText("onboarding.continue"));
     fireEvent.click(screen.getByText("onboarding.beginning_title"));
-    expect(screen.getByText("units")).toBeInTheDocument();
+    expect(await screen.findByText("first-lesson")).toBeInTheDocument();
     expect(getLevelPreference("c1")).toBe("beginner");
+    expect(getOnboarding("u1").status).toBe("done");
+  });
+
+  it("falls back to the course map when the catalog lookup fails", async () => {
+    units.mockRejectedValue(new Error("down"));
+    setOnboarding("u1", { status: "active", stage: "start", courseId: "c1" });
+    renderAt();
+    fireEvent.click(screen.getByText("onboarding.beginning_title"));
+    await waitFor(() => expect(screen.getByText("units")).toBeInTheDocument());
     expect(getOnboarding("u1").status).toBe("done");
   });
 
