@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Construction, Lock } from "lucide-react";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { sortByCefr } from "@lingo/shared/lib/cefr";
-import { LANGUAGE_FLAG } from "@lingo/shared/lib/flags";
 import { localizedLanguageName } from "@lingo/shared/lib/localizedLanguageName";
 import { pickerTargetLanguages, sortLanguagesByLocalizedName } from "../lib/languageSort";
 import { getLevelPreference } from "../lib/levelPreferences";
@@ -94,15 +94,15 @@ function LangTile({
     >
       {availability === "in_progress" && (
         <span className="lang-tile-ribbon lang-tile-ribbon--progress">
-          🚧 {t("course_picker.in_progress")}
+          <Construction size={14} aria-hidden="true" /> {t("course_picker.in_progress")}
         </span>
       )}
       {availability === "unavailable" && (
         <span className="lang-tile-ribbon lang-tile-ribbon--locked">
-          🔒 {t("course_picker.coming_soon")}
+          <Lock size={14} aria-hidden="true" /> {t("course_picker.coming_soon")}
         </span>
       )}
-      <span className="lang-flag">{LANGUAGE_FLAG[lang.code] ?? "🌐"}</span>
+      <span className="lang-flag lang-code" aria-hidden="true">{lang.code.toUpperCase()}</span>
       <span className="lang-name">{localizedLanguageName(lang.code, t, lang.name)}</span>
       <span className="lang-native" dir={lang.direction}>
         {lang.native_name}
@@ -256,7 +256,7 @@ export function CoursePickerPage({ onPickCourse }: { onPickCourse?: (course: Cou
           <UiLanguagePrompt sourceCode={source} />
           <h1>{t("course_picker.learn_heading")}</h1>
           <p className="muted">
-            {t("course_picker.you_speak")} {LANGUAGE_FLAG[source]}{" "}
+            {t("course_picker.you_speak")}{" "}
             {localizedLanguageName(source, t, languages.find((l) => l.code === source)?.name)}{" "}
             <button
               className="btn btn-secondary"
@@ -286,7 +286,6 @@ export function CoursePickerPage({ onPickCourse }: { onPickCourse?: (course: Cou
           <UiLanguagePrompt sourceCode={source} />
           <h1>
             {t("course_picker.courses_heading", {
-              flag: LANGUAGE_FLAG[target],
               name: localizedLanguageName(target, t, languages.find((l) => l.code === target)?.name),
             })}
           </h1>
