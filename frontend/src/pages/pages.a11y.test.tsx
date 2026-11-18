@@ -201,7 +201,7 @@ describe("learner-flow pages have no serious/critical axe violations", { timeout
 
   it("app shell / nav", async () => {
     const { container } = wrap(<Shell><div /></Shell>);
-    await screen.findByText(/🔥 4/);
+    await screen.findByLabelText(/: 4$/);
     await expectNoSeriousA11yViolations(container);
   });
 
