@@ -72,7 +72,11 @@ for (const type of ["translation", "writing_prompt"] as const) {
     const req = await answerRequest;
     // Answer-payload contract: the same trimmed, space-joined string typing
     // would send, and no input_mode for a tapped (non-spoken) answer.
-    expect(req.postDataJSON()).toEqual({ response: ANSWER });
+    // client_operation_id is a per-attempt UUID (idempotency key), not part of the grading payload.
+    expect(req.postDataJSON()).toEqual({
+      response: ANSWER,
+      client_operation_id: expect.stringMatching(/^[A-Za-z0-9-]{8,36}$/),
+    });
 
     await expect(page.getByRole("status").filter({ hasText: "Correct!" })).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
