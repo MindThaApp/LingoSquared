@@ -57,6 +57,7 @@ export function Translation({ exercise, onAnswer, disabled, courseLevel, lessonE
               aria-label={t("exercise.translation_placeholder")}
               lang={exercise.prompt.answer_language_code}
               dir={scriptDirection(script)}
+              enterKeyHint="done"
               {...inputProps}
             />
           </div>

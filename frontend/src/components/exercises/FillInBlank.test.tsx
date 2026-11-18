@@ -48,3 +48,15 @@ describe("FillInBlank answer payload", () => {
     expect(onAnswer.mock.calls[0][0]).toBe("uit");
   });
 });
+
+describe("FillInBlank answer field attributes", () => {
+  it("turns off autocorrect, autocapitalize, autocomplete and spellcheck", () => {
+    render(<FillInBlank exercise={exercise} onAnswer={() => {}} disabled={false} />);
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("autocapitalize", "off");
+    expect(input).toHaveAttribute("autocorrect", "off");
+    expect(input).toHaveAttribute("autocomplete", "off");
+    expect(input).toHaveAttribute("spellcheck", "false");
+    expect(input).toHaveAttribute("enterkeyhint", "done");
+  });
+});
