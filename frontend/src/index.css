@@ -25,6 +25,40 @@
 }
 
 :root {
+  /* Global design tokens (spacing, type, radius, motion). New and migrated
+     styles should use these instead of literals. Motion collapses to ~0 under
+     prefers-reduced-motion (see the media query after this block). */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0.01ms;
+    --motion-base: 0.01ms;
+    --motion-slow: 0.01ms;
+  }
+}
+
+:root {
   --bg: #f7f7fb;
   --surface: #ffffff;
   --surface-2: #f0f0f6;
@@ -722,6 +756,19 @@ button {
 .lang-tile:disabled:not(.lang-tile--unavailable):hover { transform: none; }
 
 .lang-tile .lang-flag { font-size: 2rem; line-height: 1; }
+/* Text code badge instead of a flag emoji (flag emoji render as bare letters on Windows). */
+.lang-tile .lang-code {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  display: inline-block;
+}
+.lang-tile-ribbon svg { vertical-align: -2px; }
+.home-primary { margin-bottom: var(--space-3); }
 .lang-tile .lang-name { font-weight: 700; color: var(--text-h); }
 .lang-tile .lang-native { font-size: 0.85rem; color: var(--text-soft); }
 
@@ -1933,3 +1980,5 @@ li a:not(.btn),
 }
 .beta-badge--tile { margin-top: 4px; }
 .beta-note { font-size: 0.9rem; margin: 8px 0 12px; }
+
+.topbar-stats svg { vertical-align: -3px; }

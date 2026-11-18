@@ -18,7 +18,7 @@ async function register(page: Page, email: string, password = PASSWORD): Promise
   await page.waitForURL(/\/welcome/);
 }
 
-/** Guided first start (English UI): pick the pair + course, default goal, start from the beginning. */
+/** Guided first start (English UI): pick the pair + course, default goal, start from the beginning; lands on the first lesson. */
 async function onboard(page: Page, speak: RegExp, learn: RegExp, title: string): Promise<void> {
   await page.getByRole("button", { name: speak }).first().click();
   await page.getByRole("button", { name: learn }).first().click();
@@ -27,14 +27,7 @@ async function onboard(page: Page, speak: RegExp, learn: RegExp, title: string):
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(page.getByText("Step 3 of 3")).toBeVisible();
   await page.getByText("Start from the beginning").click();
-  await page.waitForURL(/\/courses\/[^/]+$/);
-}
-
-/** From the course map: first unit, first lesson. */
-async function openFirstLesson(page: Page): Promise<void> {
-  await page.locator(".path-bubble").first().click();
-  await page.waitForURL(/\/units\/[^/]+$/);
-  await page.locator(".continue-card").first().click();
+  // Onboarding now ends directly on the first lesson.
   await page.waitForURL(/\/lessons\/[^/]+$/);
 }
 
@@ -49,7 +42,6 @@ test("sign up, onboarding, first lesson (wrong then right), completion, XP and r
 
   // Onboarding: learner language, target language, course, daily goal, start from the beginning.
   await onboard(page, /English/, /Persian/, "Farsi Foundations");
-  await openFirstLesson(page);
   const { wrongAnswers } = await runLesson(page, FARSI_L1, { wrongFirst: true });
   expect(wrongAnswers).toBe(1);
 
@@ -106,12 +98,15 @@ test("RTL: Farsi UI and Farsi course render the page and lesson text right-to-le
   await stubExternals(page);
   await register(page, freshEmail("e2e-rtl"));
   await onboard(page, /English/, /Persian/, "Farsi Foundations");
+  const lessonUrl = page.url();
+  // The runner has no nav bar: switch the UI language from Home, then return to the lesson.
+  await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await page.getByLabel("Interface language").selectOption("fa");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("html")).toHaveAttribute("lang", "fa");
 
-  await openFirstLesson(page);
+  await page.goto(lessonUrl);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 
   // Teaching card: the Farsi text block is rtl, its English gloss stays ltr.
@@ -140,7 +135,6 @@ test("cross pair de-ar: German learner sees German instructions and an RTL Arabi
   await stubExternals(page);
   await register(page, freshEmail("e2e-dear"));
   await onboard(page, /German|Deutsch/, /Arabic|العربية/, "Arabisch Grundlagen");
-  await openFirstLesson(page);
 
   // Teaching card: German gloss is ltr, Arabic is rtl.
   await expect(page.locator('.text-block[lang="de"]').first()).toHaveAttribute("dir", "ltr");
