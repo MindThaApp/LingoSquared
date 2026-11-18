@@ -89,6 +89,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           aria-label={t("exercise.grammar_check_placeholder")}
           lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
+          enterKeyHint="done"
           {...inputProps}
         />
       </div>

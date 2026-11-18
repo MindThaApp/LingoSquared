@@ -90,6 +90,12 @@ export function useKeyboardFocus<T extends TextEl = HTMLInputElement>(opts?: {
     inputRef,
     inputProps: {
       ref: inputRef,
+      // Answer fields: the OS must never "fix" a learner's attempt (auto-
+      // correct/capitalise/suggest) - that corrupts what is being graded.
+      autoCapitalize: "off" as const,
+      autoCorrect: "off" as const,
+      autoComplete: "off" as const,
+      spellCheck: false,
       inputMode: virtualActive ? ("none" as const) : undefined,
       onFocus: () => {
         setFocused(true);

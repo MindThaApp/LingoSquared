@@ -47,6 +47,7 @@ export function SpeakRepeat({ exercise, onAnswer, disabled }: ExerciseComponentP
           aria-label={t("exercise.speak_repeat_type_placeholder")}
           lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
+          enterKeyHint="done"
           {...inputProps}
         />
       </div>
