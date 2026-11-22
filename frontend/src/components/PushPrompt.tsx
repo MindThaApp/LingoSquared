@@ -53,7 +53,7 @@ export function PushPrompt() {
   return (
     <div className="card" style={{ marginBottom: 12 }}>
       <h3 style={{ marginTop: 0 }}>
-        <Bell size={16} style={{ verticalAlign: -2, marginRight: 6 }} />
+        <Bell size={16} style={{ verticalAlign: -2, marginInlineEnd: 6 }} />
         {t("push.prompt_title")}
       </h3>
       <p className="muted" style={{ marginTop: 0 }}>
