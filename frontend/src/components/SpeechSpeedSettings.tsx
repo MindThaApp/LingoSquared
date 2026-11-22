@@ -51,7 +51,7 @@ function LanguageSpeedRow({
         style={{ flex: 1 }}
         aria-label={t("speech_speed_settings.slider_label", { language: displayName })}
       />
-      <span className="muted" style={{ minWidth: 44, textAlign: "right" }}>
+      <span className="muted" style={{ minWidth: 44, textAlign: "end" }}>
         {Math.round(speed * 100)}%
       </span>
       {speed !== DEFAULT_SPEED && (
