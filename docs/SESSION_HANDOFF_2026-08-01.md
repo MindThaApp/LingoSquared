@@ -5,7 +5,7 @@
 Prereqs are DONE this session: **bun 1.3.14 installed**, **Full Disk Access granted**
 to Terminal (verified: chat.db opens). iMessage is allowlisted to **+447768619958**
 + self-chat. Telegram: **token saved + pre-authorized** (`~/.claude/channels/telegram/.env`; access.json
-policy=allowlist, allowFrom=[5308925725] = Ramin). No pairing — just DM the bot after relaunch.
+policy=allowlist, allowFrom=[5308925725] = the owner). No pairing — just DM the bot after relaunch.
 A new-terminal `claude` auto-adds both channels via a `~/.zshrc` wrapper function.
 
 Relaunch a NEW session with the channel flag (a channel'd session is a FRESH session —
@@ -25,7 +25,7 @@ prompt → OK). Telegram: after saving the token, DM the bot, then `/telegram:ac
 
 ## Git state
 - Branch: `fix/launch-gate-content-review-wave1`. **NO upstream — nothing pushed.**
-  Do NOT push/merge/deploy without an explicit ask from Ramin.
+  Do NOT push/merge/deploy without an explicit ask from the owner.
 - **10 commits this session** (b7455e99..443bd21b), all content-compile-verified
   (`verify.sh --content-only` = `content: pass`, 0 errors). Tree clean apart from
   pre-existing untracked (`frontend/.env.faqa`, `.pyc`, repo `settings.json`).
@@ -54,9 +54,9 @@ prompt → OK). Telegram: after saving the token, DM the bot, then `/telegram:ac
   fa/prs graded EXACT; latin distance-1; MCQ/option types punctuation-sensitive; `case_sensitive` flag).
   This decides what is a real content defect.
 
-## NEXT — priority order (all detail in `docs/RAMIN_REVIEW_BACKLOG.md`, 2026-08-01 sections)
+## NEXT — priority order (all detail in `docs/OWNER_REVIEW_BACKLOG.md`, 2026-08-01 sections)
 
-1. **fa-en + prs-en a2_unit35-40 (12 checkpoints) — BLOCKED ON RAMIN (native).** Their backfills
+1. **fa-en + prs-en a2_unit35-40 (12 checkpoints) — BLOCKED ON OWNER (native).** Their backfills
    (`backfill_lexemes_{fa,prs}_en.py`) stop at unit34 and need **native Farsi/Dari lexeme glosses**
    for units 35-40 (a wrong gloss ships as the shown answer). Once glossed → author 12 packs (6 per
    direction) exactly like the nl-en wave, register in `practice_manifest.txt`, compile.

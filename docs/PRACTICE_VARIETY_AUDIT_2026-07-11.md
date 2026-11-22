@@ -1,12 +1,12 @@
 # Endless Practice variety audit — 2026-07-11
 
-Prompted by Ramin's report that Endless Practice used to feel "full of
+Prompted by the owner's report that Endless Practice used to feel "full of
 repeated words or slight variations of the same words repeated non
 stop." This audit measures the **actual** learner-perceived variety of
 the generated feed for all six launch directions, against a hard
 learner-experience bar, and diagnoses the one real weakness it found.
 
-**Bottom line:** the thing Ramin complained about — the *same word*
+**Bottom line:** the thing the owner complained about — the *same word*
 cycling back over and over — is **not happening**. Lexeme-level
 repetition is well controlled in every direction (no word appears more
 than 4× in 60 items, never 3× in a row, ≥20 distinct words in the first
@@ -39,7 +39,7 @@ pool-size-sensitive:
 
 - **SMALL** — 2 units completed (~6–12 lessons), SRS pool 54–286
   lexemes. This is the early-learner regime where repetition is most
-  likely — and the regime Ramin was almost certainly in when he
+  likely — and the regime the owner was almost certainly in when he
   noticed the problem.
 - **BIG** — 8 units completed, SRS pool 195–607 lexemes. A learner a
   couple of weeks in.

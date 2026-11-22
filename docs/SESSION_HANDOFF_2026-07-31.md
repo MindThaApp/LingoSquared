@@ -2,7 +2,7 @@
 
 ## Git state
 - Branch: `fix/launch-gate-content-review-wave1` (NO upstream — nothing pushed).
-- 6 commits ahead of `7fcea523`. **Do NOT push/merge/deploy without an explicit ask from Ramin.**
+- 6 commits ahead of `7fcea523`. **Do NOT push/merge/deploy without an explicit ask from the owner.**
 - Only pre-existing untracked/modified files remain in `git status` (a .pyc, repo `.claude/settings.json`, some docker-compose/env files) — none of them mine.
 
 ## What landed this session (all local commits)
@@ -31,9 +31,9 @@ ANSWER + GLOSS correctness), ~400+ packs never agent-reviewed (I hit the 200-age
    Prefer fewer/larger agents (~15 files each) — per-agent overhead is real.
 2. **59 full-turn role-play instructions** — `docs/NATIVE_REVIEW_full_turn_instructions_2026-07-31.md`.
    fa-en/prs-en instructions under-specify the 3-turn answer → partial answers graded wrong.
-   NATIVE-RESERVED (Farsi/Dari authoring) — do NOT author; confirm with Ramin or leave queued.
+   NATIVE-RESERVED (Farsi/Dari authoring) — do NOT author; confirm with the owner or leave queued.
 3. **German a1 capitalization** — free-text grading casefolds, so lowercase German nouns / "sie"
-   for "Sie" pass. DESIGN DECISION for Ramin (opt de exercises into case_sensitive?), not a clear bug.
+   for "Sie" pass. DESIGN DECISION for the owner (opt de exercises into case_sensitive?), not a clear bug.
 
 ## Hard constraints (unchanged)
 - Never push/merge/deploy without an explicit ask. Dev-DB/deploy owner-reserved.
@@ -44,7 +44,7 @@ ANSWER + GLOSS correctness), ~400+ packs never agent-reviewed (I hit the 200-age
   accepted_answers; MCQ casefolds; overlay cks live under `ov["exercises"]`; etc.).
 
 ## Pointers
-- Queue/details: bottom of `docs/RAMIN_REVIEW_BACKLOG.md` (2026-07-31 section).
+- Queue/details: bottom of `docs/OWNER_REVIEW_BACKLOG.md` (2026-07-31 section).
 - Native list: `docs/NATIVE_REVIEW_full_turn_instructions_2026-07-31.md`.
 - Validate: `.content-venv/bin/python -m pytest scripts/tests/test_compile_content.py -q` (fast unit)
   and `bash scripts/verify.sh` (full chained content stage; ~5 min; backend/frontend stages will

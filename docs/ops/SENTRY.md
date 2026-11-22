@@ -13,7 +13,7 @@ An empty DSN means Sentry is off. Change `ENVIRONMENT` to something other than `
 1. Backend: confirm the variable reached the container without printing it: `docker compose exec -T api python -c "import os;print(bool(os.environ.get('SENTRY_DSN')))"` prints `True`. Then raise one controlled test error from a shell inside the api container using `sentry_sdk.capture_message("launch check")` after the app's Sentry init in `backend/app/core/sentry.py`, and look in the `lingosquared-backend` project (or ask the Sentry MCP `search_issues`). Check the event has no email, IP, cookies or auth header (the `before_send` scrubber).
 2. Web: open the built app, Profile, set "Crash reports" to Always send, and use "Report a problem". The feedback item should appear in `lingosquared-web` within a minute with route, release and environment tags. Then reset the setting.
 3. Releases: events show the expected `release` (sha). If source maps were uploaded, stack frames show original file names.
-4. Alerts: add an issue alert (new issue in production, mail to Ramin) so errors are noticed. A Sentry cron monitor can also watch the nightly backup.
+4. Alerts: add an issue alert (new issue in production, mail to the owner) so errors are noticed. A Sentry cron monitor can also watch the nightly backup.
 5. Leave tests alone: tests never set a DSN, so no test can send events.
 
 Rotating the DSN is in `docs/ops/KEY_ROTATION.md`.

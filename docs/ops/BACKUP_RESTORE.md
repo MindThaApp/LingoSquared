@@ -1,6 +1,6 @@
 # Database backup and restore
 
-Scripts: `scripts/ops/backup_db.sh` and `scripts/ops/restore_db.sh`. Nothing here is installed on the server; Ramin approves that separately. (The older `scripts/backup_db.sh` and `scripts/install_backup_cron.sh` are unchanged and separate; do not run both schedules.)
+Scripts: `scripts/ops/backup_db.sh` and `scripts/ops/restore_db.sh`. Nothing here is installed on the server; the owner approves that separately. (The older `scripts/backup_db.sh` and `scripts/install_backup_cron.sh` are unchanged and separate; do not run both schedules.)
 
 ## Backup
 
@@ -34,6 +34,6 @@ The drill never touches the live database. It restores into a new scratch databa
 Disk needed is roughly the size of the database again while the scratch copy exists.
 
 ## Disaster recovery (live database lost or corrupt)
-Only with Ramin's go-ahead. Stop the API (`docker compose stop api`), then
+Only with the owner's go-ahead. Stop the API (`docker compose stop api`), then
 `scripts/ops/restore_db.sh <dump> --overwrite-live --confirm-live lingosquared`.
 The script takes a safety backup first, refuses while other connections are open, renames the current live DB to `lingosquared_pre_restore_<stamp>` (nothing is dropped), creates a fresh DB and restores into it. Start the API, check `/health/ready`, and drop the renamed database by hand later. Anything written after the dump's timestamp is lost, so restore the newest good dump.

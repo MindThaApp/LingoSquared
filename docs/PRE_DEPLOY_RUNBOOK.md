@@ -8,7 +8,7 @@ flagged this scatter as the largest unaddressed risk in the repo).
 `CLAUDE.md`'s "Deploying a backend change" section has the quick-
 reference command skeleton; this file is the full checklist around it
 — pre-flight checks, required env vars, ordered steps, and post-deploy
-verification. Standing rule, unchanged: **deploys happen with Ramin
+verification. Standing rule, unchanged: **deploys happen with the owner
 present, never unattended.**
 
 ## FIRST: set `$LINGO_REPO` (every command below depends on it)
@@ -120,17 +120,17 @@ the live server.
 
 5. **Confirm no other session is mid-deploy.** Check for an
    in-progress `git worktree`/uncommitted changes on your own working
-   tree, and ask Ramin directly if any other Claude/Codex instance
+   tree, and ask the owner directly if any other Claude/Codex instance
    might be touching the live server right now — this project runs up
    to 3 parallel sessions, and the standing rule is deploys happen
-   with Ramin present specifically to avoid two people deploying at
+   with the owner present specifically to avoid two people deploying at
    once.
 
 ## Required environment variables (set/confirm before deploy)
 
 Pull the current live `.env` (step 4 above) and reconcile against this
 list before running anything. Do not guess values — anything marked
-"needs Ramin" is a real decision, not something to fill in
+"needs the owner" is a real decision, not something to fill in
 unilaterally.
 
 | Variable | Current live state (last confirmed) | What it needs to be |
@@ -139,9 +139,9 @@ unilaterally.
 | `APP_ENV` | check | `production` on the server. Anything other than dev/development/test is production-like, and then the app **refuses to start** if `JWT_SECRET` is under 32 characters or a placeholder, or the `DATABASE_URL` password is `change-me`. Set a real secret before flipping it (`openssl rand -hex 32`; this invalidates sessions). |
 | `SENTRY_DSN` | optional | Crash reporting; empty means off (WARN only). See `docs/SENTRY.md`. |
 | `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. **If deploying the LAN web bundle (see "Frontend (LAN web)" section below), must also include `http://192.168.4.4:8011`.** |
-| `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs Ramin to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
+| `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs the owner to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
 | `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `CLAUDE.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
-| `JWT_SECRET` | presumably already set from original setup | Confirm it's a real random secret, not the `.env.example` placeholder (`replace-with-a-long-random-secret`) — never regenerate it on a running deploy without warning Ramin first (invalidates every existing session token). |
+| `JWT_SECRET` | presumably already set from original setup | Confirm it's a real random secret, not the `.env.example` placeholder (`replace-with-a-long-random-secret`) — never regenerate it on a running deploy without warning the owner first (invalidates every existing session token). |
 | `POSTGRES_PASSWORD` / `DATABASE_URL` | presumably already set | Confirm they're real values, not `.env.example` placeholders, and that `DATABASE_URL` actually matches `POSTGRES_PASSWORD`. |
 
 ## Ordered deploy steps
@@ -233,17 +233,17 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run
 #    BEFORE this step, see "Required environment variables" above).
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"
 
-# 6. Register Ramin's real admin account, promote it
+# 6. Register the owner's real admin account, promote it
 #    (`docker compose run --rm api python -m app.scripts.promote_admin <email>`;
 #    registration never grants admin) and log in to get a bearer token for every
 #    admin call below:
 curl -X POST http://192.168.4.4:8010/auth/register -H "Content-Type: application/json" \
-  -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}'
+  -d '{"email":"<owner-real-email>","password":"<a-real-password>"}'
 TOKEN=$(curl -s -X POST http://192.168.4.4:8010/auth/login -H "Content-Type: application/json" \
-  -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}' | python3 -c "import json,sys;print(json.load(sys.stdin)['access_token'])")
+  -d '{"email":"<owner-real-email>","password":"<a-real-password>"}' | python3 -c "import json,sys;print(json.load(sys.stdin)['access_token'])")
 
 # 7. Compile + import the REAL course content, per direction, per
-#    scripts/manifest.d/content/*.txt (decide with Ramin which directions are
+#    scripts/manifest.d/content/*.txt (decide with the owner which directions are
 #    in scope for this first deploy — at minimum the 6 publish-gate
 #    directions: en-fa, en-nl, en-prs, fa-en, nl-en, prs-en). For each line
 #    of manifest.d/content/ in scope:
@@ -321,7 +321,7 @@ seeding is deliberately create-missing-only and **there is no
 delete-course endpoint**. The one-off cleanup is
 `backend/scripts/remove_demo_courses.sql`.
 
-**This is a destructive live-DB operation — it requires Ramin present
+**This is a destructive live-DB operation — it requires the owner present
 (root `CLAUDE.md`, "Deploy authority"). Do not run it unattended.**
 
 The script is idempotent and ships **wrapped in a rolled-back
@@ -391,7 +391,7 @@ time.
 4. **Confirm APP_ENV/CORS_ORIGINS were actually updated** (not
    just planned) if this deploy included that decision — re-run the
    step-4 pre-flight grep and confirm the values changed, then
-   register Ramin's real admin account and confirm `is_admin: true`
+   register the owner's real admin account and confirm `is_admin: true`
    comes back from a real authenticated request.
 
 5. **If this deploy includes new content**, spot-check RTL rendering
@@ -485,7 +485,7 @@ phone-testing, not a bug).
   rule): the actual `docker compose up -d web` bring-up on
   192.168.4.4, whether port 8011 is reachable through any router/
   firewall between the phone and the LAN, and an actual phone-browser
-  load of the app end-to-end. Do these live, with Ramin present, per
+  load of the app end-to-end. Do these live, with the owner present, per
   the rest of this runbook's conventions.
 
 ## Pre-rendered audio (TTS clips on disk)
@@ -523,7 +523,7 @@ human clip -> `/media/audio/<hash>.mp3` -> `POST /tts` -> browser speech.
 ### Render on the server (supervised, run by the deploy agent)
 
 Costs money only if a tier's free allowance is exceeded; the script refuses to
-do that unless `--allow-paid` is passed. Do not pass it without Ramin.
+do that unless `--allow-paid` is passed. Do not pass it without the owner.
 
 1. Deploy this branch's backend + web build first (nginx location + mounts), then
    `mkdir -p ~/lingosquared-media/audio` and `docker compose up -d api web`.
@@ -562,7 +562,7 @@ do that unless `--allow-paid` is passed. Do not pass it without Ramin.
    request time. Practice sentences built from templates at request time are not
    pre-rendered and keep using `/tts` (listed as skipped in the dry run).
 
-## Contradictions / open questions found while synthesizing this (need Ramin's input)
+## Contradictions / open questions found while synthesizing this (need the owner's input)
 
 *(Written before the server was deployed to; items 2 and 3 are historical. A
 rollback plan now exists: see "Current state" at the top and the production
@@ -590,7 +590,7 @@ compose section below.)*
    not previously documented) — there's no prior precedent for how a
    bad live deploy would actually be rolled back (restore from dump?
    revert the image tag and re-run migrations down?). Worth deciding
-   explicitly with Ramin before the first real deploy, not improvised
+   explicitly with the owner before the first real deploy, not improvised
    under pressure if something breaks.
 4. **Whether all 6 launch-gate backfill scripts need to run on this
    first deploy, or only the subset for content actually being
@@ -604,7 +604,7 @@ compose section below.)*
    picks.** `scripts/manifest.d/content/*.txt` originally had 9 entries (now one file per entry) (the
    6 publish-gate directions plus `en-es`/`en-fr`, both explicitly
    "park until nl is done" per `CLAUDE.md`, plus an `en-nl-a2`
-   extension). Decide with Ramin whether the first live deploy imports
+   extension). Decide with the owner whether the first live deploy imports
    only the 6 publish-gate directions or everything currently compiled
    — importing extra non-launch-gate content doesn't functionally
    break anything, but it does mean es/fr becomes visible/reachable on
@@ -662,7 +662,7 @@ Verified locally: prod image builds, runs as uid 1000, goes `healthy`,
 `alembic upgrade head` works, startup refuses a short JWT secret, readiness
 returns 503 with the DB stopped while `/health` stays 200.
 
-Switch-over steps (with Ramin present, after a pg_dump backup):
+Switch-over steps (with the owner present, after a pg_dump backup):
 
 1. Before switching, tag the running image for rollback:
    `docker tag backend-api:latest backend-api:pre-prod-compose`.

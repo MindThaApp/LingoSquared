@@ -9,7 +9,7 @@ tree state below.
 
 **Worker note (important, read before dispatching anything):** deepseek ran out of
 API balance (`402 Insufficient Balance`) partway through Italian unit02 authoring and
-is now completely unusable until Ramin tops up the DeepSeek account. Ramin explicitly
+is now completely unusable until the owner tops up the DeepSeek account. The owner explicitly
 chose to switch to **Codex** for the rest of this session (see §8 for what that's
 like in practice — noticeably slower per-unit but so far equal or better quality, and
 it hit one real hang that needed a `--fresh` restart). Check whether deepseek's
@@ -20,7 +20,7 @@ balance has been restored before defaulting back to it.
 ## 0. What shipped this session (committed + pushed to origin)
 
 All four commits are on `fix/launch-gate-content-review-wave1`, pushed to
-`git@github.com:ramin-azizi/LingoSquared.git` (redirects to `MindThaApp/LingoSquared`):
+`git@github.com:MindThaApp/LingoSquared.git` (redirects to `MindThaApp/LingoSquared`):
 
 1. **`en-nl-c1`** — completed (units 05-08 added to the 4 that existed from the prior
    session), full fresh-context review (7 defects found incl. a systemic missing-
@@ -148,7 +148,7 @@ This is now a proven, repeatable loop — run it per unit, per language:
    only that language's new files + the manifest — check `git status --short` first,
    this repo always has unrelated untracked infra files sitting around from other
    sessions/machines that must NOT get swept in.
-9. **Ask before pushing** — commit/push is owner-reserved per root CLAUDE.md. Ramin
+9. **Ask before pushing** — commit/push is owner-reserved per root CLAUDE.md. The owner
    approved "commit and push" explicitly for nl and es in this session; I re-asked and
    got the same answer for de. Keep asking each time unless told otherwise.
 
@@ -271,7 +271,7 @@ any en-realization shape change must update all four + grep content_manifest.txt
   working fallback (see §3a).
 - Friend-beta feedback loop + live deploy: still blocked per the 2026-08-30 handoff
   (SSH key on 192.168.4.4 + app-admin 401) — untouched this session.
-- App name still Ramin's call. fa/prs sentence authoring still native-reserved.
+- App name still the owner's call. fa/prs sentence authoring still native-reserved.
 
 ## 7. Clearing the chat
 

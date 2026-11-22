@@ -683,7 +683,7 @@ def test_farsi_sampler_excludes_listen_select_without_a_configured_azure_key(
     # configured on this deploy target. app/practice/service.py's gate now
     # checks tts_actually_configured() (app/services/tts.py), which
     # inspects real settings.azure_speech_key/_region -- both empty by
-    # default (app/core/config.py) until Ramin actually provisions one.
+    # default (app/core/config.py) until the owner actually provisions one.
     # This is the REAL current default state and must stay excluded, or
     # the app generates unanswerable audio-only items with no real voice.
     #

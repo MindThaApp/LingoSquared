@@ -1,6 +1,6 @@
 # A2 rebuild plan — en-nl, en-fa, en-prs
 
-**Status:** PROPOSAL for Ramin's review. Nothing here is authorized yet. This
+**Status:** PROPOSAL for the owner's review. Nothing here is authorized yet. This
 document authors no content, edits no spine or manifest, and changes no code.
 **Scope:** the three English-anchored launch-gate paths en→nl, en→fa and en→prs
 only. No non-English pairs. The X→en directions (nl-en / fa-en / prs-en) are
@@ -11,9 +11,9 @@ touched only where the spine forces it (see §6, open question Q7).
 
 ## 0. Decisions (2026-09-29)
 
-Ramin's decisions on this plan:
+The owner's decisions on this plan:
 
-- **Q1 scope:** Blocks A–D first (19 units per language: A1–A6, B1–B2, C1–C5, D1–D6), starting with a Wave-0 pilot of unit A1 in nl, fa and prs, reviewed by Ramin before scaling. Blocks E–G later.
+- **Q1 scope:** Blocks A–D first (19 units per language: A1–A6, B1–B2, C1–C5, D1–D6), starting with a Wave-0 pilot of unit A1 in nl, fa and prs, reviewed by the owner before scaling. Blocks E–G later.
 - **Q10:** fix the speaking lock now (being done separately in backend).
 - **Q4:** Dari standardizes on **می‌توانم** (formal). A1 and B1 prs content will be retrofitted to match A2 (separately).
 - **Q5:** existing A2 scenario units are interleaved AFTER the grammar block they use (needs a reorder-import safety check first). **Done 2026-11-15 for en-prs-a2, Block A** (safety check: PR #227): `a2_unit18_shopping_complaint` (past-tense purchases) now sits after `a2_unit26`. `a2_unit13_maintenance` stays: `a2_unit24` reuses its vocabulary (برق), so moving it fails the introduced-token validator. The rest depend on Blocks B-D. The course has no speaking unit. **en-nl-a2, Block A:** `a2_unit28_probleem_melden` and `a2_unit77_iets_terugbrengen` (the only scenario units built on past-tense grammar) now sit after `a2_unit85`; the other 8 depend on Blocks B-D or no new block and stay in place.
@@ -170,7 +170,7 @@ register; see `docs/content/DARI_REGISTER_REPAIR.md` and
 **Register inconsistency to fix before new A2 authoring:** prs A1 and B1
 use **می‌تانم / می‌تانین** (A1: 23 / 80 uses). prs A2 uses **می‌توانم (55) /
 می‌توانین (29)** and never می‌تانم. New A2 units would inherit whichever form
-the A2 course already teaches, so this needs Ramin's decision first (Q4).
+the A2 course already teaches, so this needs the owner's decision first (Q4).
 
 ### 1.5 The root cause is structural
 
@@ -684,7 +684,7 @@ AUTHORING_GUIDE §20.
    has no TTS**, so listening items queue into `scripts/audio_manifest.py`
    for recording. prs units stay playable without audio only if no item
    depends on audio (§14).
-9. **Native pass.** Ramin reviews every unit (nl, fa and prs are all
+9. **Native pass.** the owner reviews every unit (nl, fa and prs are all
    languages he verifies personally).
 10. **Live play.** Play one unit per language per wave end-to-end with a
     fresh account before deploy.
@@ -692,7 +692,7 @@ AUTHORING_GUIDE §20.
 ### 5.2 Batches
 
 - **Wave 0 — pilot, 3 units.** Unit A1 in each of nl, fa and prs. This is
-  new-recipe territory: grammar-led A2. Full review, then Ramin's native
+  new-recipe territory: grammar-led A2. Full review, then the owner's native
   pass, then the recipe is **frozen** into an A2 dispatch template in
   `AUTHORING_PROMPT_TEMPLATE.md` before scaling.
 - **Waves 1–8 — 12 units per wave.** That is 4 units per language, 3 Codex
@@ -716,8 +716,8 @@ AUTHORING_GUIDE §20.
 | Practice packs | 93 packs, 1 Codex wave each, ~8 waves | recipe exists |
 | Demotion + ordering code | 1 Codex backend task + migration, 1 frontend task, contract edit, isolated pytest, live verification → **~1–2 working days** | §4 |
 | prs audio recording | every prs listening item; count set when authored (~5–8 per unit → ~150–250 clips) | no prs TTS |
-| **Ramin's native review** | ~3,450 exercises + ~400 notes. At 30–45 s per item that is **~30–45 hours** | **This is the real critical path**, not Codex throughput |
-| **Calendar** | pipeline ~3–4 weeks of steady sessions; end-to-end **~6–8 weeks** with Ramin's review in parallel | |
+| **the owner's native review** | ~3,450 exercises + ~400 notes. At 30–45 s per item that is **~30–45 hours** | **This is the real critical path**, not Codex throughput |
+| **Calendar** | pipeline ~3–4 weeks of steady sessions; end-to-end **~6–8 weeks** with the owner's review in parallel | |
 
 **Cheaper staging if needed:** ship Blocks A–D first (19 units per language).
 They cover the most-used grammar (past tenses, future, modals, clause
@@ -726,7 +726,7 @@ as drip content.
 
 ---
 
-## 6. Risks and open questions for Ramin
+## 6. Risks and open questions for the owner
 
 ### Risks
 
@@ -768,7 +768,7 @@ as drip content.
 
 - **[DECIDED 2026-09-29] Q1 — scope.** Is 31 new units per language right, or stage Blocks A–D
   first (19 units)?
-  **Decision:** Blocks A–D first (19 units per language), Wave-0 pilot of A1 in nl/fa/prs reviewed by Ramin before scaling; E–G later.
+  **Decision:** Blocks A–D first (19 units per language), Wave-0 pilot of A1 in nl/fa/prs reviewed by the owner before scaling; E–G later.
 - **Q2 — fa/prs unit size.** Is 6 lessons × ~6 exercises right? The current
   fa/prs A2 units are 4 × ~5.
 - **[DECIDED 2026-11-15] Q3 — Dari rulings.** Questions were:

@@ -8,7 +8,7 @@ implementation.
 **Scope boundary:** only write inside
 `"$LINGO_REPO"/frontend/` (plus possibly proposing
 edits to `docs/CONTRACT.md` if a genuine gap is found — flagged, not
-silent). Never touch `/Users/raminazizi/dev/portal`.
+silent). Never touch `/Users/owner/dev/portal`.
 
 Not building mobile (Expo) yet — web only, LAN-testable on desktop/iPad/
 tablet browsers. This is explicitly a stepping stone: the API contract must

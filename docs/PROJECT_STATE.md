@@ -13,7 +13,7 @@ Read this when you need to know WHAT EXISTS. Full chronological history is in
   The integration branch `fix/wsl-handover-followups` (never master) is well
   ahead: dozens of PRs (#269 to #323) are merged but not deployed (content
   import, backfills, practice import, migrations 0037 to 0039). Deploy is
-  pending Ramin's approval of the temp-admin step. CI is green on GitHub.
+  pending the owner's approval of the temp-admin step. CI is green on GitHub.
 - **Catalogue:** 254 courses now live on the integration branch (228 at the
   last deploy). The A2 expansions (units 68-108 per direction, practice packs,
   cross-A2 pairs for targets nl and fa and others) are merged; native review
@@ -155,17 +155,17 @@ are standing rules, not history:
   Mixed/Speaking/Conversation selector (per-device preference), plus a
   `speak_response` instruction fix ("Say it in Dutch." over the English cue).
   Still not verified: real-mic capture + `PronunciationFeedback` rendering
-  in-browser (needs a human with a microphone — Ramin, with the APK test).
+  in-browser (needs a human with a microphone — the owner, with the APK test).
 - **Android APK (2026-07-13)** — `android-shell/` (Capacitor wrapper around the
   real web build) + `.github/workflows/android-apk.yml`. Debug-signed, LAN-only,
   deployed to `/home/ramin/shared/lingo.apk`. **Installed and working
-  2026-07-14** after two stacked fixes found by Ramin's first real install:
+  2026-07-14** after two stacked fixes found by the owner's first real install:
   live `CORS_ORIGINS` needed the WebView origin `https://localhost`
   (server-side env fix + `--force-recreate`, no rebuild), and the
   https-origin WebView blocked mixed-content calls to the http:// LAN API
   (`allowMixedContent: true`, rebuilt + redeployed, checksum-verified;
   flagged as a release-gate item — a store build needs real TLS instead).
-  Guest session confirmed working by Ramin. Full lesson + real-mic
+  Guest session confirmed working by the owner. Full lesson + real-mic
   speaking play-through still pending.
 
 *Still remaining from the upgrade program:* D2's dialogue-content
@@ -203,7 +203,7 @@ through in a live browser yet:
 
 - **End goal is genuine fluency (full CEFR A1→C2), but publish is a much
   earlier, separate gate.** Publish-gate language set: **en↔nl and
-  en↔fa/prs only** (6 directed paths) — the languages Ramin can
+  en↔fa/prs only** (6 directed paths) — the languages the owner can
   personally verify. The other 15 paths keep building as post-launch
   drip content, not blocked.
 - **Publish-gate quality bar: "very usable, minimum bugs," not a phase

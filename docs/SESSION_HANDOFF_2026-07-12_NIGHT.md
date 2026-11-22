@@ -61,7 +61,7 @@ next authoring wave as "judge each hit", not "the content is broken".
 
 ## 3. What shipped today (all merged, validated, pushed)
 
-- **Admin user management** (migration `0026`, Ramin-requested): create a user with
+- **Admin user management** (migration `0026`, owner-requested): create a user with
   a server-generated one-time temp password, reset password, list/search,
   deactivate/delete, promote/demote admin, unlock lessons. `is_admin` is a persisted
   column OR'd with `ADMIN_EMAILS` (env var still bootstraps); demoting/deactivating
@@ -117,7 +117,7 @@ review costs 160-216k tokens EVERY wave. Reserve review for what neither can rea
 character canon, "is this answerable by a human", genuine judgment. Review's real job
 is discovering NEW classes (it found 4 → 4 permanent validators), not re-finding known ones.
 
-## 6. Budget & model routing (Ramin, 2026-07-12 night)
+## 6. Budget & model routing (the owner, 2026-07-12 night)
 
 - **Remaining: Codex ~25%, Opus ~31%.** Codex is ~10x cheaper per month ($20 vs the
   $200 Max 20x plan) but is the SCARCER resource right now — don't dump routine work
@@ -134,7 +134,7 @@ is discovering NEW classes (it found 4 → 4 permanent validators), not re-findi
   outputs — not thinking tokens.** Fewer, denser tool calls beats lowering effort.
   (I wasted budget today re-running `verify.sh` three times where one pass would do.)
 
-## 7. Open decisions for Ramin
+## 7. Open decisions for the owner
 
 1. **The B1 English spine is EXHAUSTED.** Units 12-14 consumed the last three spine
    outcomes. A 15th unit needs a NEW spine outcome added first — his call.

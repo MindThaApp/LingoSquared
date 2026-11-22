@@ -27,11 +27,11 @@ missing is shipping it safely + finishing the content vetting.
 
 ## What stands between here and a beta (ordered)
 
-**Must-fix before any external user — BLOCKED on Ramin/infra:**
+**Must-fix before any external user — BLOCKED on the owner/infra:**
 1. Set + register a real `ADMIN_EMAILS` (first-registrant-becomes-admin; even local .env fails
-   `check_deploy_config.sh`). — needs Ramin's real email.
+   `check_deploy_config.sh`). — needs the owner's real email.
 2. Execute the deploy pipeline once, live (migrate→seed→register-admin→content-import→backfill→
-   practice-import) — it has never run against 192.168.4.4. — needs SSH + Ramin present for DB ops.
+   practice-import) — it has never run against 192.168.4.4. — needs SSH + the owner present for DB ops.
 3. TLS/HTTPS + real `CORS_ORIGINS` if beta reaches beyond the LAN (also blocks any app-store path).
 4. External cron for the two push triggers, or push silently never fires.
 5. Run the new backend CI once (Postgres) — clears the residual on the casefold fix's integration
@@ -39,7 +39,7 @@ missing is shipping it safely + finishing the content vetting.
 
 **Autonomous (in progress / doable without secrets/infra):**
 - Content review gate: keep grinding batches (self-re-invoking). ~480 packs remain.
-- Consolidated deploy-effect backfill wave (RAMIN_REVIEW_BACKLOG "BATCH 3/4 ★"): leaked-annotation
+- Consolidated deploy-effect backfill wave (OWNER_REVIEW_BACKLOG "BATCH 3/4 ★"): leaked-annotation
   glosses (strip English parentheticals, collision-checked), `_pure`/narrow tags (DEAD-verify unit
   scope first), bare-POS re-anchoring. Source-correct now; live on next re-backfill.
 
@@ -54,5 +54,5 @@ content_pool/number_no_hundred). **Withdrawn:** the "dead `LearningPath` schema"
 *intentionally* retained (guarded by backend/tests/test_no_dead_models.py + created in alembic 0005;
 removing it would break migration history), so it is not dead code to delete.
 
-See `docs/RAMIN_REVIEW_BACKLOG.md` for the content-defect detail and `docs/PRE_DEPLOY_RUNBOOK.md`
+See `docs/OWNER_REVIEW_BACKLOG.md` for the content-defect detail and `docs/PRE_DEPLOY_RUNBOOK.md`
 for the deploy sequence.

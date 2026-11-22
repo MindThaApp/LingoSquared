@@ -156,7 +156,7 @@ new exercise type. Register/touch only:
 ## 10. BUILD PROMPT (paste to a fresh-context Claude)
 
 > **Task: build the graded reading track (MVP) for Lingo²** (repo:
-> `/Users/raminazizi/dev/LingoSquared`). Read `docs/READING_TRACK_SPEC.md` fully
+> `/Users/owner/dev/LingoSquared`). Read `docs/READING_TRACK_SPEC.md` fully
 > first, plus root/`backend`/`frontend`/`docs/content` `CLAUDE.md` and
 > `docs/CONTRACT.md`.
 >
