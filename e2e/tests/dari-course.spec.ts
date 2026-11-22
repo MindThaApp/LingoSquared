@@ -7,7 +7,7 @@ import { freshEmail, registerAndLand, goToCourseUnits } from "./helpers";
 const DARI = { speak: /English/, learn: /Dari/, title: "Dari Fixture Course" };
 
 // Dari (prs) is one of the three publish-gate launch pairs per the
-// 2026-07-05 scope decision in CLAUDE.md ("publish-gate language set:
+// 2026-07-05 scope decision in the project notes ("publish-gate language set:
 // en<->nl and en<->fa/prs only... need to hit essentially no functional
 // breakage"). This mirrors course-picker.spec.ts/lesson-teaching.spec.ts's
 // en-fa coverage for the en-prs "Dari Foundations" course, since fa and

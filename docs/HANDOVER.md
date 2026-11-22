@@ -16,7 +16,7 @@
 > wait until `find . -name '*.icloud' | wc -l` returns `0` before concluding
 > anything is lost. (Everything below this banner is retained for future machines.)
 
-**You are the Claude session taking over LingoSquared on the owner's new primary
+**You are the drafting tool A session taking over LingoSquared on the owner's new primary
 Mac.** This file is written to YOU, not to the owner. It is self-contained: do
 not ask him what to do next, and do not make him relay instructions. Work
 through Part 1 in order, then pick up Part 2.
@@ -24,7 +24,7 @@ through Part 1 in order, then pick up Part 2.
 Written 2026-07-22, at the tip of `master` on
 `origin/master` (`github.com/MindThaApp/LingoSquared`, **private**).
 
-**Read root `CLAUDE.md` before any work.** It always loads and it overrides
+**Read the project notes before any work.** It always loads and it overrides
 this file wherever they disagree.
 
 Almost everything here you do autonomously. The only things you must ask
@@ -274,7 +274,7 @@ Tell the owner to delete it after about a week. Do not delete it yourself.
 ## Do this first: live browser verification
 
 **Nothing from the 2026-07-22 session has ever been played in a browser.**
-It is all verified by compiler, test suite and build only. Root `CLAUDE.md`
+It is all verified by compiler, test suite and build only. Root the project notes
 is explicit that reading a diff is not verification, and every one of this
 project's worst bugs — six unregistered exercise types, a permanently
 disabled Respond button, distractors drawn from the whole course, a deleted
@@ -426,7 +426,7 @@ actually imported before believing the number.**
 
 15 hardcoded `/Users/owner/dev/LingoSquared` references were repointed
 to a quoted `$LINGO_REPO`. On the old Mac that directory still existed but
-held only `.claude/worktrees`, so a deploy following the runbook would have
+held only `<local tool dir>`, so a deploy following the runbook would have
 failed and the frontend step's `rsync --delete` pointed at a source not
 containing the site. **On the new Mac that path is now the real repo, so
 those references are correct again.**
@@ -458,7 +458,7 @@ those references are correct again.**
 - **Never use `docker compose --env-file` for tests** — it only affects
   compose variable substitution, not container env, and once ran the suite
   against the live database. Use the isolated dropdb/createdb recipe in
-  `backend/CLAUDE.md`.
+  the backend notes.
 - Inside the container use **`python -m pytest`**, not bare `pytest`.
 - Frontend verification is the **FULL `npm run build`**, never
   `tsc --noEmit` — the full build has twice caught errors noEmit missed.
@@ -492,7 +492,7 @@ those references are correct again.**
 ## How the 2026-07-22 session was run (reuse this)
 
 Fan-out of fresh (non-fork) general-purpose agents, ~20 concurrent — the cap;
-raising it needs `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`. Every dispatch
+raising it needs `the tool's concurrency limit setting`. Every dispatch
 inlined the same rules: never `git add`/`commit`/`stash`; touch ONLY your
 assigned files; do not run `npm run build` or the full pytest suite (the
 coordinator verifies centrally); do not write to the shared dev DB. The

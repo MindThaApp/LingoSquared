@@ -10,7 +10,7 @@ needs BOTH practice templates AND lexemes and hard-fails below 12 items, so
 those 52 units could not produce the checkpoint the publish gate requires.
 
 REGISTER (2026-07-22): every Dari gloss in this file is colloquial Dari per
-this lane's register pin in docs/content/CLAUDE.md, and was audited against
+this lane's register pin in the content-lane notes, and was audited against
 scripts/check_dari_register.py's marker inventory. That checker deliberately
 scopes .py files out (see its "NOT COVERED" section, which names this file),
 so the audit was run by importing its DIALECT_MARKERS/AUDIT_MARKERS/
@@ -21,7 +21,7 @@ glosses were repaired in that pass (آموزگار->معلم, بیایید->بی
 these were the SRS-surface twin of registry class 1.28, and would have kept
 showing Farsi-register words even after the overlays were repaired.
 
-Written directly (not via Codex -- Codex was rate-limited at authoring
+Written directly (not via drafting tool B -- drafting tool B was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
 Target-side English POS/semantic-tag classification is shared with
 backfill_lexemes_nl_en.py/backfill_lexemes_fa_en.py via
@@ -1178,7 +1178,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
 #     word in one course);
 #   * everything else is written here against the token's real sentence in
 #     docs/content/realizations/en/, in the colloquial-Dari register this lane
-#     is pinned to (docs/content/CLAUDE.md: "prs-en overlay lane: colloquial
+#     is pinned to (the content-lane notes: "prs-en overlay lane: colloquial
 #     Dari, می‌تانین/استه style") -- استه/استم/استین for the copula, the -ه 3sg
 #     clitic (می‌کنه/می‌شه/می‌ته), 2pl -ین, and Afghan lexis (دالر، بس، سرک،
 #     دوکان، فلم، معلم، کلکین، چوکی، تکت، چوک) rather than the Iranian

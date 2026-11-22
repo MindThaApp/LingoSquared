@@ -6,7 +6,7 @@ EN_POS/en_agreement_tags additions the nl-en lane already made to
 _en_target_lexeme_common.py for this same unit; only the Farsi gloss
 dict needed extending here, no new POS/tag classification work).
 
-Written directly (not via Codex -- Codex was rate-limited at authoring
+Written directly (not via drafting tool B -- drafting tool B was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
 Target-side English POS/semantic-tag classification is shared with
 backfill_lexemes_nl_en.py/backfill_lexemes_prs_en.py via
@@ -1172,7 +1172,7 @@ EN_TARGET_TO_FA_GLOSS.update({
 # the shared module is consumed by nl-en/prs-en/de-en as well, and those
 # lanes' backfills were being extended over the SAME 52 units concurrently
 # by other agents. Editing one shared dict from four workers at once is the
-# `manifest.d/content/`-class concurrency hazard root CLAUDE.md forbids, so
+# `manifest.d/content/`-class concurrency hazard the project notes forbids, so
 # this pass keeps its classification local and file-private. The ~443
 # already-classified tokens these units re-use are still served from the
 # shared module, so they stay byte-identical to nl-en/prs-en; only the ~765

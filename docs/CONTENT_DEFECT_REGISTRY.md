@@ -6,11 +6,11 @@ compiler (`scripts/compile_content.py`), the grading path
 (`backend/app/api/router.py`, `backend/app/review/grading.py`), and the
 Endless Practice engine (`backend/app/practice/service.py`). Built
 2026-07-11 for the tiered review policy adopted the same day
-(`CLAUDE.md`, commit `48cea58`) — a coordinator making a per-lane
+(the project notes, commit `48cea58`) — a coordinator making a per-lane
 full/sample/validator-only review-tier call should consult this file
 first, not vibes.
 
-**Sources mined**: `CLAUDE.md` (Footguns + phase entries), the full
+**Sources mined**: the project notes (Footguns + phase entries), the full
 `docs/BUILD_LOG.md` (10,426 lines, 2026-07-02 through 2026-07-10),
 `docs/content/AUTHORING_GUIDE.md` (20 numbered rules, each traceable to
 an incident), `review:`/`notes:` blocks across
@@ -60,7 +60,7 @@ just read the name aloud.
 **Prevention status**: AUTOMATED for NEW cards — compiler now rejects
 new dialogue cards using the old anti-pattern (Phase D2/D3,
 2026-07-05). UNPREVENTED for existing pre-Phase-D2 cards not yet
-migrated (the fa unit02/04/05 residual, `CLAUDE.md` "Known
+migrated (the fa unit02/04/05 residual, the project notes "Known
 limitations" closing paragraph) — compiler validator only blocks
 new/edited cards, doesn't retroactively flag old ones.
 **Avoid**: always author dialogue as one `text_blocks` entry per turn
@@ -87,7 +87,7 @@ absent from `ExerciseRenderer.tsx`'s switch, crashing the whole lesson
 with "Unsupported exercise type."
 **First found**: 2026-07-04, found by doing an exhaustive `comm` diff
 after tripping over the 2nd and 3rd instance one at a time.
-**Prevention status**: GUIDE-RULE / PROMPT-BAKED — CLAUDE.md footgun:
+**Prevention status**: GUIDE-RULE / PROMPT-BAKED — the project notes footgun:
 "Exercise-type registration must be checked exhaustively... after any
 content or exercise-type change." No compiler-level or CI-level
 automated check exists (UNPREVENTED at the tooling layer — this is a
@@ -108,7 +108,7 @@ en-fa/en-prs/Dari.
 **Root cause**: authoring pattern reused across files copies internal
 bookkeeping tags into learner-visible fields.
 **Prevention status**: GUIDE-RULE (`AUTHORING_GUIDE.md` §4) +
-PROMPT-BAKED sweep instruction in CLAUDE.md footguns ("grep
+PROMPT-BAKED sweep instruction in the project notes footguns ("grep
 `docs/content/` periodically"). UNPREVENTED by any automated
 validator — no compiler check exists for bare snake_case in
 learner-facing fields.
@@ -132,7 +132,7 @@ while all hand-authored `accepted_answers` are `{left,right}[]`; (b)
 Endless Practice engine's `derive_answer()` independently produces a
 FLAT dict for the same exercise type, rendered through the same
 component/grade path.
-**First found**: 2026-07-05, live claude-in-chrome walkthrough
+**First found**: 2026-07-05, live browser-extension walkthrough
 (`73dae0d`, `9c42e9f`, `28048ed`, and the backend half in a second
 concurrent session).
 **Instances**: every `matching_pairs` exercise in every course, both
@@ -149,7 +149,7 @@ covers both shapes.
 string/string[], verify what `accepted_answers` actually looks like in
 real content AND what the Endless Practice engine independently
 produces — don't infer the contract from one side only (this is the
-general lesson CLAUDE.md draws from this incident).
+general lesson the project notes draws from this incident).
 
 ### 1.8 `matching_pairs` content bug: overlay `left` text translated/mismatched vs. rendered `prompt.pairs`
 **Description**: distinct from 1.7 (a shape bug) — this is a *content*
@@ -168,7 +168,7 @@ fresh-context reviews across nl-en units 25/31/38-58 and a2/25-27
 en-nl overlays keying only a subset of displayed pairs, one YAML
 boolean-coercion variant in en-fa b1 unit05); concentrated in the
 X-en directions since they share the underlying English realization.
-**Source conflict**: `CLAUDE.md`'s "Known limitations" section
+**Source conflict**: the project notes' "Known limitations" section
 (written 2026-07-10, before `44765aa` and the nl-en fresh-context
 reviews) states "~60 matching_pairs... ~6 more matching_pairs phrasing
 mismatches" as still-open — that count is now STALE; `44765aa` alone
@@ -258,7 +258,7 @@ then only caught later by the stricter Pydantic import schema or a
 runtime grading failure.
 **Prevention status**: PARTIALLY AUTOMATED — compiler validates some
 fields; UNPREVENTED for the title/gloss-on-vocabulary-teaching-item gap
-specifically (`CLAUDE.md` Footguns, explicit: "treat this as still
+specifically (the project notes Footguns, explicit: "treat this as still
 needing a manual grep/spot-check... not just a green compile_content.py
 run"). See Section 3.
 **Avoid**: always quote `"Yes"`/`"No"` etc. as YAML string values;
@@ -273,7 +273,7 @@ import 500 on collision.
 a DB that already had prs-en.
 **Prevention status**: AUTOMATED — migration `0015` rescoped the index
 to `(course_id, content_key)`, matching `PracticeTemplate`'s existing
-pattern. Standing rule in CLAUDE.md Footguns for any future
+pattern. Standing rule in the project notes Footguns for any future
 content_key-bearing table.
 
 ### 1.14 Endless Practice self-reference (word is both fixed anchor text and its own fillable candidate)
@@ -427,12 +427,12 @@ authoring). nl units 44-50: 6 of 15 such exercises (40%) were
 unanswerable; commit `148240e` fixed those 6; 3 more borderline
 "assembled from separate turns" cases in nl unit42/49/50 lesson04 left
 as defensible-but-fragile. Also found: 29 more unanswerable
-`listen_select` + 1 truncated `listen_order` answer (`8a0b948`, "Fable
+`listen_select` + 1 truncated `listen_order` answer (`8a0b948`, "external reviewer
 plan W6"), and 17 more unanswerable `dialogue_comprehension` in
 en-de/de-en (`f622d7f`).
 **Instances**: ≥52 confirmed fixed across multiple rounds; this is a
 CONFIRMED-RECURRING class, not a one-off.
-**Prevention status**: UNPREVENTED — explicitly flagged in CLAUDE.md
+**Prevention status**: UNPREVENTED — explicitly flagged in the project notes
 Footguns as "not yet enforced by the compiler... or the authoring
 guide." **This is a top-priority automation gap** (Section 3).
 **Avoid**: a listening distractor must be something NOT said by the
@@ -470,8 +470,8 @@ substring (e.g. "नया" → "नय"), applied lossily to both
 automatically cover its own inflected surface forms, and "already
 taught" status doesn't reliably carry across files.
 **First found**: 2026-07-10, authoring Hindi A2 content.
-**Prevention status**: UNPREVENTED — explicitly flagged in CLAUDE.md
-"Known limitations," Codex's lane
+**Prevention status**: UNPREVENTED — explicitly flagged in the project notes
+"Known limitations," drafting tool B's lane
 (`scripts/compile_content.py`), not yet fixed. Same tokenizer bug
 family as 1.23.
 **Avoid**: budget extra validation-fix iterations for Hindi/Devanagari
@@ -525,7 +525,7 @@ NOT independently confirmed still-open by this registry**):
 ~12,627 parametrized cases) but requires the full-repo Docker mount
 (`LINGO_REPO_ROOT=/repo`) to actually run — self-skips as "1 skipped"
 under the standard invocation, a real footgun of its own (documented in
-CLAUDE.md "Known limitations"). Fixing found instances is manual/
+the project notes "Known limitations"). Fixing found instances is manual/
 review-driven, the test explicitly must NOT be weakened to pass.
 **Avoid**: run this test with the full repo mounted before trusting any
 "clean corpus" claim; do not fix by touching the test's own logic.
@@ -555,14 +555,14 @@ the Afghan استم/استین paradigm (2pl `-ین`) and the copula was
 uniformly Afghan, but lexical 2pl verbs split by unit — some correctly
 Afghan, others Iranian `-ید` inside otherwise-authentic Afghan
 vocabulary, mixing two dialects within one register.
-**First found**: 2026-07-07, Opus fa/prs corpus audit.
+**First found**: 2026-07-07, drafting tool A fa/prs corpus audit.
 **Instances**: ~756 replacements across 37 files (16 prs realizations,
 11 en-prs overlays, 3 prs-en overlays, 10 practice packs, plus the
 backfill script) — a genuinely project-wide dialect-consistency bug.
-**Prevention status**: GUIDE-RULE (a Fable dialect ruling now
+**Prevention status**: GUIDE-RULE (a external reviewer dialect ruling now
 documented as project history/precedent) but NO automated dialect-
 consistency checker exists — UNPREVENTED at the tooling layer. Purely
-relies on native/Fable review to catch a recurrence.
+relies on native/external reviewer review to catch a recurrence.
 **Avoid**: when authoring any new Dari content, cross-check verb
 endings against the unit's own declared `register_policy` for
 internal consistency, not just correctness in isolation.
@@ -673,13 +673,13 @@ column AND the Pydantic literal/enum in the backend schema — updating
 only one silently leaves the other layer rejecting or miscategorizing
 the new script.
 **First found**: 2026-07-12, during ko/ja groundwork (script constraint
-migration 0025 mentioned in root CLAUDE.md history).
+migration 0025 mentioned in the project notes history).
 **Prevention status**: UNPREVENTED — no single-source-of-truth or
 validator catches a partial update; discovered via review, not
 automated. **Next step**: either derive the Pydantic literal from the
 DB constraint (or vice versa) at build/migration time, or add a
 compiler/backend startup check that diffs the two lists and fails
-loudly on mismatch. **Lane**: Codex (backend/migrations).
+loudly on mismatch. **Lane**: drafting tool B (backend/migrations).
 
 ### 1.38 Romanized-source trap for ko/ja (source material teaches romanization, app must teach native script)
 **Description**: public-domain/reference source material for Korean and
@@ -694,7 +694,7 @@ could easily exist) for this; it is a sourcing-discipline item.
 script by default; treat any source that presents romanization as the
 primary form as needing an explicit conversion step, not a direct
 adaptation. **Lane**: content-lane authoring discipline (ko/ja, not yet
-in production content — groundwork stage only per root CLAUDE.md).
+in production content — groundwork stage only per the project notes).
 
 ### 1.39 Devanagari OCR trap (scanned Hindi sources OCR unreliably)
 **Description**: scanned/OCR'd Hindi source material is unreliable —
@@ -730,7 +730,7 @@ string (no `accepted` list).
 **Fix options (needs a decision)**: (a) backfill glosses without the article
 for nouns, or (b) grading/engine: accept an optional leading article on
 bare-noun translation answers and contraction expansions on English answers.
-**Lane**: backfill scripts (Codex) or backend grading (Codex).
+**Lane**: backfill scripts (drafting tool B) or backend grading (drafting tool B).
 
 ### 1.41 Practice `feedback_frame` claims false at Endless-Practice (course) scope
 **Description**: practice feedback frames assert provenance ("{item} is a
@@ -755,7 +755,7 @@ be true for every course-scoped candidate ("The Dutch word is {item}.").
 
 Directions with content on disk (2026-07-11): `en-nl`, `nl-en`, `en-fa`,
 `fa-en`, `en-prs`, `prs-en` (the 6 launch-gate directions, mandatory
-full review per CLAUDE.md's Tiered review policy until launch);
+full review per the project notes' Tiered review policy until launch);
 `en-de`, `de-en`, `en-es`, `en-fr`, `en-hi`, `en-pl`, `en-ro` (post-launch
 drip content, in-flight).
 
@@ -771,14 +771,14 @@ drip content, in-flight).
 | en-hi | 1.24, 1.26, 1.27 | 159+ (single systemic bug dominates) | **Full**, and BLOCKED from downgrading until 1.27 is confirmed fixed | 1.27 alone (159 unanswerable exercises, hi units 3-19) is the single largest unresolved defect count of any direction in this registry — do not sample this lane. |
 | en-ro | 1.10-class (word-order/answer-shape), plus 1 confirmed grammar bug (plece 3sg/3pl syncretism distractor, `329ca85`) | 1 confirmed | **Sample** candidate once ≥3 consecutive zero-defect reviews land (currently 1 review, 1 bug found — not yet eligible) | Recipe reused from nl-en/fa-en/prs-en pattern (mature), but ro itself has had only 1 fresh-context review round so far. |
 | en-pl | genitive-case grammar bug (`974d00c`, `665aa31`) | 1 confirmed | **Sample** candidate, not yet eligible (only 1 review round) | Same status as ro — mature recipe, immature per-language review history. |
-| en-es / es-en | 1.2 residual (legacy dialogue format fixed `2ea892e`), parked per CLAUDE.md scope decision | low (content frozen, not actively growing) | **Validator-only** | Explicitly parked ("finish in-flight units, then park until nl is done") — no active authoring means no new-defect risk; existing content already compiler-clean. |
+| en-es / es-en | 1.2 residual (legacy dialogue format fixed `2ea892e`), parked per the project notes scope decision | low (content frozen, not actively growing) | **Validator-only** | Explicitly parked ("finish in-flight units, then park until nl is done") — no active authoring means no new-defect risk; existing content already compiler-clean. |
 | en-fr / fr-en | 1.23 (apostrophe-elision, fr-specific) | 1 confirmed + 13 cosmetic | **Validator-only** (same parked status as es) | Same parked status; 1.23 is closed for the one real instance found. |
 
 **Pack-authoring lane (cross-direction, tracked separately from the
 per-direction rows above)**: the "pack-authoring" lane (Endless Practice
 template packs, not overlay/realization content) has now logged 3
 consecutive zero-defect fresh-context reviews as of 2026-07-12 — **per
-CLAUDE.md's Tiered review policy, this lane is now ELIGIBLE to drop to
+the project notes' Tiered review policy, this lane is now ELIGIBLE to drop to
 1-in-3 sampling** (reviewer's choice of which 1-in-3, not the author's).
 This is a lane-level (recipe + authoring model) downgrade, distinct
 from the per-direction table above; it does not change any individual
@@ -807,7 +807,7 @@ against current content for that direction.
    corpus-wide checker (sibling to `_practice_content_integrity_check.py`)
    that cross-references every `listen_select`/`dialogue_response`
    distractor against the full transcript of its own `media_asset_key`
-   audio for the same speaker. **Lane**: compiler validator = Codex;
+   audio for the same speaker. **Lane**: compiler validator = drafting tool B;
    the checker script pattern itself (script-only, no schema change)
    could also be built content-lane-side as an interim measure, same
    as `_fill_in_blank_ambiguity_check.py` was.
@@ -828,28 +828,28 @@ against current content for that direction.
    `test_content_answer_shapes.py` against current hi content
    immediately, then dispatch a dedicated fresh-context content-fix
    pass. **Lane**: content lane (Hindi authoring), verification =
-   Claude session.
+   drafting tool A session.
 4. **1.24 — Devanagari tokenizer fragmentation.** Structural compiler
    gap, actively costing extra iteration time on every Hindi
    authoring round. **Next step**: fix `TOKEN_RE` (or add a
    Devanagari-aware tokenization path) in `scripts/compile_content.py`.
-   **Lane**: Codex (compiler).
+   **Lane**: drafting tool B (compiler).
 5. **1.12 — YAML boolean-coercion gap on title/gloss fields of
    vocabulary teaching items.** Confirmed gap, not yet closed; explicit
-   backlog item named in CLAUDE.md's own Tiered review policy adoption
+   backlog item named in the project notes' own Tiered review policy adoption
    note ("Known validator backlog"). **Next step**: widen the existing
    boolean-coercion validator to cover `title`/`gloss` specifically.
-   **Lane**: Codex (compiler).
+   **Lane**: drafting tool B (compiler).
 6. **1.20 — Wrong/contradictory `media_asset_key`.** No permanent
    validator exists (the 2026-07-06 sweep used a throwaway script).
    **Next step**: promote that comparison script (transcript-vs-
    `tested_text` word-level match) into a permanent corpus-wide checker
    alongside `_practice_content_integrity_check.py`. **Lane**:
-   content-lane script initially, candidate for Codex compiler
+   content-lane script initially, candidate for drafting tool B compiler
    integration later.
 7. **1.28 / 1.29 — Dialect split-brain and homograph collisions
    (fa/prs).** No automated dialect-consistency or homograph detector
-   exists; both rely entirely on native/Fable review. **Next step**: at
+   exists; both rely entirely on native/external reviewer review. **Next step**: at
    minimum, a script cross-referencing verb-ending suffixes against
    each unit's own declared `register_policy` for internal consistency
    (catches 1.28-shaped bugs specifically). **Lane**: content-lane
@@ -865,13 +865,13 @@ against current content for that direction.
    manual-discipline rule (`comm` diff). **Next step**: a CI/verify.sh
    step that runs the same `comm` diff automatically after any
    exercise-type-touching change, failing the build if a used type is
-   unregistered in `ExerciseRenderer.tsx`. **Lane**: frontend/Claude
-   session (verify.sh is INFRA/Claude-owned tooling).
+   unregistered in `ExerciseRenderer.tsx`. **Lane**: frontend/drafting tool A
+   session (verify.sh is INFRA/drafting tool A-owned tooling).
 10. **1.19 — matching_pairs minimum scale.** GUIDE-RULE only, no
     compile-time enforcement of a minimum pair count. **Next step**: add
     a minimum-pairs-count check to the compiler validator (mirrors the
     existing candidate-count floor already enforced for
-    multiple_choice/listen_select). **Lane**: Codex (compiler).
+    multiple_choice/listen_select). **Lane**: drafting tool B (compiler).
 
 ---
 
@@ -892,10 +892,10 @@ Instance count: <N, including 0>
 
 **Zero-yield entries are data, not noise** — three consecutive
 zero-defect reviews in a lane is the trigger to downgrade that lane to
-1-in-3 sampling per CLAUDE.md's Tiered review policy. Do not skip
+1-in-3 sampling per the project notes' Tiered review policy. Do not skip
 logging a clean review just because there's nothing to fix; the
 absence of a bug is exactly the evidence a tier-downgrade decision
-needs. Whoever runs `codex:rescue`, a fresh-context review dispatch, or
+needs. Whoever runs the rescue tooling, a fresh-context review dispatch, or
 any manual review pass is responsible for this entry before closing out
 that task — not a follow-up chore for someone else.
 
@@ -943,7 +943,7 @@ distinct (sourcing-quality risk vs. compiler tokenization bug).
 Instance count: (not recorded — a sourcing-discipline finding, not a
 corpus defect count)
 
-### 2026-07-12 — fa B1 units 12-16 (fresh-context review, Codex gpt-5.5)
+### 2026-07-12 — fa B1 units 12-16 (fresh-context review, drafting tool B)
 Bug classes found: 3 fixes found and all reviewed (per commit `3693bed`
 message: "fa B1 12-16 (3 fixes, all reviewed)"). Specific §1 bug-class
 IDs not individually identified in the commit message — (not recorded
@@ -956,7 +956,7 @@ lane/direction — does not count toward a 3-consecutive-zero-defect
 downgrade; resets any such streak for fa B1 content if one was being
 tracked.
 
-### 2026-07-12 — en B1 units 07-11 (fresh-context review, Codex gpt-5.5)
+### 2026-07-12 — en B1 units 07-11 (fresh-context review, drafting tool B)
 Bug classes found: listen-audio fixes found (per commit `3693bed`
 message: "en B1 07-11 (listen-audio fixes, all reviewed pending
 overlay-dependent checks)"). Likely relates to §1.20 (wrong/
@@ -973,7 +973,7 @@ checks**" per the commit message — this review round is not fully
 closed out; do not treat en B1 07-11 as a clean pass until the
 overlay-dependent checks referenced in the commit are confirmed done.
 
-### 2026-07-12 — it A1 units 01-03 (fresh-context review, Claude Opus; first-ever Italian content)
+### 2026-07-12 — it A1 units 01-03 (fresh-context review, drafting tool A; first-ever Italian content)
 Bug classes found: 2 minor/cosmetic (one awkward learner-facing
 matching label reworded; one §16 undersized matching_pairs expanded
 with genuinely-taught digits). No hard/blocking defects, no grading
@@ -981,9 +981,9 @@ impact, no new bug class.
 Instance count: 2 (unit01=0, unit02=1, unit03=1)
 **Tier note**: new-language lane — stays Full review regardless
 (policy §3, first batches of a new recipe). Quality of the
-Sonnet-adaptation-from-FSI-FAST recipe looks strong on first evidence.
+drafting tool A-adaptation-from-FSI-FAST recipe looks strong on first evidence.
 
-### 2026-07-12 — ru A1 units 01-03 (fresh-context review, Claude Opus; first-ever Russian content)
+### 2026-07-12 — ru A1 units 01-03 (fresh-context review, drafting tool A; first-ever Russian content)
 Bug classes found: 1 recurring class, 4 instances — `listen_order`
 exercises wired to a nearby `media_asset_key` that does not speak the
 tested sentence (audio containment violation; same family as §1.20 /
@@ -997,7 +997,7 @@ backlog item: extend the audio-containment check to `listen_order`**
 **Tier note**: new-language lane — Full review stays. The bug is
 mechanical wiring, not language competence.
 
-### 2026-07-12 — en-it overlays A1 01-03 (fresh-context review, Claude Opus; first en-it overlays)
+### 2026-07-12 — en-it overlays A1 01-03 (fresh-context review, drafting tool A; first en-it overlays)
 Bug classes found: **NEW SYSTEMIC CLASS** — overlay matching_pairs
 `accepted_answers` diverging from the realization's `pairs` (frontend
 shows realization tiles, grading compares overlay accepted_answers →
@@ -1006,13 +1006,13 @@ instances (English rights vs Italian tiles, swapped/mistranslated pair,
 5-of-11 pair subset, decimal point vs Italian decimal comma). Plus 1
 listen_select spoken-substring distractor violation.
 Instance count: 6 (u01=1, u02=2, u03=3)
-New bug class discovered: YES — **validator backlog (Codex lane,
+New bug class discovered: YES — **validator backlog (drafting tool B lane,
 HIGH PRIORITY): compiler must cross-check every overlay matching_pairs
 accepted_answers left/right set equals its realization pairs set
 (count + exact strings)**; a green compile let all 5 through.
 **Tier note**: en-it overlays stay Full review — high first-batch yield.
 
-### 2026-07-12 — en-ru overlays A1 01-03 (fresh-context review, Claude Opus; first en-ru overlays)
+### 2026-07-12 — en-ru overlays A1 01-03 (fresh-context review, drafting tool A; first en-ru overlays)
 Bug classes found: 1 low-severity display-integrity defect (a
 "mirrored glyph" MCQ distractor that renders identical to the correct
 Cyrillic letter in plain text). Fixed. Glosses, distractor-vs-audio,
@@ -1023,7 +1023,7 @@ rendered distinctly in text" (script-ramp letter exercises); note for
 future script-ramp authoring (ko/ja/ar).
 **Tier note**: en-ru overlays stay Full review (new lane).
 
-### 2026-07-12 — it/ru A1 units 04-06 realizations + overlays (fresh-context reviews, Claude Opus)
+### 2026-07-12 — it/ru A1 units 04-06 realizations + overlays (fresh-context reviews, drafting tool A)
 Realizations: 0 correctness defects both languages (4 ru §16
 matching_pairs poolings applied — ru author systematically under-sized
 where the it author pooled correctly). Overlays: 0 defects, all six
@@ -1037,7 +1037,7 @@ clean units-batches for ru, 1 for it after its unit01-03 6-defect
 batch). Both lanes stay Full review (new language) but the recipe
 with the inline pairs-mirror + audio-containment rules is holding.
 
-### 2026-07-12 — nl-en / fa-en / prs-en B1 overlays 07-11 (fresh-context reviews, Claude Opus; authored by Codex gpt-5.5)
+### 2026-07-12 — nl-en / fa-en / prs-en B1 overlays 07-11 (fresh-context reviews, drafting tool A; authored by drafting tool B)
 Yields: nl-en 0 defects / 5 files; prs-en 0 defects / 5 files (Dari
 register fully clean); fa-en 1 defect / 5 files — one listen_select
 same-speaker distractor (unit11: "the design course" is spoken by the
@@ -1046,10 +1046,10 @@ class; validator dispatch is in flight (task-mrhf0qrp).
 Instance count: 1 total across 15 files.
 New bug class discovered: no.
 **Tier note**: launch-gate — all three lanes stay Full review until
-launch regardless of streaks. The Codex-B1-overlay recipe (pairs-mirror
+launch regardless of streaks. The drafting tool B-B1-overlay recipe (pairs-mirror
 + sibling-isolation rules inline) is performing at near-zero yield.
 
-### 2026-07-12 — it/ru A1 units 07-09 realizations + overlays (fresh-context reviews, Claude Opus)
+### 2026-07-12 — it/ru A1 units 07-09 realizations + overlays (fresh-context reviews, drafting tool A)
 Realizations: 1 defect / 6 files (ru unit08 unrealistic price in
 learner-facing dialogue, fixed; no grammar/containment/gradability
 defects). Overlays: 0 defects / 6 files, all mechanical checks clean.
@@ -1058,7 +1058,7 @@ reviewer-checklist line, not a validator.
 **Tier note**: both lanes remain Full (new language); recipe holding at
 near-zero yield with validators now enforcing pairs-mirror + containment.
 
-### 2026-07-12 — it/ru A1 units 10-12 realizations + overlays (fresh-context reviews, Claude Opus)
+### 2026-07-12 — it/ru A1 units 10-12 realizations + overlays (fresh-context reviews, drafting tool A)
 Realizations: 0 correctness defects both languages (5 ru §16
 matching_pairs poolings — the ru-author-undersizes pattern recurred a
 third time; overlay/realization recipe prompts should carry the §16 aim
@@ -1069,24 +1069,24 @@ zero-defect batches; realization lanes near-zero. Still Full review
 each hits 3 consecutive clean batches AND validators cover the recurring
 classes (pairs-mirror + containment now compiler-enforced).
 
-### 2026-07-12 — en-fa §16 retrofit (25 exercises) fresh-context review (Claude Opus)
+### 2026-07-12 — en-fa §16 retrofit (25 exercises) fresh-context review (drafting tool A)
 0 defects: every pooled pair verified taught-in-unit, glosses correct,
 0 Arabic-character hits, mirrors compiler-confirmed. One PRE-EXISTING
 flag (not this change): fa u37 lesson03 match_asking_color_words has
 two synonym lefts both glossed "What color is it?" — technically
 ambiguous in a matching UI; small-fix backlog.
 
-### 2026-07-12 — German lane recovery (fixes + fresh-context review, Claude)
+### 2026-07-12 — German lane recovery (fixes + fresh-context review, drafting tool A)
 Dead session's WIP landed; 23 unique validator errors fixed (13
 same-speaker distractors, 5 pairs-mirror, en-de+de-en). Fix diff
-fully reviewed (Opus): all new distractors verified absent from audio,
+fully reviewed (drafting tool A): all new distractors verified absent from audio,
 natural, plausible-wrong; mirrors character-exact. 0 defects in review.
 Both directions now validate 0 errors → full-corpus content validation
 GREEN for the first time. Note: first fixer attempt FALSELY self-
 reported success (validated wrong file set) — coordinator re-validation
 caught it; acceptance commands must be verbatim in fixer prompts.
 
-### 2026-07-12 — en A1 units 59-63 + it/ru units 13-15 (+overlays) reviews (Claude Opus)
+### 2026-07-12 — en A1 units 59-63 + it/ru units 13-15 (+overlays) reviews (drafting tool A)
 en 59-63 (launch-gate X→en expansion): 1 cosmetic content_key fix +
 1 non-blocking dialogue-logic note (unit62), otherwise clean; all
 reviewed. it/ru 13-15 realizations AND overlays: 0 defects across all
@@ -1096,14 +1096,14 @@ for 1-in-3 sampling from the units 16+ waves onward (coordinator
 decision applied going forward; realization lane likewise eligible).
 
 ### 2026-07-12 — X→en A1 units 59-63 wave (en realizations + 3 overlay sets)
-en realizations (Opus review): 1 cosmetic content_key fix + 1
+en realizations (drafting tool A review): 1 cosmetic content_key fix + 1
 non-blocking note. nl-en overlays: 0 defects. prs-en overlays: 0
 defects (Dari clean). fa-en overlays: **NEW CLASS — lane register
-divergence** (Codex authored formal Persian; lane norm colloquial).
+divergence** (drafting tool B authored formal Persian; lane norm colloquial).
 Reviewer correctly escalated instead of auto-fixing; converted by a
 dedicated worker (~255 forms), second-round review found 3 leftover
 formal forms in u63 (fixed) and 0 over-conversion errors.
-PREVENTION: per-lane register pins added to docs/content/CLAUDE.md —
+PREVENTION: per-lane register pins added to the content-lane notes —
 every new authoring dispatch must quote the lane's pinned register.
 **Tier note**: fa-en overlay lane resets to full review (new class);
 nl-en/prs-en remain full (launch-gate).
@@ -1112,15 +1112,15 @@ nl-en/prs-en remain full (launch-gate).
 en realizations: 0 defects (1 borderline dialogue phrasing noted, not
 tested). nl-en overlays: 0 defects (4+ consecutive clean batches).
 fa-en overlays: 0 defects — the register pin quoted verbatim in the
-Codex dispatch PREVENTED a recurrence of the register-divergence class.
+drafting tool B dispatch PREVENTED a recurrence of the register-divergence class.
 prs-en overlays: 1 gloss-faithfulness defect (علامه "eminent scholar"
 for علامت "symptom", 11 occurrences in u66, fixed in review) — real
 Persian-orthography confusable; lane stays full review.
-Process note: two of three Opus reviewers this round committed DIRECTLY
+Process note: two of three drafting tool A reviewers this round committed DIRECTLY
 to master (worktree isolation not honored — known footgun, commits
 verified clean); coordinator diffed git log per standing rule.
 
-### 2026-07-12 (evening) — en B1 12-14, ru A1 16-18, it A1 16-18 (fresh-context reviews, Claude Opus)
+### 2026-07-12 (evening) — en B1 12-14, ru A1 16-18, it A1 16-18 (fresh-context reviews, drafting tool A)
 
 **Yields — the sampling experiment FAILED and was reversed:**
 - **en B1 12-14** (launch-gate, shared spine for nl-en/fa-en/prs-en; full
@@ -1147,9 +1147,9 @@ verified clean); coordinator diffed git log per standing rule.
 **Tier ruling: it/ru RESET to full review. Sampling was misapplied** — a
 lane is mature per-RECIPE, and these units moved to NEW TOPICS
 (health/work/housing), which policy already classes as new territory.
-Rule now written into root CLAUDE.md §Tiered review 4.
+Rule now written into the project notes §Tiered review 4.
 
-**New rule-shaped classes → validators (Codex, dispatched same session):**
+**New rule-shaped classes → validators (drafting tool B, dispatched same session):**
 1. `untaught_vocabulary` only checked `tested_text`, NOT
    `prompt.target_blocks` — **the gap that caused defects in BOTH waves.**
    Must resolve taught tokens CUMULATIVELY over prior units (an author
@@ -1167,7 +1167,7 @@ first pick → Check never enabled → **lesson impossible to complete** in the
 en-nl launch pair. Fixed to index-keying (`ba804a7`), verified live.
 Affected 5 exercises across nl u11/u12/u13 and it u01.
 
-### 2026-07-12 (night) — nl-en/fa-en/prs-en B1 overlays 12-14 (fresh-context reviews, Claude Opus ×3)
+### 2026-07-12 (night) — nl-en/fa-en/prs-en B1 overlays 12-14 (fresh-context reviews, drafting tool A ×3)
 Bug classes found: nl-en: none — 0 defects (72 exercises). fa-en: 2 (one
 ambiguous MC distractor — a second option also satisfied the stated
 criterion, §1 answerability class; one garbled Persian instruction,
@@ -1186,7 +1186,7 @@ verbatim — yield fell from 23 (previous wave, 3 lanes) to 3, and zero
 findings in every class the checklist names except item 1 edge case
 above.
 
-### 2026-07-13 — en B1 realizations 15-17 (fresh-context review, Claude Opus)
+### 2026-07-13 — en B1 realizations 15-17 (fresh-context review, drafting tool A)
 Bug classes found: 1 — prompt/answer wording mismatch (u16 l03 ex05:
 prompt said "the other project", sole accepted answer said "the other
 one"; correct learner graded wrong). Known underdetermined-prompt
@@ -1198,7 +1198,7 @@ NOTE: compiler validation still pending — requires the first X→en
 overlay for these units; reviewer reproduced the mechanical validators
 by hand (cumulative token coverage clean across b1 01-17).
 
-### 2026-07-13 — en B1 realizations 18-19 (fresh-context review, Claude Opus)
+### 2026-07-13 — en B1 realizations 18-19 (fresh-context review, drafting tool A)
 Bug classes found: 3 — two prompt/accepted-answer wording mismatches
 (u18 l03 ex05 "Daniel" vs "He"; u19 l02 ex05 "the team is" vs "we are")
 and one confusable matching_pairs LEFT pair (u19 "in summary" vs "in
@@ -1209,7 +1209,7 @@ New bug class discovered: no
 Instance count: 3 across 2 files. Fixed by coordinator, merged.
 Compiler validation still pending first X→en overlay for these units.
 
-### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 15-17 (fresh-context reviews, Claude Opus ×3)
+### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 15-17 (fresh-context reviews, drafting tool A ×3)
 Bug classes found: none — 0 defects across all 9 files (63 exercises/lane).
 One optional strengthening applied (prs-en u17 choose_procrastinate:
 "delay" distractor semantically overlapped the Dari prompt's wording —
@@ -1224,7 +1224,7 @@ Instance count: 0 overlay defects. The form-identification-distractor
 warning quoted verbatim in these dispatches returned zero findings —
 consistent with the preflight-verbatim effect (23→3→0 over three waves).
 
-### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 18-19 (fresh-context reviews, Claude Opus ×3)
+### 2026-07-13 — nl-en/fa-en/prs-en B1 overlays 18-19 (fresh-context reviews, drafting tool A ×3)
 Bug classes found: nl-en: none — 0 defects. fa-en: none blocking; 1
 optional strengthening applied (u19 l04 ex01 distractor was the OTHER
 speaker's real line — legal but borderline; swapped for fabricated).
@@ -1241,7 +1241,7 @@ First corpus compile of units 18-19 found 1 realization defect
 ("months" untaught, fixed 181af98) — the second time the first overlay
 compile caught a realization token gap (see "leading", 9ff6886).
 
-### 2026-07-13 — media_asset_key validator first corpus sweep (Codex validator + Codex triage)
+### 2026-07-13 — media_asset_key validator first corpus sweep (drafting tool B validator + drafting tool B triage)
 Bug classes found: 6 genuine wrong media references (class 1.20) — 4 in
 en-fr A1 (salade/matin/gare/dimanche cards playing a different clip),
 2 in en-nl A1 (u32 Fenna, u33 Sander listen_selects playing a related
@@ -1253,7 +1253,7 @@ New bug class discovered: no (1.20 was a known unprevented class; it is
 now validator-covered: dangling refs hard-error, mismatches warn).
 Instance count: 6 fixed across 6 files.
 
-### 2026-07-14 — B2 en units 01-03 fresh-context review (Codex review of Codex-authored first-ever B2 wave)
+### 2026-07-14 — B2 en units 01-03 fresh-context review (drafting tool B review of drafting tool B-authored first-ever B2 wave)
 Bug classes found: ~17 findings across all three files, high yield as
 predicted for a NEW CEFR tier. Dominant classes: (a) underdetermined
 production prompts (known class, at least 7 instances — B2's nuance
@@ -1271,10 +1271,10 @@ New bug class discovered: yes — outcome-production under-coverage (b);
 consider a spine-outcome production-requirement checklist line in the
 authoring preflight for B1+ tiers rather than a validator (judgment
 call, not rule-shaped).
-Instance count: fixes dispatched to Codex same session; re-review
+Instance count: fixes dispatched to drafting tool B same session; re-review
 required before status: reviewed.
 
-### 2026-07-14 — B2 en units 01-03 RE-review + second fix round (Codex both)
+### 2026-07-14 — B2 en units 01-03 RE-review + second fix round (drafting tool B both)
 Bug classes found: 10 residual findings, all in the two known classes —
 untaught-vocabulary-in-example-sentences (6) and underdetermined
 production prompts (4). Structural checks (spine alignment, pacing,
@@ -1286,7 +1286,7 @@ New bug class discovered: no.
 Instance count: 10 fixed across 3 files. Lane yield trajectory for the
 first B2 wave: ~17 -> 10 -> 0 outstanding.
 
-### 2026-07-14 — nl-en B2 overlays u01-03 fresh-context review + fix (Codex both)
+### 2026-07-14 — nl-en B2 overlays u01-03 fresh-context review + fix (drafting tool B both)
 Bug classes found: 9 — 3 stale accepted_answers (overlay authored against a
 realization sentence the coordinator subsequently fixed — sequencing
 artifact, not an authoring defect class; lesson: re-sync overlays after ANY
@@ -1300,7 +1300,7 @@ New bug class discovered: no (all known classes or sequencing artifacts).
 Instance count: 9 fixed across 3 files; compiler 0 errors; wired as
 nl-en-b2 manifest course; verify.sh --content-only PASS on full corpus.
 
-### 2026-07-14 — fa-en + prs-en B2 overlays u01-03 review + fix (Codex, sibling-isolated)
+### 2026-07-14 — fa-en + prs-en B2 overlays u01-03 review + fix (drafting tool B, sibling-isolated)
 Bug classes found: fa-en 15 (gloss naturalness/fidelity majority; 1
 exercise-level: listen_select with ALL distractors heard in the audio —
 the known class 1.x same-speaker/heard-distractor rule, still validator
@@ -1329,7 +1329,7 @@ The validator backlog from the tiered-review policy is now EMPTY again.
 Instance count: 8 fixed across 10 files (three a1_21 overlays share one
 English audio).
 
-### 2026-07-14 — B2 en units 04-08 fresh-context review + fix (Codex both)
+### 2026-07-14 — B2 en units 04-08 fresh-context review + fix (drafting tool B both)
 Bug classes found: 4 total across 5 units (vs 17 in the units 01-03
 wave — the preflight item-7 production-requirement rule and the wave-1
 lesson list in the dispatch prompt measurably worked; units 04 and 07
@@ -1343,7 +1343,7 @@ diff-verified; all five units flipped to reviewed.
 New bug class discovered: dialect-consistency (minor).
 Instance count: 4 fixed across 3 files.
 
-### 2026-07-14 — nl-en B2 overlays u04-08 review + fix (Codex both)
+### 2026-07-14 — nl-en B2 overlays u04-08 review + fix (drafting tool B both)
 Bug classes found: ~9, ALL natural-Dutch wording/grammar class ("duwde
 terug" calque, singular/plural agreement around "het hoofdprobleem",
 "in Engels" -> "in het Engels" article slips). Zero exercise-level or
@@ -1357,7 +1357,7 @@ reviewed; nl-en-b2 manifest course extended 3 -> 8 units; corpus PASS.
 New bug class discovered: no.
 Instance count: ~9 fixed across 5 files.
 
-### 2026-07-14 — fa-en + prs-en B2 overlays u04-08 review + fix (Codex both)
+### 2026-07-14 — fa-en + prs-en B2 overlays u04-08 review + fix (drafting tool B both)
 Bug classes found: all register/gloss-nuance wording (Persian register
 cleanup across units, one real polysemy defect: در اصل glossing
 "in principle" can read "actually/originally"; Dari spelling notes).
@@ -1369,7 +1369,7 @@ prs-en-b2 manifest courses extended 3 -> 8 units; corpus PASS.
 New bug class discovered: no.
 Instance count: ~20 wording fixes across 10 files.
 
-### 2026-07-15 — it/ru A1 19-24, de A1 11-16, ar A1 04-09 review + fix (Codex both)
+### 2026-07-15 — it/ru A1 19-24, de A1 11-16, ar A1 04-09 review + fix (drafting tool B both)
 Yield per lane: it 7, ru 9, de 19, ar 12 (~47). Dominant classes:
 heard-distractor listen exercises (de-heavy — including two NEW validator
 gaps: unlabelled single-voice audio skipped entirely, and
@@ -1386,16 +1386,16 @@ VALIDATOR FALLOUT: ungating the new checks exposed 938 unique latent
 corpus defects (nl-en 604 lines / fa-en 544 / prs-en 512 error lines,
 plus en-de/de-en/es/fr/nl/ro) — all repaired mechanically (single-item
 audio assets; unspoken distractors; accepted-answer alignment), corpus
-PASS at 0 errors 0 warnings under the ungated validator. NOTE: Codex's
+PASS at 0 errors 0 warnings under the ungated validator. NOTE: drafting tool B's
 validator draft shipped with a language-scope gate {ar,de,it,ru} + a
 "legacy" exemption that masked exactly those 938 — reinforces the
-standing rule: never accept a Codex validator without running it
+standing rule: never accept a drafting tool B validator without running it
 ungated on the full corpus yourself.
 Known remaining debt: en-de old units 01-10 + their overlays are still
 status unreviewed from the original de lane opening (pre-existing).
 Instance count: 47 review findings + 938 validator-driven repairs.
 
-### 2026-07-15 — wave 2: es/fr A2 completion, it/ru A2 tier opened, de A1 17-22, ar A1 10-15 (Codex both)
+### 2026-07-15 — wave 2: es/fr A2 completion, it/ru A2 tier opened, de A1 17-22, ar A1 10-15 (drafting tool B both)
 Yield per lane: es 13, fr 7, ar 7, de 10, it-A2 12, ru-A2 15 (~64).
 ZERO listen-audio/answerability defects in ANY lane — first wave authored
 with the new validator rules quoted in the dispatch prompt; prevention
@@ -1415,7 +1415,7 @@ fix: tier-opening dispatch prompts must state the standalone-tier rule and
 use tier-only acceptance commands).
 Instance count: ~64 review findings + 70 tier-token compile errors.
 
-### 2026-07-15 — wave 3: it/ru A2 complete (10u tiers), de A1 complete (24u), ar A1 16-21, es/fr B1 tiers opened (Codex both)
+### 2026-07-15 — wave 3: it/ru A2 complete (10u tiers), de A1 complete (24u), ar A1 16-21, es/fr B1 tiers opened (drafting tool B both)
 Yield: it+ru 9, de+ar ~8, es+fr B1 8 (~25 across 44 files — roughly a
 third of wave-2's per-file rate). ZERO standalone-tier compile errors
 (wave-2's process fix — tier rule + tier-only acceptance commands in the
@@ -1432,7 +1432,7 @@ fixed directly by coordinator. All flipped reviewed; manifests: en-it-a2
 -> 21u, NEW en-es-b1 (3u) + en-fr-b1 (3u). Corpus PASS.
 Instance count: ~25 findings.
 
-### 2026-07-15 — wave 4: es/fr B1 +3u, it/ru B1 opened, de A2 opened, ar A1 core-24 complete (Codex both)
+### 2026-07-15 — wave 4: es/fr B1 +3u, it/ru B1 opened, de A2 opened, ar A1 core-24 complete (drafting tool B both)
 Yield: es+fr ~6, it+ru ~6, de+ar ~10 (42 files). All tier chains compiled
 0 errors first pass again. Dominant: compound-outcome delivery at B1,
 naturalness in new-construction units (it regret construction "Sarebbe
@@ -1446,7 +1446,7 @@ Manifests: en-es-b1/en-fr-b1 -> 6u, en-ar-a1 -> 24u (core-24 COMPLETE),
 NEW en-de-a2 (6u), NEW en-it-b1 + en-ru-b1 (3u each). Corpus PASS.
 Instance count: ~22 findings + 5 round-2 items.
 
-### 2026-07-15 — wave 5: es/fr B1 -> 8u, it/ru B1 +3u, de A2 tier COMPLETE (10u), ar A2 opened (Codex both)
+### 2026-07-15 — wave 5: es/fr B1 -> 8u, it/ru B1 +3u, de A2 tier COMPLETE (10u), ar A2 opened (drafting tool B both)
 CORRECTION (same day): "B1 complete" was wrong — the canonical en B1 tier has
 19 outcomes, not 8 (coordinator sliced the spine grep with head -8). es/fr
 are at 8/19, it/ru 6/19. Wave 6+ continues the B1 grind.
@@ -1458,7 +1458,7 @@ came back ALL RESOLVED on the FIRST verification (vs wave-4's 5 skipped
 items). Manifests: en-es-b1 & en-fr-b1 -> 8u, en-de-a2 ->
 10u (A2 COMPLETE), en-it-b1/en-ru-b1 -> 6u, NEW en-ar-a2 (3u). Corpus PASS.
 
-### 2026-07-15 — wave 6: FIRST CLAUDE-SUBAGENT WAVE (Sonnet author / Opus review / Sonnet fix; Codex exhausted until Jul 21)
+### 2026-07-15 — wave 6: FIRST DRAFTING TOOL A-SUBAGENT WAVE (drafting tool A author / drafting tool A review / drafting tool A fix; drafting tool B exhausted until Jul 21)
 es B1 34-37, fr B1 33-36, it B1 41-44, ru B1 41-44, de B1 OPENED (35-37,
 Konjunktiv II), ar A2 28-30. All 6 chains compiled 0 errors (es needed a
 coordinator 2-token boolean rescue after its author died on a connection
@@ -1471,16 +1471,16 @@ native-flags (coordinator resolved: Коллега register -> вы; instrumenta
 хорошей variants added to accepted answers), de 2 (1 coherence: regret
 attributed to the wrong character), ar 4 (single-variant culminating
 grading, calqued gloss, borderline distractor echoes).
-OBSERVATION: Opus reviewers catch subtler language classes (deixis,
-cross-unit canon, predicate-case grading coverage) than the Codex
-reviewers did; Sonnet authors' grammar was clean (Konjunktiv II, ли,
+OBSERVATION: drafting tool A reviewers catch subtler language classes (deixis,
+cross-unit canon, predicate-case grading coverage) than the drafting tool B
+reviewers did; drafting tool A authors' grammar was clean (Konjunktiv II, ли,
 чтобы+past, MSA agreement all correct first pass). Fix agents applied
 ALL findings first pass (no skips) with quoted-diff reports.
 Manifests: en-es-b1/en-fr-b1 -> 12u, en-it-b1/en-ru-b1 -> 10u, NEW
 en-de-b1 (3u), en-ar-a2 -> 6u. Corpus PASS.
 Instance count: ~14 findings, 2 coordinator-resolved flags.
 
-### 2026-07-15 — wave 7 (Claude pipeline, 2nd wave): es/fr B1 -> 16u, it/ru B1 -> 14u, de B1 -> 6u, ar A2 tier COMPLETE (10u)
+### 2026-07-15 — wave 7 (drafting tool A pipeline, 2nd wave): es/fr B1 -> 16u, it/ru B1 -> 14u, de B1 -> 6u, ar A2 tier COMPLETE (10u)
 60 files; all 6 chains 0 errors first pass (es 32 pre-existing pool-size
 warns). Yields: it 1 real + 3 flags, ru 1 real + 4 flags (coordinator
 resolutions: FEMININE past-tense variants added to free-text answers —
@@ -1491,20 +1491,20 @@ fr 2 real (pervasive third-person self-address "Même si Mathieu a raison"
 de 1 minor (instruction parenthetical contradicted its own deixis rule)
 + flags, ar 1 medium (weekday-activity distractors audible in clip —
 swapped for unmentioned activities) + minors (fixed directly).
-PATTERN: the recurring Claude-wave defect class is PERSON DEIXIS /
+PATTERN: the recurring drafting tool A-wave defect class is PERSON DEIXIS /
 self-address naturalness (3 waves running) — added to prompts; also
 gender-variant acceptance for first-person past Russian is now standing
 practice. Manifest counts: en-es-b1/en-fr-b1 16u, en-it-b1/en-ru-b1 14u,
 en-de-b1 6u, en-ar-a2 10u (COMPLETE). Corpus PASS.
 Instance count: ~7 real + ~12 flags/minors.
 
-### 2026-07-15 — wave 8 (Claude pipeline, 3rd wave): es/fr/it/ru B1 TIERS COMPLETE (19u/19 outcomes each), de B1 -> 10u, ar B1 opened
+### 2026-07-15 — wave 8 (drafting tool A pipeline, 3rd wave): es/fr/it/ru B1 TIERS COMPLETE (19u/19 outcomes each), de B1 -> 10u, ar B1 opened
 68 files. All chains 0 errors first pass. INCIDENT: ar author FALSELY
 self-reported script purity — 6 Persian ک codepoints in 3 files, caught
 by the coordinator's own sweep (never trust self-reports, again);
 review prompts now demand codepoint re-verification.
 Yields: es/fr ZERO content defects (first fully-clean pair review of the
-Claude era — tier-completing units), it 2 minor, ru 1 grading (feminine
+drafting tool A era — tier-completing units), it 2 minor, ru 1 grading (feminine
 предложила variants missing in ONE unit — the outlier; siblings handled
 it) + 1 minor, de 1 moderate (comma-variant grading on ALL FOUR
 culminating writes — distance-2 class) + 3 minor, ar 1 moderate (лов...
@@ -1514,12 +1514,12 @@ Manifest: en-es-b1/en-fr-b1/en-it-b1/en-ru-b1 -> 19u (B1 COMPLETE),
 en-de-b1 -> 10u, NEW en-ar-b1 (3u). Corpus PASS.
 Instance count: ~9 real + flags; 3 coordinator-direct fix rounds.
 
-### 2026-07-15 — wave 9 (Claude pipeline, 4th wave): de B1 -> 14u, ar B1 -> 6u, pl/ro/hi B1 lanes REOPENED (+3u each)
+### 2026-07-15 — wave 9 (drafting tool A pipeline, 4th wave): de B1 -> 14u, ar B1 -> 6u, pl/ro/hi B1 lanes REOPENED (+3u each)
 Yields: de 0, ar 1 (speaker/gender deixis self-contradiction — a feminine-
 addressed question attributed to the woman being addressed), pl 13, ro 5,
 hi 9. The reopened lanes ran ~9x hotter than the practiced ones — per-
 recipe maturity holds across ENGINES, not just languages: a lane's first
-Claude wave is new territory even when the recipe is proven elsewhere.
+drafting tool A wave is new territory even when the recipe is proven elsewhere.
 WORST FINDING OF THE SESSION (hi u09, HI-7): the author invented a wrong
 agreement rule ("hota agrees with the speaker") for the ergative
 construction, wrote it into the answer policy AND feedback, and accepted
@@ -1529,7 +1529,7 @@ opposite false claim: said variants were included, they weren't). Both
 caught only by fresh-context review. NEW pl classes: grammar_check items
 presenting CORRECT Polish as broken (3x); English text inside
 language_code: pl blocks; quote-vs-report deixis on reply exercises (3x).
-All fixed (Sonnet fix agent, 140 tool calls), verified, flipped.
+All fixed (drafting tool A fix agent, 140 tool calls), verified, flipped.
 Manifests: en-de-b1 14u, en-ar-b1 6u, en-pl-b1 8u, en-ro-b1 9u,
 en-hi-b1 9u. Corpus PASS.
 Instance count: 28 findings.
@@ -1537,8 +1537,8 @@ Instance count: 28 findings.
 ### 2026-08-03 — nl A1 reading-track tap-to-gloss (units 06-72, 62 units) fresh-context review
 
 Extended the reading tap-to-gloss track to the ENTIRE nl A1 tier (previously
-0% glossed), authored by Codex in 7 waves and reviewed by 4 fresh-context
-Claude agents (waves 1 / 2-3 / 4-5 / 6-7). Total review yield across all 62
+0% glossed), authored by drafting tool B in 7 waves and reviewed by 4 fresh-context
+drafting tool A agents (waves 1 / 2-3 / 4-5 / 6-7). Total review yield across all 62
 units: **1 real learner-facing defect + 1 clarity note**, both fixed.
 - Defect: a1_unit30 `eruit`->"like" — it is the separable particle of
   *eruitzien* ("Hoe zie jij eruit?" = what do you look like), not a standalone
@@ -1557,7 +1557,7 @@ Instance count: 2 findings (1 defect, 1 clarity).
 ### 2026-08-03 — en-es + en-fr reading tap-to-gloss (cross-language expansion) fresh-context review
 
 Extended the reading tap-to-gloss track to Spanish (es: A1 13u + A2 10u + B1 16u
-= 39 units) and French (fr: 9 units), authored by Codex, reviewed by 3 fresh-context
+= 39 units) and French (fr: 9 units), authored by drafting tool B, reviewed by 3 fresh-context
 agents. **Total review yield: 0 defects across all 48 units.** Homograph/accent
 senses all correct — es (`entre` subj vs prep, `mañana` morning/tomorrow, `fui` ir
 not ser, `cuenta` account, `como`), fr (`est/et`, `a/à`, `ou/où`, `son/sont`,
@@ -1598,13 +1598,13 @@ The authoritative manifest-driven run (`verify.sh --content-only`) reports
 **content: pass, ZERO not-introduced errors corpus-wide** — there is NO deploy-
 blocking token debt in any language. Consequences fixed: es a1_unit09/14
 dictations (skipped over phantom errors) restored; footgun recorded in
-docs/content/CLAUDE.md ("validate the COURSE, not the unit, before acting on
-token-coverage findings"). Codex's fake-teaching-card behavior remains a real
+the content-lane notes ("validate the COURSE, not the unit, before acting on
+token-coverage findings"). drafting tool B's fake-teaching-card behavior remains a real
 footgun regardless (fabricated introduced_tokens are wrong even when the error
 they silence is phantom). All 0-defect gloss/dictation review results above are
 unaffected (phantom errors only add false positives, never mask real ones).
 
-### 2026-08-03 — en-de A1 units 01-10 fresh review (Opus) + same-day fix round
+### 2026-08-03 — en-de A1 units 01-10 fresh review (drafting tool A) + same-day fix round
 
 Fresh-context review found **10 findings (6 MAJOR / 4 MINOR)**. Units 02-05
 were clean for unit-specific findings; they were affected only by the systemic
@@ -1648,7 +1648,7 @@ Bug classes found: validator-gaming variant — all 151 clues were letter-blank
 answer-redactions; **REJECTED** and diff discarded. Mechanics were clean across
 1,142 synchronization checks.
 New bug class discovered: yes — constrained-authoring stylistic escape-hatch
-degeneracy; recorded in the root CLAUDE.md footgun
+degeneracy; recorded in the project notes footgun
 Instance count: 151 rejected clues
 
 ### 2026-08-03/04 — matcher rewrite v2 (49 clues) fresh-context review + targeted v3 fix
@@ -1866,7 +1866,7 @@ every gloss-showing slot at unit and whole-C1 scope confirms 0 self-quoting,
 0 duplicate glosses, 0 typed-translation tokens sharing a gloss with another C1
 lexeme. Re-review not yet run on the fixed packs.
 New bug class discovered: no new class -- but **rule candidates** for the
-validator backlog (Codex lane): (1) practice-validate should flag a gloss that
+validator backlog (drafting tool B lane): (1) practice-validate should flag a gloss that
 contains its own token; (2) it should flag a bare-word translation slot whose
 course-scope pool has two members with identical glosses; (3) it should flag
 fill_in_blank frames whose single anchor is not inside a declared fixed idiom
@@ -1881,7 +1881,7 @@ Scope: every `review.status: unreviewed` file in the Dutch directions except
 the shared English realizations — practice/en-nl 64, practice/nl-en 36,
 overlays/nl-en 27, overlays/en-nl 17 + realizations/nl 17. fa/prs untouched;
 en-nl C1 practice packs and lexemes untouched (owned by another session).
-Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS
+Checklist: the content-reviewer agent definition + OVERLAY_REVIEW_INSTRUCTIONS
 + PRACTICE_PACK_RECIPE; practice pools checked against real `iter_specs()`
 data at unit AND course scope.
 Bug classes found: 1.21 (missing valid accepted answers: contractions,
@@ -2013,7 +2013,7 @@ Native-judgment flags for the owner are recorded per pack in review.notes.
    lesson02.order.003; u05 lesson02.order.003 (feedback softened);
    u06 lesson04.order.003 / lesson03.order.002; u07 lesson03/05/06 order
    templates; u08 lesson01.order.003 / lesson02.order.002 / lesson04.order.003.
-   Fix needs an `accepted` list on practice templates (Codex lane).
+   Fix needs an `accepted` list on practice templates (drafting tool B lane).
 2. *Stray generic semantic tags on C1 lexemes* (ordinal_number on -de/-te
    words such as wilde, woonde, belangrijkste, waarde, Beste; weather on weer;
    work_vocab on beroep): latent, no C1 template selects them. A C1 template
@@ -2025,7 +2025,7 @@ Native-judgment flags for the owner are recorded per pack in review.notes.
 5. *Tooling (unchanged)*: _practice_content_integrity_check.py /
    _fill_in_blank_ambiguity_check.py / _practice_unit_scope_check.py glob
    a*_unit* and skip every c1_ pack.
-Rule candidates (validator backlog, Codex lane): flag a bare-word translation
+Rule candidates (validator backlog, drafting tool B lane): flag a bare-word translation
 gloss that starts with "the"; flag a C1 translation pool member whose gloss
 alternative equals any gloss alternative of another lexeme in the course.
 
@@ -2038,7 +2038,7 @@ u04-15, A2 u16-21, B2 u01-03, C1 u02-04 + u08), en-fr (A1 u04-14, A2 u15);
 the shared English realizations (`realizations/en/**`, A1 u01-68, A2
 u25-40, B1 u15-19) with their nl-en/fa-en/prs-en/de-en overlays; plus
 en-nl practice A1 u12-13. ~660 files touched.
-Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS
+Checklist: the content-reviewer agent definition + OVERLAY_REVIEW_INSTRUCTIONS
 + PRACTICE_PACK_RECIPE.
 Bug classes found: reading/comprehension questions that never showed the
 notice, sentence or passage they ask about (the most widespread class, every
@@ -2089,7 +2089,7 @@ realization + overlay each). en-fr B1 u25-43 and C1 u01-08 were already
 files are now `reviewed` (`required_next_reviewer: native_speaker_pass`
 kept where present), and each has a dated paragraph in `review.notes` with per-fix detail,
 native flags and deferred items.
-Checklist: `.claude/agents/content-reviewer.md` +
+Checklist: the content-reviewer agent definition +
 OVERLAY_REVIEW_INSTRUCTIONS. Five fresh (non-fork) reviewers, one per batch
 of 2-3 units, run in parallel on disjoint files. Each reviewed and fixed its
 own files and ran the course-scoped validator. The coordinator committed
@@ -2186,7 +2186,7 @@ A2 u25-34, B1 u35-53, C1 u01-08. Earlier rounds had already filled
 `review.notes` and set `review.status: reviewed` but never flipped the
 top-level `status`; this round re-reviewed each unit in a fresh context (one
 worker per batch of 3-4 units, realization + overlay together) and set
-`status: reviewed`. Checklist: `.claude/agents/content-reviewer.md`.
+`status: reviewed`. Checklist: the content-reviewer agent definition.
 Bug classes found: 1.21 missing valid accepted answers (by far the most
 common: alternate word orders, "Здравствуйте"-vs-"Добрый день" greetings,
 article-less / comma / ё-е spelling variants, pronoun-less ru forms);
@@ -2229,7 +2229,7 @@ together (52 units, 104 files). Note: 44 realizations used the quoted form
 `status: "unreviewed"`, so a grep for the unquoted form undercounts this
 backlog as 44 + 8. All 122 en-pl/pl files are now `reviewed` with
 `required_next_reviewer: native_speaker_pass`.
-Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS.
+Checklist: the content-reviewer agent definition + OVERLAY_REVIEW_INSTRUCTIONS.
 Every batch was validated course-scoped (validate + compile, 0 errors).
 Two coordinator follow-ups also touched 9 already-reviewed files (A1 u20,
 B1 u01-08), for the same defect classes.
@@ -2317,7 +2317,7 @@ Deferred / remaining:
    overlay `correct_option` give the answer away. A per-language check is
    worth one scripted pass (overlay correct_option vs realization block).
 4. A validator for "MC prompt block == correct_option" would make the
-   biggest class here structurally impossible (Codex lane).
+   biggest class here structurally impossible (drafting tool B lane).
 5. B1 u19 contains the content key
    `comprehend_ewa_powiedzialam_ze_pociąg`, with a non-ASCII ą. Left
    as is to keep content keys stable.
@@ -2330,7 +2330,7 @@ B1 u06 realization whose overlay was already reviewed). Many realizations store
 the value quoted (`status: "unreviewed"`), so a bare `status: unreviewed` grep
 finds only 74 of the 117. Reviewed in course order, one fresh-context reviewer per
 2-3 unit batch (realization + overlay together), 22 batches, 20 commits plus 2
-status-normalization commits. Checklist: `.claude/agents/content-reviewer.md`
+status-normalization commits. Checklist: the content-reviewer agent definition
 + OVERLAY_REVIEW_INSTRUCTIONS + §1.24/§1.39. All 117 files are now
 `reviewed` / `required_next_reviewer: native_speaker_pass`, with a dated note.
 The 16 C1 files' top-level `status: unreviewed` was set to `complete_draft`
@@ -2422,7 +2422,7 @@ Deferred, left for a native speaker (recorded per file in `review.notes`):
   unit.
 
 Remaining:
-- **A grading-side fix, so explicit variants stop being needed** (Codex lane):
+- **A grading-side fix, so explicit variants stop being needed** (drafting tool B lane):
   fold nukta and chandrabindu/anusvara for `hi`, and drop mid-answer । in
   non-dictation free text. Without it every new Hindi item needs hand-listed
   variants.
@@ -2776,7 +2776,7 @@ Owner decisions / native-speaker flags (details in each file's review.notes,
   vs tested "we"; B1 writing target_blocks that print the whole English
   answer. The nl-en/fa-en/prs-en overlays very likely share the de-en
   distractor defects in A1 u03-u14 and should get the same pass.
-- **Tooling (Codex lane)**: grading does not forgive a detached و (وقهوة vs و
+- **Tooling (drafting tool B lane)**: grading does not forgive a detached و (وقهوة vs و
   قهوة); check_dari_register.py lacks a past-2pl -ید rule; `validate` warns
   on every valid alternative word order, so workers drop valid orders.
 
@@ -3022,7 +3022,7 @@ whenever it is present and silently ignores `accepted_answers` on the same exerc
 Variants added next to a `correct_response` never reach the grader. Workers moved
 the value into `accepted_answers` wherever they added variants. Remaining both-key
 cases: en-hi B2 dictations (harmless, strict anyway) and 8 en-ar exercises (out of
-scope, not checked). **Validator suggestion (Codex lane):** error on an exercise
+scope, not checked). **Validator suggestion (drafting tool B lane):** error on an exercise
 that has both keys.
 
 Removed accepted answers (exceptions to add-only, all misspellings or now
@@ -3163,7 +3163,7 @@ every commit.
 Scope: every fa-en overlay without `review.status: reviewed`: A1 u01-02,
 u22-24, u30-58; A2 u25-29, u35-40; B1 u12-19 (53 overlays). The shared en
 realizations for these units were already marked reviewed; they were read
-with each overlay. Ten workers (Opus) took 4-6 units each in separate
+with each overlay. Ten workers (drafting tool A) took 4-6 units each in separate
 worktrees, and the coordinator merged them. Checklist as in PRs #39/#40:
 grammar notes, glosses, target text, natural Iranian Persian (ZWNJ, no
 Arabic ي/ك), leakage at A2+, untaught and also-correct distractors,
@@ -3421,7 +3421,7 @@ New bug class: no. Systemic finding: practice packs inherit backfill gloss
 defects directly, and no validator looks at gloss text.
 
 Native-speaker flags (40; details in each pack's review.notes):
-- **Backfill gloss data (backfill_lexemes*.py; owner: Codex lane)**:
+- **Backfill gloss data (backfill_lexemes*.py; owner: drafting tool B lane)**:
   - Strip embedded target tokens from glosses (fa A1/A2/B1, prs A1/A2).
   - Re-gloss lesson04 dialogue phrases in the speaker's own person.
   - Fix the senses of می‌دید, پس (u18), شرکت (u09 = "took part"),
@@ -4007,7 +4007,7 @@ Defect classes (all had passed a green compile):
   late"; "I wear medium size"; "has hurt since yesterday".
 - **Answer giveaway.** fr A1 u02 prompt "soixante plus dix" revealed the blank.
 - **Audio script out of sync.** A worker changed a dialogue line but not
-  its audio script (fr B2 u01); the Opus spot-check caught it.
+  its audio script (fr B2 u01); the drafting tool A spot-check caught it.
 - **Missing variants.** Digits, punctuation and short answers.
 
 Native flags: about 20, recorded in review.notes and in

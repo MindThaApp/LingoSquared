@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LLM-draft romanizations for ar/fa/prs via parallel `codex exec` jobs (reviewed=false).
+"""LLM-draft romanizations for ar/fa/prs via parallel non-interactive drafting-CLI jobs (reviewed=false).
 
 Work dir (drafts, batches, logs) lives OUTSIDE the repo (--work); results are merged into
 docs/content/translit/<lang>.json with `merge`. Never overwrites entries with source human/rule
@@ -22,6 +22,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from translit.common import REPO, collect_target_strings, latin_ok, load_store, save_store  # noqa: E402
+
+# Executable name of the external drafting CLI (must match the real binary on PATH).
+DRAFTER_BIN = "codex"
 
 SCHEME_DOC = (REPO / "docs/content/translit/SCHEME.md").read_text(encoding="utf-8")
 
@@ -88,7 +91,7 @@ def _run_job_once(lang, rows, work: Path, tag: str, model: str | None) -> dict[i
     jd.mkdir(parents=True, exist_ok=True)
     (jd / "prompt.txt").write_text(prompt_for(lang, rows), encoding="utf-8")
     out = jd / "out.txt"
-    cmd = ["codex", "exec", "-s", "read-only", "--skip-git-repo-check", "-C", str(jd), "-o", str(out),
+    cmd = [DRAFTER_BIN, "exec", "-s", "read-only", "--skip-git-repo-check", "-C", str(jd), "-o", str(out),
            "-c", 'model_reasoning_effort="low"']
     if model:
         cmd += ["-m", model]
@@ -139,7 +142,7 @@ def cmd_run(a):
             with lock:
                 fails["n"] += 1
                 if "usage limit" in (work / "jobs" / f"{a.lang}-{idx:05d}" / "log.txt").read_text(errors="ignore"):
-                    (work / "STOP").write_text("codex usage limit hit\n")
+                    (work / "STOP").write_text("drafting tool usage limit hit\n")
                 if fails["n"] >= a.max_fails:
                     (work / "STOP").write_text("too many failed jobs (limit hit?)\n")
             return

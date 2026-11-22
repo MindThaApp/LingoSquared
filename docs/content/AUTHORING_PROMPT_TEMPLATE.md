@@ -1,14 +1,14 @@
-# Content-authoring prompt templates (for dispatching Codex)
+# Content-authoring prompt templates (for dispatching drafting tool B)
 
-Built by Session 3 (INFRA) so every Codex content dispatch bakes in the
+Built by Session 3 (INFRA) so every drafting tool B content dispatch bakes in the
 standing rules from `AUTHORING_GUIDE.md` and the hard-won failure modes
-in `CLAUDE.md`/`docs/BUILD_LOG.md` by construction, instead of being
+in the project notes/`docs/BUILD_LOG.md` by construction, instead of being
 reconstructed (and potentially weakened) by hand each time. Fill in the
-`{...}` placeholders and pass the result to `codex-companion.mjs` with
+`{...}` placeholders and pass the result to `the drafting-tool companion script` with
 `--cwd "$LINGO_REPO"`.
 
 Three templates: target-language realization, source-language overlay,
-and fresh-context review. Use exactly one per Codex dispatch — never
+and fresh-context review. Use exactly one per drafting tool B dispatch — never
 combine authoring and reviewing in the same task, that's the whole
 point of "fresh context."
 
@@ -202,8 +202,8 @@ file is genuinely clean, say so explicitly and recommend
 ## Notes for whoever fills these in (Session 2 / CONTENT by default)
 
 - Always pass `--cwd "$LINGO_REPO"` to
-  `codex-companion.mjs` — see CLAUDE.md.
-- After Codex reports a review pass, still do your own independent
+  `the drafting-tool companion script` — see the project notes.
+- After drafting tool B reports a review pass, still do your own independent
   sweep for the specific bug classes that have shipped before: bare
   snake_case in `options`/`distractors`/`correct_option`, and words
   like "reviewed" leaking into feedback text (both have happened for

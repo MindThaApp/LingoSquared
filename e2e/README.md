@@ -1,8 +1,8 @@
 # Auvel end-to-end suite (Playwright)
 
-Built by Session 3 (INFRA) per `docs/SONNET_BUILD_PROMPT_UPGRADES.md` to
+Built by Session 3 (INFRA) per `docs/BUILD_PLAN_UPGRADES.md` to
 convert flows that have already been manually verified in a live browser
-(per `CLAUDE.md`/`docs/BUILD_LOG.md`) into a repeatable one-command
+(per the project notes/`docs/BUILD_LOG.md`) into a repeatable one-command
 check, instead of re-driving the browser interactively for every
 regression pass.
 
@@ -26,7 +26,7 @@ The older specs below are not part of this script; `dari-course`, `refresh-token
 1. The local Docker stack is up and seeded: start Docker (Docker Desktop / `sudo service docker start` on
    WSL / `colima start` on macOS), then `cd ../backend && docker compose up -d`, migrations applied, content
    imported per `scripts/manifest.d/content/*.txt`. Per the ownership map
-   in `docs/SONNET_BUILD_PROMPT_UPGRADES.md`, the Docker stack has ONE
+   in `docs/BUILD_PLAN_UPGRADES.md`, the Docker stack has ONE
    owner at a time -- this suite assumes someone else (or you, in a
    different terminal) already brought it up correctly. It will not
    start Docker, run migrations, or import content itself.
@@ -71,7 +71,7 @@ against the actual local stack (backend already up on :8000, seeded
 en-fa content). First run failed all 8 specs on `waitForURL` after
 register -- root cause: the dedicated e2e port wasn't in the backend's
 `CORS_ORIGINS` allowlist, the exact "confusing CORS false-lead"
-CLAUDE.md warns about. Fixed by moving to port 5175 (already
+the project notes warns about. Fixed by moving to port 5175 (already
 whitelisted). Second run: 5/8 passed, 3 failed on `strict mode
 violation: getByRole('link', ...) resolved to 2 elements` -- the NavBar
 renders both a desktop topbar nav and a mobile tabbar nav, so every nav
@@ -108,7 +108,7 @@ rebuild needed since the compose file bind-mounts the repo), are in
   seeded course's unit path (en-fa "Farsi Foundations").
 - `dari-course.spec.ts` -- the same coverage for en-prs "Dari
   Foundations" (fa and prs are separate content/RTL/script/keyboard
-  code paths, per the publish-gate scope in CLAUDE.md; fa passing
+  code paths, per the publish-gate scope in the project notes; fa passing
   doesn't prove prs works).
 - `lesson-teaching.spec.ts` -- opening a lesson, advancing through
   teaching cards into the exercise phase.
@@ -247,7 +247,7 @@ polling the shared dev stack's course list showed the `en-prs`
 course's ID changing on every single check within an ~8-second window
 -- another session actively re-importing/recreating it concurrently.
 That's a genuine finding (now in
-`docs/SONNET_BUILD_PROMPT_UPGRADES.md`'s ownership map as a new rule:
+`docs/BUILD_PLAN_UPGRADES.md`'s ownership map as a new rule:
 don't destructively reimport a course while another session might be
 verifying against the shared stack), but it was a *second*, independent
 issue layered on top of bug #3 above -- confirmed by reproducing bug #3
@@ -275,7 +275,7 @@ navigation, teaching-card flow, and locked/unlocked states, but NOT
 that a real exercise grades correctly end-to-end -- that still needs a
 human in the browser, exactly per the project's existing verification
 bar. If full-lesson e2e completion becomes worth the investment,
-whoever owns the backend (Session 1/Codex) would need to add a
+whoever owns the backend (Session 1/drafting tool B) would need to add a
 dev-only endpoint that returns an exercise's accepted answer for a
 test account; flagging here rather than building it unilaterally since
 it's a backend/security-surface decision, not an INFRA one.

@@ -2,7 +2,7 @@
 
 Status: **SPEC / not yet built** (written 2026-08-02). Owner to schedule.
 This doc is self-contained: §1–§9 are the spec; **§10 is a build prompt a
-fresh-context Claude can execute if this conversation is gone.** File:line
+fresh-context drafting tool A can execute if this conversation is gone.** File:line
 pointers were mapped against the repo at 2026-08-02 — re-verify them before
 editing (code moves).
 
@@ -149,15 +149,15 @@ rendering-but-unregistered types). Re-verify each file:line before editing.
 
 | # | File (≈line at 2026-08-02) | Add | Lane | Guarded? | Failure if missed |
 |---|---|---|---|---|---|
-| 1 | `backend/app/models/entities.py:34-53` — `ExerciseType` enum | `dictation = "dictation"` | Codex | ❌ | import 422 / can't persist |
-| 2 | `backend/app/models/entities.py:280-288` — `ck_exercises_type` check constraint **+ Alembic migration** to alter it (fresh-migrate-safe) | new value in constraint | Codex | ❌ | Postgres rejects the row |
-| 3 | `scripts/compile_content.py:280-300` — `VALID_EXERCISE_TYPES` | `"dictation"` | Codex | ✅ (compiler) | compiler hard error |
-| 4 | `scripts/compile_content.py:3619-3623` — listen-type audio block in `compile_exercise` | add `"dictation"` | Codex | ❌ | no `audio_text` emitted → silent, unanswerable |
-| 5 | `packages/shared/src/api/types.ts:74-93` — `ExerciseType` union | `\| "dictation"` | Claude | ✅ (tsc) | tsc break; drives #6/#7 |
-| 6 | `frontend/src/components/exercises/ExerciseRenderer.tsx:18-52` — switch | `case "dictation":` → `<Translation/>` | Claude | ✅ (via #7) | falls to `unsupported_type` |
-| 7 | `frontend/src/components/exercises/ExerciseRenderer.test.tsx:36-80` — `PROMPTS: Record<ExerciseType, ExercisePrompt>` | a `dictation:` prompt entry | Claude | ✅ (self) | **the guardrail** — #5 makes this fail to compile until an entry exists, then fail until #6 routes it |
-| 8 | `backend/app/review/grading.py:31-48` — `FREE_TEXT_EXERCISE_TYPES` | `"dictation"` | Codex | ❌ | typed answer never runs strict/script grading (wrong grades) |
-| 9 | `docs/CONTRACT.md:52-58` (+ note ~:70-81) | `dictation` (≈`listen_type`, strict) | Claude | ❌ | contract drift |
+| 1 | `backend/app/models/entities.py:34-53` — `ExerciseType` enum | `dictation = "dictation"` | drafting tool B | ❌ | import 422 / can't persist |
+| 2 | `backend/app/models/entities.py:280-288` — `ck_exercises_type` check constraint **+ Alembic migration** to alter it (fresh-migrate-safe) | new value in constraint | drafting tool B | ❌ | Postgres rejects the row |
+| 3 | `scripts/compile_content.py:280-300` — `VALID_EXERCISE_TYPES` | `"dictation"` | drafting tool B | ✅ (compiler) | compiler hard error |
+| 4 | `scripts/compile_content.py:3619-3623` — listen-type audio block in `compile_exercise` | add `"dictation"` | drafting tool B | ❌ | no `audio_text` emitted → silent, unanswerable |
+| 5 | `packages/shared/src/api/types.ts:74-93` — `ExerciseType` union | `\| "dictation"` | drafting tool A | ✅ (tsc) | tsc break; drives #6/#7 |
+| 6 | `frontend/src/components/exercises/ExerciseRenderer.tsx:18-52` — switch | `case "dictation":` → `<Translation/>` | drafting tool A | ✅ (via #7) | falls to `unsupported_type` |
+| 7 | `frontend/src/components/exercises/ExerciseRenderer.test.tsx:36-80` — `PROMPTS: Record<ExerciseType, ExercisePrompt>` | a `dictation:` prompt entry | drafting tool A | ✅ (self) | **the guardrail** — #5 makes this fail to compile until an entry exists, then fail until #6 routes it |
+| 8 | `backend/app/review/grading.py:31-48` — `FREE_TEXT_EXERCISE_TYPES` | `"dictation"` | drafting tool B | ❌ | typed answer never runs strict/script grading (wrong grades) |
+| 9 | `docs/CONTRACT.md:52-58` (+ note ~:70-81) | `dictation` (≈`listen_type`, strict) | drafting tool A | ❌ | contract drift |
 
 **The four with no automated guard — enumerate by hand, they are the risk:**
 #1 (backend enum), #2 (DB constraint + migration), #4 (compiler audio-emit),
@@ -173,11 +173,11 @@ Endless Practice.
 
 ## 8. Build order & lane split
 
-1. **Codex (backend + compiler, one dispatch):** #1 enum, #2 constraint +
+1. **drafting tool B (backend + compiler, one dispatch):** #1 enum, #2 constraint +
    Alembic migration (fresh-migrate-safe), #3 `VALID_EXERCISE_TYPES`, #4
    compile audio block, #8 `FREE_TEXT_EXERCISE_TYPES` + the strict-by-type
    grading change. Coordinator applies + runs migration + pytest (isolated DB).
-2. **Claude (frontend + contract):** #5 shared union, #6 renderer case, #7
+2. **drafting tool A (frontend + contract):** #5 shared union, #6 renderer case, #7
    `PROMPTS` test entry, #9 CONTRACT.md. Run the full `npm run build`.
 3. **Content (both):** author a **pilot nl unit** with 2–3 dictation items
    (realization + overlay + `media_assets`), fresh-context review, compile.
@@ -200,31 +200,31 @@ Endless Practice.
 
 ---
 
-## 10. BUILD PROMPT (paste to a fresh-context Claude if this conversation is gone)
+## 10. BUILD PROMPT (paste to a fresh-context drafting tool A if this conversation is gone)
 
 > **Task: build a `dictation` exercise type for Lingo²** (repo:
 > `/Users/owner/dev/LingoSquared`). Read `docs/DICTATION_EXERCISE_SPEC.md`
-> in full first — it is the spec. Also read root `CLAUDE.md`, `backend/CLAUDE.md`,
-> `frontend/CLAUDE.md`, `docs/content/CLAUDE.md`, and `docs/CONTRACT.md`.
+> in full first — it is the spec. Also read the project notes, the backend notes,
+> `frontend/the project notes, the content-lane notes, and `docs/CONTRACT.md`.
 >
 > **What dictation is:** learner hears a TTS target-language sentence (no source
 > text), types it, graded orthography-strict. It reuses `Translation.tsx`
 > verbatim; it is `listen_type` with strict grading forced by type.
 >
-> **Lane rules (from CLAUDE.md):** backend/app/**, Alembic migrations, and
-> `scripts/compile_content.py` are **Codex's lane** — dispatch those via the
-> codex-companion, verify yourself (Codex has no Docker; you run the migration +
+> **Lane rules (from the project notes):** backend/app/**, Alembic migrations, and
+> `scripts/compile_content.py` are **drafting tool B's lane** — dispatch those via the
+> drafting tool B-companion, verify yourself (drafting tool B has no Docker; you run the migration +
 > pytest). Frontend/src/**, `docs/CONTRACT.md`, orchestration, and all
 > verification are **yours**. Content is authored by both, through a **separate
 > fresh-context review** before import.
 >
 > **Do this, in order:**
-> 1. Dispatch **Codex** to make the backend/compiler changes — spec §7 rows
+> 1. Dispatch **drafting tool B** to make the backend/compiler changes — spec §7 rows
 >    #1,#2,#3,#4,#8 and the strict-by-type grading change in §4. Row #2 needs a
 >    **fresh-migrate-safe** Alembic migration altering `ck_exercises_type`.
->    Diff Codex's output before applying (never trust its self-report). Apply,
+>    Diff drafting tool B's output before applying (never trust its self-report). Apply,
 >    run `alembic upgrade head`, run pytest on an **isolated test DB** (recipe in
->    `backend/CLAUDE.md` — NEVER the dev DB; a prior session wiped it).
+>    the backend notes — NEVER the dev DB; a prior session wiped it).
 > 2. Make the **frontend/contract** changes yourself — spec §7 rows #5,#6,#7,#9.
 >    Run the FULL `npm run build`. The `ExerciseRenderer.test.tsx` `PROMPTS`
 >    record is the guardrail: it won't compile until #5+#6+#7 are all done.

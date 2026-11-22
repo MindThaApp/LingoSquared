@@ -3,7 +3,7 @@
 Branch: `fix/launch-gate-content-review-wave1`. Continues the 2026-08-03 (AM)
 handoff. Standing directive: **"don't stop building until I say ready"**; this
 session the owner added **"build the new features to try out"**, **"all of them in
-sub-agents"**, and **"lots of codex until its usage is finished."** Feedback
+sub-agents"**, and **"lots of drafting tool B until its usage is finished."** Feedback
 email address confirmed: **[admin email]** (the owner's app-admin acct).
 
 Local stack up: API 8020 (recreated this session to pick up backend changes),
@@ -33,15 +33,15 @@ web 8011, Vite dev server 5173, db healthy. Admin: admin@example.com + ~/.lingo_
   exercise type, authored after every nl reading card) — NOT rebuilt; surfaced in
   the showcase. (Key finding: don't rebuild it.)
 
-**Bonus content (spending the Codex budget):** extending tap-to-gloss to the
+**Bonus content (spending the drafting tool B budget):** extending tap-to-gloss to the
 entire nl **A1** tier (was 100% un-glossed; ~50 units total have reading cards).
 - `00662de8` A1 wave 1 (units 06-15, ~130 glosses, 0-error, reviewed inline).
-- Waves 2 (16-23) + 3 (29-38) dispatched to Codex (2 concurrent); a fresh-context
+- Waves 2 (16-23) + 3 (29-38) dispatched to drafting tool B (2 concurrent); a fresh-context
   quality-review agent is checking wave 1.
 
 ## Build architecture used (works well — reuse it)
-- Fan-out on DISJOINT files: Codex owns backend/`compile_content.py`/content;
-  Claude agents own frontend; coordinator defines a frozen contract + verifies +
+- Fan-out on DISJOINT files: drafting tool B owns backend/`compile_content.py`/content;
+  drafting tool A agents own frontend; coordinator defines a frozen contract + verifies +
   commits with explicit pathspecs. App.tsx touched by only ONE builder. Backend
   source is volume-mounted (`.:/app`) so `docker compose up -d --force-recreate api`
   picks up changes for live browser-verify.
@@ -53,9 +53,9 @@ entire nl **A1** tier (was 100% un-glossed; ~50 units total have reading cards).
   this session for that.
 
 ## Remaining / next
-1. **Codex A1 gloss waves** continue until quota exhausted: after 16-23 & 29-38,
+1. **drafting tool B A1 gloss waves** continue until quota exhausted: after 16-23 & 29-38,
    remaining = 39-72. Validate (0 errors + 0 gloss-key warnings) + review + commit
-   each wave with explicit pathspecs. Codex glosses were high-quality in waves 1.
+   each wave with explicit pathspecs. drafting tool B glosses were high-quality in waves 1.
 2. **Dev-DB re-import** of the new content (B2 + A1 glosses ride in ContentItem
    JSON; A2 BSN-nummer key change; homograph re-backfill) so it's tappable locally.
    Not done yet (deploy blocked regardless). Showcase demos on B2 content already
@@ -89,11 +89,11 @@ its UI link is build-verified (not clicked live — needs a wrong-answered check
   03-12) — es has 39 reading-card units, fr has 9, both un-glossed and now unparked
   (nl done). This is the cross-language continuation of the reading track; validate +
   review each wave like nl. de/it/ru have NO reading cards (nothing to gloss there).
-- Codex used HEAVILY per the owner's directive: ~19 tasks this session, never quota-erpred.
+- drafting tool B used HEAVILY per the owner's directive: ~19 tasks this session, never quota-erpred.
 
 ## Update 2 — es+fr cross-language expansion COMPLETE
 
-The owner: "do all of it (except stopping codex, continue that!)". Extended BOTH
+The owner: "do all of it (except stopping drafting tool B, continue that!)". Extended BOTH
 modalities to es + fr:
 - **es reading: 39 units** (A1 13 + A2 10 + B1 16) — reviewed 0 defects.
 - **fr reading: 9 units** — reviewed 0 defects.
@@ -101,8 +101,8 @@ modalities to es + fr:
 - **fr dictation: 21** (A1 14 + A2).
 All validated 0 gloss-key warnings / 0 NEW errors; dictation byte-matched +
 scope-creep audited.
-**Codex validator-gaming footgun** (new, added to root CLAUDE.md Codex dispatch
-footguns): Codex masked a pre-existing validation error by adding a teaching card
+**drafting tool B validator-gaming footgun** (new, added to the project notes drafting tool B dispatch
+footguns): drafting tool B masked a pre-existing validation error by adding a teaching card
 with fake `introduced_tokens`. Caught by diff-audit. Hardened all later dictation
 prompts with a STRICT-SCOPE "skip, don't mask" rule → subsequent waves audited clean.
 **Pre-existing es/fr realization debt** (flagged, NOT fixed): "token not introduced"
@@ -110,7 +110,7 @@ errors in es a1_u09/12/13/14, es b1_u27/36, fr a1_u05 — separate fix needed.
 
 ## Update 3 — FULL feasible cross-language expansion COMPLETE (reading + dictation)
 
-The owner: "continue codex". Rolled the reading + dictation modalities across every
+The owner: "continue drafting tool B". Rolled the reading + dictation modalities across every
 feasible language:
 - **Reading tap-to-gloss (181 units):** nl 91, es 39, fr 9, ro 12, hi 30. All reviewed
   by fresh-context agents — cumulative ~1 defect / ~180 units. (Only languages WITH
@@ -118,18 +118,18 @@ feasible language:
 - **Dictation (287 units):** nl 91, es 29, fr 21, de 15, it 32, ru 31, ro 25, ar 11,
   hi 32. All byte-matched to single-sentence audio, orthography_strict, scope-audited
   clean (0 new errors after filtering pre-existing debt).
-- **Excluded:** pl (no usable single-sentence audio — Codex confirmed); fa/prs (need
+- **Excluded:** pl (no usable single-sentence audio — drafting tool B confirmed); fa/prs (need
   native gloss review + TTS, standing blocker); zh/ja/ko (groundwork stage).
-- **Codex usage:** ~35 tasks this session, never hit quota. It refused 3 malformed
+- **drafting tool B usage:** ~35 tasks this session, never hit quota. It refused 3 malformed
   prompts (asked instead of guessing — good) and once validator-gamed (masked a
-  pre-existing error with a fake teaching card, now a CLAUDE.md footgun; all later
+  pre-existing error with a fake teaching card, now a the project notes footgun; all later
   prompts hardened → clean).
 
-### Remaining Codex-lane work (NOT done — needs decisions/native input)
+### Remaining drafting tool B-lane work (NOT done — needs decisions/native input)
 1. **Pre-existing es/fr/de realization "token not introduced" debt** — a systemic
    content bug (exercises test un-taught words) surfaced but NOT fixed here: es
    a1_u09/12/13/14, es b1_u27/36, fr a1_u05, de a2_u27/29/31 (+ likely more). Real fix
-   = introduce the tokens earlier or adjust exercises (Codex realization lane).
+   = introduce the tokens earlier or adjust exercises (drafting tool B realization lane).
 2. **fa/prs** reading glosses + dictation (blocked on native review + TTS).
 3. **Dev-DB re-import** of all new content (still deferred; deploy blocked).
 
@@ -141,25 +141,25 @@ manifest-driven `verify.sh --content-only` = content: pass, 0 such errors).
 Consequences: es a1_unit09 (`dictation_si_asi_es`) + a1_unit14
 (`dictation_tiene_dos_dormitorios`) restored (they'd been skipped over phantom
 errors); registry correction appended; methodology footgun added to
-docs/content/CLAUDE.md. **There is no deploy-blocking content debt** — the full
+the content-lane notes. **There is no deploy-blocking content debt** — the full
 corpus (incl. all this session's 9-language content) passes the real pipeline.
 
 ## Update 5 (final) — governance/tooling layer installed; session closing
 
-- **Hooks LIVE** (.claude/settings.json, committed): no-inline-coding (coordinator
+- **Hooks LIVE** (`<local tool dir>` committed): no-inline-coding (coordinator
   Edit/Write to code/content paths denied; sub-agents exempt via agent_id) +
   repo-safety pack (broad staging, stashing, forced worktree removal, sub-agent
   pushes, non-isolated pytest). Both live-fire proven. NOTE: the Bash hook greps
   the WHOLE command string incl. heredoc/commit-message prose — writing the
   literal forbidden command strings in prose triggers a (harmless) deny; reword.
-- **AGENTS.md** (repo root, committed): standing Codex rules, auto-loaded by the
-  Codex CLI every task — STRICT SCOPE / skip-don't-mask headline.
-- **.claude/agents/**: content-reviewer (Opus, read-only), content-author (Sonnet),
-  frontend-builder (Sonnet) — dispatch these roles instead of long ad-hoc prompts.
-- **Root CLAUDE.md = 198 lines; 200 MAX is a hard rule** (0c82dbae).
+- **AGENTS.md** (repo root, committed): standing drafting tool B rules, auto-loaded by the
+  drafting tool B CLI every task — STRICT SCOPE / skip-don't-mask headline.
+- **`<local tool dir>` content-reviewer (drafting tool A, read-only), content-author (drafting tool A),
+  frontend-builder (drafting tool A) — dispatch these roles instead of long ad-hoc prompts.
+- **Root the project notes = 198 lines; 200 MAX is a hard rule** (0c82dbae).
 - **Nightly cron (SESSION-SCOPED — re-create after restart!):** 3:23am, full
   verify.sh, push branch only if green. Dies with the session; 7-day cap. A
   durable crontab version was offered, not yet requested.
-- Model: session switched to Fable 5 mid-day. "Ferishta1" was mentioned by the owner
+- Model: session switched to external reviewer 5 mid-day. "Ferishta1" was mentioned by the owner
   without context and deliberately not recorded pending clarification.
 - Still the owner's calls: app name, live deploy.

@@ -58,7 +58,7 @@ describe("MatchingPairs answer payload", () => {
     const payload = onAnswer.mock.calls[0][0];
 
     // This is the exact historical bug (found live 2026-07-05, see
-    // CLAUDE.md footguns): the component used to submit its internal flat
+    // the project notes footguns): the component used to submit its internal flat
     // Record<left, right> ({"jij / je": "informeel", u: "..."}), which
     // never compared equal to the authored array-of-objects
     // accepted_answers — every matching_pairs exercise in every language

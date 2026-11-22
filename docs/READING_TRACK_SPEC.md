@@ -95,19 +95,19 @@ shape: `prompt.target_blocks` = short passage-ref + question, `options`,
 `correct_response`).
 
 ## 5. Tap-to-gloss mechanism
-- **Compiler (Codex):** `compile_teaching_item()` (`compile_content.py:3450`)
+- **Compiler (drafting tool B):** `compile_teaching_item()` (`compile_content.py:3450`)
   already turns a `reading` card's `target`(+overlay `gloss`) into `text_blocks`.
   Extend it to also emit the overlay's `glosses` map onto the compiled teaching
   item (e.g. `teaching_item["glosses"] = {token: gloss}`), and thread it through
   the lesson-serve payload (`router.py:662-667` teaching serialization) so the
   client receives it. Validate: glosses keys should be tokens that actually occur
   in `target.text` (warn on a gloss key absent from the passage — likely a typo).
-- **Frontend (Claude):** a new **`GlossableText`** component. Given a
+- **Frontend (drafting tool A):** a new **`GlossableText`** component. Given a
   `TextBlock` + a `glosses` map: tokenize `block.text` (must match the app's
   `tokenize()`/grading token semantics; handle non-Latin — Arabic/Persian RTL,
   no-whitespace Han/Japanese, Hangul), render each token; tokens present in
   `glosses` get a tappable affordance + a popover showing the gloss; others render
-  plain. Respect the RTL container `dir` rule (`frontend/CLAUDE.md`). Wire it into
+  plain. Respect the RTL container `dir` rule (`frontend/the project notes). Wire it into
   the `reading`-card render path in `TeachingCardView.tsx` (only when a `glosses`
   map is present; otherwise fall back to today's plain `TextBlockList`, so all 320
   existing reading cards are unaffected). Keep the existing `SpeakButton`.
@@ -123,18 +123,18 @@ new exercise type. Register/touch only:
 
 | # | File (≈line 2026-08-03) | Change | Lane |
 |---|---|---|---|
-| 1 | `scripts/compile_content.py:3450` `compile_teaching_item()` | emit overlay `glosses` onto the compiled `reading` teaching item | Codex |
-| 2 | `scripts/compile_content.py` (validators) | warn if a `glosses` key isn't a token in `target.text` | Codex |
-| 3 | `backend/app/api/router.py:662-667` lesson-serve teaching serialization | include `glosses` in the served teaching item | Codex |
-| 4 | `packages/shared/src/api/types.ts` `TeachingItem`/card type (~:129) | add optional `glosses?: Record<string,string>` | Claude |
-| 5 | `frontend/src/components/GlossableText.tsx` (new) | tokenize + tappable gloss popover, RTL-aware | Claude |
-| 6 | `frontend/src/components/teaching/TeachingCardView.tsx:13,36` | use `GlossableText` for `reading` cards that have `glosses` | Claude |
-| 7 | `docs/CONTRACT.md` | document the `glosses` teaching-item field | Claude |
+| 1 | `scripts/compile_content.py:3450` `compile_teaching_item()` | emit overlay `glosses` onto the compiled `reading` teaching item | drafting tool B |
+| 2 | `scripts/compile_content.py` (validators) | warn if a `glosses` key isn't a token in `target.text` | drafting tool B |
+| 3 | `backend/app/api/router.py:662-667` lesson-serve teaching serialization | include `glosses` in the served teaching item | drafting tool B |
+| 4 | `packages/shared/src/api/types.ts` `TeachingItem`/card type (~:129) | add optional `glosses?: Record<string,string>` | drafting tool A |
+| 5 | `frontend/src/components/GlossableText.tsx` (new) | tokenize + tappable gloss popover, RTL-aware | drafting tool A |
+| 6 | `frontend/src/components/teaching/TeachingCardView.tsx:13,36` | use `GlossableText` for `reading` cards that have `glosses` | drafting tool A |
+| 7 | `docs/CONTRACT.md` | document the `glosses` teaching-item field | drafting tool A |
 
 ## 8. Build order & lane split
-1. **Codex (compiler + serve):** #1,#2,#3 — embed + serve `glosses`; validator.
+1. **drafting tool B (compiler + serve):** #1,#2,#3 — embed + serve `glosses`; validator.
    Coordinator diffs, imports a pilot, confirms the field reaches `GET /lessons/{id}`.
-2. **Claude (frontend + contract):** #4,#5,#6,#7 — `GlossableText` + wire-in +
+2. **drafting tool A (frontend + contract):** #4,#5,#6,#7 — `GlossableText` + wire-in +
    CONTRACT. Full `npm run build`.
 3. **Content (both):** author a **pilot nl reading lesson** — one `reading` card
    with a `glosses` map + 2–4 `reading_comprehension` questions — fresh-context
@@ -153,11 +153,11 @@ new exercise type. Register/touch only:
 
 ---
 
-## 10. BUILD PROMPT (paste to a fresh-context Claude)
+## 10. BUILD PROMPT (paste to a fresh-context drafting tool A)
 
 > **Task: build the graded reading track (MVP) for Lingo²** (repo:
 > `/Users/owner/dev/LingoSquared`). Read `docs/READING_TRACK_SPEC.md` fully
-> first, plus root/`backend`/`frontend`/`docs/content` `CLAUDE.md` and
+> first, plus root/`backend`/`frontend`/`docs/content` the project notes and
 > `docs/CONTRACT.md`.
 >
 > **What it is:** an in-lesson reading experience — a `reading` teaching card
@@ -171,17 +171,17 @@ new exercise type. Register/touch only:
 > makes only glossed tokens tappable. Do NOT auto-derive glosses from `Lexeme`
 > (homographs/inflections/untaught words → wrong or missing sense).
 >
-> **Lanes (CLAUDE.md):** `scripts/compile_content.py` + `backend/app/**` +
-> migrations = **Codex** (dispatch, diff before applying, run pytest on an
-> **isolated** DB yourself — Codex has no Docker). `frontend/src/**`,
+> **Lanes (the project notes):** `scripts/compile_content.py` + `backend/app/**` +
+> migrations = **drafting tool B** (dispatch, diff before applying, run pytest on an
+> **isolated** DB yourself — drafting tool B has no Docker). `frontend/src/**`,
 > `packages/shared`, `docs/CONTRACT.md` = **yours**. Content = both, through a
 > **fresh-context review**.
 >
-> **Do, in order:** (1) dispatch Codex for spec §7 rows #1–#3 (emit + serve
+> **Do, in order:** (1) dispatch drafting tool B for spec §7 rows #1–#3 (emit + serve
 > `glosses`, plus the key-in-passage validator); diff + apply + verify the field
 > reaches `GET /lessons/{id}`. (2) Build the frontend: §7 rows #4–#7 — a new
 > `GlossableText.tsx` (tokenize the block text matching the app's token
-> semantics, RTL-aware per frontend/CLAUDE.md; tappable popover only for tokens in
+> semantics, RTL-aware per frontend/the project notes; tappable popover only for tokens in
 > the `glosses` map; keep the SpeakButton), wired into `TeachingCardView` for
 > `reading` cards that carry glosses (fall back to plain `TextBlockList`
 > otherwise so the 320 existing reading cards are unchanged); update CONTRACT.md;

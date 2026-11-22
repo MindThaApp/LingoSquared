@@ -29,7 +29,7 @@ from app.models import (
 # silently keeping fa's listen_select generation off even though fa
 # now has a real, working TTS voice.
 #
-# Not TTS_SUPPORTED_LANGUAGES either (2026-07-07, Fable audit finding):
+# Not TTS_SUPPORTED_LANGUAGES either (2026-07-07, external reviewer audit finding):
 # that set is static language-membership, added the day a provider
 # integration merges -- it says nothing about whether that provider has
 # real credentials configured on THIS deploy target right now. fa was

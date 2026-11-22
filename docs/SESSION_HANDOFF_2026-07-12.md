@@ -1,6 +1,6 @@
 # Session handoff — written 2026-07-12 ~04:15, before context clear
 
-Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume
+Read this + `docs/COORDINATOR_HANDBOOK.md` + the project notes to resume
 coordinating. Everything below is committed & pushed (private GitHub:
 MindThaApp/LingoSquared).
 
@@ -22,24 +22,24 @@ MindThaApp/LingoSquared).
   German-lane (en-de/de-en, another session's files, sitting modified/
   untracked in the main working tree — do not touch without the owner's
   word that that session is dead).
-- **Codex usage**: hit ~6% remaining ~03:30, resets ~06:30. An hourly
+- **drafting tool B usage**: hit ~6% remaining ~03:30, resets ~06:30. An hourly
   ScheduleWakeup heartbeat is armed to dispatch the queued wave after
-  reset (wave list below). Claude weekly budget ~50% — policy:
-  authoring/review on Codex gpt-5.5 (5.6 NOT available on ChatGPT
-  Codex, tested), Claude for verification/merges/browser/image-reading
+  reset (wave list below). drafting tool A weekly budget ~50% — policy:
+  authoring/review on drafting tool B (5.6 NOT available on vendor account
+  drafting tool B, tested), drafting tool A for verification/merges/browser/image-reading
   only.
 - **All 27 workers from the last session are landed.** No open
   worktrees, no uncommitted coordinator work.
 
-## Queued next wave (dispatch when Codex resets, ~06:30)
+## Queued next wave (dispatch when drafting tool B resets, ~06:30)
 
 1. **X→en B1 overlays units 07–11** (nl-en, fa-en, prs-en) against the
    reviewed en realizations `b1_unit07..11` — closes B1 at 11+ units in
-   every launch direction. Codex gpt-5.5 high; STRONG sibling-isolation
+   every launch direction. drafting tool B high; STRONG sibling-isolation
    rule in prompt; then fresh-context review; then both syncs.
 2. **Feedback-attachments frontend UI** — image picker in
    `FeedbackWidget.tsx` per CONTRACT.md "Feedback attachments" section
-   (backend is LIVE on both stacks, migration 0024). Claude Sonnet
+   (backend is LIVE on both stacks, migration 0024). drafting tool A
    worktree worker (frontend lane), phone-viewport verification, then
    rebuild `--mode production.lan` and rsync `frontend/dist/` to
    `ramin@192.168.4.4:/home/ramin/LingoSquared/backend/web_dist/`.
@@ -94,7 +94,7 @@ MindThaApp/LingoSquared).
 3. **Azure Speech key** (portal) — activates real Farsi TTS.
 4. **Before ANY external beta user**: change live `ADMIN_EMAILS` from
    `admin@example.com` to your real email and register it first
-   (documented in backend/CLAUDE.md deploy section).
+   (documented in the backend notes deploy section).
 5. **Your Dutch native review pass** + a phone QA evening on
    `http://192.168.4.4:8011` — the two human quality gates.
 6. **Tell the coordinator which lesson/screen showed the
@@ -106,13 +106,13 @@ MindThaApp/LingoSquared).
 ## Key facts future sessions must not relearn
 
 - Deploys to live from ≤0005 history MUST go fresh-DB (0004→0005
-  forward-reference crash) — documented in backend/CLAUDE.md.
+  forward-reference crash) — documented in the backend notes.
 - Live DB backup exists: `~/lingosquared_backup_20260711_2358.sql.gz`
   (server) — pre-first-deploy state.
 - `sync_dev_db.sh` picks the FULLEST course when demo courses share a
   language pair; groups packs per CEFR level (422 otherwise).
-- Codex tasks share the MAIN working tree — never two tasks on the same
-  file; commit per-task with explicit pathspecs; a "failed" Codex task
+- drafting tool B tasks share the MAIN working tree — never two tasks on the same
+  file; commit per-task with explicit pathspecs; a "failed" drafting tool B task
   usually died mid-flight platform-side — its partial tree work is real
   and a fresh continuation task finishes it cheaply.
 - The safety layer blocks credential writes + live-DB destructive ops:
@@ -131,9 +131,9 @@ All queued wave items landed; everything below is merged, reviewed
   (upload→submit→DB row confirmed; RTL fa pass; Persian-digit counter).
   Production rebuild + rsync to 192.168.4.4 HELD for the owner (deploy rule).
 - **X→en B1 closed at 11 units** in all three launch directions
-  (Codex-authored 07-11, Opus-reviewed: nl-en 0 defects, prs-en 0,
+  (drafting tool B-authored 07-11, drafting tool A-reviewed: nl-en 0 defects, prs-en 0,
   fa-en 1 same-speaker distractor). Manifest wired, dev DB synced.
-- **Two new compiler validators** (Codex): overlay matching_pairs
+- **Two new compiler validators** (drafting tool B): overlay matching_pairs
   accepted_answers must mirror realization pairs; listen audio must
   contain tested_text. Zero false positives corpus-wide; caught 4 real
   bugs (en-nl, en-ro ×3) — all fixed same session.
@@ -141,7 +141,7 @@ All queued wave items landed; everything below is merged, reviewed
   each (realizations + en-it/en-ru overlays), manifest-wired, imported
   to dev DB. Sources: FSI Italian FAST Vol 1, FSI Russian FAST (PD).
 - **Practice packs**: +90 templates (en-nl 43-48, en-fa 31-36, X-en
-  43-48) + backfill lexeme coverage; three Codex fix rounds were needed
+  43-48) + backfill lexeme coverage; three drafting tool B fix rounds were needed
   for lesson_categories/gloss gaps — the five-module iter_specs harness
   (see registry) is now the acceptance test for any backfill extension.
 - **fa/prs UI locale register normalization** (fa: 102 values → formal
@@ -167,11 +167,11 @@ All queued wave items landed; everything below is merged, reviewed
 ### New footguns learned tonight
 - sync_dev_db.sh's admin token can expire mid-run (30-min access token,
   long sync) → later imports 401. Re-run works; a token-refresh in the
-  script is Codex backlog.
+  script is drafting tool B backlog.
 - Never run sync while a merge is mid-conflict (it read conflict-marker
   YAML from the main tree once — harmless, but sequence syncs after
   merges complete).
-- Codex self-reported acceptance ("spec counts OK") missed full-iteration
+- drafting tool B self-reported acceptance ("spec counts OK") missed full-iteration
   failures twice — always run the exact harness yourself before commit.
 
 

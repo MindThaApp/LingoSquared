@@ -1,6 +1,6 @@
 # Session handoff — 2026-07-12 night (supersedes the EVENING doc)
 
-Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
+Read this + `docs/COORDINATOR_HANDBOOK.md` + the project notes to resume.
 **Everything below is committed and pushed to master. Nothing is in flight and the
 working tree is clean.**
 
@@ -40,7 +40,7 @@ They turn today's four newly-discovered bug classes into permanent checks:
 - untaught vocabulary in `prompt.target_blocks`, resolved **cumulatively** across
   prior units — the gap that let defects through both waves
 
-**On their first corpus run these found 3 real bugs**, one of them in a unit Opus
+**On their first corpus run these found 3 real bugs**, one of them in a unit drafting tool A
 had already reviewed and passed (en-it u14: instruction said "three words",
 accepted answer had four). All 3 are fixed.
 
@@ -90,7 +90,7 @@ class — and it turned out to have **10 compiler-invisible defects** (it valida
 character canon (Sam is an engineer since u02; u17 made him a teacher) — text that
 `audio_manifest.py` would have sent to the **paid audio recording queue**.
 
-**Rule now in root CLAUDE.md §Tiered review 4: a lane is mature per-RECIPE, not
+**Rule now in the project notes §Tiered review 4: a lane is mature per-RECIPE, not
 per-language. Moving to new TOPICS is new territory.** it/ru are back at FULL review.
 
 ## 5. Root cause of the 23 defects — and the cheap fix
@@ -101,34 +101,34 @@ that are in front of them while writing.**
 Proof from the same day: the ONE class I quoted VERBATIM in those dispatch prompts
 (duplicate/gloss-sharing matching_pairs lefts) came back with **ZERO findings in two
 independent reviews** — after needing 5 fixes the previous wave. Every defect found
-was a class the prompts did NOT mention. All three authors were **Sonnet**, and all
-had `docs/content/CLAUDE.md` auto-loaded. **Sonnet's capability was never the binding
+was a class the prompts did NOT mention. All three authors were **drafting tool A**, and all
+had the content-lane notes auto-loaded. **drafting tool A's capability was never the binding
 constraint — the prompt was.**
 
 → **`docs/content/AUTHORING_PREFLIGHT.md` now exists. PASTE IT VERBATIM into every
 content-authoring dispatch** (do not link it), and require a per-item self-report.
-First trial: the Sonnet fixer using it found an overlay-mirror dependency nobody had
+First trial: the drafting tool A fixer using it found an overlay-mirror dependency nobody had
 told it about, because it ran the real acceptance command.
 
 **Cost order, cheapest first: validator → checklist → review.** A validator costs
 tokens once and catches its class forever (the 3 new ones found 3 real bugs on their
-first corpus run — one in a unit Opus had already "reviewed" and passed). An Opus
+first corpus run — one in a unit drafting tool A had already "reviewed" and passed). An drafting tool A
 review costs 160-216k tokens EVERY wave. Reserve review for what neither can reach:
 character canon, "is this answerable by a human", genuine judgment. Review's real job
 is discovering NEW classes (it found 4 → 4 permanent validators), not re-finding known ones.
 
 ## 6. Budget & model routing (the owner, 2026-07-12 night)
 
-- **Remaining: Codex ~25%, Opus ~31%.** Codex is ~10x cheaper per month ($20 vs the
+- **Remaining: drafting tool B ~25%, drafting tool A ~31%.** drafting tool B is ~10x cheaper per month ($20 vs the
   $200 Max 20x plan) but is the SCARCER resource right now — don't dump routine work
-  into it. Spend the last 25% on things only Codex should do: **compiler validators**
+  into it. Spend the last 25% on things only drafting tool B should do: **compiler validators**
   (permanent value) and backend surgery.
-- **Recommended coordinator seat: Fable 5 at LOW effort** (bump to medium only when
-  actively diagnosing or ruling on something). Fable was the previous coordinator and
-  wrote the handbook heuristics. **Do NOT drop the coordinator to Sonnet** — every
+- **Recommended coordinator seat: external reviewer 5 at LOW effort** (bump to medium only when
+  actively diagnosing or ruling on something). external reviewer was the previous coordinator and
+  wrote the handbook heuristics. **Do NOT drop the coordinator to drafting tool A** — every
   worker today self-reported success and THREE were wrong; the coordinator is the last
   line of defence. Cheap workers, expensive verifier, not the reverse.
-- **Summon Opus deliberately** for exactly two things: fresh-context review of
+- **Summon drafting tool A deliberately** for exactly two things: fresh-context review of
   launch-gate content, and live debugging of a real bug.
 - **The dominant coordinator cost is context re-sent per tool call and huge tool
   outputs — not thinking tokens.** Fewer, denser tool calls beats lowering effort.
@@ -156,7 +156,7 @@ is discovering NEW classes (it found 4 → 4 permanent validators), not re-findi
 ## 9. State at handoff
 
 - master = all of today's work, pushed to private GitHub. Working tree CLEAN
-  (only `.claude/settings.json`, pre-existing and not mine).
+  (only `<local tool dir>`, pre-existing and not mine).
 - 9 worktree entries exist from today's dispatches — all merged; safe to prune, but
   **check `git log --oneline <branch> -1` against each branch's own base before
   `git worktree remove`** (standing footgun: "ancestor of master" != "merged").

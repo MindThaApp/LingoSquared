@@ -69,7 +69,7 @@ class Settings(BaseSettings):
     # Phase H2 (2026-07-07 integrity audit): the three limiters above left
     # /tts, /stt/transcribe, and the three generation endpoints (reviews/
     # session, practice/batch, units/checkpoint) completely unrated -- see
-    # docs/SONNET_BUILD_PROMPT_LAUNCH.md Phase H2 for the full finding.
+    # docs/BUILD_PLAN_LAUNCH.md Phase H2 for the full finding.
     tts_rate_limit_max: int = 30
     # Per-account daily character cap for /tts, separate from the existing
     # shared monthly budget in TTSUsage -- that budget is account-agnostic,

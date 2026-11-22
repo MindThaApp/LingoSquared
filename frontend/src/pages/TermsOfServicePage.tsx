@@ -9,7 +9,7 @@ import { LegalDocument } from "./LegalDocument";
 //
 // Honest-to-the-codebase claims worth preserving if this gets rewritten:
 // - There is genuinely NO password reset/recovery mechanism (an accepted
-//   limitation in CLAUDE.md) — the accounts section tells users so plainly
+//   limitation in the project notes) — the accounts section tells users so plainly
 //   rather than hiding it. Remove that sentence if/when password reset ships.
 // - Guest sessions are browser-local and unrecoverable (matches the login
 //   page's own guest warning).

@@ -39,7 +39,7 @@ Files: `docs/content/realizations/nl/b2_unit0[1-8]_*.yaml` + `docs/content/overl
 
 1. **B2 checkpoint-enabling** (not started). The B2 units are LESSONS only — no practice/checkpoints yet. To enable, like the a2_35-40 wave:
    - Backfill already wired (`UNIT_FILES_B2` + NL_GLOSSES delta done).
-   - Author **8 en-nl b2 practice packs** → register in `practice_manifest.txt` → import → verify checkpoints AVAILABLE (need ≥12 items each). Backfill is **Codex-lane**.
+   - Author **8 en-nl b2 practice packs** → register in `practice_manifest.txt` → import → verify checkpoints AVAILABLE (need ≥12 items each). Backfill is **drafting tool B-lane**.
 2. **Deploy to live** (below) so the owner/friend can try B2 + a2_35-40.
 3. **Native-Dutch review** of the 8 B2 drafts (naturalness) + fa/prs glosses — the owner.
 
@@ -73,7 +73,7 @@ scripts/sync_dev_db.sh http://192.168.4.4:8010
 - **Content-scaling strategy** (the owner raised, unresolved): build gold reference langs (English X→en + Dutch en→X) fully, then machine-adapt → automated-check (compilers + 26k grading tests + grammar pass) → native-refine outward to other pairs. nl B2 IS gold-reference step 1. If the owner confirms adopt-outward, switch main thrust to standing up that pipeline. See `project_2026-08-02_nl-b2-build-and-strategy.md`.
 - **App-store shipping + feedback wiring + Google/Apple sign-in**: social login already built (`POST /auth/social`, provider google|apple). Runbook published as artifact `ship-guide.html` (scratchpad). Hosting decision pending.
 - **App name**: The owner unhappy with suggestions. Current best fresh direction = mimic-bird metaphor: **Mynah** (lead), **Lyra**, **Yabber**, **Flume**. Awaiting a vibe steer (playful vs premium).
-- Uncommitted in tree (leave alone — not this session's): `.claude/settings.json`, pyc, `.firecrawl/`, `.playwright-mcp/`, `backend/docker-compose.{faqa,play}.yml`, `frontend/.env.faqa`.
+- Uncommitted in tree (leave alone — not this session's): `<local tool dir>`, pyc, `.firecrawl/`, `.playwright-mcp/`, `backend/docker-compose.{faqa,play}.yml`, `frontend/.env.faqa`.
 
 ---
 

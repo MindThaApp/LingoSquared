@@ -7,7 +7,7 @@ import type { GradedResult } from "./types";
  *
  * `correct_response` is an untyped `unknown` whose actual shape varies by
  * exercise type - this project has already shipped two real grading bugs
- * (matching_pairs, word_order/listen_order - see CLAUDE.md footguns) from
+ * (matching_pairs, word_order/listen_order - see the project notes footguns) from
  * assuming its shape without checking real content. Stay conservative here
  * too: only ever return a match when correct_response is a plain string (or
  * an array whose first/only element is a plain string) that is literally

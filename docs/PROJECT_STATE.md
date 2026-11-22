@@ -1,7 +1,7 @@
 # Project state — what exists today
 
 **Reference, not rules.** This file is deliberately NOT auto-loaded (root
-`CLAUDE.md` is, and stays rules-only so every worker in every lane doesn't pay
+the project notes is, and stays rules-only so every worker in every lane doesn't pay
 for state they don't need — see "How this documentation set works" there).
 Read this when you need to know WHAT EXISTS. Full chronological history is in
 `docs/BUILD_LOG.md`; the current session's state is in the latest
@@ -43,7 +43,7 @@ Read this when you need to know WHAT EXISTS. Full chronological history is in
   `nightly-content.yml` cannot run until it exists on the default branch; the
   integration branch has never been merged to the default branch.
 
-## Language-path status (moved from root CLAUDE.md, 2026-08-03)
+## Language-path status (moved from the project notes, 2026-08-03)
 
 24 directed en↔X learning paths across nl, fr, de, it, es, ru, zh, fa,
 prs, ar, ko, ja. **ar** approved 2026-07-11 with first content live.
@@ -61,7 +61,7 @@ are standing rules, not history:
   instances; `user_lexeme_srs`, `GET /me/reviews/due`,
   `POST /reviews/session`, `POST /reviews/items/{id}/retry`; adaptive
   recognition→structured→production ladder by mastery. *Invariant:* every
-  migration after 0001 must be fresh-migrate-safe (see backend/CLAUDE.md).
+  migration after 0001 must be fresh-migrate-safe (see the backend notes).
 - **Phase B (in-lesson error recycling)** — `LessonRunnerPage` recycles
   misses to queue end; 2 misses → non-blocking "copy it" pass; ≤2 due
   reviews prepend when `courseId` is known (via route `state`). Frontend-only.
@@ -88,7 +88,7 @@ are standing rules, not history:
   `GET /media/{key}` serving `backend/media_assets/{key}.mp3` (404 for
   unrecorded keys is expected); compiler rejects NEW embedded-"Name:"
   dialogue cards (`TextBlock.speaker` for splits); `speak()`/`SpeakButton`
-  chain (see frontend/CLAUDE.md). *Not done:* re-authoring existing
+  chain (see frontend/the project notes). *Not done:* re-authoring existing
   dialogue cards (CONTENT lane).
 - **Phase F (unit checkpoint / test-out)** — `POST /units/{id}/checkpoint`
   = 12–15 items (not gated on completion), `orthography_strict` forced
@@ -135,10 +135,10 @@ are standing rules, not history:
   STT via the free-text path; client-side WASM Whisper primary (zero audio
   leaves device), self-hosted `faster-whisper` (`POST /stt/transcribe`)
   fallback, never a cloud STT API. *Invariant:* Whisper runs
-  `dtype: "fp32"` (see frontend/CLAUDE.md).
+  `dtype: "fp32"` (see frontend/the project notes).
 - **Per-language TTS speech-speed** — `/tts` optional `speaking_rate`
   (1.0, 0.25–2.0); per-device per-language `localStorage` pref (see
-  frontend/CLAUDE.md). *Open:* a live-tab slider click-through was never
+  frontend/the project notes). *Open:* a live-tab slider click-through was never
   done — visual close-out next live browser session.
 
 - **Speaking suite (2026-07-13)** — pronunciation feedback (`/stt/transcribe`
@@ -147,7 +147,7 @@ are standing rules, not history:
   weakest-SRS-lexeme-first `speak_*` items) and **endless conversation
   practice** (`mode=conversation`, branching node graph, re-prompts instead of
   dead-ending). All zero-runtime-LLM. *Invariant:* `conversation` stays OUT of
-  `ExerciseType` (see frontend/CLAUDE.md). **Live-played 2026-07-14** on
+  `ExerciseType` (see frontend/the project notes). **Live-played 2026-07-14** on
   en→nl with a fresh account (typed path): speaking batch renders + grades,
   conversation advances/re-prompts/terminates, server STT `detail=words`
   verified with real TTS audio. Live-play also found the modes were
@@ -208,7 +208,7 @@ through in a live browser yet:
   drip content, not blocked.
 - **Publish-gate quality bar: "very usable, minimum bugs," not a phase
   checklist.** Beta users on the 3 launch pairs must hit essentially no
-  functional breakage. The Claude session earns this via the full
+  functional breakage. The drafting tool A session earns this via the full
   VERIFICATION BAR (below) on the actual lesson/review/practice flows
   BEFORE any user sees it — the report-button → triage loop is the next
   layer, not a substitute for pre-launch verification.
@@ -219,7 +219,7 @@ through in a live browser yet:
   prs-en 86 templates per `scripts/manifest.d/practice/*.txt`); actual
   hour-depth vs the bar hasn't been separately measured. Phase F unit
   checkpoints are a hard publish-gate requirement. Detail:
-  APP_SPEC_FOR_FABLE_REVIEW.md §1 + `project-lingosquared-roadmap` memory.
+  APP_SPEC_FOR_REVIEW.md §1 + `project-lingosquared-roadmap` memory.
 
 ## What's built and verified live
 
@@ -235,7 +235,7 @@ non-Latin scripts; self-reported level check with recommended-unit badge
 (not a placement system — rejected); mic-based speaking with client-side
 WASM Whisper STT.
 
-(Area-specific known limitations live in each area's CLAUDE.md:
+(Area-specific known limitations live in each area's the project notes:
 seeded-course counts + content limits → content; deploy/backend →
 backend; STT/frontend → frontend.)
 

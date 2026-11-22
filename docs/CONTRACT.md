@@ -1,7 +1,7 @@
 # Lingo² Shared Contract (source of truth)
 
-This file is the single source of truth that both the backend (Codex) and
-frontend (Claude) must agree on. Any change here requires updating both
+This file is the single source of truth that both the backend (drafting tool B) and
+frontend (drafting tool A) must agree on. Any change here requires updating both
 sides. Do not duplicate these definitions elsewhere — reference this file.
 
 ## Supported languages (fixed set, ISO 639-1/639-3 where applicable)
@@ -849,7 +849,7 @@ field, existing submission behavior is unchanged.
   authored in (see `docs/content/overlays/**`) — **a flat dict here
   will never compare equal and silently grades every match wrong**
   (real bug, shipped and fixed 2026-07-05, see `docs/BUILD_LOG.md`
-  and the matching CLAUDE.md footgun entry).
+  and the matching the project notes footgun entry).
   **`grade()` (`app/api/router.py`) additionally canonicalizes either
   representation** (flat `{left: right}` dict OR `{left,right}[]`, in
   any order) for this exercise type specifically, so both the frontend's
@@ -1849,13 +1849,13 @@ levels naturally get distinct titles, no schema constraint change needed.
 
 ## Integration ownership decision
 
-Codex owns the final backend+frontend integration pass (wiring the real
+drafting tool B owns the final backend+frontend integration pass (wiring the real
 frontend against the real running backend, Docker Compose bring-up,
-resolving any drift from this contract) — Codex is the one holding the
+resolving any drift from this contract) — drafting tool B is the one holding the
 authoritative OpenAPI/auth/error contract, so defects are less likely to
-fall into a no-man's-land between the two builds. Claude fixes any
+fall into a no-man's-land between the two builds. drafting tool A fixes any
 frontend-specific rendering/UX defects surfaced during that integration
-pass. Decided after a Codex cross-review of this doc and both build
+pass. Decided after a drafting tool B cross-review of this doc and both build
 prompts (see docs/ review notes) — revisit if it stops working in
 practice.
 
@@ -1875,7 +1875,7 @@ after a recorded asset and before `POST /tts`; slow/fast playback is
 (ElevenLabs never supported fa/prs at all; Google Cloud TTS turned out to
 have zero Persian/Dari voices either, so the fallback behavior below was
 unchanged at the time, only the primary provider changed). Phase D of the
-current build program (see `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) adds a
+current build program (see `docs/BUILD_PLAN_UPGRADES.md`) adds a
 third tier — recorded human audio for fa/prs — ahead of both.
 
 **Added 2026-07-06: Azure Cognitive Services Speech as a second cloud TTS

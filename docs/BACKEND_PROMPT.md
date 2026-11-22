@@ -1,8 +1,8 @@
-# Backend Build Prompt (for Codex)
+# Backend Build Prompt (for drafting tool B)
 
 You are building the backend for **Lingo²**, a local-first language learning
 app. This is a from-scratch build — there is no prior backend implementation
-to review or merge. A frontend is being built in parallel by Claude under
+to review or merge. A frontend is being built in parallel by drafting tool A under
 `frontend/` in this same repo; you do not need to touch it.
 
 **Scope boundary:** only write inside `"$LINGO_REPO"/`.
@@ -24,13 +24,13 @@ shape, and port conventions. It also documents the lesson-payload shape
 (all exercises in one response, no correct answers exposed, per-text-block
 language/direction for mixed-language exercises), the no-refresh-token /
 24h-token decision, and the no-public-course-creation-endpoint decision —
-all settled after a Codex review pass on an earlier draft, so treat these
+all settled after a drafting tool B review pass on an earlier draft, so treat these
 as resolved, not open. Follow it exactly so the frontend (built
 independently, in parallel) integrates without rework. If you still think
 something is wrong or underspecified, say so in your final report rather
 than silently changing behavior.
 
-You (Codex) also own the final backend+frontend integration pass once both
+You (drafting tool B) also own the final backend+frontend integration pass once both
 builds are done — see "Integration ownership decision" in
 `docs/CONTRACT.md`.
 

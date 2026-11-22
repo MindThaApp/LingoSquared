@@ -58,7 +58,7 @@ AZURE_TTS_VOICE_NAME={"fa":"fa-IR-DilaraNeural"}
 # static language-membership only, NOT proof the responsible provider
 # actually has credentials configured right now — see
 # `tts_actually_configured()` below, which the Endless Practice engine's
-# listen_select gate uses instead. A 2026-07-07 Fable audit flagged a
+# listen_select gate uses instead. A 2026-07-07 external reviewer audit flagged a
 # real latent trap: `fa` was added to this set once Azure was wired up,
 # but `azure_speech_key` defaults to empty, so gating generation on
 # language-membership alone would let listen_select items generate for

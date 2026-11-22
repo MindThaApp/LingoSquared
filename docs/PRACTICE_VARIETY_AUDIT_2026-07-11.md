@@ -205,7 +205,7 @@ so there is no correctness bug to fix. The format-monotony finding has
 two possible levers, and neither is a small/obviously-safe content
 edit:
 
-1. **Engine-level (recommended, primary fix — Codex's lane).** Stop
+1. **Engine-level (recommended, primary fix — drafting tool B's lane).** Stop
    strictly exhausting the recognition tier before structured/
    production for low-mastery lexemes. Interleave formats within a
    session so a beginner still gets a mix — options, cheapest first:

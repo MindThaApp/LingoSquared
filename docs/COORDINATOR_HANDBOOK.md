@@ -5,7 +5,7 @@ coordinating this project. This file is the canonical, version-controlled
 copy — per the owner's call (2026-07-11), ALL durable project knowledge lives
 in this repo, not in any machine-local memory store. If you learn a
 durable routine or rule, record it here (or in the file the
-"How this documentation set works" section of CLAUDE.md directs you to),
+"How this documentation set works" section of the project notes directs you to),
 commit, and push.
 
 ## Pipeline model (the owner's standing instruction)
@@ -14,21 +14,21 @@ commit, and push.
   verifies, and merges — it does not author content or write feature code
   itself. Launch-gate work (en-nl, en-fa, en-prs directions) always
   outranks post-launch drip content.
-- Model selection: Sonnet for authoring/analysis, Opus for fresh-context
+- Model selection: drafting tool A for authoring/analysis, drafting tool A for fresh-context
   review and precision fixes; never a stronger model than the task needs.
-  Codex (gpt-5.5 high for compiler/backend surgery, medium for routine
+  drafting tool B (the drafting model high for compiler/backend surgery, medium for routine
   round-trips) carries backend/compiler work and large language-content
-  fixes — deliberately load-balance toward Codex when Claude budget is
+  fixes — deliberately load-balance toward drafting tool B when drafting tool A budget is
   constrained (the owner tracks weekly usage; ~40% by day 2 prompted this).
-  gpt-5.6 is NOT available on ChatGPT-account Codex regardless of
-  usage resets — re-confirmed 2026-07-13 with gpt-5.6, gpt-5.6-codex,
-  and gpt-5.6-codex-high (identical server-side 400 "not supported when
-  using Codex with a ChatGPT account"; the ChatGPT WEBSITE offering 5.6
-  is a different product surface). Only paths: gpt-5.5, or an API key
+  the drafting model is NOT available on vendor account drafting tool B regardless of
+  usage resets — re-confirmed 2026-07-13 with the drafting model, the drafting model,
+  and the drafting model (identical server-side 400 "not supported when
+  using drafting tool B with a vendor account"; the vendor account WEBSITE offering 5.6
+  is a different product surface). Only paths: the drafting model, or an API key
   with per-token billing. Do not re-probe.
-  Budget snapshot 2026-07-13 00:18: Claude at 80% used (resets Fri
-  17:00), Codex 95% LEFT (resets ~6.5d) — route aggressively to Codex:
-  mechanical content repair, validators, backend; keep Opus reviews for
+  Budget snapshot 2026-07-13 00:18: drafting tool A at 80% used (resets Fri
+  17:00), drafting tool B 95% LEFT (resets ~6.5d) — route aggressively to drafting tool B:
+  mechanical content repair, validators, backend; keep drafting tool A reviews for
   launch-gate only; coordinator stays lean.
 - Every worker dispatch: isolated worktree, verified with
   `git worktree list` after dispatch; explicit-pathspec commits; unique
@@ -50,13 +50,13 @@ commit, and push.
 - History was secret-swept before first push (clean). Never commit real
   credentials; `.env` files stay untracked (only `.env.example`).
 
-## Documentation structure (see also CLAUDE.md's own section on this)
+## Documentation structure (see also the project notes' own section on this)
 
-- Four CLAUDE.md files: root (always loads, cross-cutting rules only) +
+- Four the project notes files: root (always loads, cross-cutting rules only) +
   docs/content/, backend/, frontend/ (each auto-loads only for agents
   working under that directory — deliberate token economy, never merge
   back into root).
-- Filing rule: rules → the right CLAUDE.md; incident narratives →
+- Filing rule: rules → the right the project notes; incident narratives →
   docs/BUILD_LOG.md; per-bug-class records with per-language ledger →
   docs/CONTENT_DEFECT_REGISTRY.md (every fresh-context review appends
   its findings there, including zero-defect results — that data drives
@@ -65,7 +65,7 @@ commit, and push.
   context re-sends on every tool call (prompt-cached ~10% after first).
   Loading less is the only real lever.
 
-## Review economics (tiered policy — details in CLAUDE.md)
+## Review economics (tiered policy — details in the project notes)
 
 - Automate known bug classes into validators first (the two 2026-07-11
   compiler validators caught 20 real bugs across es/de on day one);
@@ -86,7 +86,7 @@ commit, and push.
 ## Local models (Ollama on the M4 Pro) — assessed 2026-07-12, don't re-test without new models
 
 - Installed: qwen3:14b (9.3GB, the only one that fits alongside the Docker
-  stack on 24GB RAM), qwen3-coder:30b + deepseek-r1:32b (18-19GB — will
+  stack on 24GB RAM), qwen3-coder:30b + drafting tool C-r1:32b (18-19GB — will
   swap unless Docker is stopped first; don't use casually).
 - Benchmarked qwen3:14b on the §16 matching_pairs retrofit (the most
   local-model-friendly backlog we have): YAML format compliance and
@@ -105,7 +105,7 @@ commit, and push.
 - MLX is installed (can be ~10-30% faster than Ollama on the same model);
   only worth revisiting if a materially stronger small model lands.
 
-## Known multi-agent footguns (full list in root CLAUDE.md)
+## Known multi-agent footguns (full list in the project notes)
 
 The ones that have actually bitten coordinators: broad `git add` sweeping
 concurrent sessions' files; worktree removal destroying uncommitted work
@@ -113,8 +113,8 @@ concurrent sessions' files; worktree removal destroying uncommitted work
 tests at the shared `lingosquared` dev DB (name a unique DB in every
 dispatch); concurrent workers editing shared files
 (`scripts/_en_target_lexeme_common.py`, manifests) — serialize or
-reconcile by semantic comparison with validators as arbiter; Codex tasks
-run unisolated in the main working tree — never run two Codex tasks that
+reconcile by semantic comparison with validators as arbiter; drafting tool B tasks
+run unisolated in the main working tree — never run two drafting tool B tasks that
 touch the same file concurrently, and commit each task's output with
 explicit pathspecs.
 
@@ -132,17 +132,17 @@ explicit pathspecs.
   stores nothing). The shared dev DB reflects imports only — git is the
   source of truth.
 
-## Coordinator judgment heuristics (written by the Fable coordinator, 2026-07-12 — for any successor model)
+## Coordinator judgment heuristics (written by the external reviewer coordinator, 2026-07-12 — for any successor model)
 
 The pipeline is mature; your job is verification and routing, not
 cleverness. The failures that actually cost time today were all
 "trusted a report." Mechanical rules that substitute for judgment:
 
-1. **Never act on a worker/Codex self-report.** Before merging or
+1. **Never act on a worker/drafting tool B self-report.** Before merging or
    committing anything: `git show --stat <hash>` and confirm the file
    list matches the task scope EXACTLY; run the task's acceptance
    command yourself (put the verbatim command in every dispatch prompt
-   so "run it yourself" is copy-paste). Two fixers and Codex (twice)
+   so "run it yourself" is copy-paste). Two fixers and drafting tool B (twice)
    self-reported success today on work that failed my re-run.
 2. **After every merge/dispatch batch:** `git log --oneline -5` (agents
    sometimes commit straight to master when worktree isolation fails),
@@ -156,7 +156,7 @@ cleverness. The failures that actually cost time today were all
    (register norms, bar interpretations, anything the owner owns). A
    reviewer who says "this needs a human call" is right — route it to
    The owner, park the wave, keep other lanes moving.
-5. **Every new bug class → validator (Codex) or pinned rule (CLAUDE.md)
+5. **Every new bug class → validator (drafting tool B) or pinned rule (the project notes)
    + registry Section 4 entry, same session.** This is why review
    yields fell all day; keep the flywheel turning.
 6. **Quote register pins and the 3-5 task-critical rules VERBATIM in
@@ -165,24 +165,24 @@ cleverness. The failures that actually cost time today were all
 7. **Cadence:** merge → validate → registry/manifest → sync (never
    mid-conflict) → push, after every round. Background-run syncs with
    full logs (no tail pipes); grep logs for `"-> 401"` and `Traceback`.
-8. **Budget routing:** Codex for authoring/backend/compiler surgery,
-   Sonnet for scoped fixes/frontend, Opus ONLY for fresh-context review
+8. **Budget routing:** drafting tool B for authoring/backend/compiler surgery,
+   drafting tool A for scoped fixes/frontend, drafting tool A ONLY for fresh-context review
    and precision judgment. Launch-gate lanes stay full review until
    launch, no exceptions. **Sampling was tried on it/ru 2026-07-12 and
    REVERSED** — see heuristic 10.
 
 9. **Prevention is cheaper than detection — spend on the prompt, not the
-   reviewer.** 2026-07-12: three Sonnet-authored waves produced 23 defects,
+   reviewer.** 2026-07-12: three drafting tool A-authored waves produced 23 defects,
    and every one was a class the dispatch prompt did NOT mention. The one
    class quoted VERBATIM in those same prompts came back with ZERO findings
    in two independent reviews (it had needed 5 fixes the wave before).
-   Sonnet's capability was never the binding constraint — the prompt was.
+   drafting tool A's capability was never the binding constraint — the prompt was.
    So: paste `docs/content/AUTHORING_PREFLIGHT.md` verbatim into every
    authoring dispatch, and make the author self-report per item.
    Cost order, cheapest first: **validator → checklist → review.** A
    validator costs tokens once and catches its class forever (three new
    ones found 3 real bugs on their first corpus run, one of them in a unit
-   Opus had already "reviewed"); an Opus review costs 160–216k tokens
+   drafting tool A had already "reviewed"); an drafting tool A review costs 160–216k tokens
    EVERY wave. Reserve review for what neither can reach — character canon,
    "is this answerable by a human," genuine judgment. Review's real job is
    discovering NEW classes (it found 4 that day → 4 permanent validators),
@@ -203,16 +203,16 @@ cleverness. The failures that actually cost time today were all
     validated at 0 errors, and was found ONLY by playing the lesson. Reading
     a diff is not verification.
 
-12. **Codex can REVIEW, not just author.** Fresh-context content review on
-    Codex found 9 real defects in the de-en B1 wave (2026-07-13) at a
-    fraction of an Opus review's ~200k tokens. Route review there whenever
-    Claude budget is the constraint; keep Opus for launch-gate content only.
+12. **drafting tool B can REVIEW, not just author.** Fresh-context content review on
+    drafting tool B found 9 real defects in the de-en B1 wave (2026-07-13) at a
+    fraction of an drafting tool A review's ~200k tokens. Route review there whenever
+    drafting tool A budget is the constraint; keep drafting tool A for launch-gate content only.
 
-13. **Never accept a validator on its own armed test.** A Codex word_order
+13. **Never accept a validator on its own armed test.** A drafting tool B word_order
     validator passed the armed test IT wrote and still had a real gap (it
     only rejected answers matching the word-BANK order; any other wrong
     permutation passed silently). Write your OWN adversarial test every time.
-    Corollary, from the same day: Codex cannot run pytest or Docker — its
+    Corollary, from the same day: drafting tool B cannot run pytest or Docker — its
     "verified" means `py_compile`. **Running the suite is always the
     coordinator's job.**
 

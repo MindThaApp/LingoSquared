@@ -13,7 +13,7 @@ ungradeable-correct regardless of learner input because the frontend's
 submitted payload shape and the authored accepted_answers shape silently
 disagreed — matching_pairs (flat dict vs [{left,right}] array, found live
 2026-07-05) and word_order/listen_order (token list vs space-joined string,
-~84% of the corpus, found live 2026-07-07) are both documented in CLAUDE.md's
+~84% of the corpus, found live 2026-07-07) are both documented in the project notes'
 footguns. Nothing in the type system connects the compiler's output shape,
 the grader's expectations, and each component's submission shape — only
 actually grading a correct answer for every real exercise catches the next

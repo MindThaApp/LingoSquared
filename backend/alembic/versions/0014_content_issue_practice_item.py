@@ -27,7 +27,7 @@ Additive-only, per the project's established guarded-migration
 convention (every migration after 0001 must check existence before
 add_column/create_foreign_key/create_check_constraint, since 0001's
 `Base.metadata.create_all()` already creates this table in its CURRENT
-shape on a genuinely fresh install — see CLAUDE.md's Footguns section).
+shape on a genuinely fresh install — see the project notes' Footguns section).
 """
 
 import sqlalchemy as sa

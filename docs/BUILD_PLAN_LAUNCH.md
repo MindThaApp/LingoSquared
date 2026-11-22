@@ -1,16 +1,16 @@
-# Lingo² launch program — build prompt for the executing Claude session(s)
+# Lingo² launch program — build prompt for the executing drafting tool A session(s)
 
-Written 2026-07-07 by Fable, as the successor to
-`docs/SONNET_BUILD_PROMPT_UPGRADES.md` (phases A–G, all shipped and
-live-verified as of this date — see CLAUDE.md's "Current plan of
+Written 2026-07-07 by external reviewer, as the successor to
+`docs/BUILD_PLAN_UPGRADES.md` (phases A–G, all shipped and
+live-verified as of this date — see the project notes' "Current plan of
 record"). That program fixed the runtime learning loop. This one gets
 the app **into real users' hands and keeps it healthy there**. It was
 written alongside a same-day fresh security/integrity audit of
 `backend/app/**` (findings are Phase H below — they are new, not
 recycled from the 2026-07-05 passes).
 
-Everything standing in CLAUDE.md still binds: division of labor
-(backend = Codex, dispatched and verified by Claude), the
+Everything standing in the project notes still binds: division of labor
+(backend = drafting tool B, dispatched and verified by drafting tool A), the
 non-negotiable verification bar, every footgun, the rejected-scope
 list. Phases are lettered H onward to avoid collision with A–G in
 logs and commit messages.
@@ -25,11 +25,11 @@ beta-mechanics work only the owner can do, scheduled so it never blocks
 
 ---
 
-## Phase H — Pre-beta integrity and abuse fixes (Codex, small, do first)
+## Phase H — Pre-beta integrity and abuse fixes (drafting tool B, small, do first)
 
 These come from a 2026-07-07 code audit of the current
 `app/api/router.py` / `app/schemas/api.py` / `app/services/**`. None
-require a migration. All are additive and small; a single Codex
+require a migration. All are additive and small; a single drafting tool B
 dispatch plus the standard verification pass should clear the set.
 
 ### H1. Speaking-lock bypass (integrity, the real find of this audit)
@@ -47,7 +47,7 @@ The server-enforced speaking unlock is only checked in
 
 So a user can enumerate a locked unit's lessons, answer every exercise
 directly by ID (earning XP), and then `complete` each lesson — fully
-bypassing the unlock that CLAUDE.md describes as "server-enforced."
+bypassing the unlock that the project notes describes as "server-enforced."
 Fix: `exercise_answer()` and `complete()` must run the same
 `speaking_locked` check `start()` does (one shared helper, three call
 sites). Decide deliberately whether unauthenticated `GET
@@ -127,7 +127,7 @@ entire router that never call `enforce_rate_limit` — not even the loose
 120/min `ANSWER_RATE_LIMIT` every answer-submission path already shares.
 Each call is cheap individually (one `ContentIssueReport` insert), but
 the endpoint exists specifically to feed the admin triage queue that
-`docs/APP_SPEC_FOR_FABLE_REVIEW.md` §3 names as the load-bearing
+`docs/APP_SPEC_FOR_REVIEW.md` §3 names as the load-bearing
 post-launch feedback loop — an unrated account (or one compromised
 token) can flood that queue with thousands of rows, burying real
 reports and degrading the coverage dashboard right when it matters most
@@ -153,7 +153,7 @@ confirming 429s fire at the configured ceiling while normal use is
 unaffected (H2), a registration attempt with an oversized
 `display_name` (H3), and a scripted report-spam burst against both
 report endpoints (H4). All four are additive, no migration, small
-enough for a single Codex dispatch plus one verification pass — don't
+enough for a single drafting tool B dispatch plus one verification pass — don't
 let this phase balloon into a general re-audit; that pass already
 happened (`docs/NEXT_PHASE_ARCHITECTURE_SPEC.md` §2, Phase H0) and came
 back clean beyond these four findings.
@@ -178,7 +178,7 @@ H1–H4 (backup, observability, `PracticeItem` GC, and a full
 isolated-stack deploy rehearsal before touching 192.168.4.4) — read
 that document for the detail rather than this one duplicating it. The
 one build-prompt-specific addition here: fold this program's own Phase
-H (H1–H4 above) into the SAME Codex dispatch/verification pass as
+H (H1–H4 above) into the SAME drafting tool B dispatch/verification pass as
 whatever code changes come out of the deploy rehearsal's dry run, so
 the live server's first real deployment ships with the integrity fixes
 already in, not as a fast-follow patch applied right after real users
@@ -193,7 +193,7 @@ arrive.
   early so Phase J's deploy isn't blocked waiting on them at the last
   step.
 - **Azure Farsi TTS key provisioning**: built and tested, not yet live
-  (CLAUDE.md's Secrets section) — a owner-side Azure Portal action, not
+  (the project notes' Secrets section) — a owner-side Azure Portal action, not
   code; once H2's per-account TTS cap lands this becomes safe to flip
   on without a runaway-cost risk.
 - **fa/prs recorded-audio session**: Phase D's pipeline (manifest →
@@ -201,7 +201,7 @@ arrive.
   has zero real clips yet. Pure human time (the owner recording against
   `scripts/audio_manifest.py`'s queue), not a build task — schedule in
   parallel with H–J, it blocks nothing else.
-- **nl native-review pass**: ongoing per CLAUDE.md's standing
+- **nl native-review pass**: ongoing per the project notes' standing
   instruction (the owner reviews nl content directly as it's authored) —
   keep this flowing continuously, don't batch it up to the end.
 
@@ -213,7 +213,7 @@ forgotten while the code/ops phases are in flight.
 ## Ordering, scope discipline, and definition of done
 
 ```
-H (integrity/abuse fixes, Codex, small)  ->  J (backup/observability/GC/rehearsal,
+H (integrity/abuse fixes, drafting tool B, small)  ->  J (backup/observability/GC/rehearsal,
                                                  per NEXT_PHASE_ARCHITECTURE_SPEC.md §2)
                                                           |
                               I (content-depth ruler)  ->  finish content to the measured bar
@@ -233,7 +233,7 @@ nothing.
   compiler validation, backend pytest, full frontend build, live
   browser verification with a fresh account — reading a diff is not
   verification, this project has the scar tissue to prove it.
-- If any phase here turns out to need something CLAUDE.md's
+- If any phase here turns out to need something the project notes'
   rejected-scope list already closed off (runtime LLM, hearts, Redis
   before there's a real scale reason), stop and ask the owner — the
   standing rule from the A–G program is unchanged.

@@ -1,6 +1,6 @@
 # Session handoff — 2026-07-13 (supersedes the 2026-07-12 NIGHT doc)
 
-Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
+Read this + `docs/COORDINATOR_HANDBOOK.md` + the project notes to resume.
 **Everything below is committed and pushed to master. Verify state yourself
 (`git log --oneline -5`, `git status --short`, `git worktree list`,
 `bash scripts/verify.sh --content-only`) — do not trust this doc blindly.**
@@ -9,21 +9,21 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
 
 ## 1. BUDGET & ROUTING (the thing that changed most)
 
-- **Claude ~80% used, resets Friday 17:00. Codex ~95% LEFT, resets in ~6 days.**
-  The owner's standing instruction: **route aggressively to Codex.** Content
+- **drafting tool A ~80% used, resets Friday 17:00. drafting tool B ~95% LEFT, resets in ~6 days.**
+  The owner's standing instruction: **route aggressively to drafting tool B.** Content
   authoring, content REVIEW, compiler validators, backend surgery, mechanical
-  repair — all Codex. Reserve Claude for: coordination, verification, merges,
-  and `frontend/src/**` (Codex does not own the frontend lane).
-- **Codex can do fresh-context content review**, not just authoring — proved
-  today on the de-en B1 wave (found 9 real defects). Use it; an Opus review
+  repair — all drafting tool B. Reserve drafting tool A for: coordination, verification, merges,
+  and `frontend/src/**` (drafting tool B does not own the frontend lane).
+- **drafting tool B can do fresh-context content review**, not just authoring — proved
+  today on the de-en B1 wave (found 9 real defects). Use it; an drafting tool A review
   costs ~200k tokens.
-- **gpt-5.6 is NOT available on ChatGPT-account Codex.** Re-confirmed today
-  with THREE model IDs (`gpt-5.6`, `gpt-5.6-codex`, `gpt-5.6-codex-high`) —
-  all return a server-side 400 "not supported when using Codex with a ChatGPT
-  account". The ChatGPT *website* offering 5.6 is a different product surface.
-  gpt-5.5 is the ceiling. **DO NOT RE-PROBE THIS.**
+- **the drafting model is NOT available on vendor account drafting tool B.** Re-confirmed today
+  with THREE model IDs (`the drafting model`, `the drafting model`, `the drafting model`) —
+  all return a server-side 400 "not supported when using drafting tool B with a vendor account
+  account". The vendor account *website* offering 5.6 is a different product surface.
+  the drafting model is the ceiling. **DO NOT RE-PROBE THIS.**
 - **Token economy:** the dominant cost is context re-sent per tool call.
-  Polling Codex with status checks is the expensive anti-pattern. Instead
+  Polling drafting tool B with status checks is the expensive anti-pattern. Instead
   background ONE watcher per task:
   `until <status-check> | grep -q completed; do sleep 90; done` with
   `run_in_background: true` — costs one call, wakes you once when done.
@@ -85,7 +85,7 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
   mismatches warn. **Its first sweep found 6 real bugs** (fr/nl listen
   exercises playing the WRONG clip — unanswerable by listening), all fixed.
 - Answer-shapes corpus is CLEAN — the "~226 known failing" note in
-  docs/content/CLAUDE.md was STALE and has been corrected.
+  the content-lane notes was STALE and has been corrected.
 
 **Android APK:**
 - `android-shell/` (Capacitor) + `.github/workflows/android-apk.yml`. CI builds
@@ -98,11 +98,11 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
 
 ## 3. LESSONS THAT COST REAL TIME TODAY
 
-1. **Codex self-reports are unreliable in a specific way: it cannot run
+1. **drafting tool B self-reports are unreliable in a specific way: it cannot run
    pytest or Docker.** It reported "py_compile passed" as verification twice.
    **Running the suite is ALWAYS the coordinator's job.** Isolated-DB recipe is
-   in root CLAUDE.md; name a unique DB per run.
-2. **A Codex validator passed ITS OWN armed test and still had a real gap.**
+   in the project notes; name a unique DB per run.
+2. **A drafting tool B validator passed ITS OWN armed test and still had a real gap.**
    The word_order validator only rejected answers matching the *bank* order;
    any other wrong permutation passed silently. Found by writing MY OWN armed
    test. **Always write your own adversarial test, never just re-run theirs.**
@@ -161,11 +161,11 @@ expert work, and does not want workflow-interrupting questions.
    path returns no word confidences, so test with the client path disabled);
    does a conversation advance node-to-node and terminate. Do this BEFORE
    building anything else on top of them.
-2. **B2 English units 01-03** → Codex, against the new B2 spine (`0258a3f`).
+2. **B2 English units 01-03** → drafting tool B, against the new B2 spine (`0258a3f`).
    Then X→en overlays. FULL review — a new CEFR tier is new territory, and B2's
-   hedging/register/nuance content is exactly where a Sonnet/Codex author and a
+   hedging/register/nuance content is exactly where a drafting tool A/drafting tool B author and a
    validator have the least traction. Expect review yield to CLIMB again.
-3. **Grind the shallow paths toward B1 on Codex** (es/fr/it/ru/de/pl/ro/hi/ar
+3. **Grind the shallow paths toward B1 on drafting tool B** (es/fr/it/ru/de/pl/ro/hi/ar
    are 3-32 units vs the launch pairs' ~90).
 4. The owner should install `/home/ramin/shared/lingo.apk` and play a lesson — the
    ONE verification nobody has done.

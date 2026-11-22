@@ -3,12 +3,12 @@
 Date: 2026-11-18. Status: proposal, nothing here is implemented.
 Scope: the master spec for every platform. Platform differences are in `02-platforms.md`. The evidence behind each decision is in `00-review.md` (cited as R-n).
 
-This spec extends, and does not replace, `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §9 on branch `origin/docs/delight-spec`. Its motion tokens, feedback rules, shortcut table and acceptance checklists are adopted here by reference (cited as D§9.x). Where the two differ, this file says so.
+This spec extends, and does not replace, `docs/APP_SPEC_FOR_REVIEW.md` §9 on branch `origin/docs/delight-spec`. Its motion tokens, feedback rules, shortcut table and acceptance checklists are adopted here by reference (cited as D§9.x). Where the two differ, this file says so.
 
 Fixed constraints taken from the repo rules:
 - Every course is English-anchored (en→X, X→en). This spec proposes no new pair types.
 - Dutch is the polish reference; fa and prs are the mandatory RTL, virtual-keyboard and strict-script check for every phase.
-- `docs/CONTRACT.md` is updated before any API change. Backend and compiler work is Codex's lane; frontend and shared TypeScript is Claude's.
+- `docs/CONTRACT.md` is updated before any API change. Backend and compiler work is drafting tool B's lane; frontend and shared TypeScript is drafting tool A's.
 - Hearts, gems and leaderboard stay off by default (R25). **⏸ Pending decision (see DECISIONS.md): D7 gamification amounts and defaults**
 
 ---
@@ -524,7 +524,7 @@ Two independent axes; never conflate them:
 Rules:
 1. Layout uses logical properties only (§3.3). Flex and grid follow `dir` automatically; no `row-reverse` hacks.
 2. Every target-language fragment is wrapped by `TargetText` (sets `lang`, `dir`, isolation). Interpolated values inside translated strings use `<bdi>` (existing pattern in `LessonRunnerPage.tsx:358-366`); in plain-string contexts (notifications, `aria-label`, document title) use Unicode isolates FSI/PDI (U+2068/U+2069).
-3. Token sequences (tiles, word order, fill-in-blank with inline blanks) set `dir` on their own container from the answer language (existing rule in `frontend/CLAUDE.md`). Blanks inside RTL sentences are inline-block with `unicode-bidi: isolate`.
+3. Token sequences (tiles, word order, fill-in-blank with inline blanks) set `dir` on their own container from the answer language (existing rule in `frontend/the project notes). Blanks inside RTL sentences are inline-block with `unicode-bidi: isolate`.
 4. Progress, sliders, the week strip, carousels and swipe gestures run in the inline direction: "next" is toward inline-end. Screen transitions follow the same axis.
 5. Mirrored: back/forward chevrons, arrows, progress direction, send, list disclosure, undo/redo. Not mirrored: play, audio, mic, check, clock, charts with time on the x-axis keep time flowing in the UI direction (so they do mirror) but numerals stay LTR; logos never.
 6. Numerals: Persian digits in fa/prs UI prose; Latin digits where the learner is being taught Latin-script numbers; scores and ratios isolated LTR. `Intl.NumberFormat` and `Intl.DateTimeFormat` with the UI locale; calendar stays Gregorian in v1 with a setting for the Solar Hijri calendar (`fa-u-ca-persian`) on the week strip later.
@@ -718,12 +718,12 @@ Exit: §10 items 4–6.
 - `Store` on IndexedDB; all progress reads go through it; settings consolidated.
 - Outbox draining through existing endpoints; remove the "session unavailable" wall for users with local data; offline banner and sync indicator.
 - Workbox precache; update toast.
-- Backend (Codex lane, CONTRACT first): `POST /sync/batch`, accept bounded client timestamps.
+- Backend (drafting tool B lane, CONTRACT first): `POST /sync/batch`, accept bounded client timestamps.
 Exit: with a previously opened lesson cached, the app is usable offline except for grading (answers queue with a "will be checked when online" state — an interim state that Phase 4 removes).
 
 ### Phase 4 — Local grading, SRS and packs (5–7 weeks; the largest)
 - Golden-vector harness first, then the TypeScript grading port, then FSRS and progress rules.
-- Pack endpoints and compiler packaging (Codex lane); pack manager and Downloads settings; audio packs once audio is rendered.
+- Pack endpoints and compiler packaging (drafting tool B lane); pack manager and Downloads settings; audio packs once audio is rendered.
 
 > **⏸ Pending decision (see DECISIONS.md): D6 (answers to client); D4 affects the later Tauri v2 build**
 - Server re-grade and parity reporting.

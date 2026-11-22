@@ -12,15 +12,15 @@ specific:
 
     extract   en-Y overlays/packs/glosses -> flat *.src.json files (+ GUIDE.md) in .local/derive-cross/X-Y/
               (translate: write NAME.tr.json next to each NAME.src.json, by hand, by agents, or `translate`)
-    translate call the Gemini API for the missing ids (key from $GEMINI_API_KEY or secrets/gemini/api-key.txt)
+    translate call drafting API C for the missing ids (key from the DRAFTER_C_KEY_ENV variable or the DRAFTER_C_KEY_FILE file)
     status    coverage per file
     inject    overlays, packs, manifest lines, lexicon (docs/content/lexicon/X-Y.json) + backfill shim
     validate  compiler, practice-validate, leakage gates, English-leftover scan
 
     python3 scripts/derive_cross.py extract  --new es-fr --levels a1
     python3 scripts/derive_cross.py translate --new es-fr          # or fill the *.tr.json files otherwise
-    python3 scripts/derive_cross.py translate --new fr-es --codex  # Codex CLI (ChatGPT plan), resumable
-    python3 scripts/derive_cross.py translate --new fr-es --claude # headless `claude -p` (Sonnet, no tools), same logic
+    python3 scripts/derive_cross.py translate --new fr-es --drafter-b  # drafting CLI B, resumable
+    python3 scripts/derive_cross.py translate --new fr-es --drafter-a  # drafting CLI A in headless mode (no tools), same logic
     python3 scripts/derive_cross.py inject   --new es-fr --levels a1
     python3 scripts/derive_cross.py validate --new es-fr --levels a1
 
@@ -54,6 +54,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import derive_direction as dd  # noqa: E402
 
 ROOT, CONTENT = dd.ROOT, dd.CONTENT
+
+# Drafting back-ends.  The values below are the external tools' real executable / environment / endpoint names and
+# must stay as they are for the tools to be found; everything else in this file refers to them as drafter A / B / C.
+DRAFTER_A_BIN = "claude"            # CLI A, run headless
+DRAFTER_A_DEFAULT_MODEL = "sonnet"  # CLI A model alias
+DRAFTER_B_BIN = "codex"             # CLI B, run via its non-interactive `exec` mode
+DRAFTER_C_KEY_ENV = "GEMINI_API_KEY"
+DRAFTER_C_KEY_FILE = "secrets/gemini/api-key.txt"
+DRAFTER_C_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+DRAFTER_C_DEFAULT_MODEL = "gemini-2.5-flash"
 
 
 def group_names(pair: str, levels: list[str]) -> list[str]:
@@ -731,13 +741,13 @@ def cmd_batch(args):
         print(f"=== {pair} ===")
         cmd_extract(a)
         print(f"  translation memory filled {tm_prefill(a)} item(s)")
-        if args.gemini:
+        if args.drafter_c:
             a.model, a.batch = args.model, args.batch
             cmd_translate(a)
-        elif args.codex or args.claude:
+        elif args.drafter_b or args.drafter_a:
             a.sibling = f"en-{pair.split('-')[1]}"
-            backend = "claude" if args.claude else "codex"
-            (cmd_translate_claude if args.claude else cmd_translate_codex)(a)
+            backend = "drafter-a" if args.drafter_a else "drafter-b"
+            (cmd_translate_a if args.drafter_a else cmd_translate_b)(a)
             stp = Path(args.work, pair, f"{backend}-stats.json")
             if stp.exists() and json.loads(stp.read_text()).get("quota"):
                 print("  usage limit reached: stopping the batch")
@@ -1015,39 +1025,39 @@ if __name__ == "__main__":
 
 
 # ---------------------------------------------------------------------------
-# translate (Gemini)
+# translate (drafting API C)
 # ---------------------------------------------------------------------------
-def gemini_key() -> str:
+def drafter_c_key() -> str:
     import os
-    k = os.environ.get("GEMINI_API_KEY", "")
+    k = os.environ.get(DRAFTER_C_KEY_ENV, "")
     if not k:
-        p = ROOT / "secrets/gemini/api-key.txt"
+        p = ROOT / DRAFTER_C_KEY_FILE
         if p.exists():
             k = p.read_text().strip()
     if not k:
-        sys.exit("no Gemini key: set GEMINI_API_KEY or create secrets/gemini/api-key.txt (never committed)")
+        sys.exit(f"no drafter-C key: set {DRAFTER_C_KEY_ENV} or create {DRAFTER_C_KEY_FILE} (never committed)")
     return k
 
 
-def gemini_call(model: str, prompt: str, key: str) -> str:
+def draft_call_c(model: str, prompt: str, key: str) -> str:
     body = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
                        "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}}).encode()
     req = urllib.request.Request(
-        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+        DRAFTER_C_URL.format(model=model),
         data=body, headers={"Content-Type": "application/json", "x-goog-api-key": key})
     with urllib.request.urlopen(req, timeout=300) as r:
         return json.load(r)["candidates"][0]["content"]["parts"][0]["text"]
 
 
 def cmd_translate(args):
-    if getattr(args, "claude", False):
-        sys.exit(2 if cmd_translate_claude(args) else 0)
-    if getattr(args, "codex", False):
-        left = cmd_translate_codex(args)
+    if getattr(args, "drafter_a", False):
+        sys.exit(2 if cmd_translate_a(args) else 0)
+    if getattr(args, "drafter_b", False):
+        left = cmd_translate_b(args)
         sys.exit(2 if left else 0)
     work = Path(args.work) / args.new
     guide = (work / "GUIDE.md").read_text(encoding="utf-8")
-    key = gemini_key()
+    key = drafter_c_key()
     for src in sorted(work.glob("*.src.json")):
         name = src.name[: -len(".src.json")]
         items = json.loads(src.read_text(encoding="utf-8"))["items"]
@@ -1077,7 +1087,7 @@ def cmd_translate(args):
                       "non-'#' item.\n\n" + "\n".join(json.dumps(c, ensure_ascii=False) for c in ch))
             for attempt in range(3):
                 try:
-                    out = json.loads(gemini_call(args.model, prompt, key))
+                    out = json.loads(draft_call_c(args.model, prompt, key))
                     break
                 except (urllib.error.URLError, json.JSONDecodeError, KeyError) as e:
                     print(f"  retry {attempt + 1}: {type(e).__name__}")
@@ -1089,9 +1099,9 @@ def cmd_translate(args):
 
 
 # ---------------------------------------------------------------------------
-# translate (Codex CLI, `codex exec`)
+# translate (drafting CLI B, non-interactive exec)
 # ---------------------------------------------------------------------------
-CODEX_SCHEMA = {
+DRAFT_SCHEMA = {
     "type": "object", "additionalProperties": False, "required": ["items"],
     "properties": {"items": {"type": "array", "items": {
         "type": "object", "additionalProperties": False, "required": ["id", "t"],
@@ -1101,19 +1111,19 @@ QUOTA_RE = re.compile(r"usage limit|quota|exceeded your|insufficient_quota|credi
 RATE_RE = re.compile(r"rate.?limit|429|too many requests|overloaded|try again", re.I)
 
 
-class CodexQuotaExhausted(RuntimeError):
-    """The ChatGPT plan has no Codex usage left (retrying is pointless until the reset time in the message)."""
+class DrafterQuotaExhausted(RuntimeError):
+    """The drafting tool has no usage left (retrying is pointless until the reset time in the message)."""
 
 
-def codex_call(prompt: str, model: str | None = None, effort: str = "low", timeout: int = 900) -> tuple[str, dict]:
-    """One non-interactive `codex exec`: read-only sandbox, empty scratch cwd (no repo access), no user config/rules, nothing
-    persisted, final message constrained by CODEX_SCHEMA.  Returns (final message text, {"tokens": n, "events": [...]}).
-    Raises CodexQuotaExhausted on a hard usage limit and RuntimeError("rate: ...") on transient limits."""
-    with tempfile.TemporaryDirectory(prefix="codex-tr-") as tmp:
+def draft_call_b(prompt: str, model: str | None = None, effort: str = "low", timeout: int = 900) -> tuple[str, dict]:
+    """One non-interactive `DRAFTER_B_BIN exec`: read-only sandbox, empty scratch cwd (no repo access), no user config/rules, nothing
+    persisted, final message constrained by DRAFT_SCHEMA.  Returns (final message text, {"tokens": n, "events": [...]}).
+    Raises DrafterQuotaExhausted on a hard usage limit and RuntimeError("rate: ...") on transient limits."""
+    with tempfile.TemporaryDirectory(prefix="drafter-b-tr-") as tmp:
         tmpd = Path(tmp)
         schema, last = tmpd / "schema.json", tmpd / "last.txt"
-        schema.write_text(json.dumps(CODEX_SCHEMA), encoding="utf-8")
-        cmd = ["codex", "exec", "-s", "read-only", "--ephemeral", "--skip-git-repo-check", "--ignore-user-config",
+        schema.write_text(json.dumps(DRAFT_SCHEMA), encoding="utf-8")
+        cmd = [DRAFTER_B_BIN, "exec", "-s", "read-only", "--ephemeral", "--skip-git-repo-check", "--ignore-user-config",
                "--ignore-rules", "-C", str(tmpd), "--json", "--output-schema", str(schema), "-o", str(last),
                "-c", f'model_reasoning_effort="{effort}"']
         if model:
@@ -1134,17 +1144,17 @@ def codex_call(prompt: str, model: str | None = None, effort: str = "low", timeo
         err = " | ".join(info["events"]) or r.stderr[-300:]
         if r.returncode != 0 or not last.exists():
             if QUOTA_RE.search(err) and not RATE_RE.search(err.replace("try again at", "")):
-                raise CodexQuotaExhausted(err)
+                raise DrafterQuotaExhausted(err)
             raise RuntimeError(("rate: " if RATE_RE.search(err) else "") + (err or f"exit {r.returncode}"))
         return last.read_text(encoding="utf-8"), info
 
 
-def parse_codex_items(text: str) -> dict[str, str]:
+def parse_draft_items(text: str) -> dict[str, str]:
     data = json.loads(text)
     return {i["id"]: i["t"] for i in data["items"] if isinstance(i.get("id"), str) and isinstance(i.get("t"), str)}
 
 
-def codex_prompt(guide: str, chunk: list, hints: dict[str, str] | None = None) -> str:
+def draft_prompt(guide: str, chunk: list, hints: dict[str, str] | None = None) -> str:
     extra = ""
     if hints:
         extra = ("\nA previous attempt of these ids failed the checks below; fix exactly these problems:\n"
@@ -1156,7 +1166,7 @@ def codex_prompt(guide: str, chunk: list, hints: dict[str, str] | None = None) -
             + "\n".join(json.dumps(c, ensure_ascii=False) for c in chunk))
 
 
-def codex_chunks(work: Path, files: list[str], size: int) -> list[list]:
+def draft_chunks(work: Path, files: list[str], size: int) -> list[list]:
     """Untranslated items of all files, context rows kept in front of their items, ids namespaced `file/id`, size items per chunk."""
     chunks, chunk, n = [], [], 0
     for name in files:
@@ -1182,14 +1192,14 @@ def codex_chunks(work: Path, files: list[str], size: int) -> list[list]:
     return chunks
 
 
-def claude_call(prompt: str, model: str = "sonnet", effort: str | None = None, timeout: int = 900) -> tuple[str, dict]:
-    """One headless `claude -p`: no tools, empty scratch cwd, no settings/MCP/session, answer constrained by CODEX_SCHEMA.
-    Returns (final message JSON text, {"tokens": n, "usage": {...}, "cost_usd": x}).  Same error contract as codex_call
-    (CodexQuotaExhausted on a hard limit, RuntimeError("rate: ...") on transient limits)."""
-    with tempfile.TemporaryDirectory(prefix="claude-tr-") as tmp:
-        cmd = ["claude", "-p", "--model", model or "sonnet", "--output-format", "json", "--tools", "", "--no-session-persistence",
+def draft_call_a(prompt: str, model: str = DRAFTER_A_DEFAULT_MODEL, effort: str | None = None, timeout: int = 900) -> tuple[str, dict]:
+    """One headless `DRAFTER_A_BIN -p`: no tools, empty scratch cwd, no settings/MCP/session, answer constrained by DRAFT_SCHEMA.
+    Returns (final message JSON text, {"tokens": n, "usage": {...}, "cost_usd": x}).  Same error contract as draft_call_b
+    (DrafterQuotaExhausted on a hard limit, RuntimeError("rate: ...") on transient limits)."""
+    with tempfile.TemporaryDirectory(prefix="drafter-a-tr-") as tmp:
+        cmd = [DRAFTER_A_BIN, "-p", "--model", model or DRAFTER_A_DEFAULT_MODEL, "--output-format", "json", "--tools", "", "--no-session-persistence",
                "--setting-sources", "", "--strict-mcp-config", "--system-prompt", "You are a precise translation engine.",
-               "--json-schema", json.dumps(CODEX_SCHEMA)]
+               "--json-schema", json.dumps(DRAFT_SCHEMA)]
         if effort:
             cmd += ["--effort", effort]
         r = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=timeout, cwd=tmp)
@@ -1202,7 +1212,7 @@ def claude_call(prompt: str, model: str = "sonnet", effort: str | None = None, t
         if r.returncode != 0 or ev.get("is_error") or not isinstance(ev.get("structured_output"), dict):
             err = err or f"exit {r.returncode}"
             if QUOTA_RE.search(err) and not RATE_RE.search(err.replace("try again at", "")):
-                raise CodexQuotaExhausted(err)
+                raise DrafterQuotaExhausted(err)
             raise RuntimeError(("rate: " if RATE_RE.search(err) else "") + err[:300])
         u = ev.get("usage") or {}
         usage = {"input_tokens": int(u.get("input_tokens", 0)), "cache_read_input_tokens": int(u.get("cache_read_input_tokens", 0)),
@@ -1211,23 +1221,23 @@ def claude_call(prompt: str, model: str = "sonnet", effort: str | None = None, t
                                                       "cost_usd": float(ev.get("total_cost_usd") or 0)}
 
 
-def cmd_translate_claude(args, call=None, sleep=time.sleep) -> int:
-    """Same as cmd_translate_codex but through headless `claude -p` (stats in claude-stats.json)."""
-    return cmd_translate_codex(args, call=call or claude_call, sleep=sleep, backend="claude")
+def cmd_translate_a(args, call=None, sleep=time.sleep) -> int:
+    """Same as cmd_translate_b but through headless `DRAFTER_A_BIN -p` (stats in drafter-a-stats.json)."""
+    return cmd_translate_b(args, call=call or draft_call_a, sleep=sleep, backend="drafter-a")
 
 
-def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> int:
-    """Translate the missing ids of a work dir with `codex exec`.  Resumable (each finished chunk is written to NAME.tr.json at
+def cmd_translate_b(args, call=None, sleep=time.sleep, backend="drafter-b") -> int:
+    """Translate the missing ids of a work dir with `DRAFTER_B_BIN exec`.  Resumable (each finished chunk is written to NAME.tr.json at
     once), parallel (--workers), retries with backoff on transient limits, stops cleanly on a hard usage limit.  Returns the
     number of ids still untranslated."""
-    call = call or codex_call
-    model = getattr(args, f"{backend}_model", None)
+    call = call or draft_call_b
+    model = getattr(args, f"{backend.replace('-', '_')}_model", None)
     work = Path(args.work) / args.new
     guide = (work / "GUIDE.md").read_text(encoding="utf-8")
     target = args.new.split("-")[1]
     files = sorted(p.name[: -len(".src.json")] for p in work.glob("*.src.json"))
     srcs = {n: {i[0]: i for i in json.loads((work / f"{n}.src.json").read_text(encoding="utf-8"))["items"] if i[0] != "#"} for n in files}
-    chunks = codex_chunks(work, files, args.batch)
+    chunks = draft_chunks(work, files, args.batch)
     stats = {"calls": 0, "failed_calls": 0, "tokens": 0, "usage": {}, "cost_usd": 0.0, "rate_limited": 0, "lint_rejected": 0, "quota": None}
     lock = threading.Lock()
     stop = threading.Event()
@@ -1271,7 +1281,7 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> i
                 if stop.is_set():
                     return
                 try:
-                    text, info = call(codex_prompt(guide, todo, hints), model=model)
+                    text, info = call(draft_prompt(guide, todo, hints), model=model)
                     with lock:
                         stats["calls"] += 1
                         stats["tokens"] += info.get("tokens", 0)
@@ -1279,9 +1289,9 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> i
                         for k, v in (info.get("usage") or {}).items():
                             if isinstance(v, (int, float)):
                                 stats["usage"][k] = stats["usage"].get(k, 0) + v
-                    got = parse_codex_items(text)
+                    got = parse_draft_items(text)
                     break
-                except CodexQuotaExhausted as e:
+                except DrafterQuotaExhausted as e:
                     with lock:
                         stats["calls"] += 1
                         stats["failed_calls"] += 1
@@ -1672,7 +1682,7 @@ def cmd_validate(args):
 def cmd_cards(args):
     """Retrofit an existing cross pair with the overlay text that lives in the shared realization: English teaching card bodies
     (`teaching.<key>.target_text`) and English cloze hints (`exercises.<key>.prompt_blocks`).  Translates only what the pair's
-    overlays do not carry yet (Codex / Claude), then writes it into the existing overlay files.  A new pair needs none of this:
+    overlays do not carry yet (drafting tools A / B), then writes it into the existing overlay files.  A new pair needs none of this:
     `extract` already emits these items."""
     target = args.new.split("-")[1]
     cm = dd.read_manifest(dd.MANIFEST)
@@ -1713,9 +1723,9 @@ def cmd_cards(args):
         return
     cargs = argparse.Namespace(**vars(args))
     cargs.new = f"{args.new}-cards"
-    backend = "claude" if getattr(args, "claude", False) else "codex"
-    if getattr(args, "codex", False) or getattr(args, "claude", False):
-        left = cmd_translate_codex(cargs, call=claude_call if backend == "claude" else None, backend=backend)
+    backend = "drafter-a" if getattr(args, "drafter_a", False) else "drafter-b"
+    if getattr(args, "drafter_b", False) or getattr(args, "drafter_a", False):
+        left = cmd_translate_b(cargs, call=draft_call_a if backend == "drafter-a" else None, backend=backend)
         if left:
             sys.exit(2)
     # write
@@ -1752,11 +1762,11 @@ def main():
         sp = sub.add_parser(name)
         if name == "batch":
             sp.add_argument("--pairs", required=True, type=lambda s: s.split(","))
-            sp.add_argument("--gemini", action="store_true", help="translate missing ids with the Gemini API")
-            sp.add_argument("--codex", action="store_true", help="translate missing ids with the Codex CLI")
-            sp.add_argument("--claude", action="store_true", help="translate missing ids with headless `claude -p` (Sonnet, no tools)")
+            sp.add_argument("--drafter-c", action="store_true", help="translate missing ids with drafting API C")
+            sp.add_argument("--drafter-b", action="store_true", help="translate missing ids with drafting CLI B")
+            sp.add_argument("--drafter-a", action="store_true", help="translate missing ids with drafting CLI A in headless mode (no tools)")
             sp.add_argument("--inject", action="store_true", help="inject pairs that are fully translated")
-            sp.add_argument("--model", default="gemini-2.5-flash")
+            sp.add_argument("--model", default=DRAFTER_C_DEFAULT_MODEL)
             sp.add_argument("--batch", type=int, default=120)
         elif name == "plan":
             sp.add_argument("--glosses", action="store_true")
@@ -1769,18 +1779,18 @@ def main():
         if name == "check":
             sp.add_argument("files", nargs="*", help="file stems, e.g. a1_unit05 shared glosses (default: all)")
         if name == "cards":
-            sp.add_argument("--codex", action="store_true")
-            sp.add_argument("--claude", action="store_true")
+            sp.add_argument("--drafter-b", action="store_true")
+            sp.add_argument("--drafter-a", action="store_true")
             sp.add_argument("--batch", type=int, default=120)
         if name in ("translate", "batch", "cards"):
-            sp.add_argument("--codex-model", default=None, help="model for --codex (default: the Codex CLI default)")
-            sp.add_argument("--claude-model", default="sonnet", help="model for --claude")
-            sp.add_argument("--workers", type=int, default=4, help="parallel codex/claude calls")
+            sp.add_argument("--drafter-b-model", default=None, help="model for --drafter-b (default: that CLI's default)")
+            sp.add_argument("--drafter-a-model", default=DRAFTER_A_DEFAULT_MODEL, help="model for --drafter-a")
+            sp.add_argument("--workers", type=int, default=4, help="parallel drafting-tool calls")
             sp.add_argument("--retries", type=int, default=5)
         if name == "translate":
-            sp.add_argument("--codex", action="store_true", help="translate with `codex exec` (ChatGPT plan) instead of Gemini")
-            sp.add_argument("--claude", action="store_true", help="translate with headless `claude -p` (Sonnet, no tools)")
-            sp.add_argument("--model", default="gemini-2.5-flash")
+            sp.add_argument("--drafter-b", action="store_true", help="translate with drafting CLI B instead of API C")
+            sp.add_argument("--drafter-a", action="store_true", help="translate with drafting CLI A in headless mode (no tools)")
+            sp.add_argument("--model", default=DRAFTER_C_DEFAULT_MODEL)
             sp.add_argument("--batch", type=int, default=120)
         if name == "inject":
             sp.add_argument("--allow-missing", action="store_true")

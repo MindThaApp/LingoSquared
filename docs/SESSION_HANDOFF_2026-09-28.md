@@ -8,7 +8,7 @@ contains no credentials — keep it that way.**
 
 1. **Four-way app review** (frontend code, backend + grading, product/curriculum, live
    play-through). Consolidated ranked fix list (private artifact):
-   https://claude.ai/artifact/7xcm4p4jNeqEogF3Kp4Qpk
+   https://drafting tool A.ai/artifact/7xcm4p4jNeqEogF3Kp4Qpk
 2. **Fixed + committed + pushed:**
    - `fix(grading)`: NFC + quote folding; non-dictation free text ignores punctuation
      (opt-in `punctuation_strict`); multi-accepted-answer items get typo tolerance;
@@ -30,14 +30,14 @@ contains no credentials — keep it that way.**
 
 ## Next up (in order)
 
-1. **Arabic hamza "almost" (the owner APPROVED 2026-09-28, ar ONLY, never fa/prs).** Codex
+1. **Arabic hamza "almost" (the owner APPROVED 2026-09-28, ar ONLY, never fa/prs).** drafting tool B
    stopped honestly: `grade()` receives `script` but not the target language code, so it
    can't tell ar from fa/prs. Needs the language code threaded from `router.py` answer /
    practice / checkpoint call sites into `grade()`. Brief is in the old session scratchpad;
    re-write: fold أ إ آ → ا for ar only, verdict "almost" with a spelling note; tests: ar
    "اهلا بك" vs "أهلا بك" → almost; fa "ادرس" vs "آدرس" → incorrect.
    Same change should wire `punctuation_strict` from feedback_meta in router.py.
-2. **Backend (Codex lane)** — from the backend audit, all VERIFIED:
+2. **Backend (drafting tool B lane)** — from the backend audit, all VERIFIED:
    - `/lessons/{id}/start` 500 on duplicate insert (race) → upsert / ON CONFLICT. Shows up
      in browsers as a CORS error.
    - Refresh/logout argon2-verify EVERY refresh token ever issued (49 ms each, never

@@ -1,8 +1,8 @@
-# Lingo² upgrade program — build prompt for the executing Claude Sonnet 5 session
+# Lingo² upgrade program — build prompt for the executing drafting tool A session
 
-Written 2026-07-05 by Fable, following the architecture review in
-`docs/APP_SPEC_FOR_FABLE_REVIEW.md`. This document is your work order.
-It assumes the app as it exists today (see CLAUDE.md at repo root) and
+Written 2026-07-05 by external reviewer, following the architecture review in
+`docs/APP_SPEC_FOR_REVIEW.md`. This document is your work order.
+It assumes the app as it exists today (see the project notes at repo root) and
 upgrades it to a pedagogically serious product. Do the phases in order —
 Phase A is the architectural centerpiece and later phases depend on it.
 
@@ -12,48 +12,48 @@ Phase A is the architectural centerpiece and later phases depend on it.
 
 Read, in this order:
 
-1. `CLAUDE.md` (repo root) — full project state, every known footgun.
+1. the project notes (repo root) — full project state, every known footgun.
 2. `docs/CONTRACT.md` — the API/schema contract. Any API change in this
    program must be written into CONTRACT.md **before** implementation,
-   and Codex builds against the updated contract, never against chat.
-3. `docs/APP_SPEC_FOR_FABLE_REVIEW.md` — what the app is and why.
+   and drafting tool B builds against the updated contract, never against chat.
+3. `docs/APP_SPEC_FOR_REVIEW.md` — what the app is and why.
 4. `docs/content/AUTHORING_GUIDE.md` — binding rules for all content.
 5. Memory files `project-lingosquared-roadmap` and
    `project_lingosquared_endless_practice` if available.
 
-**Division of labor (unchanged, it works):** Codex authors all backend
+**Division of labor (unchanged, it works):** drafting tool B authors all backend
 code (`backend/app/**`, alembic migrations, `scripts/compile_content.py`)
 and every word of language content. You own `frontend/src/**`,
-orchestration of Codex (extract → validate → apply), CONTRACT.md edits,
-and ALL verification. Delegate to Codex with explicit
-`--cwd "$LINGO_REPO"`; Codex has no Docker and no
+orchestration of drafting tool B (extract → validate → apply), CONTRACT.md edits,
+and ALL verification. Delegate to drafting tool B with explicit
+`--cwd "$LINGO_REPO"`; drafting tool B has no Docker and no
 network — you verify everything it produces against the real local stack.
 
-**Working with the Codex plugin (mechanics + known failure modes):**
-Delegate via the openai-codex plugin's companion script, always in the
-background and always with an explicit `--cwd` (Codex's sandbox
-defaults to the Claude session's cwd, which may be a different project
+**Working with the drafting tool B plugin (mechanics + known failure modes):**
+Delegate via the drafting-tool-b plugin's companion script, always in the
+background and always with an explicit `--cwd` (drafting tool B's sandbox
+defaults to the drafting tool A session's cwd, which may be a different project
 entirely — without this it cannot write files at all):
 
 ```bash
-node "/Users/owner/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
+node "<drafting-tool-b plugin path>" task \
   --cwd "$LINGO_REPO" --background --write --resume "…prompt…"
 # then: status <job-id> --cwd ... --json   /   result <job-id> --cwd ...
 ```
 
 (If the plugin version/path has changed, find the current one under
-`~/.claude/plugins/cache/openai-codex/` rather than trusting this path.
-If Codex auth fails with a revoked refresh token, the owner must run
-`codex login` — stop and tell him, don't retry.)
+`<drafting-tool-b plugin path>` rather than trusting this path.
+If drafting tool B auth fails with a revoked refresh token, the owner must run
+the tool\'s login command — stop and tell him, don't retry.)
 
 Rules learned from real incidents this project:
-- Codex has no Docker and no outbound network — it writes and
+- drafting tool B has no Docker and no outbound network — it writes and
   static-checks code; ALL build/test/browser verification is yours.
-- Never trust Codex's self-report. When it rewrites a whole file, diff
+- Never trust drafting tool B's self-report. When it rewrites a whole file, diff
   against the prior version before applying — a full-file rewrite once
   silently introduced an unrelated one-line query regression
   (`Unit.id==u.id` for `Lesson.unit_id==u.id`) alongside a correct fix.
-- Every content-authoring prompt to Codex must include, up front: the
+- Every content-authoring prompt to drafting tool B must include, up front: the
   recognition→drag→production pacing rule, and — when authoring a
   source overlay against an existing realization — the STRONG form of
   the sibling-file rule ("treat the sibling-direction overlay as if it
@@ -62,7 +62,7 @@ Rules learned from real incidents this project:
 - Point every content task at `docs/content/AUTHORING_GUIDE.md`, and
   route every content deliverable through a separate fresh-context
   review task (zero access to the authoring reasoning) before import.
-- Tests Codex writes that import `scripts/compile_content.py` belong in
+- Tests drafting tool B writes that import `scripts/compile_content.py` belong in
   `scripts/tests/` (run via `.content-venv`), not `backend/tests/` —
   the backend container doesn't mount repo-root `scripts/`.
 
@@ -98,22 +98,22 @@ Rules learned from real incidents this project:
   words like "reviewed" in learner-facing feedback) after every content
   round.
 
-**Parallel-session ownership map (when the owner runs multiple Claude
-instances):** Up to three Claude sessions may work this repo
+**Parallel-session ownership map (when the owner runs multiple drafting tool A
+instances):** Up to three drafting tool A sessions may work this repo
 concurrently. Identify which session YOU are from how the owner launched
 you, stay in your lane, and hand off anything outside it rather than
 touching another session's territory.
 
 | | Session 1 — CODE | Session 2 — CONTENT | Session 3 — INFRA |
 |---|---|---|---|
-| Owns | `frontend/src/**`, `docs/CONTRACT.md`, all backend/migration coordination with Codex (phases A–G) | Codex content dispatch + fresh-context reviews, compiler validation, the owner's nl native-review loop, `docs/content/**` | `e2e/**` (Playwright), `scripts/verify.sh` + tooling, audio-manifest/pipeline scaffolding (D1/D3), prompt templates, CLAUDE.md restructure |
+| Owns | `frontend/src/**`, `docs/CONTRACT.md`, all backend/migration coordination with drafting tool B (phases A–G) | drafting tool B content dispatch + fresh-context reviews, compiler validation, the owner's nl native-review loop, `docs/content/**` | `e2e/**` (Playwright), `scripts/verify.sh` + tooling, audio-manifest/pipeline scaffolding (D1/D3), prompt templates, the project notes restructure |
 | Docker stack | **Sole owner** (compose up/down, migrations, imports, pytest, browser verification) | Never touches it — compiler validation needs only `.content-venv` | Hands live-stack steps to Session 1, or runs its own compose project on different ports if Playwright work gets too chatty |
-| Codex jobs | Backend code tasks | Content authoring/review tasks (3–4 in parallel, disjoint language dirs) | Script/tooling tasks |
+| drafting tool B jobs | Backend code tasks | Content authoring/review tasks (3–4 in parallel, disjoint language dirs) | Script/tooling tasks |
 
 Singletons regardless of session count: ONE owner for the Docker stack
 at any time; ONE owner for alembic migration numbering (Session 1 —
-never ask Codex for a new migration from any other session); ONE
-editor for CLAUDE.md's build log per day (Session 1 by default; others
+never ask drafting tool B for a new migration from any other session); ONE
+editor for the project notes' build log per day (Session 1 by default; others
 queue their entries as notes for it). If sessions commit, use one
 branch or worktree per session — never two sessions committing to the
 same checkout. Post-fan-out, Session 3's tooling work will be done;
@@ -172,7 +172,7 @@ comes due. Review and Endless Practice converge into one system.
 
 ## Phase A — Lexeme-level SRS unified with the practice engine
 
-### A1. Schema (Codex, additive migration)
+### A1. Schema (drafting tool B, additive migration)
 
 New table `user_lexeme_srs`:
 - `user_id`, `lexeme_id` (unique together), `course_id`
@@ -302,14 +302,14 @@ RTL check in fa: the retry flow renders correctly.
 ### C1. Distractor-specific feedback
 
 The overlays' whole point is interference-error distractors; make them
-pay off at the moment of error. Compiler + content change (Codex):
+pay off at the moment of error. Compiler + content change (drafting tool B):
 optional `feedback_by_option` map (option-string → explanation) on
 choice-type exercises, compiled into the schema-less `feedback` JSON —
 zero DB migration. Frontend: when the learner picks a mapped wrong
 option, show its specific explanation INSTEAD of generic feedback
 ("You picked ك — that's Arabic kaf; Persian uses ک").
 
-Content pass (Codex, fresh-context reviewed like all content): add
+Content pass (drafting tool B, fresh-context reviewed like all content): add
 `feedback_by_option` to existing fa/prs/en units' deliberate
 interference distractors. Update AUTHORING_GUIDE: every authored
 interference distractor in NEW content should carry an explanation.
@@ -356,7 +356,7 @@ listening exercises for exactly the two languages with zero TTS coverage
 anywhere. The owner records; you build the pipeline. Piper stays on the
 roadmap for scale, NOT as this phase.
 
-### D1. Recording manifest (Codex, script)
+### D1. Recording manifest (drafting tool B, script)
 
 `scripts/audio_manifest.py`: walks compiled course content and emits a
 deduplicated CSV/JSON of every string needing audio for a course
@@ -365,7 +365,7 @@ turns), each with a stable `media_asset_key` derived from content_key +
 normalized text hash. Idempotent; re-running after content edits shows
 only NEW strings needing recording.
 
-### D2. Dialogue per-speaker-turn split (Codex, content pattern — ALL languages)
+### D2. Dialogue per-speaker-turn split (drafting tool B, content pattern — ALL languages)
 
 The known "TTS choking" bug: dialogue teaching cards store a whole
 multi-speaker exchange as one `text_block` with embedded "Name:" labels
@@ -377,7 +377,7 @@ turn separately. This fixes TTS-based languages too, independent of
 recorded audio. Compiler validator: reject any new dialogue card whose
 single text_block contains a newline + "Name:" pattern.
 
-### D3. Asset storage and serving (Codex)
+### D3. Asset storage and serving (drafting tool B)
 
 Static-file approach, no new infra: assets live under a served
 directory keyed by `media_asset_key` (backend `StaticFiles` mount or
@@ -421,7 +421,7 @@ Streaks currently flip at the SERVER's local midnight
 Additive migration: `User.timezone` (IANA string, nullable). Frontend
 sends `Intl.DateTimeFormat().resolvedOptions().timeZone` at
 register/login; streak day computed in the user's zone, UTC fallback.
-Codex must audit every `date.today()`/`activity_day_bounds()` caller
+drafting tool B must audit every `date.today()`/`activity_day_bounds()` caller
 (streaks, diminishing-XP daily window) in the same pass — same bug
 class, fix it everywhere at once, the way the options-producing-paths
 audit worked.
@@ -504,9 +504,9 @@ orthography-strict grading. Reuses `Translation.tsx` verbatim; it is
 type in 9 places (4 backend rows have no automated guard) + force
 strict-by-type grading. Course-content only in v1 (not Endless Practice).
 **nl-first — NOT prs** (Dari has no TTS; a dictation there is an unanswerable
-silent play button). Lanes: Codex = enum + Alembic constraint migration +
+silent play button). Lanes: drafting tool B = enum + Alembic constraint migration +
 `VALID_EXERCISE_TYPES` + compile audio block + `FREE_TEXT_EXERCISE_TYPES` +
-strict grading; Claude = shared union + renderer case + `PROMPTS` test entry +
+strict grading; drafting tool A = shared union + renderer case + `PROMPTS` test entry +
 CONTRACT.md. Motivation: the one modality lingua.com leans on that we lack;
 plays into our orthography-strict grading + on-screen keyboard strengths.
 (Related: a graded reading/"stories" track is now specced — see Phase I;
@@ -525,14 +525,14 @@ files), narration is free (SpeakButton on every text block), comprehension type
 exists. So: NOT a new exercise type, NOT a new screen, NOT a new progress path.
 Gloss data = author-controlled `glosses:` map (token→gloss) in the en-nl overlay,
 compile-time-embedded + served (NOT auto-from-Lexeme — homograph/inflection
-risk). Lanes: Codex = compiler emit/serve `glosses` + validator; Claude =
+risk). Lanes: drafting tool B = compiler emit/serve `glosses` + validator; drafting tool A =
 `GlossableText` component + wire into TeachingCardView + CONTRACT. nl-first (TTS).
 Deferred: dedicated Stories screen, recorded narration, passage+question-set
 object.
 
 ---
 
-## Content program (Codex, parallel to code phases — never blocks them)
+## Content program (drafting tool B, parallel to code phases — never blocks them)
 
 Continue the roadmap fan-out (Phase 3 Latin cohort es/fr in progress)
 under the existing AUTHORING_GUIDE rules, PLUS these additions from
@@ -583,11 +583,11 @@ this program:
   reference-only (CC-BY attribution not tracked, unreviewed) — original
   policy unchanged for Tatoeba: reference for sequencing and patterns,
   NEVER copy sentences.
-- **Division of labor, REVISED 2026-07-05**: Claude may now also author
-  content directly (not just Codex) — specifically the FSI/Peace-Corps
+- **Division of labor, REVISED 2026-07-05**: drafting tool A may now also author
+  content directly (not just drafting tool B) — specifically the FSI/Peace-Corps
   adaptation lane above, since it's a different task shape (adapting
-  real source material vs. generating from scratch) and the owner's Claude
-  Max usage has headroom to spare. Codex continues from-scratch
+  real source material vs. generating from scratch) and the owner's drafting tool A
+  Max usage has headroom to spare. drafting tool B continues from-scratch
   generation and all backend work unchanged. Both routes go through the
   same fresh-context review + compiler validation — no shortcut on the
   quality bar for adapted content.
@@ -603,12 +603,12 @@ this program:
   foundation; B and C are independent of each other after A; D can run
   in parallel with B/C once A is merged (different files); E2 (timezone)
   can be pulled earlier if convenient since it's a live bug.
-- After each phase: update CLAUDE.md's build log and CONTRACT.md, all
+- After each phase: update the project notes' build log and CONTRACT.md, all
   tests green, live-browser evidence noted. Nothing deploys to
   192.168.4.4 without the owner present; when it does, remember the full
   recipe INCLUDING `docker compose up -d api` at the end, migrations
   before seed, and the practice-template import + lexeme backfill order
-  documented in CLAUDE.md.
+  documented in the project notes.
 - If a phase turns out to need something rejected above (runtime LLM,
   hearts, a big new dependency), stop and ask the owner — don't design
   around the constraint silently.

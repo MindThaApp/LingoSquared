@@ -13,7 +13,7 @@ interface ErrorBoundaryState {
 }
 
 // Last line of defense against a render-time crash. This project has hit
-// real ones live (unregistered exercise types, etc. -- see CLAUDE.md's
+// real ones live (unregistered exercise types, etc. -- see the project notes'
 // footguns), and until now a single bad render anywhere under this
 // boundary would blank the whole app. Uses the i18next instance directly
 // (i18n.t) rather than the useTranslation hook, since class components

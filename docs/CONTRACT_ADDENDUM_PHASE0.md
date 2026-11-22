@@ -1,6 +1,6 @@
 # Lingo² Shared Contract — Phase 0 Addendum
 
-Status: proposed for merge into `docs/CONTRACT.md` after the owner/Claude review.
+Status: proposed for merge into `docs/CONTRACT.md` after the owner/drafting tool A review.
 
 This addendum extends the existing contract. Existing behavior remains authoritative unless this addendum explicitly replaces it.
 
@@ -470,7 +470,7 @@ Fields:
 - `content_release_id`.
 - `content_key_id`: nullable when the review covers a complete release.
 - `review_stage`.
-- `reviewer_system`: for example `codex` or `claude`.
+- `reviewer_system`: for example `drafting tool B` or `drafting tool A`.
 - `reviewer_model`.
 - `fresh_context`: boolean.
 - `status`: `pending`, `passed`, `failed`, or `needs_revision`.
@@ -1185,7 +1185,7 @@ The existing delete-and-recreate behavior in `import_content()` is incompatible 
 
 ## AI cross-review protocol
 
-Professional native-speaker review is not a publication gate. Quality control uses automated validation and independent AI cross-review by Codex and Claude.
+Professional native-speaker review is not a publication gate. Quality control uses automated validation and independent AI cross-review by drafting tool B and drafting tool A.
 
 The accepted quality-risk tradeoff does not remove the requirement to record review evidence.
 

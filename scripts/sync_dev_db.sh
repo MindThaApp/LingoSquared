@@ -3,7 +3,7 @@
 # backend (http://localhost:8000 by default). Prompts for the admin password
 # interactively; the credential is never written to disk or shell history.
 #
-# Order matters (documented in docs/PRE_DEPLOY_RUNBOOK.md and CLAUDE.md):
+# Order matters (documented in docs/PRE_DEPLOY_RUNBOOK.md and the project notes):
 #   1. content import   (POST /admin/content/import, per manifest.d/content/)
 #   2. lexeme backfills (docker compose run with full-repo mount)
 #   3. practice import  (POST /admin/courses/{id}/practice/import, per manifest.d/practice/)

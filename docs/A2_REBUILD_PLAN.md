@@ -241,7 +241,7 @@ grammar.
 
 **File numbering:** the next free A2 unit numbers today are nl
 `a2_unit78`–`a2_unit108` and fa/prs `a2_unit19`–`a2_unit49`. Per the
-`docs/content/CLAUDE.md` footgun, **run `ls` on the realization directory
+the content-lane notes footgun, **run `ls` on the realization directory
 immediately before claiming a number.** File numbers are identifiers, not
 course order; order comes from the manifest (see §4.4).
 
@@ -558,7 +558,7 @@ reading, writing]`, and four `assessment_requirements` (one per modality) with
   needs no demotion field.
 - **One spine commit, made by the coordinator before wave 1.** It must not
   run in parallel with authoring, because the spine is a shared-file footgun
-  (root CLAUDE.md, staging rule).
+  (the project notes, staging rule).
 
 ---
 
@@ -584,13 +584,13 @@ makes import create new rows. That orphans every `LessonProgress`,
 lesson and exercise ids. In-place flagging keeps all ids, so no progress, XP,
 streak or SRS data is touched.
 
-Proposed change (CODE lane: Codex backend + migration, Claude frontend +
+Proposed change (CODE lane: drafting tool B backend + migration, drafting tool A frontend +
 CONTRACT; it goes to Session 1 as a separate brief):
 
 1. **Contract first.** Update `docs/CONTRACT.md`: add
    `UnitOut.track: "core" | "situation"`, default `"core"`.
 2. **Model and migration.** Add `Unit.track`: an enum column, `NOT NULL`,
-   `server_default 'core'`, fresh-migrate-safe per `backend/CLAUDE.md`.
+   `server_default 'core'`, fresh-migrate-safe per the backend notes.
    Additive only; no data migration is needed.
 3. **Content and compiler.** Add an optional per-unit `track: situation` in
    realization YAML. The compiler validates and passes it through.
@@ -618,7 +618,7 @@ and no data is lost either way.
 
 ### 4.3 Verification for the demotion change
 
-Follow the root CLAUDE.md verification bar:
+Follow the project notes verification bar:
 - Isolated-DB pytest, including a test that an existing user's
   `LessonProgress` on a demoted unit survives re-import.
 - The full `npm run build`.
@@ -635,7 +635,7 @@ Import currently appends by unit `order` and updates in place by
 new units *before* the existing 10 shifts their orders, which can collide
 mid-update.
 
-**Before wave 1, Codex should test a reorder import on an isolated DB:**
+**Before wave 1, drafting tool B should test a reorder import on an isolated DB:**
 existing A2 units move from orders 1–10 to interleaved positions, with
 progress intact. If that isn't safe, the fallback is two-phase order
 renumbering (offset, then final) inside `import_content()`. The worse
@@ -648,10 +648,10 @@ grammar — pedagogically backwards.
 
 ### 5.1 Pipeline (per unit, per language)
 
-These rules come from root CLAUDE.md, `docs/content/CLAUDE.md` and
+These rules come from the project notes, the content-lane notes and
 AUTHORING_GUIDE §20.
 
-1. **Author.** Codex (from scratch) or Claude (adapting public-domain
+1. **Author.** drafting tool B (from scratch) or drafting tool A (adapting public-domain
    material: FSI Dutch, DLI Dari, per §10) writes the realization and its
    en-X overlay as a pair. The dispatch prompt includes, **pasted
    verbatim**:
@@ -668,7 +668,7 @@ AUTHORING_GUIDE §20.
    (never judge token coverage from a single-unit run). Grep for
    `COMPILE FAILED`. Also run the answer-shape corpus test
    (`backend/tests/test_content_answer_shapes.py`).
-3. **Fresh-context review.** Use the `content-reviewer` agent or Codex, with
+3. **Fresh-context review.** Use the `content-reviewer` agent or drafting tool B, with
    no access to the authoring reasoning. **Every unit gets full review** — this
    is launch-gate content and a new recipe (the tiered policy).
 4. **Fix, then adversarial re-verify.** Use the `content-tier` workflow.
@@ -695,7 +695,7 @@ AUTHORING_GUIDE §20.
   new-recipe territory: grammar-led A2. Full review, then the owner's native
   pass, then the recipe is **frozen** into an A2 dispatch template in
   `AUTHORING_PROMPT_TEMPLATE.md` before scaling.
-- **Waves 1–8 — 12 units per wave.** That is 4 units per language, 3 Codex
+- **Waves 1–8 — 12 units per wave.** That is 4 units per language, 3 drafting tool B
   tasks in parallel on disjoint language directories. Units go in block order,
   so the grammar each unit builds on is already reviewed. The manifest and
   spine are touched only by the coordinator, between waves.
@@ -710,13 +710,13 @@ AUTHORING_GUIDE §20.
 | item | estimate | basis |
 |---|---|---|
 | New content | 93 realizations + 93 overlays, ~3,450 exercises, ~400 grammar_note cards | §2 totals |
-| Codex authoring | ~96 tasks (pilot + 8 × 12), ~2–3 waves per working day at best | 2026-07-15 ran 5–7 Codex waves in one day, but those were 6-unit waves on mature recipes |
-| Fresh-context review | ~150–200k tokens per unit reviewed by Claude → **~15–19M tokens** if all on Claude. Route ≥half to Codex (the tiered policy allows this when budget is tight) | docs/content/CLAUDE.md "~200k tokens per review" |
+| drafting tool B authoring | ~96 tasks (pilot + 8 × 12), ~2–3 waves per working day at best | 2026-07-15 ran 5–7 drafting tool B waves in one day, but those were 6-unit waves on mature recipes |
+| Fresh-context review | ~150–200k tokens per unit reviewed by drafting tool A → **~15–19M tokens** if all on drafting tool A. Route ≥half to drafting tool B (the tiered policy allows this when budget is tight) | the content-lane notes "~200k tokens per review" |
 | Expected defect yield | ~1.5–3 findings per unit → **~150–280 fixes**, heaviest in the first 2 waves | registry: 7–19 per 6-unit lane on new tiers (2026-07-15 waves) |
-| Practice packs | 93 packs, 1 Codex wave each, ~8 waves | recipe exists |
-| Demotion + ordering code | 1 Codex backend task + migration, 1 frontend task, contract edit, isolated pytest, live verification → **~1–2 working days** | §4 |
+| Practice packs | 93 packs, 1 drafting tool B wave each, ~8 waves | recipe exists |
+| Demotion + ordering code | 1 drafting tool B backend task + migration, 1 frontend task, contract edit, isolated pytest, live verification → **~1–2 working days** | §4 |
 | prs audio recording | every prs listening item; count set when authored (~5–8 per unit → ~150–250 clips) | no prs TTS |
-| **the owner's native review** | ~3,450 exercises + ~400 notes. At 30–45 s per item that is **~30–45 hours** | **This is the real critical path**, not Codex throughput |
+| **the owner's native review** | ~3,450 exercises + ~400 notes. At 30–45 s per item that is **~30–45 hours** | **This is the real critical path**, not drafting tool B throughput |
 | **Calendar** | pipeline ~3–4 weeks of steady sessions; end-to-end **~6–8 weeks** with the owner's review in parallel | |
 
 **Cheaper staging if needed:** ship Blocks A–D first (19 units per language).
@@ -731,7 +731,7 @@ as drip content.
 ### Risks
 
 - **R1 — spine coverage regression.** Today the English realization covers
-  every spine outcome (`docs/content/CLAUDE.md`). Adding 31 outcomes makes
+  every spine outcome (the content-lane notes). Adding 31 outcomes makes
   the coverage dashboard show gaps for nl-en / fa-en / prs-en / de-en, and
   for every other en-X path, until they are realized. That is cosmetic, but
   visible (Q7).
@@ -746,7 +746,7 @@ as drip content.
   see some items twice (Q6).
 - **R3 — import reorder.** Covered in §4.4. If reordering isn't safe, the
   interleave fails and the grammar arrives after the scenarios.
-- **R4 — validator gaming at scale.** 93 units is the largest Codex content
+- **R4 — validator gaming at scale.** 93 units is the largest drafting tool B content
   push so far. The known failure modes are masking errors with bogus content
   and exploiting escape hatches. Mitigation: named forbidden forms in every
   prompt, a coordinator diff audit per wave, and full review.

@@ -397,7 +397,7 @@ def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
 ):
     # This test verifies the six prompt SHAPES/contracts, not credential
     # gating -- but listen_select generation is gated on
-    # tts_actually_configured() (app/practice/service.py, 2026-07-07 Fable
+    # tts_actually_configured() (app/practice/service.py, 2026-07-07 external reviewer
     # audit fix), which reads the REAL settings.google_cloud_tts_
     # credentials_json / azure_speech_key at request time. Without this
     # monkeypatch the listen_select leg of this test silently depends on
@@ -677,7 +677,7 @@ def test_expired_practice_item_fails_cleanly(client, admin, auth):
 def test_farsi_sampler_excludes_listen_select_without_a_configured_azure_key(
     client, admin, auth, monkeypatch
 ):
-    # 2026-07-07 (Fable audit finding): fa was added to
+    # 2026-07-07 (external reviewer audit finding): fa was added to
     # TTS_SUPPORTED_LANGUAGES the day Azure integration code shipped, but
     # that's static language membership, not proof a real Azure key is
     # configured on this deploy target. app/practice/service.py's gate now

@@ -1,6 +1,6 @@
 # fa/prs a2_unit35–40 gloss DRAFTS — for native review (2026-08-02)
 
-> ⚠️ **These are UNVERIFIED best-effort drafts produced by Claude (not a native
+> ⚠️ **These are UNVERIFIED best-effort drafts produced by drafting tool A (not a native
 > Farsi/Dari speaker).** They exist to give a native reviewer a *head-start* — confirm
 > or correct each cell before it is wired into `backfill_lexemes_{fa,prs}_en.py`.
 > **A wrong gloss ships as the graded "correct" answer**, so nothing here goes live

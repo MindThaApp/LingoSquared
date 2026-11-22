@@ -39,7 +39,7 @@ The script is idempotent: git `core.autocrlf=input`, apt packages, nvm + Node
 22 (`.nvmrc`), `.content-venv` (`scripts/requirements-content.txt`), `npm ci`,
 Docker check, a fresh `backend/.env` (random JWT secret + DB password; never
 overwrites an existing one) and `frontend/.env`, then `docker compose up -d`
-and `alembic upgrade head`. `jq` is installed because the `.claude` hooks need it.
+and `alembic upgrade head`. `jq` is installed because the `.drafting tool A` hooks need it.
 
 The script does **not** create the reference data (languages, achievements);
 run the language bootstrap in section 4 once after it finishes.
@@ -53,8 +53,8 @@ Move these over a secure channel (USB, password manager). Never chat, email or c
 | `backend/.env` | Keys: `JWT_SECRET`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` (must match the password), `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`, `TTS_MONTHLY_CHAR_BUDGET`, `ADMIN_EMAILS` (legacy, not read by the backend; see section 4), `CORS_ORIGINS`, rate-limit settings. Azure keys (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`) are not set yet. If you copy the Mac's file over the generated one, also copy the matching DB volume or reset the DB password. `chmod 600`. |
 | `~/.lingo_admin_pw` | Admin password file, `chmod 600` (live admin is `admin@example.com`). |
 | `~/.ssh/id_ed25519`, `id_ed25519.pub`, `config`, `known_hosts` | For `ramin@192.168.4.4`. `chmod 700 ~/.ssh; chmod 600 ~/.ssh/id_ed25519 ~/.ssh/config`. |
-| `~/.deepseek_api_key` | DeepSeek worker key. |
-| Codex login | `codex login` on the new machine. |
+| `~/.drafter_c_api_key` | drafting tool C worker key. |
+| drafting tool B login | the tool\'s login command on the new machine. |
 | GitHub | `gh auth login`. |
 
 **Do NOT copy:** `node_modules`, `.content-venv`, `dist`, `web_dist` (darwin
@@ -83,14 +83,14 @@ Then either:
 The live server is at alembic migration 0031; `alembic upgrade head` in the
 bootstrap brings a fresh DB to head.
 
-## 5. Claude Code on WSL
+## 5. the drafting tool on WSL
 
-1. Install Claude Code (https://docs.claude.com/en/docs/claude-code) and log in.
-2. Reinstall the OpenAI Codex plugin (`/plugin`), then `codex login`.
-3. `.claude/settings.json` has two allow-rules with a hard-coded macOS path to
-   `codex-companion.mjs`. Do not edit it; instead add equivalent rules to the
-   gitignored `.claude/settings.local.json` using the WSL path
-   (`/home/<you>/.claude/plugins/cache/openai-codex/codex/<version>/scripts/codex-companion.mjs`,
+1. Install the drafting tool (https://docs.drafting tool A.com/en/docs/drafting tool A-code) and log in.
+2. Reinstall the drafting tool B plugin (`/plugin`), then the tool\'s login command.
+3. `<local tool dir>` has two allow-rules with a hard-coded macOS path to
+   `the drafting-tool companion script`. Do not edit it; instead add equivalent rules to the
+   gitignored `<local tool settings>` using the WSL path
+   (`<drafting-tool-b plugin path>`,
    `status *` and `result *`).
 4. Hooks need `jq` (installed by bootstrap) and the checkout directory named `LingoSquared`.
 

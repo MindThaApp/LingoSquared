@@ -2,7 +2,7 @@
 """Idempotently backfill reviewed nl-en A1+A2 lexemes (English target,
 Dutch source) from the shared en realization.
 
-Written directly (not via Codex -- Codex was rate-limited at authoring
+Written directly (not via drafting tool B -- drafting tool B was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
 Target-side English classification lives in
 scripts/_en_target_lexeme_common.py (shared with backfill_lexemes_fa_en.py

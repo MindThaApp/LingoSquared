@@ -19,7 +19,7 @@ A purely data-driven "token absent from known-good Dari" rule was tried
 first and produces garbage: A1 Dari content has no occasion to use
 شواهد / بودجه / ادعا / منبع, so a frequency diff flags ordinary B1/B2
 topic vocabulary as a dialect defect. That is precisely the noisy-
-validator failure this project has been burned by before (a Codex
+validator failure this project has been burned by before (a drafting tool B
 validator once emitted 360 false positives and taught everyone to ignore
 validators). So the marker inventory below is *linguistically* curated --
 each entry is a form where Dari and Iranian Persian genuinely diverge --
@@ -50,7 +50,7 @@ TIERS
    both practice packs).
 2. `overlay_register` -- forms that are CORRECT in the formal-written
    register of `realizations/prs/` but violate the `prs-en` overlay
-   lane's register pin (`docs/content/CLAUDE.md`: "prs-en overlay lane:
+   lane's register pin (the content-lane notes: "prs-en overlay lane:
    colloquial Dari, می‌توانین/استه style"). Scanned in `overlays/prs-en/`
    ONLY, with per-file thresholds calibrated so the known-good band
    (A1 units 30-68) is clean.

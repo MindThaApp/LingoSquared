@@ -353,14 +353,14 @@ English-source course `en-Y` are the sibling, and only their English learner-lan
 
 ```bash
 python3 scripts/derive_cross.py extract  --new es-fr --levels a1       # -> .local/derive-cross/es-fr/*.src.json + GUIDE.md
-python3 scripts/derive_cross.py translate --new es-fr                  # Gemini (key: $GEMINI_API_KEY or secrets/gemini/api-key.txt), or write *.tr.json by hand/agents
+python3 scripts/derive_cross.py translate --new es-fr                  # drafting API C (key: see DRAFTER_C_KEY_ENV / DRAFTER_C_KEY_FILE in the script), or write *.tr.json by hand/agents
 python3 scripts/derive_cross.py check    --new es-fr [stem ...]        # lint translations: ids, {placeholders}, *spans*, kept target words, English left
 python3 scripts/derive_cross.py inject   --new es-fr --levels a1       # overlays, packs, manifest.d lines, lexicon + backfill shim
 python3 scripts/derive_cross.py validate --new es-fr --levels a1       # compile, practice-validate, cross-leftover
 ```
 
-Bulk helpers: `plan --levels a1` lists every missing pair with its item/word counts; `batch --pairs es-it,fr-es --gemini --inject`
-runs extract -> translation-memory prefill -> Gemini -> inject for several pairs and is resumable (re-run continues);
+Bulk helpers: `plan --levels a1` lists every missing pair with its item/word counts; `batch --pairs es-it,fr-es --drafter-c --inject`
+runs extract -> translation-memory prefill -> drafting API C -> inject for several pairs and is resumable (re-run continues);
 `todo` / `merge` split the untranslated items into small `STEM.todo.json` files for agents and merge their `STEM.new.json` back;
 the per-learner translation memory `docs/content/tm/<x>.json` (exact role + English text) is filled after every inject and prefilled
 at the next extract. Mixed matching exercises (English clue on either side) are handled per pair; verify with `validate`, which also

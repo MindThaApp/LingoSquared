@@ -29,7 +29,7 @@ No credentials in this file — keep it that way.
 
 ## What shipped (2026-09-28/29)
 
-Ranked fix list from the 4-way review: https://claude.ai/artifact/7xcm4p4jNeqEogF3Kp4Qpk
+Ranked fix list from the 4-way review: https://drafting tool A.ai/artifact/7xcm4p4jNeqEogF3Kp4Qpk
 
 - **Grading:** punctuation/curly-apostrophe/NFC no longer fail correct answers; multi-answer
   typo tolerance; Arabic-only hamza "almost"; matching-pairs multi-answer bug. Corpus harness:
@@ -59,7 +59,7 @@ Ranked fix list from the 4-way review: https://claude.ai/artifact/7xcm4p4jNeqEog
 - **A2 plan** (`docs/A2_REBUILD_PLAN.md` §0 decisions): Blocks A–D first. Spine has the 19
   A–D outcomes. **Wave-0 pilots committed but NOT wired** into the manifest:
   nl `a2_unit78_afgelopen_weekend`, fa `a2_unit19_last_weekend`, prs `a2_unit19_last_weekend`
-  (each fresh-reviewed + fixed). Native questions: https://claude.ai/artifact/VuCSx1M3HNB8tbC12awcYa
+  (each fresh-reviewed + fixed). Native questions: https://drafting tool A.ai/artifact/VuCSx1M3HNB8tbC12awcYa
   — WAITING ON OWNER. After his answers: apply, freeze the recipe into the A2 authoring template,
   wire the manifest, then author the remaining 18 units/lang in batches of 12 with fresh review.
 - Local dev DB (localhost:8020/5180) has all launch courses re-imported with word banks and the
@@ -86,7 +86,7 @@ vitest, and `scripts/verify.sh --content-only` before every push.
 - Azure Speech key for Farsi audio in production.
 
 ## How work ran
-Cloud sessions (claude.ai/code) are launched by the coordinator via the claude-in-chrome MCP
+Cloud sessions (drafting tool A.ai/code) are launched by the coordinator via the browser-extension MCP
 with one-paragraph briefs; each opens a PR into the working branch; coordinator reviews,
 merges, runs build/vitest/pytest (CI-style, repo mounted: see below), live-verifies.
 CI-style backend run: `docker compose run --rm -v "$HOME/dev/LingoSquared:/repo" -w /repo/backend api ...`

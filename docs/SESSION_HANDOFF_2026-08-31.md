@@ -1,18 +1,18 @@
 # Session Handoff — 2026-08-31 (overnight C1 rollout session, updated ~06:20)
 
-**Read this first, then root `CLAUDE.md` and `docs/content/CLAUDE.md`.**
+**Read this first, then the project notes and the content-lane notes.**
 This session finished the Dutch C1 tier (started by the 2026-08-30 handoff) and then
 rolled the same 8-unit C1 tier out to three more languages: **Spanish, German
 (fully shipped), and Italian (in progress, 4/8 units).** Paused mid-Italian-tier at
 the user's explicit request, twice (once after unit01, again after unit04). Working
 tree state below.
 
-**Worker note (important, read before dispatching anything):** deepseek ran out of
+**Worker note (important, read before dispatching anything):** drafting tool C ran out of
 API balance (`402 Insufficient Balance`) partway through Italian unit02 authoring and
-is now completely unusable until the owner tops up the DeepSeek account. The owner explicitly
-chose to switch to **Codex** for the rest of this session (see §8 for what that's
+is now completely unusable until the owner tops up the drafting tool C account. The owner explicitly
+chose to switch to **drafting tool B** for the rest of this session (see §8 for what that's
 like in practice — noticeably slower per-unit but so far equal or better quality, and
-it hit one real hang that needed a `--fresh` restart). Check whether deepseek's
+it hit one real hang that needed a `--fresh` restart). Check whether drafting tool C's
 balance has been restored before defaulting back to it.
 
 ---
@@ -89,7 +89,7 @@ lane, different axis).
 
 This is now a proven, repeatable loop — run it per unit, per language:
 
-1. **Dispatch authoring to `~/bin/deepseek --yolo "<prompt>"` in the background**
+1. **Dispatch authoring to `~/bin/drafting tool C --yolo "<prompt>"` in the background**
    (`run_in_background: true` on the Bash tool call, NOT a manual trailing `&` —
    double-backgrounding breaks output capture). Every dispatch prompt MUST:
    - Paste `docs/content/AUTHORING_PREFLIGHT.md` **verbatim** (not linked).
@@ -110,9 +110,9 @@ This is now a proven, repeatable loop — run it per unit, per language:
 2. **After each dispatch, before trusting the output:**
    - Check for exactly 2 new files (one realization, one overlay). **If you see MORE
      than one realization file for the same unit number, this is very likely a
-     deepseek self-confusion artifact** (it happened 4 times this session — nl unit05,
+     drafting tool C self-confusion artifact** (it happened 4 times this session — nl unit05,
      de unit03, de unit04, it unit01), not a real concurrent worker. Verify: (a) was
-     only one deepseek process launched for this unit, (b) does the overlay's
+     only one drafting tool C process launched for this unit, (b) does the overlay's
      content_key match one specific realization file. Delete the stray, keep the
      matched one. Do NOT ask the user to adjudicate a "collision" that's actually just
      one worker's own earlier output.
@@ -123,7 +123,7 @@ This is now a proven, repeatable loop — run it per unit, per language:
      3s..." — or got killed with "Execution error" and no files). Always verify files
      exist before treating a "completed" notification as success; if nothing landed,
      just retry the identical dispatch — every single retry succeeded on the 2nd try.
-3. **Wire the manifest** — `deepseek --flash --yolo` a one-line append/insert to
+3. **Wire the manifest** — `drafting tool C --flash --yolo` a one-line append/insert to
    `scripts/content_manifest.txt` (new course → new line after the language's B2 line;
    existing course → append to both the realizations and overlays fields, position-
    matched). Always paste back the resulting line and eyeball it.
@@ -139,28 +139,28 @@ This is now a proven, repeatable loop — run it per unit, per language:
    every defect class found in PRIOR tiers (paste the actual list — this is what makes
    each review find fewer NEW defects; it's not going to spontaneously re-derive "check
    for regret-framing contradictions" on its own).
-7. **Fix every finding** via one consolidated deepseek dispatch (all fixes for all
-   units in one prompt is fine — deepseek handled 7-10 fixes across 8 files correctly
+7. **Fix every finding** via one consolidated drafting tool C dispatch (all fixes for all
+   units in one prompt is fine — drafting tool C handled 7-10 fixes across 8 files correctly
    in one dispatch, twice). Independently re-verify course-scoped yourself afterward —
-   don't just trust the fix job's own "0 errors" claim; deepseek's self-reports were
+   don't just trust the fix job's own "0 errors" claim; drafting tool C's self-reports were
    accurate every time this session, but re-verifying is cheap and the rule stands.
 8. **Commit with explicit pathspecs** (`git add <files...>`, never `-A`/`.`), stage
    only that language's new files + the manifest — check `git status --short` first,
    this repo always has unrelated untracked infra files sitting around from other
    sessions/machines that must NOT get swept in.
-9. **Ask before pushing** — commit/push is owner-reserved per root CLAUDE.md. The owner
+9. **Ask before pushing** — commit/push is owner-reserved per the project notes. The owner
    approved "commit and push" explicitly for nl and es in this session; I re-asked and
    got the same answer for de. Keep asking each time unless told otherwise.
 
-## 3a. Codex dispatch pattern (used for it C1 units 02-04 after deepseek ran dry)
+## 3a. drafting tool B dispatch pattern (used for it C1 units 02-04 after drafting tool C ran dry)
 
-Different mechanics from deepseek — use `node "<codex-companion.mjs path from root
-CLAUDE.md>" task --cwd "<repo>" --background --write --resume --prompt-file <file>`
+Different mechanics from drafting tool C — use `node "<the drafting-tool companion script path from root
+the project notes>" task --cwd "<repo>" --background --write --resume --prompt-file <file>`
 (first dispatch in a session needs `--fresh` instead of `--resume` — there's no prior
-thread to resume yet, it errors "No previous Codex task thread was found"). Same
+thread to resume yet, it errors "No previous drafting tool B task thread was found"). Same
 prompt content works fine (spine outcome, character canon, register, the accumulated
-lessons in §4, preflight instructions) — Codex doesn't need the CLI-wrapper-specific
-framing deepseek dispatches used.
+lessons in §4, preflight instructions) — drafting tool B doesn't need the CLI-wrapper-specific
+framing drafting tool C dispatches used.
 
 - **Poll with `status <job-id> --cwd ... --json`**, or better, use the Monitor tool
   with an until-loop polling that same command every 5-15s until `"status"` matches
@@ -172,27 +172,27 @@ framing deepseek dispatches used.
   Unit04's first attempt (via `--resume`, continuing the thread from unit03) produced
   one planning message in the first 30 seconds, then went **completely silent for
   ~55 minutes** with zero further log lines and no files written — a genuine hang,
-  not just "Codex is slower." Cancelled it (`cancel <job-id> --cwd ...`) and
+  not just "drafting tool B is slower." Cancelled it (`cancel <job-id> --cwd ...`) and
   redispatched the identical prompt with `--fresh` instead of `--resume`; it
-  completed normally on the fresh thread. **If a Codex job has been silent for more
+  completed normally on the fresh thread. **If a drafting tool B job has been silent for more
   than ~10-15 minutes past its last log line (check the raw log file path from the
   status JSON's `logFile` field, not just the `progressPreview` array which can look
   identical to an active job), don't assume it's just slow — cancel and retry
   `--fresh`.**
-- **Content quality so far (units 03-04, one clean run each): as good as deepseek's
+- **Content quality so far (units 03-04, one clean run each): as good as drafting tool C's
   best output, possibly better** — unit03's sourcing disclosure named specific URLs
   actually checked (not just "no source found"), the preflight self-report was
   detailed and accurate, and no stray duplicate-draft files were left on disk (unlike
-  deepseek, which did this 4 times this session). Too small a sample (2 clean runs)
-  to call it definitively better, but nothing worse than deepseek either.
-- **Always diff Codex's manifest edits yourself** (`git diff scripts/content_manifest.txt`)
-  per root CLAUDE.md's standing "never trust Codex's self-report" rule — this applied
+  drafting tool C, which did this 4 times this session). Too small a sample (2 clean runs)
+  to call it definitively better, but nothing worse than drafting tool C either.
+- **Always diff drafting tool B's manifest edits yourself** (`git diff scripts/content_manifest.txt`)
+  per the project notes's standing "never trust drafting tool B's self-report" rule — this applied
   even to the small one-line manifest appends in this session; every diff checked out
   clean, but the rule doesn't get suspended just because the edit is trivial.
-- **Codex jobs run unisolated in the main working tree** (same as documented in root
-  CLAUDE.md) — don't run two Codex dispatches concurrently on this repo; this session
+- **drafting tool B jobs run unisolated in the main working tree** (same as documented in root
+  the project notes) — don't run two drafting tool B dispatches concurrently on this repo; this session
   serialized every dispatch (author → verify → wire manifest → verify → next unit),
-  never launching a second Codex job before the first fully completed or was
+  never launching a second drafting tool B job before the first fully completed or was
   cancelled.
 
 ## 4. Accumulated cross-tier lessons (restate these VERBATIM in every future dispatch)
@@ -266,8 +266,8 @@ any en-realization shape change must update all four + grep content_manifest.txt
 - **Push the two local-only it-C1 commits** (`c9e2c753` unit01, `c910793a` units
   02-04) — owner-reserved, ask before pushing, same as every other commit this
   session.
-- **Top up the DeepSeek API account** (`402 Insufficient Balance` as of this session)
-  if you want to go back to deepseek for future authoring — otherwise Codex is the
+- **Top up the drafting tool C API account** (`402 Insufficient Balance` as of this session)
+  if you want to go back to drafting tool C for future authoring — otherwise drafting tool B is the
   working fallback (see §3a).
 - Friend-beta feedback loop + live deploy: still blocked per the 2026-08-30 handoff
   (SSH key on 192.168.4.4 + app-admin 401) — untouched this session.

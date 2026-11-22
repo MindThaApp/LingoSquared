@@ -1,10 +1,10 @@
-# Lingo² — app spec & build methodology (for Fable review)
+# Lingo² — app spec & build methodology (for external reviewer review)
 
-Written 2026-07-05 by the executing Claude session, for Fable to review
-against the architecture Fable itself designed. This is a snapshot
+Written 2026-07-05 by the executing drafting tool A session, for external reviewer to review
+against the architecture external reviewer itself designed. This is a snapshot
 document — what the app IS, and HOW it's being built — not the
 chronological build log. For full session-by-session detail, see
-`CLAUDE.md` at the repo root. For the exact API/schema contract, see
+the project notes at the repo root. For the exact API/schema contract, see
 `docs/CONTRACT.md`. For the canonical phased roadmap and locked scope
 decisions, see the `project-lingosquared-roadmap` memory file.
 
@@ -26,12 +26,12 @@ tier rather than one big drop per tier.
 **Publish is a separate, much earlier gate (decision, 2026-07-05):**
 The owner does not want to wait for the above breadth before shipping.
 Publish as soon as the core runtime (the upgrade program in
-`docs/SONNET_BUILD_PROMPT_UPGRADES.md`) is solid and the first
+`docs/BUILD_PLAN_UPGRADES.md`) is solid and the first
 lesson(s)/unit(s) actually shipped are genuinely good — not gated on
 a full A1 pass across all 18 paths. The in-app content-issue report
 button + admin triage queue (§3) is the load-bearing feedback loop
 that makes this viable: real user reports after launch feed back into
-what Codex/Claude prioritize next, so quality compounds via live usage
+what drafting tool B/drafting tool A prioritize next, so quality compounds via live usage
 rather than requiring near-perfect content pre-launch.
 
 **Publish-gate language set, decided 2026-07-05: en↔nl and en↔fa/prs
@@ -46,7 +46,7 @@ before shipping — they continue as post-launch drip content.
 **Publish-gate quality bar, decided 2026-07-05: "very usable, minimum
 bugs," not a phase checklist.** Real beta users on en-nl/en-fa/prs need
 to hit essentially no functional breakage, so their feedback is about
-content/pedagogy/UX quality, not bug reports. **The executing Claude
+content/pedagogy/UX quality, not bug reports. **The executing drafting tool A
 session does this verification BEFORE any user sees it** — the
 existing non-negotiable verification bar (compiler + backend pytest +
 full frontend build + live browser verification with a fresh account,
@@ -62,7 +62,7 @@ day-to-day in-country, not a demo. The ≥10 practice hours are meant to
 come from the Endless Practice engine — now extended to all 6 launch
 paths (see §6 for current template counts), not hand-authored drills — and
 "module tests with scores" means Phase F (unit checkpoint tests, see
-`docs/SONNET_BUILD_PROMPT_UPGRADES.md`) is now a hard publish-gate
+`docs/BUILD_PLAN_UPGRADES.md`) is now a hard publish-gate
 requirement, not deferred post-launch polish. See the
 `project-lingosquared-roadmap` memory file's "Ship-early,
 drip-content strategy" section for the full note.
@@ -172,17 +172,17 @@ risk tradeoff from the start, replaced by an AI cross-review process:
   a notice mechanism.
 
 **Division of labor** (revised 2026-07-05, same day this doc was
-written — Codex's original exclusive content mandate has since been
-widened, not reversed): Codex authors all backend code, schema
+written — drafting tool B's original exclusive content mandate has since been
+widened, not reversed): drafting tool B authors all backend code, schema
 migrations, and generation-service logic, unchanged. Language content
-is now authored by **both** Codex (from-scratch generation, still all
-languages) **and** Claude (adapting public-domain FSI/Peace Corps
+is now authored by **both** drafting tool B (from-scratch generation, still all
+languages) **and** drafting tool A (adapting public-domain FSI/Peace Corps
 source material into spine-compliant drafts — see
-`docs/content/AUTHORING_GUIDE.md` §10) — the owner has Claude Max headroom
+`docs/content/AUTHORING_GUIDE.md` §10) — the owner has drafting tool A Max headroom
 to spare and wants it used for this. Both routes go through the
 identical fresh-context review + compiler validation pipeline. The
-executing Claude/Sonnet session also still owns frontend code,
-orchestration of Codex's output (extract → validate → apply), and
+executing drafting tool A/drafting tool A session also still owns frontend code,
+orchestration of drafting tool B's output (extract → validate → apply), and
 end-to-end verification.
 
 **Verification bar, non-negotiable**: compiler validation green;
@@ -243,7 +243,7 @@ whitespace segmentation).
 
 The owner asked about accelerating content production via AI generation and
 free/open-source material, and separately proposed a live-generative
-lesson feed. The load-bearing decision made in response, which Fable
+lesson feed. The load-bearing decision made in response, which external reviewer
 should specifically sanity-check:
 
 **Rejected**: generating core lesson content live via an LLM call per
@@ -257,7 +257,7 @@ LLM-token cost the owner explicitly does not want (confirmed: he cannot
 have per-use AI token spend in the running app).
 
 **Built instead**: a bounded, **procedural** generation engine.
-Codex authors reviewed *sentence-frame templates* (slotted, tagged,
+drafting tool B authors reviewed *sentence-frame templates* (slotted, tagged,
 fresh-context reviewed exactly like lesson content) plus a lexeme pool
 promoted from each lesson's already-taught vocabulary. At runtime, a
 deterministic seeded sampler recombines them — zero LLM calls, zero
@@ -277,14 +277,14 @@ just static language membership) rather than a fa/prs-specific
 exclusion — prs still has zero coverage from either TTS provider and
 is permanently excluded either way; fa is technically eligible via
 Azure but stays excluded in practice until a real `AZURE_SPEECH_KEY`
-is provisioned (not yet done as of this writing — see CLAUDE.md's
+is provisioned (not yet done as of this writing — see the project notes'
 Secrets section). The gap is respected rather than papered over
 either way.
 
 **Free/open material research** (informational, not yet incorporated
 into the pipeline): public-domain FSI language courses and the
 CC-BY-licensed Tatoeba sentence corpus exist and are usable, but their
-value is as *pedagogical reference* fed into Codex's authoring
+value is as *pedagogical reference* fed into drafting tool B's authoring
 prompts (proven lesson sequencing, natural example sentences) — not as
 directly-imported content, and explicitly not anything from
 Duolingo/Babbel, which is proprietary. Not yet built into the actual
@@ -305,11 +305,11 @@ velocity becomes the bottleneck again.
   breadth across all 18 paths; no finish date should be inferred from
   anything in this document.
 - No admin UI for content authoring (curl/API-only) — an intentional
-  scope trim, not an oversight, given Codex authors via files.
+  scope trim, not an oversight, given drafting tool B authors via files.
 - No native-speaker review network — an accepted, explicit risk
   tradeoff, not a gap anyone is trying to hide.
 
-## 8. Specific questions for Fable
+## 8. Specific questions for external reviewer
 
 1. Does the procedural-not-generative decision in §6 hold up, or is
    there a bounded generative-content design that preserves the review
@@ -329,7 +329,7 @@ iOS apps"). This is a product requirement, not a nice-to-have: the app
 should feel calm, fast and physical, the way a good native iOS/macOS app
 does. Every rule below is written so a reviewer can check it in a
 browser. "Delight" never overrides correctness, accessibility (WCAG AA,
-the 2026-07/09 a11y passes) or the RTL rules in `frontend/CLAUDE.md`.
+the 2026-07/09 a11y passes) or the RTL rules in `frontend/the project notes.
 
 Scope: the web/PWA frontend (`frontend/src/**`). All tokens live in
 `frontend/src/index.css` `:root`; no animation library is required (CSS

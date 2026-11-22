@@ -1,6 +1,6 @@
 # Session handoff — written 2026-07-12 ~17:45 (supersedes the morning doc)
 
-Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume
+Read this + `docs/COORDINATOR_HANDBOOK.md` + the project notes to resume
 coordinating. Everything below is committed & pushed (master `485823a`,
 private GitHub MindThaApp/LingoSquared). The 2026-07-12 morning doc
 (`SESSION_HANDOFF_2026-07-12.md`) holds the overnight session log —
@@ -10,7 +10,7 @@ still worth skimming for the depth-measurement history.
 
 - **Working tree clean** (only the usual untracked `.firecrawl/`,
   `.playwright-mcp/`, per-session docker-compose files, `.env.faqa`).
-  Zero open worktrees, zero running workers, zero running Codex tasks.
+  Zero open worktrees, zero running workers, zero running drafting tool B tasks.
   Dev-DB sync11 completed clean; dev DB fully reflects master.
 - **Full-corpus content validation is GREEN** (first time ever,
   achieved today) — `bash scripts/verify.sh --content-only` passes.
@@ -20,11 +20,11 @@ still worth skimming for the depth-measurement history.
   with feedback image-attachments UI + localized language names
   (`--mode production.lan` build, rsync'd, bundle hash verified).
   The owner confirmed it works. **Coordinator now has STANDING DEPLOY
-  AUTHORITY** (root CLAUDE.md OPERATIONS) — verification bar first,
+  AUTHORITY** (the project notes OPERATIONS) — verification bar first,
   destructive live-DB ops still need the owner.
-- **Codex quota**: last reset 11:39; ~15 tasks run today, one quota
+- **drafting tool B quota**: last reset 11:39; ~15 tasks run today, one quota
   bounce mid-afternoon. Check before big waves.
-- **Claude budget**: heavy Opus review usage today — the tiered-review
+- **drafting tool A budget**: heavy drafting tool A review usage today — the tiered-review
   data now justifies 1-in-3 sampling for it/ru lanes (see registry) to
   economize.
 
@@ -38,7 +38,7 @@ still worth skimming for the depth-measurement history.
    reviewed en-it/en-ru overlays, manifest-wired, imported.
 5. **English A1 units 59-68** (10 new topical units) + all three X→en
    overlay sets, all reviewed. fa-en had a register-divergence incident
-   (fixed + prevented via per-lane register pins in content CLAUDE.md).
+   (fixed + prevented via per-lane register pins in content the project notes).
 6. **Practice**: +90 templates (43-48/31-36 ranges) + format-monotony
    fix (MC share modeled 60-82% → 44-50%); practice depth measured
    145-219h/direction — **practice launch bar CLOSED**.
@@ -66,14 +66,14 @@ still worth skimming for the depth-measurement history.
 
 ## Queued / natural next work (in priority order)
 
-1. The owner's per-pair ruling → possibly English B1 12+ wave (Codex,
+1. The owner's per-pair ruling → possibly English B1 12+ wave (drafting tool B,
    3 overlay sets each, register pins quoted verbatim in EVERY prompt).
 2. it/ru units 16+ drip (recipe proven; lanes eligible for 1-in-3
    review sampling per registry — coordinator may apply it).
 3. Small-fix backlog: fa u37 lesson03 match_asking_color_words has two
    synonym lefts both glossed "What color is it?" (ambiguous matching);
    §1.22 same-speaker-distractor validator (listen_select) still on
-   Codex backlog; sync_dev_db.sh mid-run 401 token-refresh (Codex).
+   drafting tool B backlog; sync_dev_db.sh mid-run 401 token-refresh (drafting tool B).
 4. Variety re-audit (isolated stack harness in
    PRACTICE_VARIETY_AUDIT_2026-07-11.md) to confirm the MC% fix
    empirically — modeled only so far.
@@ -95,20 +95,20 @@ still worth skimming for the depth-measurement history.
 (Wrong-language bug: RESOLVED today — was unlocalized language names.
 German session: RESOLVED — declared dead, lane recovered.)
 
-## Footguns learned today (also in registry/CLAUDE.md)
+## Footguns learned today (also in registry/the project notes)
 
 - **The shared English realization has FOUR X→en overlay consumers:
   nl-en, fa-en, prs-en AND de-en** — update all four mirrors or the
   compiler mirror-validator fails de-en (happened today, caught in
-  review). Now in docs/content/CLAUDE.md.
-- **Per-lane register pins** exist in docs/content/CLAUDE.md — quote
+  review). Now in the content-lane notes.
+- **Per-lane register pins** exist in the content-lane notes — quote
   them VERBATIM in every authoring dispatch (prevented a recurrence
   when done; caused a full 5-file conversion when not).
 - **Fixer/worker self-reports lie**: one fixer "validated" the wrong
-  file set and reported success; Codex acceptance twice passed its own
+  file set and reported success; drafting tool B acceptance twice passed its own
   harness while the real one failed. ALWAYS run the acceptance command
   yourself before commit; put the verbatim command in the prompt.
-- **Opus reviewers sometimes get no worktree** (2 of 3 in one batch
+- **drafting tool A reviewers sometimes get no worktree** (2 of 3 in one batch
   committed straight to master — commits were fine, but diff git log
   after every batch, per the standing rule).
 - **Don't run sync_dev_db.sh while a merge is mid-conflict** (it reads

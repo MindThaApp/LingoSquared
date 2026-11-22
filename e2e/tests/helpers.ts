@@ -3,7 +3,7 @@ import type { Page } from "@playwright/test";
 /**
  * Unique, harmless test account per run -- @example.com per this
  * project's own convention (RFC-2606 reserved; .invalid was tried and
- * rejected by the email validator, see CLAUDE.md/BUILD_LOG.md).
+ * rejected by the email validator, see the project notes/BUILD_LOG.md).
  */
 export function freshEmail(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 100000)}@example.com`;
@@ -92,7 +92,7 @@ export async function goToCourseUnits(
 
 /**
  * The three publish-gate launch pairs (en<->nl, en<->fa/prs) per the
- * 2026-07-05 scope decision in CLAUDE.md. Course titles must match a
+ * 2026-07-05 scope decision in the project notes. Course titles must match a
  * REAL imported course, not a test artifact -- verify with
  * `curl "http://localhost:8000/courses?source=X&target=Y"` before
  * adding an entry here (en-nl has no real course yet as of this

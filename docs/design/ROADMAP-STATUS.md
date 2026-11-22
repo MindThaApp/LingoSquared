@@ -43,7 +43,7 @@ Data-safety review means: an independent agent reviews the code for anything tha
 | `Store` on IndexedDB; local lesson progress; offline storage | Can do — needs data-safety review first (new persistent user data, migrations, eviction) |
 | Outbox draining via existing endpoints; sync indicator; remove "session unavailable" wall | Can do — needs data-safety review first (remote-side writes, duplicate/overwrite risk) |
 | Workbox precache, update toast | Can do without input |
-| Backend `POST /sync/batch` (CONTRACT.md first, Codex lane) | Can do — needs data-safety review first |
+| Backend `POST /sync/batch` (CONTRACT.md first, drafting tool B lane) | Can do — needs data-safety review first |
 
 ## Phase 4 — Local grading, SRS, packs
 | Item | Status |
@@ -74,4 +74,4 @@ Data-safety review means: an independent agent reviews the code for anything tha
 Local lesson-progress saving and restore (Phase 0 #5), the IndexedDB `Store`, offline storage and eviction, the outbox/sync endpoint, `SessionEngine` extraction, and pack download/caching. Each gets an independent reviewer given the code (not conclusions), per the standing destructive-code gate.
 
 ## Unmerged spec this builds on: `origin/docs/delight-spec`
-The core spec's delight/acceptance items (the "D§9.x" references) come from `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §9 on branch `origin/docs/delight-spec` (one commit, `b6773982b`, "add Delight / polish section"; 321 added lines in that single file). It is **not merged**. A trial merge into `fix/wsl-handover-followups` reports a content conflict in `docs/APP_SPEC_FOR_FABLE_REVIEW.md` (the file already exists on the integration branch and differs), so it needs a manual rebase/merge by whoever owns that doc. This PR does not touch it; references to `D§9.x` stay unresolved on this branch until it is merged.
+The core spec's delight/acceptance items (the "D§9.x" references) come from `docs/APP_SPEC_FOR_REVIEW.md` §9 on branch `origin/docs/delight-spec` (one commit, `b6773982b`, "add Delight / polish section"; 321 added lines in that single file). It is **not merged**. A trial merge into `fix/wsl-handover-followups` reports a content conflict in `docs/APP_SPEC_FOR_REVIEW.md` (the file already exists on the integration branch and differs), so it needs a manual rebase/merge by whoever owns that doc. This PR does not touch it; references to `D§9.x` stay unresolved on this branch until it is merged.

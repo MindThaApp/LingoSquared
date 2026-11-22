@@ -3,7 +3,7 @@
 ## Git state
 - Branch: `fix/launch-gate-content-review-wave1` (NO upstream — nothing pushed).
 - 6 commits ahead of `7fcea523`. **Do NOT push/merge/deploy without an explicit ask from the owner.**
-- Only pre-existing untracked/modified files remain in `git status` (a .pyc, repo `.claude/settings.json`, some docker-compose/env files) — none of them mine.
+- Only pre-existing untracked/modified files remain in `git status` (a .pyc, repo `<local tool dir>`, some docker-compose/env files) — none of them mine.
 
 ## What landed this session (all local commits)
 Fixes: volume_translate debug-placeholder strip (37 packs); a2_30 untaught `qualified`

@@ -92,7 +92,7 @@ def test_pair_clue_side_rule():
 
 
 # ---------------------------------------------------------------------------
-# --codex translation backend (the codex call is mocked)
+# --drafter-b translation backend (the call is mocked)
 # ---------------------------------------------------------------------------
 import json  # noqa: E402
 import types  # noqa: E402
@@ -108,18 +108,18 @@ def _work(tmp_path, items_by_file):
 
 
 def _args(tmp_path, **kw):
-    base = dict(work=str(tmp_path), new="fr-es", batch=2, workers=2, retries=3, codex_model=None)
+    base = dict(work=str(tmp_path), new="fr-es", batch=2, workers=2, retries=3, drafter_b_model=None)
     return types.SimpleNamespace(**{**base, **kw})
 
 
 def _echo(prompt, model=None):
-    """Fake codex: translate every item to 'ES:<text>' (keeps *spans* and placeholders)."""
+    """Fake drafter B: translate every item to 'ES:<text>' (keeps *spans* and placeholders)."""
     items = [json.loads(l) for l in prompt.split("Items:\n", 1)[1].splitlines() if l.startswith("[")]
     out = [{"id": it[0], "t": it[2].replace("Hello", "Hola")} for it in items if it[0] != "#"]
     return json.dumps({"items": out}), {"tokens": 10}
 
 
-def test_codex_translates_all_files_in_namespaced_chunks_and_is_resumable(tmp_path):
+def test_drafter_b_translates_all_files_in_namespaced_chunks_and_is_resumable(tmp_path):
     w = _work(tmp_path, {"a1_unit01": [["#", "exercise"], ["u1", "instruction", "Hello there"], ["u2", "feedback", "Hello again"]],
                          "shared": [["s1", "packtext", "Hello {item}"]]})
     calls = []
@@ -128,17 +128,17 @@ def test_codex_translates_all_files_in_namespaced_chunks_and_is_resumable(tmp_pa
         calls.append(prompt)
         return _echo(prompt)
 
-    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert dc.cmd_translate_b(_args(tmp_path), call=call, sleep=lambda s: None) == 0
     assert json.loads((w / "a1_unit01.tr.json").read_text())["u1"] == "Hola there"
     assert json.loads((w / "shared.tr.json").read_text())["s1"] == "Hola {item}"
     assert len(calls) == 2                      # 3 items, batch 2
-    assert json.loads((w / "codex-stats.json").read_text())["calls"] == 2
+    assert json.loads((w / "drafter-b-stats.json").read_text())["calls"] == 2
     calls.clear()
-    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert dc.cmd_translate_b(_args(tmp_path), call=call, sleep=lambda s: None) == 0
     assert calls == []                          # nothing left to do on a re-run
 
 
-def test_codex_retries_transient_limits_with_backoff(tmp_path):
+def test_drafter_b_retries_transient_limits_with_backoff(tmp_path):
     _work(tmp_path, {"shared": [["s1", "packtext", "Hello"]]})
     state, waits = {"n": 0}, []
 
@@ -148,24 +148,24 @@ def test_codex_retries_transient_limits_with_backoff(tmp_path):
             raise RuntimeError("rate: 429 too many requests")
         return _echo(prompt)
 
-    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=waits.append) == 0
+    assert dc.cmd_translate_b(_args(tmp_path), call=call, sleep=waits.append) == 0
     assert waits == [15, 30]
-    st = json.loads((tmp_path / "fr-es" / "codex-stats.json").read_text())
+    st = json.loads((tmp_path / "fr-es" / "drafter-b-stats.json").read_text())
     assert st["rate_limited"] == 2 and st["calls"] == 3
 
 
-def test_codex_stops_on_hard_usage_limit_and_records_it(tmp_path):
+def test_drafter_b_stops_on_hard_usage_limit_and_records_it(tmp_path):
     _work(tmp_path, {"shared": [["s1", "packtext", "Hello"], ["s2", "packtext", "Hello 2"]]})
 
     def call(prompt, model=None):
-        raise dc.CodexQuotaExhausted("You've hit your usage limit")
+        raise dc.DrafterQuotaExhausted("You've hit your usage limit")
 
-    assert dc.cmd_translate_codex(_args(tmp_path, batch=1, workers=1), call=call, sleep=lambda s: None) == 2
-    st = json.loads((tmp_path / "fr-es" / "codex-stats.json").read_text())
+    assert dc.cmd_translate_b(_args(tmp_path, batch=1, workers=1), call=call, sleep=lambda s: None) == 2
+    st = json.loads((tmp_path / "fr-es" / "drafter-b-stats.json").read_text())
     assert "usage limit" in st["quota"] and st["calls"] == 1      # no further calls after the quota error
 
 
-def test_codex_lint_failure_is_retried_with_the_problem_in_the_prompt(tmp_path):
+def test_drafter_b_lint_failure_is_retried_with_the_problem_in_the_prompt(tmp_path):
     w = _work(tmp_path, {"shared": [["s1", "feedback", "*Poulet* is masculine."]]})
     prompts = []
 
@@ -174,11 +174,11 @@ def test_codex_lint_failure_is_retried_with_the_problem_in_the_prompt(tmp_path):
         t = "Poulet es masculino." if len(prompts) == 1 else "*Poulet* es masculino."
         return json.dumps({"items": [{"id": "shared/s1", "t": t}]}), {}
 
-    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert dc.cmd_translate_b(_args(tmp_path), call=call, sleep=lambda s: None) == 0
     assert "asterisk span" in prompts[1] and json.loads((w / "shared.tr.json").read_text())["s1"] == "*Poulet* es masculino."
 
 
-def test_codex_call_builds_a_sandboxed_command_and_classifies_errors(monkeypatch):
+def test_draft_call_b_builds_a_sandboxed_command_and_classifies_errors(monkeypatch):
     seen = {}
 
     def fake_run(cmd, **kw):
@@ -188,20 +188,20 @@ def test_codex_call_builds_a_sandboxed_command_and_classifies_errors(monkeypatch
 
     monkeypatch.setattr(dc.subprocess, "run", fake_run)
     try:
-        dc.codex_call("x")
-    except dc.CodexQuotaExhausted:
+        dc.draft_call_b("x")
+    except dc.DrafterQuotaExhausted:
         pass
     else:
-        raise AssertionError("usage limit must raise CodexQuotaExhausted")
+        raise AssertionError("usage limit must raise DrafterQuotaExhausted")
     c = seen["cmd"]
-    assert c[:2] == ["codex", "exec"] and c[c.index("-s") + 1] == "read-only" and "--ephemeral" in c and "--output-schema" in c
+    assert c[:2] == [dc.DRAFTER_B_BIN, "exec"] and c[c.index("-s") + 1] == "read-only" and "--ephemeral" in c and "--output-schema" in c
     assert seen["cwd"] != str(dc.ROOT)
 
 
 # ---------------------------------------------------------------------------
-# --claude backend (headless `claude -p`, subprocess mocked)
+# --drafter-a backend (headless CLI, subprocess mocked)
 # ---------------------------------------------------------------------------
-def test_claude_backend_translates_and_writes_usage_stats(tmp_path):
+def test_drafter_a_backend_translates_and_writes_usage_stats(tmp_path):
     w = _work(tmp_path, {"a1_unit01": [["i1", "instruction", "Hello"], ["i2", "feedback", "Hello again"], ["i3", "note", "Hello!"]]})
 
     def call(prompt, model=None):
@@ -209,14 +209,14 @@ def test_claude_backend_translates_and_writes_usage_stats(tmp_path):
         return text, {"tokens": 100, "usage": {"input_tokens": 5, "cache_read_input_tokens": 60, "cache_creation_input_tokens": 20,
                                                 "output_tokens": 15}, "cost_usd": 0.01}
 
-    assert dc.cmd_translate_claude(_args(tmp_path, claude_model="sonnet"), call=call, sleep=lambda s: None) == 0
+    assert dc.cmd_translate_a(_args(tmp_path, drafter_a_model=dc.DRAFTER_A_DEFAULT_MODEL), call=call, sleep=lambda s: None) == 0
     assert dc.dd.load_tr(w, "a1_unit01")["i1"] == "Hola"
-    st = json.loads((w / "claude-stats.json").read_text())
-    assert not (w / "codex-stats.json").exists()
+    st = json.loads((w / "drafter-a-stats.json").read_text())
+    assert not (w / "drafter-b-stats.json").exists()
     assert st["calls"] == 2 and st["tokens"] == 200 and st["usage"]["cache_read_input_tokens"] == 120 and st["cost_usd"] == 0.02
 
 
-def test_claude_call_builds_a_toolless_command_and_parses_usage(monkeypatch):
+def test_draft_call_a_builds_a_toolless_command_and_parses_usage(monkeypatch):
     seen = {}
     ev = {"is_error": False, "structured_output": {"items": [{"id": "a", "t": "hola"}]}, "total_cost_usd": 0.5,
           "usage": {"input_tokens": 2, "cache_creation_input_tokens": 3, "cache_read_input_tokens": 4, "output_tokens": 5}}
@@ -226,25 +226,25 @@ def test_claude_call_builds_a_toolless_command_and_parses_usage(monkeypatch):
         return types.SimpleNamespace(returncode=0, stdout=json.dumps(ev), stderr="")
 
     monkeypatch.setattr(dc.subprocess, "run", fake_run)
-    text, info = dc.claude_call("x")
+    text, info = dc.draft_call_a("x")
     c = seen["cmd"]
-    assert c[:2] == ["claude", "-p"] and c[c.index("--tools") + 1] == "" and c[c.index("--model") + 1] == "sonnet"
+    assert c[:2] == [dc.DRAFTER_A_BIN, "-p"] and c[c.index("--tools") + 1] == "" and c[c.index("--model") + 1] == dc.DRAFTER_A_DEFAULT_MODEL
     assert "--json-schema" in c and "--no-session-persistence" in c and seen["cwd"] != str(dc.ROOT)
     assert json.loads(text)["items"][0]["t"] == "hola"
     assert info["tokens"] == 14 and info["usage"]["cache_read_input_tokens"] == 4 and info["cost_usd"] == 0.5
 
 
-def test_claude_call_classifies_errors(monkeypatch):
+def test_draft_call_a_classifies_errors(monkeypatch):
     def run_with(msg):
         monkeypatch.setattr(dc.subprocess, "run", lambda cmd, **kw: types.SimpleNamespace(
             returncode=1, stdout=json.dumps({"is_error": True, "result": msg}), stderr=""))
-        dc.claude_call("x")
+        dc.draft_call_a("x")
 
-    for msg, exc in (("You've hit your usage limit", dc.CodexQuotaExhausted), ("429 rate limit, overloaded", RuntimeError)):
+    for msg, exc in (("You've hit your usage limit", dc.DrafterQuotaExhausted), ("429 rate limit, overloaded", RuntimeError)):
         try:
             run_with(msg)
         except exc as e:
-            assert (exc is dc.CodexQuotaExhausted) or str(e).startswith("rate")
+            assert (exc is dc.DrafterQuotaExhausted) or str(e).startswith("rate")
         else:
             raise AssertionError(msg)
 
@@ -442,16 +442,16 @@ def test_english_in_nonlatin_ignores_dutch_words_that_are_also_english():
     assert f("यह is एक वाक्य है", "es") == ["is"]            # still English when the target is not Dutch
 
 
-def test_cards_claude_backend_uses_claude_call(monkeypatch, tmp_path):
-    """`cards --claude` must translate through claude_call (it once fell back to codex_call, which rejects model 'sonnet' with a 400)."""
+def test_cards_drafter_a_backend_uses_draft_call_a(monkeypatch, tmp_path):
+    """`cards --drafter-a` must translate through draft_call_a (it once fell back to draft_call_b, which rejects drafter A's model alias with a 400)."""
     import argparse
     seen = {}
 
-    def fake(args, call=None, sleep=None, backend="codex"):
+    def fake(args, call=None, sleep=None, backend="drafter-b"):
         seen["call"], seen["backend"] = call, backend
         return 0
 
-    monkeypatch.setattr(dc, "cmd_translate_codex", fake)
+    monkeypatch.setattr(dc, "cmd_translate_b", fake)
     monkeypatch.setattr(dc.dd, "read_manifest", lambda *_: {"x-ru": ([], [])})
     monkeypatch.setattr(dc.dd, "group_names", lambda *_: ["x-ru"])
     monkeypatch.setattr(dc, "foreign_teaching_targets", lambda *a: {"k": ("card", "Hello")})
@@ -460,8 +460,8 @@ def test_cards_claude_backend_uses_claude_call(monkeypatch, tmp_path):
     real = tmp_path / "r.yaml"; real.write_text("{}"); ov = tmp_path / "o.yaml"; ov.write_text("{}")
     monkeypatch.setattr(dc, "ROOT", tmp_path)
     monkeypatch.setattr(dc.dd, "read_manifest", lambda *_: {"x-ru": ([str(real)], [str(ov)])})
-    dc.cmd_cards(argparse.Namespace(new="x-ru", levels=["a1"], work=str(tmp_path / "w"), claude=True, codex=False))
-    assert seen["backend"] == "claude" and seen["call"] is dc.claude_call
+    dc.cmd_cards(argparse.Namespace(new="x-ru", levels=["a1"], work=str(tmp_path / "w"), drafter_a=True, drafter_b=False))
+    assert seen["backend"] == "drafter-a" and seen["call"] is dc.draft_call_a
 
 
 def test_prompt_block_dict_form_rejects_learner_language_blocks():
