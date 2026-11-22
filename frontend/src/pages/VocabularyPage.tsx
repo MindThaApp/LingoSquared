@@ -14,7 +14,7 @@ function MasteryBar({ mastery }: { mastery: number }) {
       <div className="progress-track" style={{ flex: 1, minWidth: 60 }}>
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
-      <span className="muted" style={{ fontSize: "0.8rem", minWidth: 34, textAlign: "right" }}>
+      <span className="muted" style={{ fontSize: "0.8rem", minWidth: 34, textAlign: "end" }}>
         {pct}%
       </span>
     </div>
@@ -47,7 +47,7 @@ function LexemeRow({ lexeme }: { lexeme: Lexeme }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
         <div>
           <strong>{lexeme.token}</strong>
-          <span className="muted" style={{ marginLeft: 8 }}>
+          <span className="muted" style={{ marginInlineStart: 8 }}>
             {lexeme.english_gloss}
           </span>
         </div>
@@ -70,7 +70,7 @@ function MistakeRow({ mistake }: { mistake: MistakeLexeme }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
         <div>
           <strong>{mistake.token}</strong>
-          <span className="muted" style={{ marginLeft: 8 }}>
+          <span className="muted" style={{ marginInlineStart: 8 }}>
             {mistake.english_gloss}
           </span>
         </div>

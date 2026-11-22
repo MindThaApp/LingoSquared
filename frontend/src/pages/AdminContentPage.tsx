@@ -106,7 +106,7 @@ export function AdminContentPage() {
         {coverageQuery.data && (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ textAlign: "left", borderBottom: "1px solid var(--border)" }}>
+              <tr style={{ textAlign: "start", borderBottom: "1px solid var(--border)" }}>
                 <th style={{ padding: "6px 8px" }}>{t("admin.table.pair")}</th>
                 <th style={{ padding: "6px 8px" }}>{t("admin.table.courses")}</th>
                 <th style={{ padding: "6px 8px" }}>{t("admin.table.units")}</th>
