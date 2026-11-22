@@ -2,7 +2,7 @@
 
 Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume
 coordinating. Everything below is committed & pushed (master `485823a`,
-private GitHub ramin-azizi/LingoSquared). The 2026-07-12 morning doc
+private GitHub MindThaApp/LingoSquared). The 2026-07-12 morning doc
 (`SESSION_HANDOFF_2026-07-12.md`) holds the overnight session log —
 still worth skimming for the depth-measurement history.
 
@@ -19,9 +19,9 @@ still worth skimming for the depth-measurement history.
 - **Live server (192.168.4.4) is current**: frontend deployed today
   with feedback image-attachments UI + localized language names
   (`--mode production.lan` build, rsync'd, bundle hash verified).
-  Ramin confirmed it works. **Coordinator now has STANDING DEPLOY
+  The owner confirmed it works. **Coordinator now has STANDING DEPLOY
   AUTHORITY** (root CLAUDE.md OPERATIONS) — verification bar first,
-  destructive live-DB ops still need Ramin.
+  destructive live-DB ops still need the owner.
 - **Codex quota**: last reset 11:39; ~15 tasks run today, one quota
   bounce mid-afternoon. Check before big waves.
 - **Claude budget**: heavy Opus review usage today — the tiered-review
@@ -47,26 +47,26 @@ still worth skimming for the depth-measurement history.
 8. **fa/prs UI locale register normalization**; **wrong-language bug
    fixed** (course-picker language names now localized via
    `language_names` i18n block, `localizedLanguageName()` helper).
-9. **German lane recovery** (Ramin declared the session dead).
+9. **German lane recovery** (the owner declared the session dead).
 10. **Local-model experiment**: qwen3:14b BARRED from content
-    (verdict in COORDINATOR_HANDBOOK). Ramin: never use local AI.
+    (verdict in COORDINATOR_HANDBOOK). The owner: never use local AI.
 
 ## Launch-gate scoreboard
 
 - Practice depth: **PASS** everywhere (145-219h vs 10h bar).
 - Teaching depth: en→X **PASS** (11.25/13.8/15.3h). X→en **7.90h per
   direction** — passes per-PAIR (19-23h), short per-DIRECTION.
-  **OPEN QUESTION FOR RAMIN: is the 10h teaching bar per-pair or
+  **OPEN QUESTION FOR OWNER: is the 10h teaching bar per-pair or
   per-direction?** If per-direction: author denser English B1 units
   12+ (most efficient; ~19 more light A1 units otherwise). X→en unit
   waves are PAUSED pending this ruling.
 - Checkpoints: built (Phase F). "Minimum bugs" live verification:
-  report-button loop live; Ramin's Dutch native pass + phone QA still
+  report-button loop live; the owner's Dutch native pass + phone QA still
   the human gates.
 
 ## Queued / natural next work (in priority order)
 
-1. Ramin's per-pair ruling → possibly English B1 12+ wave (Codex,
+1. The owner's per-pair ruling → possibly English B1 12+ wave (Codex,
    3 overlay sets each, register pins quoted verbatim in EVERY prompt).
 2. it/ru units 16+ drip (recipe proven; lanes eligible for 1-in-3
    review sampling per registry — coordinator may apply it).
@@ -80,7 +80,7 @@ still worth skimming for the depth-measurement history.
 5. Remaining §16 warnings are all documented genuine caps (~14 en,
    ~25 fa, 13 it, 13 ru) — no action unless the guide changes.
 
-## RAMIN'S LIST (unchanged from morning doc, minus resolved items)
+## OWNER'S LIST (unchanged from morning doc, minus resolved items)
 
 1. Domain + Cloudflare Tunnel (~$10/yr) — unlocks public HTTPS, OAuth,
    VITE_FEEDBACK_API_URL.

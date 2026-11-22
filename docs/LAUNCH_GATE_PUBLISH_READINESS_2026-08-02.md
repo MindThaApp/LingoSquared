@@ -38,7 +38,7 @@ glossed → extend `backfill_lexemes_{fa,prs}_en.py`, author 12 packs, import.
 content lexemes, and the checkpoint scopes targets to a unit's OWN lexemes — so they
 cannot reach the 12-item floor without either teaching more distinct vocab (a content
 redesign) or accepting no checkpoint. The pack authors already flagged this and
-correctly refused to pad with untaught vocabulary. **Decision for Ramin:** accept
+correctly refused to pad with untaught vocabulary. **Decision for the owner:** accept
 these breadth units as checkpoint-exempt, or expand their taught vocab. Not a bug.
 
 ## Grading correctness — launch gate is 100% clean

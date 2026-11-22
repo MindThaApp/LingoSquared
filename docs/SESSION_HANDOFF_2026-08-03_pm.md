@@ -2,9 +2,9 @@
 
 Branch: `fix/launch-gate-content-review-wave1`. Continues the 2026-08-03 (AM)
 handoff. Standing directive: **"don't stop building until I say ready"**; this
-session Ramin added **"build the new features to try out"**, **"all of them in
+session the owner added **"build the new features to try out"**, **"all of them in
 sub-agents"**, and **"lots of codex until its usage is finished."** Feedback
-email address confirmed: **[admin email]** (Ramin's app-admin acct).
+email address confirmed: **[admin email]** (the owner's app-admin acct).
 
 Local stack up: API 8020 (recreated this session to pick up backend changes),
 web 8011, Vite dev server 5173, db healthy. Admin: admin@example.com + ~/.lingo_admin_pw.
@@ -19,11 +19,11 @@ web 8011, Vite dev server 5173, db healthy. Admin: admin@example.com + ~/.lingo_
   `best`→adverb "quite". (Investigated all 9 flagged tokens; other 7 out of scope.)
 - `55d7358d` glossed the 2 remaining un-glossed nl B2 reading passages.
 
-**Three new features (Ramin's request), each browser-verified:**
+**Three new features (the owner's request), each browser-verified:**
 - `bb833832` **Showcase page** `/showcase` (ProtectedRoute, linked from Home) +
   new reusable **`ReadingPassageWithQuestions`** component (passage pinned sticky
   while answering its comprehension questions below — the "combined passage+
-  questions" upgrade Ramin approved). Discovers sample lessons via catalog.
+  questions" upgrade the owner approved). Discovers sample lessons via catalog.
 - `c5de5519` **Skill-targeted practice**: (a) exercise-`type` filter on the
   practice feed (backend `types` param on POST /practice/{course}/batch; frontend
   chip row); (b) "Drill weak outcomes" — checkpoint result now returns
@@ -62,7 +62,7 @@ entire nl **A1** tier (was 100% un-glossed; ~50 units total have reading cards).
    in the dev DB, so "try it" works without this.
 3. **fa/prs practice-filter labels** were added as English placeholders in the
    fa/prs locale JSONs (minor i18n debt; RTL is the mandated verify target).
-4. **Ramin's calls (unchanged):** app name (`docs/APP_NAME_SHORTLIST.md`); live
+4. **the owner's calls (unchanged):** app name (`docs/APP_NAME_SHORTLIST.md`); live
    deploy (SSH key on 192.168.4.4 + app-admin 401 still blocking).
 
 ## Verification status
@@ -89,11 +89,11 @@ its UI link is build-verified (not clicked live — needs a wrong-answered check
   03-12) — es has 39 reading-card units, fr has 9, both un-glossed and now unparked
   (nl done). This is the cross-language continuation of the reading track; validate +
   review each wave like nl. de/it/ru have NO reading cards (nothing to gloss there).
-- Codex used HEAVILY per Ramin's directive: ~19 tasks this session, never quota-erpred.
+- Codex used HEAVILY per the owner's directive: ~19 tasks this session, never quota-erpred.
 
 ## Update 2 — es+fr cross-language expansion COMPLETE
 
-Ramin: "do all of it (except stopping codex, continue that!)". Extended BOTH
+The owner: "do all of it (except stopping codex, continue that!)". Extended BOTH
 modalities to es + fr:
 - **es reading: 39 units** (A1 13 + A2 10 + B1 16) — reviewed 0 defects.
 - **fr reading: 9 units** — reviewed 0 defects.
@@ -110,7 +110,7 @@ errors in es a1_u09/12/13/14, es b1_u27/36, fr a1_u05 — separate fix needed.
 
 ## Update 3 — FULL feasible cross-language expansion COMPLETE (reading + dictation)
 
-Ramin: "continue codex". Rolled the reading + dictation modalities across every
+The owner: "continue codex". Rolled the reading + dictation modalities across every
 feasible language:
 - **Reading tap-to-gloss (181 units):** nl 91, es 39, fr 9, ro 12, hi 30. All reviewed
   by fresh-context agents — cumulative ~1 defect / ~180 units. (Only languages WITH
@@ -160,6 +160,6 @@ corpus (incl. all this session's 9-language content) passes the real pipeline.
 - **Nightly cron (SESSION-SCOPED — re-create after restart!):** 3:23am, full
   verify.sh, push branch only if green. Dies with the session; 7-day cap. A
   durable crontab version was offered, not yet requested.
-- Model: session switched to Fable 5 mid-day. "Ferishta1" was mentioned by Ramin
+- Model: session switched to Fable 5 mid-day. "Ferishta1" was mentioned by the owner
   without context and deliberately not recorded pending clarification.
-- Still Ramin's calls: app name, live deploy.
+- Still the owner's calls: app name, live deploy.

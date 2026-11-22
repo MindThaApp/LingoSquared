@@ -2,7 +2,7 @@
 # Install the nightly database-backup cron job (scripts/backup_db.sh).
 #
 # *** MEANT TO BE RUN MANUALLY, BY A HUMAN, ON THE TARGET MACHINE. ***
-# This script modifies the invoking user's crontab. It exists so Ramin can
+# This script modifies the invoking user's crontab. It exists so the owner can
 # run it himself on whatever machine should actually take the nightly
 # backups (the home server, 192.168.4.4) — it should NOT be executed
 # automatically by an agent, a deploy script, or CI against any machine,

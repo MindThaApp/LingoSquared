@@ -38,7 +38,7 @@ digest, not a replacement for it.
 - **`FIRECRAWL_API_KEY`: never hardcode, persist to a committed file, or
   embed directly in a shell-command argument** (exposes it in shell
   history/process listings). Safe pattern: `firecrawl login --api-key
-  ...` run once by Ramin, after which the CLI reads stored credentials.
+  ...` run once by the owner, after which the CLI reads stored credentials.
   **`.firecrawl/` is gitignored — write scrape output there with `-o`.**
 - **Disclose the actual source and its actual license in
   `generation_provenance`** — never one undifferentiated "found real
@@ -51,7 +51,7 @@ digest, not a replacement for it.
     that doesn't exist yet. **Don't re-investigate pool sizes without new
     information.**
   - **Wikibooks / any CC BY-SA source — categorically excluded** until
-    Ramin explicitly resolves the share-alike question (a real legal
+    The owner explicitly resolves the share-alike question (a real legal
     call), *before* first use, not after shipping derived content.
   - **University OER / other CC-BY courseware (e.g. COERLL) — usable only
     after a real attribution credit surface exists** (hard precondition

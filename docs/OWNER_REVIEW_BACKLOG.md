@@ -1,17 +1,17 @@
-# Ramin's review backlog
+# The owner's review backlog
 
-Things the autonomous coordinator (Claude) decided or deferred that Ramin may
+Things the autonomous coordinator (Claude) decided or deferred that the owner may
 want to review when he has a moment. **Nothing here is blocking** — it is a
-queue, not a set of questions. Newest at top. The coordinator appends; Ramin
+queue, not a set of questions. Newest at top. The coordinator appends; the owner
 prunes.
 
 Standing mandate (2026-07-23): Claude runs the build autonomously as
 coordinator/architect/engineer with a subagent team; only genuinely blocking
-or owner-reserved decisions interrupt Ramin. Everything else lands here.
+or owner-reserved decisions interrupt the owner. Everything else lands here.
 
 ---
 
-## ⭐⭐ RAMIN — CURRENT STATE + DECISION LIST (2026-07-31)
+## ⭐⭐ OWNER — CURRENT STATE + DECISION LIST (2026-07-31)
 
 **Where we are:** full native-review sweep done — **297/529 practice packs flipped to `review.status: reviewed`**
 (all validate 0/0; DEAD/floor gate at baseline, no regressions). The **reverse dirs (en-fa + en-prs) a1/a2/b1 are
@@ -109,7 +109,7 @@ fix-pass queue. Everything else re-verified **CONFIRM** (en-fa a1_10-56 + a2/b1,
 ### 🔬 en-nl a2/b1 FIRST-PASS REVIEW WAVE (2026-07-31) — 17 unreviewed packs (a2 25/26/27/73/75/76/77 + b1 01/02/03/05/06/07/08/09/10/11)
 
 7 sonnet read-only reviewers; I applied fixes centrally. **NONE flipped** — the whole en-nl corpus is
-held on the systemic "(with ik)"/homograph leaked-gloss class (re-backfill wave, Ramin's dev-DB), so
+held on the systemic "(with ik)"/homograph leaked-gloss class (re-backfill wave, the owner's dev-DB), so
 these join the held pile even when otherwise clean. Value = the real defects surfaced + fixed.
 
 **FIXED pack-side (committed 0-err):**
@@ -164,7 +164,7 @@ these join the held pile even when otherwise clean. Value = the real defects sur
 - **fa-en b1_16**: practice pack flipped to `reviewed` but its realization + overlay are BOTH still `review.status: unreviewed` (notes:null / "needs fresh-context review") — the flip isn't backed by any review of its own ingredients. Re-review the realization/overlay (also fix its grammar_note paragraph) before trusting the flip.
 - fa-en a1_37 "break" gloss "اتاق استراحت" (= "break room", the compound's sense, not bare "break") — re-backfill (deploy). fa-en a1_32 overlay uses heavy *asterisk* markdown in teaching/feedback text unlike siblings (literal asterisks if unrendered) — verify renderer. a1_66/a1_51 both realize spine `universal.a1.pharmacy.buy_basic_medicine` (duplicate outcome) — maintainer check.
 
-### 🔧 DELICATE CLEANUPS (2026-07-31, Ramin-approved "delicate cleanups (careful)") — outcomes
+### 🔧 DELICATE CLEANUPS (2026-07-31, owner-approved "delicate cleanups (careful)") — outcomes
 
 Investigated the three queued delicate cleanups with per-change verification. Only one was a clean safe win; the other two are NOT quick fixes (careful checks avoided two mistakes):
 - **✅ DONE — duplicate semantic-tag defs** (`_en_target_lexeme_common.py`): `celebration_noun` was defined in 3 if-blocks (diverged on the 4th member congratulations-vs-cake) + `chore_noun` in 2. Consolidated to one def per tag preserving the exact runtime union. PROVABLY behavior-preserving (before/after deduped tag-sets of all 9 affected tokens identical); 34 tests pass; scope-check baseline unchanged. Commit c6b50a62.
@@ -181,14 +181,14 @@ Investigated the three queued delicate cleanups with per-change verification. On
 **en-fa a1_01-09 — FIXED in-content (committed 22dabc0d):** authored English metalanguage in graded answers — a1_05 برید "go (polite)"→"go", a1_09 chande/half MC "is what/half (colloquial contraction of …)"→"is what/half", a1_06 match_register verbose "(polite, waiter or stranger)"→"(polite)". **KEY DISTINCTION: these were AUTHORED content** (realization matching_pairs.right + overlay accepted_answers/correct_option), NOT backfill glosses rendered via slot_gloss — so content-fixable NOW, unlike the deploy-gated gloss class. ⇒ **a chunk of the "leaked-gloss" backlog previously filed as re-backfill/deploy may actually be authored-content that's fixable in-lane — worth a re-triage sweep** (grep matching_pairs `right:` / MC `correct_option` for `(…)` parentheticals). Rest of en-fa a1_01-09 CONFIRM.
 
 **en-prs a1_01-09 + a2_09/16 — all findings QUEUED (Dari-content = native lane; none in-lane for me):**
-- **a1_03 REAL (native fix): untaught 3rd-person دارد/ندارد required in graded answers.** The `lesson03.teach.possession` grammar note teaches only دارم/داریم/دارین (omits 3sg), yet match_dialogue_facts (اولاد→ندارد) + write_profile (only accepted answers use `... دارد. متأهل است.`) require producing/matching it. Confirmed genuinely untaught (not in a1_01/02, and a1_03 is the 3rd unit). Fix (Ramin's native lane): add دارد to the possession note (completes the paradigm) OR rewrite the 2 exercises to the already-taught 1st-person.
+- **a1_03 REAL (native fix): untaught 3rd-person دارد/ندارد required in graded answers.** The `lesson03.teach.possession` grammar note teaches only دارم/داریم/دارین (omits 3sg), yet match_dialogue_facts (اولاد→ندارد) + write_profile (only accepted answers use `... دارد. متأهل است.`) require producing/matching it. Confirmed genuinely untaught (not in a1_01/02, and a1_03 is the 3rd unit). Fix (the owner's native lane): add دارد to the possession note (completes the paradigm) OR rewrite the 2 exercises to the already-taught 1st-person.
 - **قابلی نداره / می‌شه (a1_05/06/08) — native-Dari register confirm.** The "-ه" colloquial contraction (نداره/می‌شه) is the Tehrani/Iranian marker this course otherwise avoids; a prior pass web-verified قابلی نداره + بل چند می‌شه as genuine Afghan usage, but the reviewer escalates because می‌شه recurs productively ("دوصد افغانی می‌شه"). check_dari_register is silent (its FORMAL_3SG list never added داشتن/شدن's -ه form — a checker blind spot). Native sign-off needed; if rejected, swap to خواهش می‌کنم.
 - **a1_07 speak_full_call — role-incoherent composite prompt** (answer-the-phone + invite-continuation are the callee's moves, "leave a message" is the caller's; mashed into one accepted answer). Non-blocking; split into 2 exercises (native restructure).
 - **a2_09/16 طبق/متن reading-frame** ("طبق متن، …" = "according to the text") untaught, but only these 2 units use that stem (not a corpus convention) + mitigated by the English overlay instruction. Low-pri: teach طبق/متن or rephrase. Plus a2_09 کنین bare-imperative + اسنادی (plural of in-unit سند) — minor inflectional.
 - **a2_16 FALSE-FLIP** (realization+overlay `review.status: unreviewed` but pack flipped — same class as fa-en b1_16). Re-review before trusting.
 - **FALSE ALARMS (NOT defects): a2_09/16 چرا/کی.** The reviewers' untaught-token check is FILE-LOCAL, but the taught set is CUMULATIVE — چرا is taught in a1_unit25, کی in a1_07/10/16 (all before the a2 units), so they're already known. ⇒ **methodological note for future waves: file-local untaught-token findings on a2/b1 units over-flag anything taught in a prior a1 unit; verify cumulatively before queuing.**
 
-### 🔥 MAX-CONCURRENCY BURN-WAVE (2026-07-31) — ~30 sonnet reviewers (Ramin: "use up all the budget")
+### 🔥 MAX-CONCURRENCY BURN-WAVE (2026-07-31) — ~30 sonnet reviewers (the owner: "use up all the budget")
 
 Fanned out 20-concurrent reviewers (2nd-lens re-verify of the whole flipped a1 corpus in all 6 dirs + first-review of the never-reviewed b1 packs + deep single-class hunts). Overwhelmingly CONFIRM. **FIXED in-lane (committed):** a1_62 speaker attribution (line3 → Leila across shared realization + nl-en distractor + all 3 overlay glosses/titles); en-nl a1_67/68/69 15 English lesson-titles → Dutch; prs-en a1_35 battery بطری→بتری, a1_49 jar بوتل شیشه‌ای→شیشهٔ ظرف; en-fr a1_03 instruction five→six.
 
@@ -205,7 +205,7 @@ Fanned out 20-concurrent reviewers (2nd-lens re-verify of the whole flipped a1 c
 
 **NEW SYSTEMIC — leaked internal placeholder in graded prompts:** `volume_translate.NNN` auto-generated templates carry a `text_blocks` entry literally reading **"Second review translation prompt for this unit."** — found in en-nl a2_74/75/76 and reported present in **37+ files across nl-en/en-fa/prs-en/fa-en/en-nl** (auto-generation artifact). VERIFY whether it renders as the learner-facing prompt (if so, HARD — a debug string shown in a graded exercise); strip/replace corpus-wide. Deploy/backfill-adjacent (auto-gen source).
 
-**JUDGMENT CALL — en-nl a2_77 write_summary hij/zij:** the story is Omar-only (he buys the headphones AND gets his own refund — "Ik wil graag mijn geld terug" is Omar's line), so "Zij heeft haar geld teruggekregen" is a referent-less phantom "she." The realization's own note calls the hij/zij mix a deliberate 3rd-person drill; I synced the overlay to that (hij/zij) earlier this session. 2nd-lens argues it should be all-hij for narrative coherence (matches every sibling a2 unit). **Non-blocking (valid Dutch, grades fine) — Ramin's call: keep the deliberate hij/zij drill, or make it Omar-consistent all-hij** (would change realization nl/a2_77 grammar_gekocht+tested_text AND the en-nl overlay together). Also a2_74 respond_ask_help §12 +en-variant (folds into the §12 inventory).
+**JUDGMENT CALL — en-nl a2_77 write_summary hij/zij:** the story is Omar-only (he buys the headphones AND gets his own refund — "Ik wil graag mijn geld terug" is Omar's line), so "Zij heeft haar geld teruggekregen" is a referent-less phantom "she." The realization's own note calls the hij/zij mix a deliberate 3rd-person drill; I synced the overlay to that (hij/zij) earlier this session. 2nd-lens argues it should be all-hij for narrative coherence (matches every sibling a2 unit). **Non-blocking (valid Dutch, grades fine) — the owner's call: keep the deliberate hij/zij drill, or make it Omar-consistent all-hij** (would change realization nl/a2_77 grammar_gekocht+tested_text AND the en-nl overlay together). Also a2_74 respond_ask_help §12 +en-variant (folds into the §12 inventory).
 
 **QUEUED — merged/mis-attributed speaker hunt (real, precise, mostly mechanical):**
 - **Class A — fused dialogue teaching cards (2+ turns in one card, no speaker: field):** nl = 32 across 14 files (a1_unit01/02[×5]/03[×4]/04/05[3-way]/06/07/08/09/10/11/13/15/44) — nl a1_01-58 use the old inline "Name:" convention; units 59+ already migrated to speaker:. en = 2, both in en/a1_unit02_introductions (`lesson03.teach.room_and_member`, `.closing`). fa/prs = 0 (prs fully clean). Fix = split each into speaker-tagged turns (same pattern as the en-fa a2_10-17 splits done earlier).
@@ -328,7 +328,7 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   nl-en author's rationalizing note for cross-direction consistency).
 - en-nl u35 fill.003 Sander→Fenna wrong-fact + u34 order.003 'mijn' determiner (c64c0513).
 
-**QUEUED — NATIVE-JUDGMENT (Dari, prs-en — need Ramin/native confirm, do NOT auto-fix):**
+**QUEUED — NATIVE-JUDGMENT (Dari, prs-en — need the owner/native confirm, do NOT auto-fix):**
 - **prs-en u35 `battery`="بطری" (CRITICAL): بطری = "bottle" in Dari/Farsi, not battery** (should be
   باتری or the colloquial بتری the backfill already uses — spelling is also inconsistent بطری/بتری).
   The overlay note claims بطری is "distinct from Iranian باتری" — reviewer (native-ish) says that's wrong.
@@ -349,7 +349,7 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
 **QUEUED — JUDGMENT/DESIGN:**
 - nl-en u33 order.002/translate.001 "take the car/bike" contradicts the unit's own teaching (car→drive,
   bike→ride) — pack author documented "take is standard English", reviewer disagrees. Fix = narrow to
-  {bus,train} (new tag) OR reframe vehicle-neutral "by {item}" (like sibling order.001). Ramin's call.
+  {bus,train} (new tag) OR reframe vehicle-neutral "by {item}" (like sibling order.001). The owner's call.
 - fa-en u31/32 + nl-en u31 + prs-en u31 production-prompt completeness (missing curly/long/short/glasses
   etc. accepted_answers) — add the taught variants; native-EN judgment.
 - fa-en u34/u35 duplicate templates (order.005 vs volume_order — differentiate the frame, like u31 did).
@@ -1058,7 +1058,7 @@ a2_10/11/15/17; (b) metalanguage stripped from grammar-note target.text on 8 en-
 en-prs a1_57 untaught-conjugation frames → attested forms + FLIPPED; (d) en-fa a2_15 + en-prs a2_15 lesson02
 forward-ref prompts fixed (dropped leading متاسفانه/متأسفم); (e) en-fa a2_15 cancel_word example aligned to لغو شدن;
 (f) en-prs a2_16 lesson02 attribution de-named. **FLIPPED this pass: en-fa a2_09/10/15/17/18 + en-prs a2_09/16 +
-a1_57 (10 total incl. batch-26).** **REMAINING = native-judgment only (queued, NOT mine — Ramin's native lane):**
+a1_57 (10 total incl. batch-26).** **REMAINING = native-judgment only (queued, NOT mine — the owner's native lane):**
 the STRUCTURAL forward-ref rephrases/pre-teach cards (en-fa a2_11 بکنم; en-prs a2_12 مشکل, a2_13 مشکلی, a2_17
 می‌کنی, a2_18 مشکلی) — these foundational words are oddly first-taught in lesson04 of their own units; correct fix
 = pre-teach in lesson01 (needs a native example sentence) OR native rephrase; I did NOT author fa/prs sentences.
@@ -1373,7 +1373,7 @@ No prs-en batch-6 pack flipped.
   hobby ("reading" is Leila's own line). Fix: scope the instruction to a speaker/moment ("what X says
   first") or trim the audio clip. Shared EN realization → affects all X-en. Queue (careful).
 - **Deferred (already-tracked):** lesson01 matching_pairs forward-reference (nl-en u21 match_travel_
-  words 3/8, u24 match_rooms balcony; fa-en implied) — shared-realization, high revert risk, Ramin's call.
+  words 3/8, u24 match_rooms balcony; fa-en implied) — shared-realization, high revert risk, the owner's call.
 - **fa-en u21/u22 reply-prompt completeness gaps** (a required clause has no cue in target_blocks;
   units 23/24 do it right → avoidable). Add the missing cue or narrow accepted answer. Native-EN judgment.
 - **nl-en u30 `volume_order.006` malformed dup template** (English feedback, paste-error content_key,
@@ -1392,7 +1392,7 @@ new-and-live:**
   the realization's fixed lesson01 `match_*` exercise pads past lesson01's own vocab with 1-3 pairs
   first taught in later lessons of the same unit (e.g. u18 match_past_verbs includes watch/do/be from
   L2-L4). `canonical_pairs()` grades all-or-nothing. This is the ALREADY-TRACKED, DEFERRED
-  shared-realization class ("~9 files across dirs", high revert risk, Ramin's call) — fix = trim
+  shared-realization class ("~9 files across dirs", high revert risk, the owner's call) — fix = trim
   lesson01 pairs to lesson01-native + mirror to every X-en overlay. NOT done (queued, careful paired pass).
 - **feedback_frame false-provenance / stale counts / one echo bug — RUNTIME-INERT** (not read by
   generate_batch/build_prompt; same finding as a1_10-14). u17 (3× 'uit deze les' over a 1027-word
@@ -1470,7 +1470,7 @@ it collides with another token's final gloss):
     skipped). LOW value (below-floor is the accepted honest-thin ledger) — consistency polish, optional.
 
 **DEFERRED / already-tracked (all dirs):** within-unit forward-reference in lesson01 matching_pairs
-(realization-level, shared across X-en overlays, high revert risk — Ramin's call). Present in nl-en
+(realization-level, shared across X-en overlays, high revert risk — the owner's call). Present in nl-en
 u15/18/19/20, prs-en u16/18/19/20, fa-en (implied), en-nl (via realization).
 
 **NATIVE-CONFIRM (prs-en Dari — escalate):** صبح‌چاشت (breakfast? vs صبحانه/ناشتا), تُند (strong coffee?
@@ -1560,7 +1560,7 @@ once; VERIFY unit-scope per token — see the weekday DEAD trap below):**
      graded-severity defect); the thematic re-anchor (fa_en_/nl_en_a1_unitNN_words) is the deploy-effect
      polish. Same per-POS DEAD-verification required.
 
-**NATIVE-CONFIRM / JUDGMENT (escalate — Ramin or a native pass):**
+**NATIVE-CONFIRM / JUDGMENT (escalate — the owner or a native pass):**
 - prs-en unit13: `sad`="خفه؛ غمگین" / `worried`="خفه؛ پریشان" share leading "خفه" → MC harder to
   distinguish (not a hard dup). Confirm خفه is safe shared, or drop from one.
 - prs-en unit12: `shirt`="شرت" (vs شورت shorts/underwear) — confirm the loanword register.
@@ -1676,7 +1676,7 @@ any sole-frame-rendered slot a CLEAN display gloss, not the parenthetical author
 Deploy-effect if fixed via backfill gloss; pack-side if the slot pool is narrowed. Pool analysis
 needed — mixed POS (adv/adj/noun), so no clean POS-narrow.
 
-**fa-en PACK feedback_frame register — RAMIN POLICY DECISION (2026-07-28: downgraded from the
+**fa-en PACK feedback_frame register — OWNER POLICY DECISION (2026-07-28: downgraded from the
 reviewer's "MAJOR violation"; do NOT autonomously sweep).** The batch-3 reviewer flagged fa-en pack
 feedback_frames as formal (کنید/می‌کند/می‌شود) vs the colloquial overlays, citing the CLAUDE.md
 register pin. BUT I verified: (a) the pin is explicitly the **fa-en OVERLAY lane** ("fa-en overlay
@@ -1715,7 +1715,7 @@ overrides, deploy-effect, no runtime effect today. (prs-en a1_09 CLEAN.)
   food_plural noun) IS a valid 8th candidate; benign (cumulative reuse is fine, bare {item} frames).
   Optionally correct the note.
 - fa-en soft character-canon: unit02 casts Leila as a student/new-library-member; unit03/08 market
-  dialogues implicitly cast her as the vendor. Not a hard contradiction; Ramin's call.
+  dialogues implicitly cast her as the vendor. Not a hard contradiction; the owner's call.
 - shared realization a1_unit02 audio/text mismatch ("What's your name?" vs tested_text "What is your
   name") — pre-audio-recording, cross-direction (already noted in batch 2).
 
@@ -1772,7 +1772,7 @@ pools + the real grading code. **FIXED this session (commit for nl-en/prs-en a1_
 6. **prs-en overlay Dari spelling (MAJOR, needs native confirm).** a1_04 overlay glosses "month" as
    «مهی» 26× (standard «ماه» appears 393× elsewhere — almost certainly a dropped-vowel typo);
    a1_03 glosses "number" as «شمیر» in titles/instructions (standard «شماره»/«عدد» dominate — LESS
-   certain, could be a variant). Fix: مهی→ماه is safe; شمیر needs a Dari reference / Ramin's call
+   certain, could be a variant). Fix: مهی→ماه is safe; شمیر needs a Dari reference / the owner's call
    before touching. (These are overlay TEACHING glosses, not practice-grading data.)
 7. **MINORs:** prs-en a1_05 "afternoon" glossed «بعد از ظهر» vs the course convention «بعد از چاشت»
    (unit01); nl-en a1_16 + en-nl a1_04 "this unit's own word" feedback over untagged course pools
@@ -1961,7 +1961,7 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   than the status quo"). The 6 "raisable" are all en-nl a2 units (27/28/74/75/77) and are marginal
   or net-negative: a2_75's two matchers share one 6-token pool (raising both → duplicate matchers);
   a2_28's pool is exactly 6 (raising → zero-slack exact-fit). Conclusion: the 110 stay honest-thin;
-  the ~6 are low-value churn on non-launch-gating units. If Ramin wants the floor enforced anyway,
+  the ~6 are low-value churn on non-launch-gating units. If the owner wants the floor enforced anyway,
   the 3 with real slack (a2_27 pool 7, a2_74 pool 8, a2_77 pool 7) are the clean candidates.
 - ~~**`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
   after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.~~
@@ -2314,7 +2314,7 @@ Pack-fix sweep found the duplicate-gloss mis-grading has two layers:
 - en-X §12: fa/prs targets are graded EXACT (arabic, non-tolerant) so need every
   valid answer variant — NATIVE-RESERVED. en-nl Dutch variants — authoring call.
 - German (en-de/de-en) capitalization: free-text grading casefolds, so a learner
-  writing lowercase German nouns / "sie" for "Sie" passes. DESIGN DECISION for Ramin
+  writing lowercase German nouns / "sie" for "Sie" passes. DESIGN DECISION for the owner
   (opt de exercises into case_sensitive?) — not a clear bug.
 - Fresh semantic review of realizations/en: a1_17–37 = NO DEFECTS (agent). a1_01–16
   & a1_38–53 agent-reviewed this session; a2/b1/b2 + en-nl NOT agent-reviewed
@@ -2356,7 +2356,7 @@ corpus is overwhelmingly clean — most packs 0 defects.
 - **de-en a1_08** teach.label_text: title "Cafe Menu" (copy-paste from unit07) → "Price
   label"; the card is a grocery price label.
 
-### QUEUED — NEEDS RAMIN (native / pedagogy / grading-policy). Nothing applied.
+### QUEUED — NEEDS OWNER (native / pedagogy / grading-policy). Nothing applied.
 
 **Pedagogy decision (en-nl underdetermined free-text prompts).** Instruction invites
 free personal composition but accepted_answers holds one exact model string; a valid
@@ -2478,7 +2478,7 @@ Chain to close these 18 checkpoints (6 units × 3 X→en directions):
 1. Extend the 3 backfill scripts for a2_unit35..40 (add source paths + a lexeme spec dict
    per unit). The lexeme GLOSS is the learner's L1 word.
    - **nl-en = Dutch glosses** → being drafted autonomously via Codex (reference lane,
-     Ramin-verifiable). Draft; needs your native Dutch confirm.
+     owner-verifiable). Draft; needs your native Dutch confirm.
    - **fa-en = Farsi glosses, prs-en = Dari glosses → NATIVE-RESERVED, BLOCKED ON YOU.**
      A wrong gloss ships as the shown correct answer (§0.1), so these must be authored/
      confirmed by a native Farsi/Dari speaker. This is the only hard blocker to full X→en
@@ -2503,7 +2503,7 @@ thin (12-31 content lexemes each, like sibling a2_unit34 — no padding).
 
 **HELD + re-authored:** a2_unit37 — see homograph note below (`turn`).
 
-### SYSTEMIC ISSUE FOR RAMIN — cross-unit homograph glosses (backfill architecture)
+### SYSTEMIC ISSUE FOR OWNER — cross-unit homograph glosses (backfill architecture)
 The backfill keys each English lexeme's gloss by BARE TOKEN, one entry per direction
 (recipe defect 1.29). Several a2_unit35-40 tokens are reused from earlier units where
 they were glossed for a DIFFERENT sense, and `slot_gloss` derives from that single
@@ -2523,7 +2523,7 @@ pedagogical display-quality issue, same class as the 5 known-shipped en-nl B1 mi
   the unit37 overlay itself glosses vergadering. Defensible near-sense.
 - Minor (excluded from pools, no harm): by, food, taking, course, once, fixed, under, turn(37).
 
-**The real fix is an architecture decision (Ramin/Codex):** add per-unit / per-sense gloss
+**The real fix is an architecture decision (the owner/Codex):** add per-unit / per-sense gloss
 disambiguation to the backfill (or a pack-level slot_gloss override), which would resolve
 this class corpus-wide (including the B1 five). Until then, the shipped packs carry the
 same flag-and-ship status as existing content.

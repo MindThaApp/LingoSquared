@@ -3,8 +3,8 @@
     "allow": [
       "Bash(.content-venv/bin/python scripts/compile_content.py validate*)",
       "Bash(npx tsc --noEmit)",
-      "Bash(node \"/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" status *)",
-      "Bash(node \"/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" result *)",
+      "Bash(node \"/Users/owner/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" status *)",
+      "Bash(node \"/Users/owner/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" result *)",
       "Bash(curl * http://localhost:8000/*)"
     ]
   },
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "IN=$(cat); AID=$(printf \"%s\" \"$IN\" | jq -r \".agent_id // empty\"); [ -n \"$AID\" ] && exit 0; FP=$(printf \"%s\" \"$IN\" | jq -r \".tool_input.file_path // empty\"); case \"$FP\" in */CLAUDE.md) exit 0;; */LingoSquared/frontend/*|*/LingoSquared/backend/*|*/LingoSquared/packages/*|*/LingoSquared/scripts/*|*/LingoSquared/e2e/*|*/LingoSquared/mobile/*|*/LingoSquared/docs/content/*) jq -n \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Coordinator no-inline-coding rule (Ramin 2026-08-03): dispatch this edit to a sub-agent or Codex instead. (Sub-agents are exempt from this hook.)\\\"}}\";; esac",
+            "command": "IN=$(cat); AID=$(printf \"%s\" \"$IN\" | jq -r \".agent_id // empty\"); [ -n \"$AID\" ] && exit 0; FP=$(printf \"%s\" \"$IN\" | jq -r \".tool_input.file_path // empty\"); case \"$FP\" in */CLAUDE.md) exit 0;; */LingoSquared/frontend/*|*/LingoSquared/backend/*|*/LingoSquared/packages/*|*/LingoSquared/scripts/*|*/LingoSquared/e2e/*|*/LingoSquared/mobile/*|*/LingoSquared/docs/content/*) jq -n \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Coordinator no-inline-coding rule (the owner 2026-08-03): dispatch this edit to a sub-agent or Codex instead. (Sub-agents are exempt from this hook.)\\\"}}\";; esac",
             "timeout": 10,
             "statusMessage": "coordinator no-inline-coding check"
           }

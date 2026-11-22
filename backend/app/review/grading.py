@@ -58,7 +58,7 @@ QUOTE_FOLD = str.maketrans({
     "“": '"', "”": '"', "„": '"', "«": '"', "»": '"',
 })
 INTERNAL_PUNCTUATION = frozenset(",;:.!?¿¡…،؛؟«»\"„")
-# Ramin's 2026-11-16 decision: a trailing sentence terminator is never graded,
+# The owner's 2026-11-16 decision: a trailing sentence terminator is never graded,
 # in any language and even for punctuation_strict exercises. Punctuation inside
 # the answer is unaffected by this set.
 TRAILING_TERMINATORS = frozenset(".!?؟۔。！？．｡")
@@ -97,7 +97,7 @@ def canonical_text(
     text = text if case_sensitive else text.casefold()
     return " ".join(text.split())
 
-# Ramin's 2026-08-04 decision: dictation grading ignores only punctuation at
+# The owner's 2026-08-04 decision: dictation grading ignores only punctuation at
 # the answer boundaries. The realization corpus currently uses leading ¿ and
 # terminal . ? ؟; the wider approved set covers the equivalent boundaries in
 # the other shipped scripts. Keep this in sync with scripts/compile_content.py.

@@ -478,7 +478,7 @@ UNIT_FILES_A2 = (
     # Added 2026-08-05 (fa/prs native-gloss backlog): units 35-40 unblock the
     # last 6 prs-en A2 checkpoints. English POS ported from the already-shipped
     # nl-en EN_EXTRA (commit 304c029e); Dari glosses below are DRAFTS pending
-    # Ramin's native audit.
+    # The owner's native audit.
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit35_prescription.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit35.yaml",
@@ -1324,7 +1324,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "working": "کار کردن (شکل استمراری)", "30": "سی",
     "refunded": "پولش پس داده شد", "thirty-five": "سی‌وپنج",
     # -- a2 unit35 (at the pharmacy: a prescription) --- DRAFT Dari glosses
-    # (2026-08-05), Kabuli register, pending Ramin's native audit.
+    # (2026-08-05), Kabuli register, pending the owner's native audit.
     "dose": "دوز؛ اندازهٔ هر بار خوردن دوا", "refill": "تکرار نسخه",
     "refills": "تکرار نسخه", "side": "جانبی",
     "effects": "عوارض جانبی", "shouldn't": "نباید (مخفف)",

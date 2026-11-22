@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { LegalDocument } from "./LegalDocument";
 
-// DRAFT legal content, not yet reviewed by a lawyer — Ramin must have this
+// DRAFT legal content, not yet reviewed by a lawyer — the owner must have this
 // reviewed before real (non-beta) users rely on it.
 //
 // Deliberately NOT i18n'd for the same reason as PrivacyPolicyPage.tsx:

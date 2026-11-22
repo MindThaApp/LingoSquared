@@ -132,7 +132,7 @@ collector by default. REST-only, mobile-ready. Full spec: CONTRACT.md.
 
 **Standing gap: `VITE_FEEDBACK_API_URL` has no real value set yet** — it
 needs ONE stable internet-reachable collector URL. An infra/deployment
-decision for Ramin (tunnel/DDNS/hosted domain), not for a Claude session
+decision for the owner (tunnel/DDNS/hosted domain), not for a Claude session
 to invent unilaterally. **Flag this again before ever publishing a
 "run-locally" distribution** — until then local-install feedback only
 reaches whatever backend that install happens to run against.

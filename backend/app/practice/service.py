@@ -34,7 +34,7 @@ from app.models import (
 # integration merges -- it says nothing about whether that provider has
 # real credentials configured on THIS deploy target right now. fa was
 # added to it the moment Azure code landed, while azure_speech_key still
-# defaults to empty until Ramin actually provisions a key. Gating
+# defaults to empty until the owner actually provisions a key. Gating
 # generation on membership alone would let listen_select items generate
 # for fa with no real voice configured -- the exact unanswerable-audio
 # class already hit twice this project via other mechanisms.
@@ -742,7 +742,7 @@ def build_prompt(
         # the substituted gloss span(s) in the existing single-asterisk
         # convention (AUTHORING_GUIDE.md #15) so the frontend renders them
         # italic+bold, visually separated from the surrounding target-
-        # language words, the same fix Ramin asked for directly.
+        # language words, the same fix the owner asked for directly.
         hint = render_frame(
             template.frame,
             filled,

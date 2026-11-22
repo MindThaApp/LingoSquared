@@ -1408,7 +1408,7 @@ Every existing report path (`POST /exercises/{id}/report`, `POST
 there was no way to report a problem with the app itself (a broken button, a
 confusing screen, a login failure) or leave general feedback from a page
 that isn't an exercise. Also: this app is meant to be usable in at least
-three deployment shapes (Ramin's home server, a locally-run clone someone
+three deployment shapes (the owner's home server, a locally-run clone someone
 starts via a shortcut, and eventually a hosted public domain) — a report
 mechanism that only writes to whatever backend instance happens to be
 running locally would silently lose all feedback from the "everyone runs
@@ -1490,7 +1490,7 @@ Frontend: `VITE_FEEDBACK_API_URL` is a new, separate env var (falls back to
 the existing `VITE_API_BASE_URL` when unset, which is correct for the
 "single shared backend" deployment shapes — home server or hosted domain).
 It only needs to be set to something different in the "many independent
-local installs" shape, and only once Ramin has a real, stable,
+local installs" shape, and only once the owner has a real, stable,
 internet-reachable URL for one canonical collector backend (e.g. a tunnel
 or DNS record pointed at his home server, or the eventual hosted domain) —
 until then, local installs' feedback stays local to that install, which is

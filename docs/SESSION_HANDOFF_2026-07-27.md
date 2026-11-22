@@ -5,7 +5,7 @@
 This doc is the *operational* snapshot for immediate continuation.
 
 ## Git state
-- Repo `/Users/raminazizi/dev/LingoSquared` (NOT the iCloud CWD). Branch
+- Repo `/Users/owner/dev/LingoSquared` (NOT the iCloud CWD). Branch
   `fix/launch-gate-content-review-wave1`, **UNPUSHED**. HEAD **359d85be**.
 - ~22 commits this session (7522844a..HEAD). Working tree clean apart from the
   long-standing untracked noise (.claude/settings.json, a stale .pyc,
@@ -17,7 +17,7 @@ This doc is the *operational* snapshot for immediate continuation.
 No reviewers in flight. Nothing pending in this context. Two batch-3 fixes committed
 (nl-en a1_07 menu_meaning `- $3`→bare = 76d519de; prs-en a1_08 پونډ→پوند HIGH = 359d85be).
 Everything else from batch 3 is a QUEUED wave, fully written up in
-`docs/RAMIN_REVIEW_BACKLOG.md` → "Native review — BATCH 3" (all 4 dirs' findings, ranked).
+`docs/OWNER_REVIEW_BACKLOG.md` → "Native review — BATCH 3" (all 4 dirs' findings, ranked).
 
 ## ✅ DONE since this doc — en-nl `_distractor_values` casefold-dedup (PARTIAL, commit e4144c8e)
 Landed a casefold-dedup on MC/listen distractors (+ `backend/tests/test_distractor_casefold.py`,
@@ -33,12 +33,12 @@ real module won't even import here — the algorithm was proven via a standalone
 fa-en a1_09-13, prs-en a1_11-15, nl-en a1_10-14, en-nl a1_11-15. 5 clean fixes committed (nl-en
 feedback wave 64edd7b4; en-nl u15 MC-ambiguity + u12 language_code 434f6669; prs-en u12 منجم; fa-en
 u09 register 4b42e8de); prs-en a1_11 flipped reviewed (439d3af2). Everything else = the consolidated
-backfill wave below, fully written up in RAMIN_REVIEW_BACKLOG "BATCH 4".
+backfill wave below, fully written up in OWNER_REVIEW_BACKLOG "BATCH 4".
 
 ## ▶ Next autonomous items
 0. **Launch native-review BATCH 5** (next a1 band — fa-en a1_15-19, prs-en a1_16-20, nl-en a1_15-19,
    en-nl a1_16-20; ~470 packs remain). Keep the ship-gate advancing.
-1. **★ Consolidated deploy-effect BACKFILL WAVE** (RAMIN_REVIEW_BACKLOG "BATCH 4 ★"): leaked-annotation
+1. **★ Consolidated deploy-effect BACKFILL WAVE** (OWNER_REVIEW_BACKLOG "BATCH 4 ★"): leaked-annotation
    glosses (fa-en get/can't; prs-en well/credit/debit — strip English parentheticals, but VERIFY no
    gloss-collision reintroduced, per the fa-en a1_03 lesson); `_pure`/narrow tags for en-nl
    preference_item/equal_adj/accept_decline; bare-POS re-anchoring (prs-en u14, fa-en u10, nl-en
@@ -51,7 +51,7 @@ backfill wave below, fully written up in RAMIN_REVIEW_BACKLOG "BATCH 4".
 - prs-en a1_08 پونډ→پوند (HIGH, 359d85be) · prs-en a1_10 forward-ref move to lesson04 (d5ffa1d1)
   · fa-en a1_03 "much" prompt-shows-answer CRITICAL → noun-only slot (1910f052)
   · backend casefold-dedup PARTIAL (e4144c8e).
-- fa-en pack-feedback register = escalated to a Ramin POLICY call (not drift; 116 formal/0 colloquial
+- fa-en pack-feedback register = escalated to a the owner POLICY call (not drift; 116 formal/0 colloquial
   is a uniform authored convention; pin is overlay-only). See backlog.
 - REMAINING batch-3 items are all DEPLOY-EFFECT or native/policy — consolidate into the en-nl backfill
   wave below AFTER batch-4 en-nl findings land (touch backfill_lexemes_en_nl.py once).
@@ -79,7 +79,7 @@ deploy-effect / native-confirm.
    (`practice-validate` 0 err; unit-scope no new DEAD; self-reference 0; Dari 0
    for prs/en-prs), commit per direction with the wave-style message + the
    `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>` line.
-3. **Queue the non-clean ones** as fix-waves in `docs/RAMIN_REVIEW_BACKLOG.md`
+3. **Queue the non-clean ones** as fix-waves in `docs/OWNER_REVIEW_BACKLOG.md`
    (see "Native review BATCH 2" for the format).
 4. **Flip fully-clean packs** to `review.status: reviewed` + `fresh_context: 'true'`
    with a review-confirmation note; commit. (71/553 reviewed so far.)
@@ -113,9 +113,9 @@ deploy-effect / native-confirm.
   DEAD** (units introduce own tokens capitalized). The metalabel exclusion (checkpoint
   part) is already committed.
 - **en-nl a1_04 cafe_meetup function-word contamination** (same blanket-tag class).
-- **prs-en a1_03 شمیر** "number" spelling — needs your (Ramin) native-Dari confirm.
+- **prs-en a1_03 شمیر** "number" spelling — needs your (the owner) native-Dari confirm.
 
-## BLOCKED on Ramin / infra (do not attempt)
+## BLOCKED on the owner / infra (do not attempt)
 - Deploy + live lexeme re-backfill (activates all the backfill gloss/tag fixes;
   needs SSH key + live server). Junk-lexeme DB cleanup + `_label_guarded` widen
   (needs a dev DB — docker/colima NOT installed on this machine).

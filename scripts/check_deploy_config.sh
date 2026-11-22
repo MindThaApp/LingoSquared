@@ -22,13 +22,13 @@
 #   WARN  CORS_ORIGINS consists ONLY of localhost/127.0.0.1 origins (or is
 #         empty). Fails safe (requests rejected) but breaks the app for
 #         every real beta user until the real frontend origin is added — a
-#         product decision for Ramin, so WARN not FAIL.
+#         product decision for the owner, so WARN not FAIL.
 #   WARN  SENTRY_DSN is empty (crash reporting off; optional).
 #   WARN  GOOGLE_CLOUD_TTS_CREDENTIALS_JSON is empty — /tts degrades
 #         gracefully to browser speechSynthesis, so not a deploy blocker,
 #         but the 8 Google-covered languages get no cloud TTS.
 #   WARN  AZURE_SPEECH_KEY is empty — same graceful degradation; fa TTS
-#         won't actually work until Ramin provisions an Azure Speech
+#         won't actually work until the owner provisions an Azure Speech
 #         resource (runbook: NOT a deploy blocker).
 #
 # Usage:
@@ -130,7 +130,7 @@ else
   done
   IFS="$OLD_IFS"
   if [ -z "$NON_LOCAL" ]; then
-    warn "CORS_ORIGINS is localhost/127.0.0.1 only — fine for local dev, but breaks the app for every real beta user on a live deploy. Needs the real frontend origin(s) (Ramin's call, don't guess). Current value: $CORS_ORIGINS"
+    warn "CORS_ORIGINS is localhost/127.0.0.1 only — fine for local dev, but breaks the app for every real beta user on a live deploy. Needs the real frontend origin(s) (the owner's call, don't guess). Current value: $CORS_ORIGINS"
   else
     ok   "CORS_ORIGINS includes non-localhost origin(s):$NON_LOCAL"
   fi
@@ -141,11 +141,11 @@ JWT_SECRET="$(get_var JWT_SECRET)"
 if [ -z "$JWT_SECRET" ]; then
   fail "JWT_SECRET is unset or empty — the app silently falls back to the hardcoded dev default ('development-only-secret', backend/app/core/config.py), so every token is forgeable."
 elif [ "$JWT_SECRET" = "development-only-secret" ]; then
-  fail "JWT_SECRET is the hardcoded app-code default ('development-only-secret') — every token is forgeable. Set a real random secret. (Never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions.)"
+  fail "JWT_SECRET is the hardcoded app-code default ('development-only-secret') — every token is forgeable. Set a real random secret. (Never regenerate on a RUNNING deploy without warning the owner — invalidates all sessions.)"
 elif [ "${#JWT_SECRET}" -lt 32 ]; then
-  fail "JWT_SECRET is shorter than 32 characters — the app refuses to start with it in a production-like APP_ENV. Generate one with: openssl rand -hex 32 (but never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions)."
+  fail "JWT_SECRET is shorter than 32 characters — the app refuses to start with it in a production-like APP_ENV. Generate one with: openssl rand -hex 32 (but never regenerate on a RUNNING deploy without warning the owner — invalidates all sessions)."
 elif [ "$JWT_SECRET" = "replace-with-a-long-random-secret" ]; then
-  fail "JWT_SECRET is the .env.example placeholder — set a real random secret. (Never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions.)"
+  fail "JWT_SECRET is the .env.example placeholder — set a real random secret. (Never regenerate on a RUNNING deploy without warning the owner — invalidates all sessions.)"
 else
   ok   "JWT_SECRET is set and not a known default/placeholder (value not printed)"
 fi
@@ -172,7 +172,7 @@ fi
 
 AZURE_KEY="$(get_var AZURE_SPEECH_KEY)"
 if [ -z "$AZURE_KEY" ]; then
-  warn "AZURE_SPEECH_KEY is empty — fa (Farsi) TTS falls back to browser speechSynthesis. Not a blocker per the runbook; needs Ramin to provision an Azure Speech resource."
+  warn "AZURE_SPEECH_KEY is empty — fa (Farsi) TTS falls back to browser speechSynthesis. Not a blocker per the runbook; needs the owner to provision an Azure Speech resource."
 else
   ok   "AZURE_SPEECH_KEY is non-empty (value not printed)"
   AZURE_REGION="$(get_var AZURE_SPEECH_REGION)"

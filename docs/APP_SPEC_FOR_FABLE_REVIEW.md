@@ -13,7 +13,7 @@ decisions, see the `project-lingosquared-roadmap` memory file.
 Lingo² is a Duolingo/Babbel-caliber language-learning app covering
 **18 directed learning paths**: English to/from each of nl, fr, de, it,
 es, ru, zh, fa, prs (hub-based — no non-English↔non-English pairs).
-Ramin (the product owner) is personally the primary user for the
+The owner (the product owner) is personally the primary user for the
 en↔fa/prs paths; the app is intended for real public use beyond that.
 
 **"Complete" is defined as**: genuine fluency per language, full CEFR
@@ -24,7 +24,7 @@ repeated per language, expect many incremental releases within each
 tier rather than one big drop per tier.
 
 **Publish is a separate, much earlier gate (decision, 2026-07-05):**
-Ramin does not want to wait for the above breadth before shipping.
+The owner does not want to wait for the above breadth before shipping.
 Publish as soon as the core runtime (the upgrade program in
 `docs/SONNET_BUILD_PROMPT_UPGRADES.md`) is solid and the first
 lesson(s)/unit(s) actually shipped are genuinely good — not gated on
@@ -35,7 +35,7 @@ what Codex/Claude prioritize next, so quality compounds via live usage
 rather than requiring near-perfect content pre-launch.
 
 **Publish-gate language set, decided 2026-07-05: en↔nl and en↔fa/prs
-only** (6 directed paths). These are exactly the languages Ramin can
+only** (6 directed paths). These are exactly the languages the owner can
 personally verify — nl natively (the designated native-review
 language), fa/prs as his personally relevant pair, shipped as a bundle
 since they share ~100% of the RTL/script tooling from Phase 1/2. The
@@ -178,7 +178,7 @@ migrations, and generation-service logic, unchanged. Language content
 is now authored by **both** Codex (from-scratch generation, still all
 languages) **and** Claude (adapting public-domain FSI/Peace Corps
 source material into spine-compliant drafts — see
-`docs/content/AUTHORING_GUIDE.md` §10) — Ramin has Claude Max headroom
+`docs/content/AUTHORING_GUIDE.md` §10) — the owner has Claude Max headroom
 to spare and wants it used for this. Both routes go through the
 identical fresh-context review + compiler validation pipeline. The
 executing Claude/Sonnet session also still owns frontend code,
@@ -228,7 +228,7 @@ just-unlocked vocabulary).
 
 ## 5. Why fa/prs first, not breadth
 
-This was Ramin's own most personally relevant and self-reviewable
+This was the owner's own most personally relevant and self-reviewable
 pair, and the phased plan deliberately goes deep on it before fanning
 out: Phase 1 (en↔fa) and Phase 2 (en↔prs) exist specifically to prove
 the whole pipeline — content architecture, review process, compiler,
@@ -241,7 +241,7 @@ whitespace segmentation).
 
 ## 6. New this session: "Endless Practice" — a generative feed, not a generative curriculum
 
-Ramin asked about accelerating content production via AI generation and
+The owner asked about accelerating content production via AI generation and
 free/open-source material, and separately proposed a live-generative
 lesson feed. The load-bearing decision made in response, which Fable
 should specifically sanity-check:
@@ -253,7 +253,7 @@ error — the entire review methodology in §3 exists because of exactly
 this risk. It also breaks spaced-repetition (nothing stable to
 re-test), breaks trustworthy grading (a live-generated exercise needs a
 live-generated answer key, unreviewed), and re-introduces a live
-LLM-token cost Ramin explicitly does not want (confirmed: he cannot
+LLM-token cost the owner explicitly does not want (confirmed: he cannot
 have per-use AI token spend in the running app).
 
 **Built instead**: a bounded, **procedural** generation engine.
@@ -324,7 +324,7 @@ velocity becomes the bottleneck again.
 
 ## 9. Delight / polish (Apple-quality feel)
 
-Added 2026-11-17 (Ramin: "make the app delightful to use, like macOS /
+Added 2026-11-17 (the owner: "make the app delightful to use, like macOS /
 iOS apps"). This is a product requirement, not a nice-to-have: the app
 should feel calm, fast and physical, the way a good native iOS/macOS app
 does. Every rule below is written so a reviewer can check it in a

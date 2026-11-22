@@ -8,7 +8,7 @@ P2 = plausible but unverified wording; P3 = polish or a design decision.
 
 Sources: completion-rescore, hiar-fix, session20-group3, session19-cross-batch, qualfix, notes-fix and notes-fix2 (all 2026-11-04/05
 logs in `.local/logs/`, not in git), PR #145 (Privacy/Terms notice) and PR #149 (password change) UI strings, plus the earlier open
-questions. Held content packs not listed here are in `docs/RAMIN_REVIEW_BACKLOG.md`. Process notes for reviewers:
+questions. Held content packs not listed here are in `docs/OWNER_REVIEW_BACKLOG.md`. Process notes for reviewers:
 `docs/NATIVE_REVIEW_full_turn_instructions_2026-07-31.md`.
 
 Reviewer shortcut: for the cross pairs (X-ar, X-fa, X-prs, X-hi) the target text is shared with the `en-<target>` course, so a

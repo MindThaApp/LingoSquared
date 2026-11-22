@@ -525,7 +525,7 @@ UNIT_FILES_A2 = (
     # Added 2026-08-05 (fa/prs native-gloss backlog): units 35-40 unblock the
     # last 6 fa-en A2 checkpoints. English POS ported from the already-shipped
     # nl-en EN_EXTRA (commit 304c029e); Farsi glosses below are DRAFTS pending
-    # Ramin's native audit.
+    # The owner's native audit.
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit35_prescription.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit35.yaml",
@@ -1491,7 +1491,7 @@ FA_EN_EXTRA_LEXEMES: dict[str, tuple[str, str]] = {
     "refunded": ("verb", "بازپرداخت شد"),
     "thirty-five": ("noun", "سی و پنج"),
     # --- a2 unit35: at the pharmacy (a prescription) ----------------------
-    # DRAFT Farsi glosses (2026-08-05), pending Ramin's native audit. POS
+    # DRAFT Farsi glosses (2026-08-05), pending the owner's native audit. POS
     # ported from nl-en EN_EXTRA. Colloquial Iranian register; senses pinned
     # to the a2_unit35 overlay's own glossary (دوز/تکرار نسخه/عوارض جانبی).
     "dose": ("noun", "دوز؛ مقدار هر بار مصرف دارو"),

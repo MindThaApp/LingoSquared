@@ -4,7 +4,7 @@
 
 ## 0. Executive summary
 
-The app already ships a **self-report** level picker (`LevelCheckPage`, 3 buttons → `localStorage` → highlights one "recommended for you" unit). Ramin's read that "the answer is unused" is *almost* right: it drives only a soft highlight from a coarse self-assessment. This design **replaces the self-report with a real, adaptive, laddered test** that samples **existing lesson exercises**, grades them server-side with the existing grading engine, and produces a **recommended starting unit** — reusing the *exact same* highlight UI the self-report already feeds.
+The app already ships a **self-report** level picker (`LevelCheckPage`, 3 buttons → `localStorage` → highlights one "recommended for you" unit). The owner's read that "the answer is unused" is *almost* right: it drives only a soft highlight from a coarse self-assessment. This design **replaces the self-report with a real, adaptive, laddered test** that samples **existing lesson exercises**, grades them server-side with the existing grading engine, and produces a **recommended starting unit** — reusing the *exact same* highlight UI the self-report already feeds.
 
 **MVP is ZERO migrations.** It adds 3 stateless backend endpoints and one new page, persisting the recommendation in `localStorage` exactly like the current level preference. The growth step adds **one** small table to persist results server-side and actually seed progress/SRS.
 
@@ -43,7 +43,7 @@ The app already ships a **self-report** level picker (`LevelCheckPage`, 3 button
 - **Adaptive early-exit (client-driven, using server per-item grading):**
   - Pass a level block = **≥ 3 of 4 correct** (≥ 75%).
   - **Stop at the first level block the learner FAILS** (< 3/4). Also stop after the highest available block passes.
-  - This realizes Ramin's "consecutive fails ends" cleanly: one clear level-fail ends the test (a whole block is already the evidence unit). No need to slog an A1 learner through B2.
+  - This realizes the owner's "consecutive fails ends" cleanly: one clear level-fail ends the test (a whole block is already the evidence unit). No need to slog an A1 learner through B2.
 - **Scoring → recommendation (authoritative, server-side in `/result`):**
 
   | Outcome | Recommended level | Recommended unit |

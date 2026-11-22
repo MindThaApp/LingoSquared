@@ -42,7 +42,7 @@ export interface ApiConfig {
   // independently-configurable base URL, not baseUrl. If this app is ever
   // run as many independent local installs (each with its own local
   // backend), feedback still needs to reach ONE centrally-reachable
-  // collector Ramin actually checks -- pointing feedback at whatever
+  // collector the owner actually checks -- pointing feedback at whatever
   // backend happens to be running locally would silently strand it there.
   // Callers that don't need this distinction (a single-shared-backend
   // deployment) should just pass the same value as baseUrl. See

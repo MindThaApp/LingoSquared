@@ -1,6 +1,6 @@
-# App name shortlist — for Ramin to review
+# App name shortlist — for the owner to review
 
-Saved 2026-08-03. Status: **DECISION PENDING** (Ramin to pick; then a trademark
+Saved 2026-08-03. Status: **DECISION PENDING** (the owner to pick; then a trademark
 clearance in class 9 (software) / 41 (education) before spending on branding).
 
 ## Context / how we got here
@@ -12,7 +12,7 @@ liked. Also: **a free `.com` is effectively unobtainable** for any pronounceable
 brand name in 2026 (all registered/parked) — so these are vetted on **`.io`**,
 which is the modern-app standard. The name itself doesn't need to *sound* like a
 language app; the App Store **subtitle** ("— Learn Dutch, Farsi & more") + icon
-do that (Babbel/Busuu model). Ramin gravitated to the soft "au-" / "-vel" audio
+do that (Babbel/Busuu model). The owner gravitated to the soft "au-" / "-vel" audio
 family (liked **Auvel**).
 
 ## The master shortlist — all confirmed clean
@@ -20,7 +20,7 @@ Each below has **no competing language app** AND a **free `.io` domain** (checke
 via App/Play store search + authoritative RDAP, 2026-08-02/03). All read as a
 product (not a person) and are globally pronounceable.
 
-### "au-" / audio-aural line (Ramin's preferred family; closest to Auvel)
+### "au-" / audio-aural line (the owner's preferred family; closest to Auvel)
 - **Auvel** — auvel.io — (AW-vel)
 - **Auvelo** — auvelo.io — (aw-VEL-oh)
 - **Auvelio** — auvelio.io — (aw-VEL-ee-oh)
@@ -50,11 +50,11 @@ product (not a person) and are globally pronounceable.
 - Lingua / Verba / Glossa / Fluentia / Fluently / Lexicore / Lexipath / Speakwise /
   Verbio / Parlay / Diction / Cadence / Loqui\* — all taken as language apps.
 - Mynah — too playful; over-commits to "speaking."
-- Orla / Solva / Orlana — clean but read as a first name (Ramin's objection).
-- Lingo² / LingoSquared — Ramin dislikes the "²".
+- Orla / Solva / Orlana — clean but read as a first name (the owner's objection).
+- Lingo² / LingoSquared — the owner dislikes the "²".
 - Velmo / Vondo / Kavora / Sonvel(.com) — coined but crowded and/or premium domains taken.
 
-## Next step when Ramin decides
+## Next step when the owner decides
 1. Pick one name from the shortlist.
 2. Grab `<name>.io` (+ `get<name>.com` as a redirect), the App/Play store name, and `@<name>` handles.
 3. Trademark clearance (class 9 + 41) by an attorney before any logo/design spend.
