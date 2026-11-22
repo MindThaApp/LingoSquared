@@ -20,7 +20,7 @@ to launch is (1) a small set of genuinely new integrity/abuse fixes,
 (2) *measured* — not estimated — content depth on the six launch
 paths, (3) a first real deploy treated as a from-scratch operation
 with backups and observability, and (4) the human-dependent audio and
-beta-mechanics work only Ramin can do, scheduled so it never blocks
+beta-mechanics work only the owner can do, scheduled so it never blocks
 (1)–(3).
 
 ---
@@ -189,20 +189,20 @@ arrive.
 ## Phase K — Human-dependent work (schedule so it never blocks H–J)
 
 - **ADMIN_EMAILS / CORS_ORIGINS real values**: product decisions only
-  Ramin can make (see `PRE_DEPLOY_RUNBOOK.md`) — get these answers
+  The owner can make (see `PRE_DEPLOY_RUNBOOK.md`) — get these answers
   early so Phase J's deploy isn't blocked waiting on them at the last
   step.
 - **Azure Farsi TTS key provisioning**: built and tested, not yet live
-  (CLAUDE.md's Secrets section) — a Ramin-side Azure Portal action, not
+  (CLAUDE.md's Secrets section) — a owner-side Azure Portal action, not
   code; once H2's per-account TTS cap lands this becomes safe to flip
   on without a runaway-cost risk.
 - **fa/prs recorded-audio session**: Phase D's pipeline (manifest →
   upload → serving → priority chain) is fully built and verified; it
-  has zero real clips yet. Pure human time (Ramin recording against
+  has zero real clips yet. Pure human time (the owner recording against
   `scripts/audio_manifest.py`'s queue), not a build task — schedule in
   parallel with H–J, it blocks nothing else.
 - **nl native-review pass**: ongoing per CLAUDE.md's standing
-  instruction (Ramin reviews nl content directly as it's authored) —
+  instruction (the owner reviews nl content directly as it's authored) —
   keep this flowing continuously, don't batch it up to the end.
 
 None of Phase K gates H, I, or J. It's surfaced here only so it isn't
@@ -235,7 +235,7 @@ nothing.
   verification, this project has the scar tissue to prove it.
 - If any phase here turns out to need something CLAUDE.md's
   rejected-scope list already closed off (runtime LLM, hearts, Redis
-  before there's a real scale reason), stop and ask Ramin — the
+  before there's a real scale reason), stop and ask the owner — the
   standing rule from the A–G program is unchanged.
 - **Done means**: a fresh account cannot bypass the speaking lock or
   exhaust the TTS budget via curl; the live server has a tested backup

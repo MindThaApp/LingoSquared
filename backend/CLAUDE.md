@@ -155,7 +155,7 @@ worker — see the DB-isolation footgun in root `CLAUDE.md`.)
 - Local stack: start Docker (Docker Desktop / `sudo service docker start` on WSL; `colima start` on macOS); `cd backend && docker compose up -d`
   (isolated `backend/.env`, random JWT secret, never committed). **Never
   touch the live server (192.168.4.4) unattended — deploys happen with
-  Ramin present.**
+  The owner present.**
 
 ## Deploying a backend change
 
@@ -165,7 +165,7 @@ deploy to 192.168.4.4.** It covers pre-flight, required env vars
 `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`), a backup step, the ordered deploy,
 and post-deploy smoke tests.
 
-**First real deploy COMPLETED 2026-07-12 (Ramin present).** Live state:
+**First real deploy COMPLETED 2026-07-12 (the owner present).** Live state:
 DB dropped fresh (old one only had demo data; backup at
 `~/lingosquared_backup_20260711_2358.sql.gz` on the server) and migrated
 0001→0023 via the fresh-create path (the 0004→0005 incremental path
@@ -177,7 +177,7 @@ server-side, all practice packs imported. Frontend served by the `web`
 nginx service on port 8011 (`http://192.168.4.4:8011` is the LAN app
 URL); `CORS_ORIGINS` includes it; Google TTS credentials live and
 smoke-verified (real MP3 returned). Before external beta invites, promote
-Ramin's existing account with the operator command below. Ongoing syncs:
+The owner's existing account with the operator command below. Ongoing syncs:
 `scripts/sync_dev_db.sh http://192.168.4.4:8010` with
 `LINGO_BACKFILL_SSH=ramin@192.168.4.4`.
 

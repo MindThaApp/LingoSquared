@@ -9,7 +9,7 @@ to review or merge. A frontend is being built in parallel by Claude under
 Specifically `backend/` for code, and you may propose edits to
 `docs/CONTRACT.md` if you find a genuine gap (see "Contract" below) — but
 flag any such change explicitly rather than just changing it silently.
-Never write anything under `/Users/raminazizi/dev/portal` — unrelated
+Never write anything under `/Users/owner/dev/portal` — unrelated
 project, do not touch.
 
 Do not build a public production deployment yet — this is for internal LAN

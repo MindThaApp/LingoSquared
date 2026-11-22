@@ -191,7 +191,7 @@ conventions in places, mismatched to newly-authored content), but is
 worth using as a pronunciation reference during any recording pass,
 especially for fa/prs where the project currently has zero TTS coverage.
 
-**Update 2026-07-10: Ramin approved CC-licensed sourcing in principle**
+**Update 2026-07-10: The owner approved CC-licensed sourcing in principle**
 (public-domain government works are no longer the only permitted
 source type — see CLAUDE.md's "Sourcing policy widened" entry). That
 doesn't change anything below: the practical blockers here (empty CC0
@@ -406,7 +406,7 @@ any INTERNAL difference between the two is still a defect.
 ## 15. Mark target-language words with `*asterisks*` inside mixed-language
 explanatory text (`note`, exercise `feedback`)
 
-Found live 2026-07-06 (Ramin's nl A1 review): a teaching card's `note`
+Found live 2026-07-06 (the owner's nl A1 review): a teaching card's `note`
 routinely mixes the target language inline with the source-language
 sentence explaining it, e.g. `"Zou + infinitive is the polite
 conditional, softer than a direct statement."` or `"Om ... te +
@@ -450,7 +450,7 @@ accepted answer, is not affected.
 ## 16. `matching_pairs` exercises need real scale — a handful to a dozen
 pairs, not 2-3
 
-Found live 2026-07-06 (Ramin's direct feedback): existing `matching_pairs`
+Found live 2026-07-06 (the owner's direct feedback): existing `matching_pairs`
 exercises across every language pair are consistently tiny — 2 or 3
 pairs per exercise, the same underlying problem as §-adjacent density
 complaints about teaching-card pagination (too little content per
@@ -600,7 +600,7 @@ duplicate) in `docs/BUILD_LOG.md`'s "Course-scoping audit result" entry.
 ## 19. Every `kind: vocabulary` teaching card needs an example sentence
 on the card itself — never a bare word with a gloss
 
-Direct product-owner feedback, 2026-07-07 (Ramin): teaching cards that
+Direct product-owner feedback, 2026-07-07 (the owner): teaching cards that
 are just a target-language word, an English gloss, and a one-line note
 ("*medicine* bedeutet Medizin") don't teach — "if it's going to be
 single word, it needs to be with more context and gamified to engrain

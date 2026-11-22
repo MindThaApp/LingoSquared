@@ -3,7 +3,7 @@
 Glosses whose Persian/Dari text embeds a raw English fragment inside `(…)`, reachable
 as an MC option or translate prompt via a bare-POS slot (root: `_en_target_lexeme_common.py`
 + the two backfill dicts). This is the decision-ready inventory for the BATCH-8 data-layer
-call in RAMIN_REVIEW_BACKLOG. **Not auto-fixed** — see the two classes below.
+call in OWNER_REVIEW_BACKLOG. **Not auto-fixed** — see the two classes below.
 
 ## fa_en — 158 leaked total
 - **A. Disambiguating annotation (68)** — tense/3rd-person/contraction/negation/possessive. The English MUST go but a Persian marker MUST stay (else buy/bought, he/she collapse). Needs native delatinize, e.g. `خرید (زمان گذشتهٔ buy)` → `خرید (گذشته)`. Deploy-effect.

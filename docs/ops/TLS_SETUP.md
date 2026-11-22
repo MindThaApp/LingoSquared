@@ -4,7 +4,7 @@ Today the app is plain HTTP on the home server (192.168.4.4): API on :8010, ngin
 
 Note: the app uses bearer tokens, not cookies (no `Set-Cookie` in backend or frontend), so there are no secure-cookie flags to flip. What matters is the origin names (CORS, CSP, link in reset email).
 
-## Decisions and inputs needed from Ramin
+## Decisions and inputs needed from the owner
 1. A domain name (for example `app.<domain>`), and where its DNS is managed (Cloudflare is easiest for either option).
 2. How the home server is exposed: Option A (port-forward) or Option B (Cloudflare Tunnel), below.
 3. Is the ISP IP public and stable (not CGNAT)? Does the router allow forwarding 80/443? Is :80/:443 already used on the box (the box also runs keyboard-sensei behind Caddy; reuse that Caddy or give LingoSquared its own)?
@@ -21,7 +21,7 @@ Cons: exposes the home IP and the box directly to the internet; needs a static I
 Pros: no port-forward, no certificate handling, works with dynamic IPs.
 Cons: DNS must be on Cloudflare; Cloudflare can see the traffic (they terminate TLS); an extra dependency and a possible outage point; large uploads and WebSocket limits on the free tier; audio/media bandwidth terms apply. Caddy is optional here (the tunnel can target :8011 and :8010 directly), but keeping Caddy gives one place for path routing and headers.
 
-Recommendation: Option B if the ISP uses CGNAT or Ramin does not want ports open; otherwise A is fine and simpler to reason about. Either way the Caddy config below is the same.
+Recommendation: Option B if the ISP uses CGNAT or the owner does not want ports open; otherwise A is fine and simpler to reason about. Either way the Caddy config below is the same.
 
 ## Routing: one origin, API under `/api`
 Serving the API under the same origin avoids CORS and keeps the existing CSP (`'self'`) working. The frontend is currently built with `VITE_API_BASE_URL=http://192.168.4.4:8010` and nginx's CSP only allows `http(s)://*:8010` for API calls, so a separate `https://api.<domain>` host would also need a CSP change in `backend/nginx.web.conf`. With `/api` on the same origin no CSP change is needed.

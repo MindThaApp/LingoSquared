@@ -2,9 +2,9 @@
 
 Local-first language-learning app, Duolingo/Babbel-caliber, 24 directed en↔X learning paths
 (nl, fr, de, it, es, ru, zh, fa, prs, ar, ko, ja — per-path approval status and the ja/ko IME
-groundwork caveat are in `docs/PROJECT_STATE.md`). **Priority order (Ramin, 2026-07-12): every
+groundwork caveat are in `docs/PROJECT_STATE.md`). **Priority order (the owner, 2026-07-12): every
 path is English-anchored — en→X and X→en are THE product; non-English↔non-English pairs are
-deferred — never propose, scaffold, or content-plan them without a new decision from Ramin.**
+deferred — never propose, scaffold, or content-plan them without a new decision from the owner.**
 **Lanes:** backend code + alembic migrations + `scripts/compile_content.py` are **Codex**'s
 (dispatched and verified by Claude); frontend, orchestration, verification, and CONTRACT.md are
 **Claude**'s; language content is authored by both. This file is rules only — full history and
@@ -40,13 +40,13 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   `docs/CONTENT_DEFECT_REGISTRY.md`; STATE (what exists/shipped) → `docs/PROJECT_STATE.md`.
 - **Dispatching workers:** inline the 3–5 task-critical rules directly in the dispatch prompt —
   never rely on auto-loaded context to carry them.
-- **Root is 200 lines MAX (Ramin, 2026-08-03)** — a hard rule: if an addition would exceed it,
+- **Root is 200 lines MAX (the owner, 2026-08-03)** — a hard rule: if an addition would exceed it,
   something else must move out first. Split by ACCESS PATTERN (rules vs reference), never by
   topic — rules must be in the reader's face unbidden; state only needs to be findable.
 
 ## Reference-language priorities
 
-- **Reference language: Dutch (nl)** — full polish first (Ramin is fluent → native review); primary UX verification target.
+- **Reference language: Dutch (nl)** — full polish first (the owner is fluent → native review); primary UX verification target.
 - **fa/prs stay the mandatory RTL / virtual-keyboard / script-strict-grading verification target for every phase — don't let them rot.**
 - **es/fr:** finish in-flight units, then park until nl is done.
 
@@ -58,7 +58,7 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   owns `frontend/src/**`, CONTRACT.md, orchestration (extract → validate → apply), and ALL
   verification. Never trust Codex's self-report; diff full-file rewrites against the prior
   version before applying** (a rewrite once smuggled in an unrelated one-line query bug).
-- **The coordinator does NO inline coding (Ramin, 2026-08-03).** ALL code/content edits go to
+- **The coordinator does NO inline coding (the owner, 2026-08-03).** ALL code/content edits go to
   sub-agents/Codex — coordinator scope is dispatch, diff-review, verification, and git commits
   (explicit pathspecs). The old "apply a short verified diff" carve-out is retired; a
   PreToolUse hook enforces this. Reading dozens of files or hand-editing inline burns context
@@ -72,7 +72,7 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   `~/.claude/plugins/cache/openai-codex/`). **Always pass `--cwd` explicitly** — the sandbox
   defaults to the Claude session's cwd. Codex has no Docker/network — real build/test/deploy
   verification is always Claude's job. **Auth failing with a revoked refresh token → stop and
-  tell Ramin to run `codex login`; don't retry.** **`--resume` continues whatever thread was
+  tell the owner to run `codex login`; don't retry.** **`--resume` continues whatever thread was
   last active (a stale "still running" one blocks it) — use `--fresh` when a prior dispatch may
   still be mid-flight.** Detail: BUILD_LOG.
 
@@ -82,7 +82,7 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   as command substitution and silently strips them from the prompt. Detail: BUILD_LOG 2026-08-03 relocated-detail §.
 - **`gpt-5.6` is unavailable on ChatGPT-account Codex; `gpt-5.5` is the ceiling — don't
   re-test.** Effort: `high` ONLY for compiler/grading-critical surgery; `medium`/`low` for
-  routine rounds (Ramin's standing preference: the cheaper option wherever quality holds).
+  routine rounds (the owner's standing preference: the cheaper option wherever quality holds).
 - **A "failed" Codex task may have done most of the work** — always `git status` + `git diff
   --stat`, and verify the partial work yourself, before discarding or re-dispatching. Detail: BUILD_LOG relocated §.
 - **Never accept a Codex validator without running it on the full corpus yourself** (one
@@ -100,7 +100,7 @@ ledger) · `docs/BUILD_LOG.md` (full history).
 - **Codex runs UNISOLATED in the main working tree** — concurrent tasks only on disjoint
   files; always commit with explicit pathspecs and `git show --stat` the result.
 
-## Tiered review policy (Ramin's call, 2026-07-11)
+## Tiered review policy (the owner's call, 2026-07-11)
 
 1. **Automate first** — any rule-shaped review finding becomes an automated validator
    (compiler check or corpus test), not just a note.
@@ -124,10 +124,10 @@ append every fresh-context review's findings (zero-defect included) to its Secti
   pathspecs only**, and `git show --stat` anything touching files you didn't personally edit
   (broad staging twice swept a concurrent session's work into an unrelated commit; on shared
   files like `universal_spine.yaml` (manifests are one file per group under `scripts/manifest.d/`, so no longer shared), stagger agents or use worktrees). Detail: BUILD_LOG 2026-07-06/07/08.
-- **A safety-system block means stop and escalate to Ramin — never route around it, and never
+- **A safety-system block means stop and escalate to the owner — never route around it, and never
   hand the blocked action to a differently-governed agent (e.g. Codex).** Detail: BUILD_LOG 2026-07-06.
 - **Direct DB credential writes are blocked even with chat authorization.** Pattern: do the
-  safe read-only half yourself (compute the hash via the app's `hash_password()`), hand Ramin
+  safe read-only half yourself (compute the hash via the app's `hash_password()`), hand the owner
   the ready-to-paste `psql UPDATE`. Detail: BUILD_LOG 2026-07-08.
 - **A live credential must never be written to any shared scratch location — even the
   scratchpad, even briefly.** Re-derive inline via command substitution per command. Detail: BUILD_LOG 2026-07-08.
@@ -187,11 +187,11 @@ append every fresh-context review's findings (zero-defect included) to its Secti
   dead Respond button, a deleted logout button — were ALL found only by playing a lesson).
 - Local stack only: start Docker (Docker Desktop / `sudo service docker start` on WSL; `colima start` on macOS); `cd backend && docker compose up -d` (isolated
   `backend/.env`, random JWT secret, never committed).
-- **Deploy authority (Ramin, 2026-07-12): the coordinator may deploy to the live server
+- **Deploy authority (the owner, 2026-07-12): the coordinator may deploy to the live server
   (192.168.4.4) — frontend `web_dist` rsync and backend deploys per
-  `docs/PRE_DEPLOY_RUNBOOK.md` — without Ramin present, provided the verification bar passed
+  `docs/PRE_DEPLOY_RUNBOOK.md` — without the owner present, provided the verification bar passed
   on the deployed change first. Destructive live-DB operations (drops, data-losing
-  migrations) still require Ramin present.**
+  migrations) still require the owner present.**
 
 # HISTORY
 

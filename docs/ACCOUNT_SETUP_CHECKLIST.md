@@ -1,4 +1,4 @@
-# Developer-account setup checklist (Ramin's manual tasks)
+# Developer-account setup checklist (the owner's manual tasks)
 
 These require your identity and payment details — no AI session can or
 should do them. Each section ends with exactly what to hand back to the
@@ -21,9 +21,9 @@ our Google sign-in makes Apple sign-in mandatory on iOS).
 3. Pay the $99/year fee, wait for approval (usually <48h).
 4. Once approved, in https://developer.apple.com/account → Certificates,
    Identifiers & Profiles → Identifiers:
-   - Create an App ID (bundle ID, e.g. `com.raminazizi.lingosquared`)
+   - Create an App ID (bundle ID, e.g. `com.example.lingosquared`)
      with the "Sign in with Apple" capability checked.
-   - Create a Services ID (e.g. `com.raminazizi.lingosquared.web`) for
+   - Create a Services ID (e.g. `com.example.lingosquared.web`) for
      the WEB sign-in flow, also with Sign in with Apple enabled; its
      return URL will be the app's real web origin (decide together with
      the CORS-origin question — can be updated later).

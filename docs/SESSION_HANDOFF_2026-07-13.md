@@ -10,7 +10,7 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
 ## 1. BUDGET & ROUTING (the thing that changed most)
 
 - **Claude ~80% used, resets Friday 17:00. Codex ~95% LEFT, resets in ~6 days.**
-  Ramin's standing instruction: **route aggressively to Codex.** Content
+  The owner's standing instruction: **route aggressively to Codex.** Content
   authoring, content REVIEW, compiler validators, backend surgery, mechanical
   repair — all Codex. Reserve Claude for: coordination, verification, merges,
   and `frontend/src/**` (Codex does not own the frontend lane).
@@ -30,7 +30,7 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
 
 ## 2. WHAT SHIPPED TODAY
 
-**Speaking features (both Ramin-requested, backend complete):**
+**Speaking features (both owner-requested, backend complete):**
 - **Pronunciation feedback.** `POST /stt/transcribe` takes optional
   `detail=words` → returns per-word `{word,start,end,probability}` from
   faster-whisper (`fda1641`, contract updated first). Frontend renders
@@ -68,7 +68,7 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
 - **B2 SPINE TIER DESIGNED** (`0258a3f`) — 8 outcomes (argumentation, graded
   speculation, hedging/emphasis, complex narrative time, register adaptation,
   abstract discussion, negotiation, source synthesis). **B2 authoring is
-  unblocked for all 24 English-anchored paths — nothing waits on Ramin.**
+  unblocked for all 24 English-anchored paths — nothing waits on the owner.**
 - **de-en B1 units 01-03** authored + reviewed + fixed (German lane opened).
 - **+249 practice templates** across the 6 launch directions (`21b0ad4`),
   fill_in_blank-heavy, ZERO new multiple_choice — this is the fix for the
@@ -125,16 +125,16 @@ Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume.
    23 → 3 → 0. `docs/content/AUTHORING_PREFLIGHT.md` pasted VERBATIM into every
    authoring dispatch (not linked) remains the single highest-leverage practice.
 
-## 4. DECISION BOUNDARY (Ramin corrected me on this — respect it)
+## 4. DECISION BOUNDARY (the owner corrected me on this — respect it)
 
-Ramin's instruction: **"be the language expert, linguist, architect, engineer,
+The owner's instruction: **"be the language expert, linguist, architect, engineer,
 product manager — make the decision."** He does NOT want to be asked to approve
 expert work, and does not want workflow-interrupting questions.
 
 - **The coordinator OWNS:** curriculum design (I designed the whole B2 tier
   unilaterally — correct), architecture, review policy, model/budget routing,
   what to build next, technical trade-offs.
-- **Ramin OWNS only:** money, legal (the CC BY-SA share-alike call), what "done"
+- **The owner OWNS only:** money, legal (the CC BY-SA share-alike call), what "done"
   means commercially, launch timing, anything touching real users/credentials,
   and taste calls on HIS languages (e.g. the Dutch "u"-in-a-complaint-letter
   question — still open, non-blocking).
@@ -144,7 +144,7 @@ expert work, and does not want workflow-interrupting questions.
 ## 5. STANDING AUTHORIZATION
 
 - **Admin credential:** `admin@example.com`, password in `~/.lingo_admin_pw`
-  (chmod-600). Ramin explicitly authorized its use for building/operating the
+  (chmod-600). The owner explicitly authorized its use for building/operating the
   app (syncs, admin API, deploys). **Never write the password into memory,
   logs, scratch, or commits** — use
   `LINGO_ADMIN_EMAIL=admin@example.com LINGO_ADMIN_PASSWORD_FILE=~/.lingo_admin_pw`
@@ -167,13 +167,13 @@ expert work, and does not want workflow-interrupting questions.
    validator have the least traction. Expect review yield to CLIMB again.
 3. **Grind the shallow paths toward B1 on Codex** (es/fr/it/ru/de/pl/ro/hi/ar
    are 3-32 units vs the launch pairs' ~90).
-4. Ramin should install `/home/ramin/shared/lingo.apk` and play a lesson — the
+4. The owner should install `/home/ramin/shared/lingo.apk` and play a lesson — the
    ONE verification nobody has done.
 
 ## 7. OPEN, NON-BLOCKING
 
 - nl-en u15 complaint-LETTER glosses use formal "u" — the reviewer judged this
-  correct Dutch business register; Ramin's taste call, no change made.
+  correct Dutch business register; the owner's taste call, no change made.
 - en-hi and other courses: `de-en` overlay set now exists at B1 01-03 but the
   de-en course line in `content_manifest.txt` may need its B1 units wired when
   the lane grows.

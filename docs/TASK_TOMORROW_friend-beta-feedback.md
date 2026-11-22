@@ -34,7 +34,7 @@ and acts on it.
    - The homograph backfills are now deploy-safe: `backfill_lexemes_en_nl.py` uses
      migrate-in-place (no orphan-delete FK failure); `backfill_lexemes_nl_en.py` is
      gloss-only. Verify both after backfill (regel→noun "the rule", order→"de bestelling").
-2. **Pre-beta checklist** (backend/CLAUDE.md): confirm live `ADMIN_EMAILS` is Ramin's real
+2. **Pre-beta checklist** (backend/CLAUDE.md): confirm live `ADMIN_EMAILS` is the owner's real
    email (not admin@example.com) and `CORS_ORIGINS` lists the origin the friend loads.
 3. **Smoke test** as a guest on the live app: pick nl-en, play a lesson + a checkpoint,
    submit a test Feedback, confirm it appears in the live `content_issue_reports`.

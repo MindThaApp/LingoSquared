@@ -63,7 +63,7 @@ first real content for the reference language:
     closing dialogue (reworked and verified more natural in the actual
     file), and added missing "Tot ziens" teaching coverage.
   - `status: reviewed`, `required_next_reviewer: null`. 0 errors/0
-    warnings. **This is now ready for Ramin's native-speaker review
+    warnings. **This is now ready for the owner's native-speaker review
     gate — that step is explicitly his, not something I can do.**
 - `docs/content/overlays/nl-en/a1_unit01.yaml` +
   `docs/content/overlays/nl-en/a1_unit02.yaml` (nl→en, reusing the
@@ -92,7 +92,7 @@ first real content for the reference language:
 directions (en→nl and nl→en) and is the most complete single unit in
 the project outside fa/prs. It has NOT been imported into any running
 course, backfilled into the Lexeme table, or browser-verified — that
-needs Session 1 (Docker owner) plus Ramin's native review, in whatever
+needs Session 1 (Docker owner) plus the owner's native review, in whatever
 order makes sense to them. I did not touch Docker, migrations, or any
 code file this session, per the CONTENT lane boundary.
 
@@ -198,7 +198,7 @@ direction).
 
 ## 2026-07-05 overnight, continued — Codex still rate-limited; authored nl unit05 myself as a stopgap
 
-Per Ramin's explicit direction ("continue whatever codex was working
+Per the owner's explicit direction ("continue whatever codex was working
 on before it got interrupted... check codex later to hand over"), I
 authored `docs/content/realizations/nl/a1_unit05_family.yaml` +
 `docs/content/overlays/en-nl/a1_unit05.yaml` directly myself (covers
@@ -240,7 +240,7 @@ gotten, before it's considered done.**
 Codex hit a usage/rate limit at ~04:06 BST tonight ("try again at
 5:16 AM", timezone unconfirmed). Checked again at 04:19 BST — likely
 still too early to retry meaningfully. Continuing to author further
-units myself in the meantime per Ramin's direction, accumulating a
+units myself in the meantime per the owner's direction, accumulating a
 review backlog for whenever Codex is back, rather than idling.
 
 **Content-depth tally**: 5 of ~22 estimated nl units exist (en→nl
@@ -339,7 +339,7 @@ this myself before handing off, not just rely on review to catch it
 every time.
 
 Codex is confirmed fully back online. Resuming normal Codex-authored
-content from here (next: nl unit07, or whatever Ramin/the next session
+content from here (next: nl unit07, or whatever the owner/the next session
 prioritizes).
 
 ## 2026-07-05 overnight, continued — nl unit07 (shopping/market) authored + reviewed, fully Codex
@@ -507,7 +507,7 @@ To avoid duplicate/colliding Codex dispatches:
   "nl practice pack" Codex task at the same time.
 
 Continuing nl core units (unit12 next) and the native-review loop
-with Ramin on completed units in the meantime.
+with the owner on completed units in the meantime.
 
 ## 2026-07-05 overnight, continued — nl unit11 (plans) authored + reviewed
 

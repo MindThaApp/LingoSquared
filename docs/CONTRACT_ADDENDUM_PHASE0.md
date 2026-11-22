@@ -1,6 +1,6 @@
 # Lingo² Shared Contract — Phase 0 Addendum
 
-Status: proposed for merge into `docs/CONTRACT.md` after Ramin/Claude review.
+Status: proposed for merge into `docs/CONTRACT.md` after the owner/Claude review.
 
 This addendum extends the existing contract. Existing behavior remains authoritative unless this addendum explicitly replaces it.
 
@@ -1031,7 +1031,7 @@ Request:
   },
   "device": {
     "id": "client-generated UUID",
-    "label": "Ramin's phone",
+    "label": "the owner's phone",
     "user_agent": "string"
   }
 }

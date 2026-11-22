@@ -2,13 +2,13 @@
 
 Standing operating knowledge for whichever AI session (or human) is
 coordinating this project. This file is the canonical, version-controlled
-copy — per Ramin's call (2026-07-11), ALL durable project knowledge lives
+copy — per the owner's call (2026-07-11), ALL durable project knowledge lives
 in this repo, not in any machine-local memory store. If you learn a
 durable routine or rule, record it here (or in the file the
 "How this documentation set works" section of CLAUDE.md directs you to),
 commit, and push.
 
-## Pipeline model (Ramin's standing instruction)
+## Pipeline model (the owner's standing instruction)
 
 - Keep roughly 4-5 workers running at all times; the coordinator manages,
   verifies, and merges — it does not author content or write feature code
@@ -19,7 +19,7 @@ commit, and push.
   Codex (gpt-5.5 high for compiler/backend surgery, medium for routine
   round-trips) carries backend/compiler work and large language-content
   fixes — deliberately load-balance toward Codex when Claude budget is
-  constrained (Ramin tracks weekly usage; ~40% by day 2 prompted this).
+  constrained (the owner tracks weekly usage; ~40% by day 2 prompted this).
   gpt-5.6 is NOT available on ChatGPT-account Codex regardless of
   usage resets — re-confirmed 2026-07-13 with gpt-5.6, gpt-5.6-codex,
   and gpt-5.6-codex-high (identical server-side 400 "not supported when
@@ -40,8 +40,8 @@ commit, and push.
 
 ## GitHub backup routine
 
-- Private remote: https://github.com/ramin-azizi/LingoSquared
-  (created 2026-07-11 by Ramin himself after the coordinator's attempt
+- Private remote: https://github.com/MindThaApp/LingoSquared
+  (created 2026-07-11 by the owner himself after the coordinator's attempt
   was safety-blocked — that block-then-hand-to-owner pattern is correct;
   keep it).
 - The coordinator runs `git push origin master` after EVERY verified
@@ -99,7 +99,7 @@ commit, and push.
 - **Standing verdict: local models must not author or modify learner-facing
   content, even "mechanical" expansions.** Acceptable uses: pure-format
   transforms verifiable 100% programmatically, throwaway scaffolding, or
-  bulk classification where a validator is the sole consumer. Ramin's
+  bulk classification where a validator is the sole consumer. The owner's
   operating rule: ask him before running local AI; overnight runs allowed
   only while on AC power or battery >= 60% (check `pmset -g batt`).
 - MLX is installed (can be ~10-30% faster than Ollama on the same model);
@@ -153,9 +153,9 @@ cleverness. The failures that actually cost time today were all
    manifests and `_en_target_lexeme_common.py` are single-writer; grep
    manifest.d/content/ for every consumer of a changed file.
 4. **Escalate, don't improvise, on launch-gate design questions**
-   (register norms, bar interpretations, anything Ramin owns). A
+   (register norms, bar interpretations, anything the owner owns). A
    reviewer who says "this needs a human call" is right — route it to
-   Ramin, park the wave, keep other lanes moving.
+   The owner, park the wave, keep other lanes moving.
 5. **Every new bug class → validator (Codex) or pinned rule (CLAUDE.md)
    + registry Section 4 entry, same session.** This is why review
    yields fell all day; keep the flywheel turning.
@@ -227,9 +227,9 @@ cleverness. The failures that actually cost time today were all
     token cost. `until <check>; do sleep 90; done` with run_in_background
     costs one call and wakes you exactly once.
 
-16. **The coordinator OWNS expert decisions (Ramin, 2026-07-13).** Curriculum
+16. **The coordinator OWNS expert decisions (the owner, 2026-07-13).** Curriculum
     design, architecture, review policy, budget routing, what to build next —
-    decide and report, do NOT ask. Ramin owns only: money, legal, commercial
+    decide and report, do NOT ask. The owner owns only: money, legal, commercial
     "done", launch timing, anything touching real users/credentials, and taste
     calls on his own languages. Asking him to approve expert work is a failure
     mode he explicitly corrected. (I designed the entire B2 spine tier

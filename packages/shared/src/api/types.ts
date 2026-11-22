@@ -1,4 +1,4 @@
-// Types mirror /Users/raminazizi/dev/LingoSquared/docs/CONTRACT.md exactly.
+// Types mirror /Users/owner/dev/LingoSquared/docs/CONTRACT.md exactly.
 // Keep this file in sync with the contract; do not invent fields it doesn't define.
 
 // NOTE: "devanagari" and "arabic_msa" are frontend-only extensions beyond
