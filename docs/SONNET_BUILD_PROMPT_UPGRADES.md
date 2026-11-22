@@ -36,14 +36,14 @@ defaults to the Claude session's cwd, which may be a different project
 entirely — without this it cannot write files at all):
 
 ```bash
-node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
+node "/Users/owner/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task \
   --cwd "$LINGO_REPO" --background --write --resume "…prompt…"
 # then: status <job-id> --cwd ... --json   /   result <job-id> --cwd ...
 ```
 
 (If the plugin version/path has changed, find the current one under
 `~/.claude/plugins/cache/openai-codex/` rather than trusting this path.
-If Codex auth fails with a revoked refresh token, Ramin must run
+If Codex auth fails with a revoked refresh token, the owner must run
 `codex login` — stop and tell him, don't retry.)
 
 Rules learned from real incidents this project:
@@ -81,7 +81,7 @@ Rules learned from real incidents this project:
   course) were ALL found only in the browser.
 - Local stack only (`colima start`, `cd backend && docker compose up -d`,
   isolated `backend/.env`). Never touch the live server (192.168.4.4)
-  unattended; deploys happen with Ramin present.
+  unattended; deploys happen with the owner present.
 - `docker compose restart` does not reload `.env`; use `up -d`.
 
 **Standing constraints — do not violate, do not re-propose:**
@@ -98,15 +98,15 @@ Rules learned from real incidents this project:
   words like "reviewed" in learner-facing feedback) after every content
   round.
 
-**Parallel-session ownership map (when Ramin runs multiple Claude
+**Parallel-session ownership map (when the owner runs multiple Claude
 instances):** Up to three Claude sessions may work this repo
-concurrently. Identify which session YOU are from how Ramin launched
+concurrently. Identify which session YOU are from how the owner launched
 you, stay in your lane, and hand off anything outside it rather than
 touching another session's territory.
 
 | | Session 1 — CODE | Session 2 — CONTENT | Session 3 — INFRA |
 |---|---|---|---|
-| Owns | `frontend/src/**`, `docs/CONTRACT.md`, all backend/migration coordination with Codex (phases A–G) | Codex content dispatch + fresh-context reviews, compiler validation, Ramin's nl native-review loop, `docs/content/**` | `e2e/**` (Playwright), `scripts/verify.sh` + tooling, audio-manifest/pipeline scaffolding (D1/D3), prompt templates, CLAUDE.md restructure |
+| Owns | `frontend/src/**`, `docs/CONTRACT.md`, all backend/migration coordination with Codex (phases A–G) | Codex content dispatch + fresh-context reviews, compiler validation, the owner's nl native-review loop, `docs/content/**` | `e2e/**` (Playwright), `scripts/verify.sh` + tooling, audio-manifest/pipeline scaffolding (D1/D3), prompt templates, CLAUDE.md restructure |
 | Docker stack | **Sole owner** (compose up/down, migrations, imports, pytest, browser verification) | Never touches it — compiler validation needs only `.content-venv` | Hands live-stack steps to Session 1, or runs its own compose project on different ports if Playwright work gets too chatty |
 | Codex jobs | Backend code tasks | Content authoring/review tasks (3–4 in parallel, disjoint language dirs) | Script/tooling tasks |
 
@@ -353,7 +353,7 @@ tests for the distance function's script-boundary and strictness rules.
 Recorded human audio beats any TTS for A1 scope: a few hundred short
 clips, cacheable static assets, zero runtime cost, and it unblocks
 listening exercises for exactly the two languages with zero TTS coverage
-anywhere. Ramin records; you build the pipeline. Piper stays on the
+anywhere. The owner records; you build the pipeline. Piper stays on the
 roadmap for scale, NOT as this phase.
 
 ### D1. Recording manifest (Codex, script)
@@ -382,7 +382,7 @@ single text_block contains a newline + "Name:" pattern.
 Static-file approach, no new infra: assets live under a served
 directory keyed by `media_asset_key` (backend `StaticFiles` mount or
 nginx later; local dev = a mounted folder). Admin endpoint
-`POST /admin/media/upload` (key + file) for getting Ramin's recordings
+`POST /admin/media/upload` (key + file) for getting the owner's recordings
 in. `GET /media/{key}` serves with long cache headers.
 
 ### D4. Frontend audio priority chain
@@ -543,7 +543,7 @@ this program:
 - All new dialogue cards use per-speaker-turn blocks (D2) once the
   pattern lands; re-author existing dialogues in the same pass.
 - **Dutch (nl) is the reference language — build it to full polish
-  first.** Ramin is fluent in Dutch, making nl the only language with a
+  first.** the owner is fluent in Dutch, making nl the only language with a
   genuine native-speaker review gate (the project's biggest accepted
   risk, closed for this one language). Priority order within the
   content program:
@@ -553,7 +553,7 @@ this program:
      same reuse that worked for prs-en, and the strong sibling-file
      rule applies).
   3. Every nl unit gets BOTH reviews: the standard fresh-context AI
-     review first, then Ramin's native review. Convert his corrections
+     review first, then the owner's native review. Convert his corrections
      into compiler validators or AUTHORING_GUIDE rules wherever
      generalizable — that's how nl polish transfers to de and the rest
      of the Latin cohort.
@@ -586,7 +586,7 @@ this program:
 - **Division of labor, REVISED 2026-07-05**: Claude may now also author
   content directly (not just Codex) — specifically the FSI/Peace-Corps
   adaptation lane above, since it's a different task shape (adapting
-  real source material vs. generating from scratch) and Ramin's Claude
+  real source material vs. generating from scratch) and the owner's Claude
   Max usage has headroom to spare. Codex continues from-scratch
   generation and all backend work unchanged. Both routes go through the
   same fresh-context review + compiler validation — no shortcut on the
@@ -605,12 +605,12 @@ this program:
   can be pulled earlier if convenient since it's a live bug.
 - After each phase: update CLAUDE.md's build log and CONTRACT.md, all
   tests green, live-browser evidence noted. Nothing deploys to
-  192.168.4.4 without Ramin present; when it does, remember the full
+  192.168.4.4 without the owner present; when it does, remember the full
   recipe INCLUDING `docker compose up -d api` at the end, migrations
   before seed, and the practice-template import + lexeme backfill order
   documented in CLAUDE.md.
 - If a phase turns out to need something rejected above (runtime LLM,
-  hearts, a big new dependency), stop and ask Ramin — don't design
+  hearts, a big new dependency), stop and ask the owner — don't design
   around the constraint silently.
 - Done means: a fresh user in the browser can complete a lesson with
   error recycling, come back "tomorrow" (dev-DB time shift) to a home

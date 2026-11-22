@@ -77,7 +77,7 @@ const REFRESH = "refresh_token";
 const USER: AuthUser = {
   id: "u-1",
   email: "guest-abc@example.com",
-  display_name: "Ramin",
+  display_name: "Alex",
 };
 
 beforeEach(() => {
@@ -197,7 +197,7 @@ describe("AuthContext session state machine", () => {
     renderProbe();
 
     await expectStatus("authenticated");
-    expect(screen.getByTestId("status")).toHaveTextContent("authenticated|Ramin");
+    expect(screen.getByTestId("status")).toHaveTextContent("authenticated|Alex");
   });
 });
 

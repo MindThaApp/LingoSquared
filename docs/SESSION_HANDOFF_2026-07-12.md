@@ -2,7 +2,7 @@
 
 Read this + `docs/COORDINATOR_HANDBOOK.md` + root `CLAUDE.md` to resume
 coordinating. Everything below is committed & pushed (private GitHub:
-ramin-azizi/LingoSquared).
+MindThaApp/LingoSquared).
 
 ## State as of this handoff
 
@@ -20,7 +20,7 @@ ramin-azizi/LingoSquared).
   every content merge, plus `git push` — standing routine.
 - **Corpus grading test**: 6 failures remain in the ENTIRE corpus, all
   German-lane (en-de/de-en, another session's files, sitting modified/
-  untracked in the main working tree — do not touch without Ramin's
+  untracked in the main working tree — do not touch without the owner's
   word that that session is dead).
 - **Codex usage**: hit ~6% remaining ~03:30, resets ~06:30. An hourly
   ScheduleWakeup heartbeat is armed to dispatch the queued wave after
@@ -57,14 +57,14 @@ ramin-azizi/LingoSquared).
 
 ## Standing follow-ups (coordinator, not urgent)
 
-- **Wrong-language display bug (Ramin's report)**: investigation found
-  data+render layers clean; NEEDS Ramin's specifics (language/lesson/
+- **Wrong-language display bug (the owner's report)**: investigation found
+  data+render layers clean; NEEDS the owner's specifics (language/lesson/
   screen) to progress. Ask again when he's around.
 - **Social login**: backend live both stacks, inert until env vars get
-  real IDs (see Ramin list). Frontend buttons NOT built yet — build
+  real IDs (see the owner list). Frontend buttons NOT built yet — build
   after his Google client ID exists (needs it for testing).
 - **ja/ko typing IME decision** (product): jamo composition / kana input
-  — present options to Ramin before any ja/ko typing exercises ship.
+  — present options to the owner before any ja/ko typing exercises ship.
   Recognition/listen/word_order types are unblocked.
 - **fa/prs register flags in locale files** (from the translation task:
   a few Iranian-leaning forms in prs.json, mixed formality in fa.json)
@@ -77,11 +77,11 @@ ramin-azizi/LingoSquared).
   constraint-two-layer (DB check + Pydantic literal) for new languages,
   romanized-source trap for ko/ja, Devanagari OCR trap).
 - **German lane**: 25 validator-caught bugs (19 distractors + 6 shapes)
-  block en-de/de-en imports. Another session's lane; if Ramin declares
+  block en-de/de-en imports. Another session's lane; if the owner declares
   it dead, dispatch fixes.
-- **Azure Farsi TTS**: built, needs `AZURE_SPEECH_KEY`/`_REGION` (Ramin).
+- **Azure Farsi TTS**: built, needs `AZURE_SPEECH_KEY`/`_REGION` (the owner).
 
-## RAMIN'S LIST (only you can do these)
+## OWNER'S LIST (only you can do these)
 
 1. **Domain + Cloudflare Tunnel** (~$10/yr) — the one decision unlocking
    public HTTPS, OAuth return URLs, CORS origin, and
@@ -116,7 +116,7 @@ ramin-azizi/LingoSquared).
   usually died mid-flight platform-side — its partial tree work is real
   and a fresh continuation task finishes it cheaply.
 - The safety layer blocks credential writes + live-DB destructive ops:
-  compute what's computable, hand Ramin a paste-ready command for the
+  compute what's computable, hand the owner a paste-ready command for the
   rest. He knows the drill and prefers speed — minimize such asks by
   designing around them.
 
@@ -129,7 +129,7 @@ All queued wave items landed; everything below is merged, reviewed
 
 - **Feedback attachments frontend** shipped + live-browser-verified
   (upload→submit→DB row confirmed; RTL fa pass; Persian-digit counter).
-  Production rebuild + rsync to 192.168.4.4 HELD for Ramin (deploy rule).
+  Production rebuild + rsync to 192.168.4.4 HELD for the owner (deploy rule).
 - **X→en B1 closed at 11 units** in all three launch directions
   (Codex-authored 07-11, Opus-reviewed: nl-en 0 defects, prs-en 0,
   fa-en 1 same-speaker distractor). Manifest wired, dev DB synced.
@@ -152,7 +152,7 @@ All queued wave items landed; everything below is merged, reviewed
 ### Depth measurement (scripts/measure_content_depth.py, teaching half)
 - en→X teaching: en-nl 11.25h, en-fa 13.8h, en-prs 15.3h — all ≥10h OK.
 - X→en teaching: nl-en / fa-en / prs-en ≈ 6.78h each (shared English
-  realization). **QUESTION FOR RAMIN:** is the ≥10hr teaching bar
+  realization). **QUESTION FOR OWNER:** is the ≥10hr teaching bar
   per-direction or per-pair? Per-pair, every launch pair passes
   (18h/20.6h/22h); per-direction, X→en needs ~10 more English units
   (they'd be shared by all three directions — one authoring effort).
@@ -182,6 +182,6 @@ sets reviewed) moved X→en per-direction teaching from 6.78h to **7.90h**
 lighter (~22 cards ≈ 0.11h each) than legacy units, so closing the
 remaining ~2.1h purely with more A1 units needs ~19 more. Per-PAIR the
 bar passes everywhere already (en↔nl 19.2h, en↔fa 21.7h, en↔prs 23.2h).
-**Paused further X→en unit waves pending Ramin's per-direction vs
+**Paused further X→en unit waves pending the owner's per-direction vs
 per-pair ruling** — if per-direction, the efficient path is probably
 denser B1/A2 English units (B1 is only 1.03h) rather than more A1.

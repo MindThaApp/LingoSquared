@@ -30,7 +30,7 @@ contains no credentials — keep it that way.**
 
 ## Next up (in order)
 
-1. **Arabic hamza "almost" (Ramin APPROVED 2026-09-28, ar ONLY, never fa/prs).** Codex
+1. **Arabic hamza "almost" (the owner APPROVED 2026-09-28, ar ONLY, never fa/prs).** Codex
    stopped honestly: `grade()` receives `script` but not the target language code, so it
    can't tell ar from fa/prs. Needs the language code threaded from `router.py` answer /
    practice / checkpoint call sites into `grade()`. Brief is in the old session scratchpad;
@@ -52,11 +52,11 @@ contains no credentials — keep it that way.**
 3. **Content/audio:** dialogue_comprehension items have no audio_text (298 in nl A1);
    🔊 on digit prompts speaks the answer (18 nl A1 items).
 4. **Roadmap (product review):** next-lesson path (brief C), fa/prs audio (needs Azure key
-   from Ramin), interleave teaching cards with exercises, working push reminders + goal
+   from the owner), interleave teaching cards with exercises, working push reminders + goal
    picker, tap-to-build word bank for A1/A2, rebuild A2 for launch paths (30+ units), replace
    C1 "repeat the exact paragraph" production. Pause new tiers for non-launch languages.
 
-## Needs Ramin
+## Needs the owner
 
 - Rotate the server SSH password and the live admin login (both were in plaintext in the
   untracked 2026-09-02 handoff); change the admin email off the default.

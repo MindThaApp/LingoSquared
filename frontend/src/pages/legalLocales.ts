@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 
 // Locale shell for the Privacy Policy and Terms of Service. The English text
 // in PrivacyPolicyPage / TermsOfServicePage is the only authoritative version
-// until Ramin signs off the legal wording. When a translation is approved,
+// until the owner signs off the legal wording. When a translation is approved,
 // add a body component here, keyed by base language code, e.g.
 //   LEGAL_TRANSLATIONS.privacy = { nl: PrivacyPolicyNl };
 // LegalDocument then renders it (lang/dir taken from the locale) instead of

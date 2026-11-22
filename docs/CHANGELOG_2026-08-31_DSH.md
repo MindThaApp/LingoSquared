@@ -2,7 +2,7 @@
 
 Running record of pushes and content changes made this session. Companion to
 `docs/SESSION_HANDOFF_2026-08-31_DSH.md` (state/handoff). Branch:
-`fix/launch-gate-content-review-wave1`. Remote: `git@github.com:ramin-azizi/LingoSquared.git`
+`fix/launch-gate-content-review-wave1`. Remote: `git@github.com:MindThaApp/LingoSquared.git`
 (redirects to `MindThaApp/LingoSquared`).
 
 ## PUSH LOG
@@ -44,7 +44,7 @@ Fresh-context review: dispatched (pending). None of this is committed yet.
 
 ## TODO LOG (next steps in order)
 1. Collect fr C1 fresh-context review findings (subagent 63ec9115) → apply consolidated fixes → re-verify course-scoped.
-2. Commit fr C1 (16 files + manifest) with explicit pathspecs; update this changelog; ask Ramin before push.
+2. Commit fr C1 (16 files + manifest) with explicit pathspecs; update this changelog; ask the owner before push.
 3. Roll C1 out to ru, ar, ro, pl, hi (same 8-outcome tier; fa/prs native-reserved; de-en separate axis).
 ## FRENCH C1 — review + fix (same session)
 - **Fresh-context review done**: 3 clean units (01, 03, 08); 5 units with should-fixes, NO blockers.
@@ -61,7 +61,7 @@ Fresh-context review: dispatched (pending). None of this is committed yet.
 - **Committed** `2011fc19`: 19 files (8 fr realizations + 8 fr overlays + content_manifest en-fr-c1 line + CHANGELOG + DSH handoff), 6155 insertions.
 - All review should-fixes (F1-F5) + Inès-origin canon fix applied and independently re-verified course-scoped (`content: pass`, en-fr-c1 = 0 errors).
 - **Not pushed.** Local ahead of origin by 1 (2011fc19).
-- Next: ask Ramin before push; then roll C1 out to ru (prompts ready in /tmp/ru_c1_unit0*.md).
+- Next: ask the owner before push; then roll C1 out to ru (prompts ready in /tmp/ru_c1_unit0*.md).
 
 ## FRENCH C1 — pushed
 - Pushed `ca58f533..2011fc19` (fr C1) to origin (owner-authorized). origin == 2011fc19.

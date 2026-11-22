@@ -102,7 +102,7 @@ answer** and MUST set strict + MUST NOT carry `options`/`distractors`.
 - Grade call sites that must apply the strict-by-type rule: `exercise_answer()`
   and `review_answer()` in `backend/app/api/router.py` (practice too, but v1
   excludes practice).
-- **Boundary-punctuation tolerance (approved by Ramin, 2026-08-04):**
+- **Boundary-punctuation tolerance (approved by the owner, 2026-08-04):**
   dictation remains orthography-strict EXCEPT for leading/trailing
   punctuation. For `dictation` only, compare the learner's typed answer
   against `correct_response`/`accepted_answers` after (a) trimming
@@ -203,7 +203,7 @@ Endless Practice.
 ## 10. BUILD PROMPT (paste to a fresh-context Claude if this conversation is gone)
 
 > **Task: build a `dictation` exercise type for Lingo²** (repo:
-> `/Users/raminazizi/dev/LingoSquared`). Read `docs/DICTATION_EXERCISE_SPEC.md`
+> `/Users/owner/dev/LingoSquared`). Read `docs/DICTATION_EXERCISE_SPEC.md`
 > in full first — it is the spec. Also read root `CLAUDE.md`, `backend/CLAUDE.md`,
 > `frontend/CLAUDE.md`, `docs/content/CLAUDE.md`, and `docs/CONTRACT.md`.
 >

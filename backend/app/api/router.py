@@ -294,7 +294,7 @@ def conversation_next_node(
 # AnswerIn payload-size bound above — generous enough that no real lesson
 # pace ever trips it). See app/core/rate_limit.py for why this is
 # in-memory rather than Redis-backed. Limits are deliberately loose/simple
-# per Ramin's ask, not tuned against real traffic yet.
+# per the owner's ask, not tuned against real traffic yet.
 _rate_limit_settings = get_settings()
 LOGIN_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.login_rate_limit_max, window_seconds=60))
 REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.register_rate_limit_max, window_seconds=3600))

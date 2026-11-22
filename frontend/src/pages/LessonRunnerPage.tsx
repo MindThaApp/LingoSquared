@@ -54,7 +54,7 @@ interface MissedWord {
   languageCode?: string;
 }
 
-// Read-only back/forward review (Ramin UX request, 2026-07-09): every
+// Read-only back/forward review (the owner UX request, 2026-07-09): every
 // teaching card the learner has advanced past, and every exercise attempt
 // they've submitted (including recycled misses), gets appended here as it's
 // left behind. `reviewCursor` (an index into this array, or `null` for
@@ -661,7 +661,7 @@ function LessonRunnerContent() {
   }
 
   // Read-only review of a previously-shown teaching card or exercise
-  // attempt (Ramin UX request, 2026-07-09). Takes priority over the live
+  // attempt (the owner UX request, 2026-07-09). Takes priority over the live
   // teaching/exercise phases below whenever the learner has stepped back;
   // never touches teachingIndex/queue/result, so the live phase resumes
   // exactly where it left off once reviewCursor returns to null.

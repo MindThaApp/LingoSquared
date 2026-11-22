@@ -74,7 +74,7 @@ operational, not vulnerabilities.
 - **ADMIN_EMAILS placeholder / admin-registration race** — real, and
   correctly captured as a *deployment* step in
   `PRE_DEPLOY_RUNBOOK.md` (set the real email before any invite,
-  register Ramin's account immediately). Not a code bug. The runbook
+  register the owner's account immediately). Not a code bug. The runbook
   handles it. Keep it on the pre-invite checklist; nothing to build.
 - **CORS_ORIGINS localhost-only** — same: documented in the runbook as a
   product decision (what the real origin is), fails safe. Nothing to
@@ -100,7 +100,7 @@ real pre-deploy risks are the three operational gaps below.
 ### H1. Database backup — currently zero, this is the highest-severity gap
 
 The runbook itself notes no backup exists anywhere in the project's
-history. For a local-first app whose entire value to Ramin is his own
+history. For a local-first app whose entire value to the owner is his own
 fa/prs progress plus (post-launch) real beta users' accounts and SRS
 state, **a single `docker volume` loss is unrecoverable.** Before any
 beta invite: a scheduled `pg_dump` (cron on the box, or a
@@ -112,7 +112,7 @@ before H2.
 
 ### H2. Observability — the app cannot currently tell you when it fails
 
-This is the finding I'd most want Ramin to internalize. The stated
+This is the finding I'd most want the owner to internalize. The stated
 launch strategy is "ship early, fix errors as users report them via the
 in-app report button." But that only covers **content** errors a user
 notices and bothers to report. It covers none of:
@@ -186,7 +186,7 @@ sampler starts recycling, which is the honest measure of "hours of
 non-repeating practice," not raw template count). Template *count* is a
 proxy that can badly overstate real depth if the lexeme pool feeding the
 slots is thin. Once the ruler exists, the content lanes have a target
-they can actually converge on and Ramin has a number to gate on. **Build
+they can actually converge on and the owner has a number to gate on. **Build
 the ruler before authoring the last mile of content**, or the last mile
 is aimed blind.
 

@@ -48,7 +48,7 @@ discipline.
 **Description**: dialogue teaching cards stored a whole exchange as one
 `text_block` with embedded `"Name: ..."` labels and literal newlines;
 TTS read speaker names aloud and stumbled on the raw newline.
-**First found**: 2026-07-04 (Ramin's own hands-on testing),
+**First found**: 2026-07-04 (the owner's own hands-on testing),
 `docs/BUILD_LOG.md` ~line 250.
 **Instances**: every dialogue card authored before Phase D2/D3
 (2026-07-05); confirmed residual instances in fa unit02
@@ -70,7 +70,7 @@ with `target.speaker` set, never bake the name into `text`.
 **Description**: `media_asset_key` was compiled but never referenced by
 the frontend — listening exercises showed an instruction with nothing
 to play.
-**First found**: 2026-07-04, root cause of Ramin's "exercise 1 is
+**First found**: 2026-07-04, root cause of the owner's "exercise 1 is
 impossible" report.
 **Instances**: every listening exercise, every shipped language, at
 that date.
@@ -232,7 +232,7 @@ per-item direction; `WordOrder.tsx`'s render container had no explicit
 `dir` and didn't inherit direction from anywhere, so Farsi/Dari tiles
 assembled visually LTR even though the underlying `chosen` click-order
 array (and grading) was always correct.
-**First found**: 2026-07-09, live Ramin report.
+**First found**: 2026-07-09, live the owner report.
 **Prevention status**: AUTOMATED for this component — new
 `answerDirectionForExercise()` helper applies `dir` to both word-bank
 and answer-row containers. GUIDE-RULE (documented as a general lesson
@@ -1213,7 +1213,7 @@ Compiler validation still pending first X→en overlay for these units.
 Bug classes found: none — 0 defects across all 9 files (63 exercises/lane).
 One optional strengthening applied (prs-en u17 choose_procrastinate:
 "delay" distractor semantically overlapped the Dari prompt's wording —
-swapped for "regret"). One judgment item flagged for Ramin, no change
+swapped for "regret"). One judgment item flagged for the owner, no change
 made: nl-en u15 complaint-LETTER glosses use formal "u" (reviewer judges
 correct Dutch business register; learner-facing instruction voice stays
 jij).
@@ -1662,7 +1662,7 @@ Instance count: 9 rejected and fixed clues
 ### 2026-08-04 — three new validators review-yield takeaway
 Bug classes found: the validators surfaced **491 + 315 + 11 latent defects**
 that no prior human pass caught. The 315 dictation-punctuation fixes remain
-pending a grading-policy decision by Ramin.
+pending a grading-policy decision by the owner.
 New bug class discovered: no — aggregate validator yield and pending-policy record
 Instance count: 817 latent defects surfaced; 315 fixes pending policy
 
@@ -1729,9 +1729,9 @@ New bug class discovered: no
 Instance count: 1 native-review NIT — bike-pedal phrasing
 
 ### 2026-08-04 — native-review queue
-- Dutch A1 matcher clues: 63 exercises awaiting Ramin's native pass.
-- Farsi A1 matcher clues: 63 exercises awaiting Ramin's native pass.
-- Dari A1 matcher clues: 63 exercises awaiting Ramin's native pass.
+- Dutch A1 matcher clues: 63 exercises awaiting the owner's native pass.
+- Farsi A1 matcher clues: 63 exercises awaiting the owner's native pass.
+- Dari A1 matcher clues: 63 exercises awaiting the owner's native pass.
 
 ### 2026-08-04 — de-en A1 German + nl/fa/prs-en A2 L1 matcher-clue wave (fresh-context review)
 Bug classes found: none — **SHIP all 4 lanes**. Orientation 13/13 + 48/48
@@ -1763,7 +1763,7 @@ declared file scope.
 ### 2026-08-04 — native-review queue (update)
 Supersedes the queue recorded in the 2026-08-04 "native-review queue" entry
 above. Current state: nl/fa/prs ~62 localized matchers per lane (A1-B2) +
-de-en A1 (9) — all awaiting Ramin's post-hoc native-language audit.
+de-en A1 (9) — all awaiting the owner's post-hoc native-language audit.
 New bug class discovered: no
 Instance count: 0 (queue status update, not a review)
 
@@ -1908,7 +1908,7 @@ reviews → eligible for 1-in-3 sampling" call for the pack lane does NOT
 survive this review (~180 pack defects across 100 packs); keep packs at Full.
 Instance count: ~383 fixed (en-nl practice 138, nl-en practice 39, nl-en
 overlays 115, en-nl overlays + nl realizations 91), 35 native-judgment flags
-recorded in the files' notes for Ramin's pass, deferred items below.
+recorded in the files' notes for the owner's pass, deferred items below.
 
 Per direction/level (files reviewed → fixed):
 - en-nl practice: A1 39 → 90 · A2 7 → 15 · B1 10 → 13 · B2 8 → 20
@@ -2002,7 +2002,7 @@ glosses, 0 translation tokens sharing a gloss alternative with another C1
 lexeme except form-cued pairs (vaste/vast, moet/moeten).
 Status: u08 -> reviewed (third pass clean). u01-u07 stay unreviewed: their
 third pass found defects (fixed), so each needs one more clean pass.
-Native-judgment flags for Ramin are recorded per pack in review.notes.
+Native-judgment flags for the owner are recorded per pack in review.notes.
 
 **Deliberately NOT fixed (deferred), 2026-10-11:**
 1. *Engine limitation*: practice word_order and fixed-sentence translation
@@ -2163,7 +2163,7 @@ New bug class discovered: no. All instances fit existing classes.
    The u16-20 descriptions were fixed anyway, but are not learner-visible.
 7. A2 u20 `answer_policy.formal_register` still says "unit01-14" (grading
    metadata, not learner-visible).
-Native flags for Ramin are recorded per file in `review.notes`. The main
+Native flags for the owner are recorded per file in `review.notes`. The main
 ones:
 - calques: "désolé d'entendre ça", "je comprends ton point"
 - "De l'autre côté" with no "d'un côté"
@@ -3137,7 +3137,7 @@ agent that applies them; details in .local/logs/session9-prs-en-a.md):
 - Leak-check: A1 u08 write_kilo, u09 write_in_front_of and u11
   write_weather now hit, because new valid accepted answers match the
   realization's English prompt block ("Write how you ask for one kilo of
-  tomatoes."). These are A1, so the owner decision applies. Under the
+  tomatoes."). These are A1, so owner decision applies. Under the
   PR #37 rule these blocks should be emptied in the shared realization.
 
 Native flags (about 55, listed per file in review.notes as "NATIVE FLAGS"):

@@ -45,7 +45,7 @@ All 8 realizations in `docs/content/realizations/it/c1_unitNN_*.yaml`; all 8 ove
    `verify.sh --content-only` after (grep the en-it-c1 stanza + COMPILE FAILED — `content: pass`
    alone is insufficient).
 3. **Commit** the new it C1 units 05-08 + the manifest update with EXPLICIT pathspecs
-   (never `git add -A`). Then ask Ramin before pushing (owner-reserved). Note: commits for units
+   (never `git add -A`). Then ask the owner before pushing (owner-reserved). Note: commits for units
    01-04 (`c9e2c753`, `c910793a`) are still unpushed and `origin` is behind.
 4. **Then roll the same 8-outcome C1 tier out to fr, ru, ar, ro, pl, hi** (all currently C1=0).
    fa/prs remain native-reserved/blocked. de-en is a separate underbuilt X→en lane, not part of
@@ -74,7 +74,7 @@ Sam = American engineer (ingegnere) from Chicago, working in an office in Milan,
 Elena = Italian teacher (insegnante) from Milan, feminine forms. Established colleagues, informal
 `tu` throughout. "la direttrice" (female director) introduced in unit03 as formal-register audience.
 
-## Open decisions / reserved for Ramin
+## Open decisions / reserved for the owner
 - **Push** the it-C1 commits (c9e2c753, c910793a, + the new units 05-08 commit once made) —
   owner-reserved, ask before pushing.
 - **DeepSeek balance** — appeared restored this session (pro worked for units 05-08). Confirm
@@ -93,7 +93,7 @@ Elena = Italian teacher (insegnante) from Milan, feminine forms. Established col
 - **Should-fixes:** S1 = unit01 three declared-but-absent `introduced_tokens` (proponi, e, rischi); S2 = unit02 two untaught-vocab accepted answers; S3 = unit02 speaking act missing the "explain the unstated judgement" half; S4 = unit03 diplomatic register label blur + production; S5 = unit04 confusable matching_pairs lefts (match_oral_moves, match_concessione); S6 = unit06 underdetermined translate_toro prompt.
 - **All blockers + should-fixes fixed in one consolidated worker dispatch.** Independently re-verified course-scoped: `en-it-c1` = **0 errors, content: pass** (single pre-existing §16 warning on unit06 L01 ex03, untouched). Blockers B1/B2 spot-checked applied.
 - **Left for native-Italian/human judgment** (NOT fixed, noted): unit06 `modello_pasta` "Ho le mani in pasta in questo progetto" (double "in" — arguably acceptable); unit01 dettato trailing period + parentesi.01 audio truncation (harmless); unit02 listen_irony tested_text vs audio fragment (choice-based, harmless); unit03 lesson01 exercise numbering gap (ex01→ex03, cosmetic, content_key renames risky).
-- **Next:** commit the 11 modified it C1 files (units 01-06) with explicit pathspecs; ask Ramin before pushing; then roll C1 out to fr/ru/ar/ro/pl/hi.
+- **Next:** commit the 11 modified it C1 files (units 01-06) with explicit pathspecs; ask the owner before pushing; then roll C1 out to fr/ru/ar/ro/pl/hi.
 
 ## UPDATE 2 (same session, later) — it C1 pushed; French C1 rollout started
 - **Pushed** the 5 it-C1 commits to `origin/fix/launch-gate-content-review-wave1` (owner-authorized). Italian C1 fully shipped: 8 units, reviewed, fixed, verified, pushed.

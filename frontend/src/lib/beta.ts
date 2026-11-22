@@ -1,5 +1,5 @@
 // Farsi (fa) and Dari (prs) courses launch with a visible "beta" label until
-// native speakers have finished reviewing them (Ramin, 2026-11-16).
+// native speakers have finished reviewing them (the owner, 2026-11-16).
 export const BETA_LANGUAGES: ReadonlySet<string> = new Set(["fa", "prs"]);
 
 export function isBetaLanguage(code: string | undefined | null): boolean {

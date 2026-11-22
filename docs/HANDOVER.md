@@ -3,7 +3,7 @@
 # HANDOVER — read this first, then act
 
 > **UPDATE 2026-08-30 — for now, work directly IN the iCloud copy; do NOT migrate out.**
-> Ramin retired his other Mac and synced the latest project (including an
+> The owner retired his other Mac and synced the latest project (including an
 > uncommitted Dutch C1 tier that exists nowhere else) to iCloud. The canonical
 > working copy is now this repo at
 > `~/Library/Mobile Documents/com~apple~CloudDocs/dev/LingoSquared`.
@@ -16,19 +16,19 @@
 > wait until `find . -name '*.icloud' | wc -l` returns `0` before concluding
 > anything is lost. (Everything below this banner is retained for future machines.)
 
-**You are the Claude session taking over LingoSquared on Ramin's new primary
-Mac.** This file is written to YOU, not to Ramin. It is self-contained: do
+**You are the Claude session taking over LingoSquared on the owner's new primary
+Mac.** This file is written to YOU, not to the owner. It is self-contained: do
 not ask him what to do next, and do not make him relay instructions. Work
 through Part 1 in order, then pick up Part 2.
 
 Written 2026-07-22, at the tip of `master` on
-`origin/master` (`github.com/ramin-azizi/LingoSquared`, **private**).
+`origin/master` (`github.com/MindThaApp/LingoSquared`, **private**).
 
 **Read root `CLAUDE.md` before any work.** It always loads and it overrides
 this file wherever they disagree.
 
 Almost everything here you do autonomously. The only things you must ask
-Ramin for are two files in step 4b — and even those can be deferred.
+The owner for are two files in step 4b — and even those can be deferred.
 
 ---
 
@@ -54,7 +54,7 @@ pwd && git log --oneline -1 2>/dev/null
 ```bash
 REPO="$HOME/<projects-dir>/LingoSquared"   # any path WITHOUT spaces; used as $REPO below
 mkdir -p "$(dirname "$REPO")"
-git clone https://github.com/ramin-azizi/LingoSquared.git "$REPO"
+git clone https://github.com/MindThaApp/LingoSquared.git "$REPO"
 cd "$REPO" && git log --oneline -1   # newest commit dated 2026-07-22 or later
 ```
 
@@ -110,14 +110,14 @@ cp "$OLD/frontend/.env" "$REPO/frontend/.env"
 ```
 
 If they are missing or zero-length, iCloud has not finished materializing —
-wait for it, then retry. Do NOT ask Ramin for them until you have tried this.
+wait for it, then retry. Do NOT ask the owner for them until you have tried this.
 
 | File | Contains |
 |---|---|
 | `backend/.env` | DB URL + password, JWT secret, `ADMIN_EMAILS` (legacy, not read by the backend), `CORS_ORIGINS`, Google Cloud TTS service-account JSON |
 | `frontend/.env` | `VITE_API_BASE_URL` |
 
-### 4b. ASK RAMIN for these two — they are NOT in iCloud
+### 4b. ASK OWNER for these two — they are NOT in iCloud
 
 They sit at the home-directory root, which iCloud does not sync (only
 `~/Desktop` and `~/Documents` are symlinked into iCloud Drive).
@@ -252,7 +252,7 @@ wiped an entire import (Part 3).
 
 ## Step 8. Retire the old iCloud copy — ONLY after step 6 passes
 
-Ramin keeps the old Mac for side projects, so the old copy must be made
+The owner keeps the old Mac for side projects, so the old copy must be made
 impossible to open by accident; otherwise two machines can write to one repo
 and you are back to failure #2.
 
@@ -265,7 +265,7 @@ Do NOT edit or commit here. Read-only safety net; delete after ~1 week." \
   > "$OLD/RETIRED_DO_NOT_USE.txt"
 ```
 
-Tell Ramin to delete it after about a week. Do not delete it yourself.
+Tell the owner to delete it after about a week. Do not delete it yourself.
 
 ---
 
@@ -328,12 +328,12 @@ practice pack** (0 lexemes, 0 templates), so they yield 0 items.
 
 What is still open:
 
-1. **Scope decision (Ramin):** are en-nl C1 and en-fa/en-prs B2 inside the
+1. **Scope decision (the owner):** are en-nl C1 and en-fa/en-prs B2 inside the
    publish gate? If not, the gate is met for the launch scope. If yes, each
    tier needs its `backfill_lexemes_en_{nl,fa,prs}.py` extended, 8 packs
    authored per `docs/content/PRACTICE_PACK_RECIPE.md`, full fresh-context
    review, and (fa/prs) a native audit.
-2. **Native audit (Ramin):** the 78 fa/prs gloss drafts behind the
+2. **Native audit (the owner):** the 78 fa/prs gloss drafts behind the
    fa-en/prs-en a2_unit35–40 checkpoints
    (`docs/FA_PRS_GLOSS_DRAFTS_a2_unit35-40.md`, commit `776b830f`) are still
    unaudited drafts. A wrong gloss ships as the graded answer.
@@ -361,11 +361,11 @@ cd backend && docker compose exec -T api python -m app.scripts.checkpoint_covera
    ship gate as already-reviewed. Launch-gate content, Full review tier.
 4. **Run `backend/scripts/remove_demo_courses.sql`** on dev and live. Dry
    run verified (4 matched, 165 real courses untouched). Committing takes a
-   deliberate `ROLLBACK;`→`COMMIT;` edit. **Live DB needs Ramin present.**
+   deliberate `ROLLBACK;`→`COMMIT;` edit. **Live DB needs the owner present.**
 5. **The live admin account is still `admin@example.com`.** `ADMIN_EMAILS`
    does not grant anything (the backend never reads it; `register()` always
    creates non-admin users). Admin is the `users.is_admin` column: promote
-   Ramin's real account with `python -m app.scripts.promote_admin <email>`
+   The owner's real account with `python -m app.scripts.promote_admin <email>`
    before any external beta invite, and consider revoking the placeholder.
 
 ---
@@ -424,7 +424,7 @@ packs didn't move the template count.
 **Lesson: when a measurement against the dev DB looks wrong, verify the sync
 actually imported before believing the number.**
 
-15 hardcoded `/Users/raminazizi/dev/LingoSquared` references were repointed
+15 hardcoded `/Users/owner/dev/LingoSquared` references were repointed
 to a quoted `$LINGO_REPO`. On the old Mac that directory still existed but
 held only `.claude/worktrees`, so a deploy following the runbook would have
 failed and the frontend step's `rsync --delete` pointed at a source not

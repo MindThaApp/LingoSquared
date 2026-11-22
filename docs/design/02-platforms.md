@@ -20,7 +20,7 @@ Why, for a solo developer:
 Consequences for the repo:
 - `frontend/` stays the product.
 - `android-shell/` (Capacitor) is the right idea in the wrong state: rebuild it as `shells/android/` with bundled web assets, no `allowMixedContent` (`android-shell/capacitor.config.json:9`), and native plugins.
-- `mobile/` (Expo/React Native scaffold, placeholder home at `mobile/app/index.tsx:12-37`) is **frozen**: keep the code, stop its three CI workflows from consuming minutes, do not add screens. Revisit only if store review or performance rejects the WebView approach. This is a proposal for Ramin to decide; nothing is deleted. **⏸ Pending decision (see DECISIONS.md): D1 one codebase / freeze mobile/**
+- `mobile/` (Expo/React Native scaffold, placeholder home at `mobile/app/index.tsx:12-37`) is **frozen**: keep the code, stop its three CI workflows from consuming minutes, do not add screens. Revisit only if store review or performance rejects the WebView approach. This is a proposal for the owner to decide; nothing is deleted. **⏸ Pending decision (see DECISIONS.md): D1 one codebase / freeze mobile/**
 
 ---
 
@@ -165,7 +165,7 @@ Store app (later):
 | Conventions | SF via `system-ui`; SF-like weights; bounce scrolling left on; pull-to-refresh only on Today (triggers sync); context menus on long-press for words and lessons; system share sheet; Sign in with Apple offered wherever Google sign-in is (store rule; `SocialSignInButtons.tsx` already has Apple). No custom alert styling — destructive confirmations use an action-sheet-styled `Sheet`. |
 | Notifications | Local notifications scheduled on device (UNUserNotificationCenter) for the three kinds; permission asked after the first lesson with the pre-prompt; provisional (quiet) delivery is an option to consider. Time Sensitive is not used. Badge shows the due count. |
 | Widgets | Phase 6: small "Streak + ring", medium "Today", lock-screen circular (streak) and rectangular (due count). Live Activity: not for v1 (a lesson is too short). App Intents for "Start today's lesson" and "Review" so they appear in Spotlight and Shortcuts. |
-| Store requirements | Apple Developer Program; App Privacy "nutrition labels"; privacy policy URL; in-app account deletion (exists); Sign in with Apple parity; microphone and speech usage strings; no remote code beyond WebView content rules; the app must be more than a repackaged website (guideline 4.2) — offline lessons, haptics, notifications and widgets are the answer; export compliance (standard encryption only); age rating. Persian-language listing is allowed; availability by territory is a business/legal check for Ramin **(verify sanctions-related restrictions for the storefronts concerned)**. |
+| Store requirements | Apple Developer Program; App Privacy "nutrition labels"; privacy policy URL; in-app account deletion (exists); Sign in with Apple parity; microphone and speech usage strings; no remote code beyond WebView content rules; the app must be more than a repackaged website (guideline 4.2) — offline lessons, haptics, notifications and widgets are the answer; export compliance (standard encryption only); age rating. Persian-language listing is allowed; availability by territory is a business/legal check for the owner **(verify sanctions-related restrictions for the storefronts concerned)**. |
 | Offline | Starter packs bundled. SQLite in the app container (included in device backups; exclude audio packs from iCloud backup). Sync on foreground and via BGAppRefreshTask opportunistically. On-device speech recognition used where the language supports it; otherwise Whisper download with consent. |
 
 ---
@@ -207,7 +207,7 @@ For each platform that ships, before release:
 7. Upgrade from the previous version keeps all local progress (never ship a build without this test — a migration that loses a streak is the worst bug this app can have).
 8. Store listing claims match the publish-gated content.
 
-## 13. Decisions needed from Ramin
+## 13. Decisions needed from the owner
 
 1. Confirm "one web codebase + shells" and freezing `mobile/` (Expo).
 2. Play account: personal (closed-test requirement) or organisation. Until decided, Android work can proceed to internal APK testing.
