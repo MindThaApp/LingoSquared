@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # One-command local verification: compiler validation + backend pytest +
 # full frontend build. Built by Session 3 (INFRA) per
-# docs/SONNET_BUILD_PROMPT_UPGRADES.md so every session gets the same
+# docs/BUILD_PLAN_UPGRADES.md so every session gets the same
 # pass/fail summary instead of re-deriving the recipe (and its footguns)
-# from CLAUDE.md each time.
+# from the project notes each time.
 #
 # Ownership note: the backend-test stage touches the LOCAL Docker stack's
 # test database. Per the parallel-session ownership map in
-# docs/SONNET_BUILD_PROMPT_UPGRADES.md, the Docker stack has ONE owner at
+# docs/BUILD_PLAN_UPGRADES.md, the Docker stack has ONE owner at
 # a time (Session 1/CODE by default) -- if you are not that owner, run
 # with --content-only or --frontend-only instead of the full suite.
 #
@@ -30,7 +30,7 @@
 # Deliberately does NOT use `docker compose --env-file` anywhere -- that
 # flag only affects docker-compose.yml variable substitution, not the
 # container's actual environment, and using it for tests once ran the
-# suite against the LIVE database. See CLAUDE.md footguns.
+# suite against the LIVE database. See the project notes footguns.
 
 set -uo pipefail
 
@@ -200,7 +200,7 @@ fi
 
 # ---------------------------------------------------------------------------
 # Stage 3: frontend build (full build, never just tsc --noEmit -- the full
-# build has twice caught type errors noEmit alone missed, per CLAUDE.md)
+# build has twice caught type errors noEmit alone missed, per the project notes)
 # ---------------------------------------------------------------------------
 if [ "$RUN_FRONTEND" = "1" ]; then
   echo "== Stage 3/3: frontend build (npm run build) ========================"

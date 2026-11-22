@@ -1992,7 +1992,7 @@ class UnitDeriver:
         R["cefr_level"] = self.level.upper()
         R["status"] = "complete_draft"
         R["generation_provenance"] = {
-            "method": "ai_generated", "authoring_system": "claude", "human_reviewed": False,
+            "method": "ai_generated", "authoring_system": "drafting_tool_a", "human_reviewed": False,
             "source_material": f"Translated from {sp} {self.level.upper()} unit {self.src_no:02d} ({self.stem}) by scripts/derive_target.py.",
         }
         R["review"] = {"status": "unreviewed", "required_next_reviewer": "native_speaker_review", "notes": note}
@@ -2007,7 +2007,7 @@ class UnitDeriver:
         newO["source_language"] = base_o["source_language"]
         newO["target_language"] = tp
         newO["status"] = "complete_draft"
-        newO["generation_provenance"] = {"method": "ai_generated", "authoring_system": "claude", "human_reviewed": False}
+        newO["generation_provenance"] = {"method": "ai_generated", "authoring_system": "drafting_tool_a", "human_reviewed": False}
         newO["review"] = {"status": "unreviewed", "required_next_reviewer": "native_speaker_review", "notes": note}
         if "answer_policy" in base_o:
             newO["answer_policy"] = copy.deepcopy(base_o["answer_policy"])

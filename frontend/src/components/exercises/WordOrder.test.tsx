@@ -56,7 +56,7 @@ describe("WordOrder answer payload", () => {
     expect(onAnswer).toHaveBeenCalledTimes(1);
     const payload = onAnswer.mock.calls[0][0];
 
-    // Contract locked down here (see CLAUDE.md's word_order/listen_order
+    // Contract locked down here (see the project notes' word_order/listen_order
     // footgun, found live 2026-07-07): the frontend submits a LIST of
     // word_bank tokens in click order — the backend's
     // canonical_order_tokens() canonicalizes both list- and string-authored

@@ -1,16 +1,16 @@
 # Lingo² — next-phase architecture spec (post Phase A–G)
 
-Written 2026-07-07 by Fable, as the successor to
-`docs/APP_SPEC_FOR_FABLE_REVIEW.md`. That document reviewed the app as
+Written 2026-07-07 by external reviewer, as the successor to
+`docs/APP_SPEC_FOR_REVIEW.md`. That document reviewed the app as
 it stood before the upgrade program and produced the phased work order
-in `docs/SONNET_BUILD_PROMPT_UPGRADES.md`. **Phases A–G are now all
-shipped and live-verified** (see CLAUDE.md's "Current plan of record").
+in `docs/BUILD_PLAN_UPGRADES.md`. **Phases A–G are now all
+shipped and live-verified** (see the project notes' "Current plan of record").
 This document answers the question that comes next: with the runtime
 learning loop rebuilt and the publish-gate content push mid-flight,
 **what should the project actually do between now and a real beta
 launch — and what should it deliberately not do?**
 
-Read `CLAUDE.md` first for current state. This spec assumes it.
+Read the project notes first for current state. This spec assumes it.
 
 ---
 
@@ -51,7 +51,7 @@ word_order) that shipped and were caught live.
 - `user_grammar_srs` — Phase A explicitly built lexeme SRS first and
   left grammar SRS as "mechanical to add, don't build yet."
 - The content-depth push itself: the ≥10hr teaching + ≥10hr practice
-  bar per launch pair is **stated but never measured** (CLAUDE.md and
+  bar per launch pair is **stated but never measured** (the project notes and
   the prior spec both say so in as many words).
 - A real deploy: the live box (192.168.4.4) has never been deployed to
   beyond original setup. The next deploy is from-scratch-equivalent.
@@ -64,7 +64,7 @@ second list, and only the last two items are on the critical path.
 ## 2. Phase H — Pre-deploy hardening (do this first; it is the launch blocker)
 
 This folds in the security/pre-deploy re-audit. I checked the open
-items from CLAUDE.md's "Known limitations" against the actual code and
+items from the project notes' "Known limitations" against the actual code and
 the runbook. **Good news: the previously-flagged items are genuinely
 handled or correctly documented.** The findings below that are new are
 operational, not vulnerabilities.
@@ -119,7 +119,7 @@ notices and bothers to report. It covers none of:
 
 - `/tts` swallows every synthesis failure in a bare `except Exception`
   and returns a browser-fallback — a corrupted Google credential, an
-  expired Azure key, or a quota exhaustion is **invisible** (CLAUDE.md's
+  expired Azure key, or a quota exhaustion is **invisible** (the project notes'
   own footgun entry admits "the `/tts` route's except Exception
   swallows the real exception with no logging").
 - `/stt/transcribe` returns a generic 500 on any failure with no trace.
@@ -171,7 +171,7 @@ volume is the real pre-flight check; the runbook's prose is not.
 ## 3. Phase I — Prove the content-depth bar (measurement, not authoring)
 
 The ≥10hr teaching + ≥10hr practice bar is a hard publish-gate
-requirement that **has never been measured** — both CLAUDE.md and the
+requirement that **has never been measured** — both the project notes and the
 prior spec say the practice hours are "meant to come from" the Endless
 Practice engine and that "actual hour-depth per path hasn't been
 separately measured." Shipping against an unmeasured gate is shipping
@@ -214,7 +214,7 @@ Phase A design already carved the socket for it.
 
 ---
 
-## 5. Answers to the three standing questions the prior spec asked Fable
+## 5. Answers to the three standing questions the prior spec asked external reviewer
 
 The prior spec closed with three questions. Now that the program has
 shipped, the answers are load-bearing for what's next:

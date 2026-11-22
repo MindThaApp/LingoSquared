@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { freshEmail, registerAndLand } from "./helpers";
 
-// Covers the flow CLAUDE.md/BUILD_LOG.md records as manually verified
+// Covers the flow the project notes/BUILD_LOG.md records as manually verified
 // multiple times this project (register -> home dashboard; logout
 // button was once accidentally deleted and only caught by a live
 // click-through) -- turning that manual check into a repeatable one.

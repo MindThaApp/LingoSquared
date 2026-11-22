@@ -311,7 +311,7 @@ REFRESH_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.ref
 SOCIAL_NONCE_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
 SPEND_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.spend_rate_limit_max, window_seconds=60))
 ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
-# Phase H2 (2026-07-07 integrity audit, docs/SONNET_BUILD_PROMPT_LAUNCH.md):
+# Phase H2 (2026-07-07 integrity audit, docs/BUILD_PLAN_LAUNCH.md):
 # /tts, /stt/transcribe, and the three generation endpoints were completely
 # unrated. TTS additionally gets a per-account daily character budget,
 # separate from TTSUsage's account-agnostic shared monthly budget.

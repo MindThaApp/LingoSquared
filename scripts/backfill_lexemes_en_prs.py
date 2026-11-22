@@ -5,7 +5,7 @@ unit 2, added 2026-07-05 by the practice-pool-sync lane: name exchange,
 origin/hometown, occupation, introducing a third person, polite titles,
 and a gathering dialogue).
 
-Written directly (not via Codex -- Codex was rate-limited at authoring
+Written directly (not via drafting tool B -- drafting tool B was rate-limited at authoring
 time) mirroring scripts/backfill_lexemes.py's structure and rigor.
 Target-side Dari classification is NOT derived from the reference
 script's Farsi classification -- verified against this course's own

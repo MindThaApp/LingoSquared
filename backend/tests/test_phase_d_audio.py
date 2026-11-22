@@ -7,7 +7,7 @@ import app.api.router as api_router
 # Docker container's `.:/app` mount only covers backend/, so a test in
 # backend/tests/ importing scripts/compile_content.py by path fails
 # inside the container even though it works locally via .content-venv
-# (see CLAUDE.md's footgun list). Only genuine API/DB integration tests
+# (see the project notes' footgun list). Only genuine API/DB integration tests
 # belong in this file.
 
 def configure_asset_directory(monkeypatch, tmp_path):

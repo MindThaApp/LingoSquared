@@ -8,7 +8,7 @@ from app.models.entities import ExerciseType
 
 def test_frontend_exercise_renderer_handles_all_backend_types():
     # The standard `docker compose run api pytest` container only mounts
-    # backend/ (see CLAUDE.md's backfill_lexemes.py footgun for the same
+    # backend/ (see the project notes' backfill_lexemes.py footgun for the same
     # class of issue) -- frontend/ is invisible there, so this test can
     # only run when the full repo is mounted (e.g. the coordinator running
     # pytest directly on the host, or a container started with the

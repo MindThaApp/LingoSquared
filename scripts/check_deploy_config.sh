@@ -2,7 +2,7 @@
 # check_deploy_config.sh — automated pre-deploy .env sanity check.
 #
 # Automates the two pre-deploy/pre-beta-invite checklist items from
-# CLAUDE.md "Known limitations" and docs/PRE_DEPLOY_RUNBOOK.md's
+# the project notes "Known limitations" and docs/PRE_DEPLOY_RUNBOOK.md's
 # "Required environment variables" table, which until now were manual
 # grep-and-eyeball steps (runbook pre-flight step 4):
 #
@@ -167,7 +167,7 @@ GOOGLE_TTS="$(get_var GOOGLE_CLOUD_TTS_CREDENTIALS_JSON)"
 if [ -z "$GOOGLE_TTS" ]; then
   warn "GOOGLE_CLOUD_TTS_CREDENTIALS_JSON is empty — cloud TTS for the 8 Google-covered languages falls back to browser speechSynthesis. Not a blocker, but confirm this is intentional (and if set later, verify the key isn't the corrupted one from the 2026-07-04 incident — runbook open question #1)."
 else
-  ok   "GOOGLE_CLOUD_TTS_CREDENTIALS_JSON is non-empty (contents not printed or validated — a corrupted key still needs the CLAUDE.md debug path to detect)"
+  ok   "GOOGLE_CLOUD_TTS_CREDENTIALS_JSON is non-empty (contents not printed or validated — a corrupted key still needs the DRAFTING TOOL A.md debug path to detect)"
 fi
 
 AZURE_KEY="$(get_var AZURE_SPEECH_KEY)"

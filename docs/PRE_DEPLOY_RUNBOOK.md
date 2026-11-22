@@ -3,9 +3,9 @@
 **Read this in full before touching the live server.** This is the
 consolidated checklist for the FIRST real deploy of current work to
 192.168.4.4, assembled 2026-07-07 from landmines scattered across
-~10 separate `docs/BUILD_LOG.md` entries (a 2026-07-07 Fable audit
+~10 separate `docs/BUILD_LOG.md` entries (a 2026-07-07 external reviewer audit
 flagged this scatter as the largest unaddressed risk in the repo).
-`CLAUDE.md`'s "Deploying a backend change" section has the quick-
+the project notes' "Deploying a backend change" section has the quick-
 reference command skeleton; this file is the full checklist around it
 — pre-flight checks, required env vars, ordered steps, and post-deploy
 verification. Standing rule, unchanged: **deploys happen with the owner
@@ -120,7 +120,7 @@ the live server.
 
 5. **Confirm no other session is mid-deploy.** Check for an
    in-progress `git worktree`/uncommitted changes on your own working
-   tree, and ask the owner directly if any other Claude/Codex instance
+   tree, and ask the owner directly if any other drafting tool A/drafting tool B instance
    might be touching the live server right now — this project runs up
    to 3 parallel sessions, and the standing rule is deploys happen
    with the owner present specifically to avoid two people deploying at
@@ -140,13 +140,13 @@ unilaterally.
 | `SENTRY_DSN` | optional | Crash reporting; empty means off (WARN only). See `docs/SENTRY.md`. |
 | `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. **If deploying the LAN web bundle (see "Frontend (LAN web)" section below), must also include `http://192.168.4.4:8011`.** |
 | `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs the owner to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
-| `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `CLAUDE.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
+| `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `DRAFTING TOOL A.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
 | `JWT_SECRET` | presumably already set from original setup | Confirm it's a real random secret, not the `.env.example` placeholder (`replace-with-a-long-random-secret`) — never regenerate it on a running deploy without warning the owner first (invalidates every existing session token). |
 | `POSTGRES_PASSWORD` / `DATABASE_URL` | presumably already set | Confirm they're real values, not `.env.example` placeholders, and that `DATABASE_URL` actually matches `POSTGRES_PASSWORD`. |
 
 ## Ordered deploy steps
 
-Matches `CLAUDE.md`'s existing skeleton, made complete with the
+Matches the project notes' existing skeleton, made complete with the
 correct step ordering and the pre/post steps above folded in.
 
 **Load-bearing correction vs. an earlier draft of this runbook**: `python
@@ -162,7 +162,7 @@ content-import step (new step 7 below) leaves backfill with nothing to
 match against. The real pipeline is: compile each course direction
 locally with `scripts/compile_content.py`, then `POST` the compiled
 JSON to `/admin/content/import` (admin-authenticated). This gap wasn't
-documented anywhere in `CLAUDE.md`/`BUILD_LOG.md` — it's a finding from
+documented anywhere in the project notes/`BUILD_LOG.md` — it's a finding from
 reading `backend/app/content/seed.py` and the backfill scripts' own
 DB queries directly while assembling this runbook, not a synthesis of
 an existing landmine entry.
@@ -192,7 +192,7 @@ stub. Those courses are dev/test fixtures only (`backend/tests/conftest.py`,
   default flipped.
 - **This does not remove courses that already exist.** Seeding is
   create-missing-only by design (an earlier delete-and-recreate version
-  cascade-wiped user progress — see `backend/CLAUDE.md`). The 4 demo
+  cascade-wiped user progress — see the backend notes). The 4 demo
   courses already present on live (and on the dev DB) need the one-off
   cleanup script — see "Removing the already-seeded demo courses" below.
 
@@ -287,7 +287,7 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run
 
 # 9. Import practice templates — ONLY after step 8. Importing before backfill
 #    fails every template with "lesson key ... was not found in the course"
-#    (found live 2026-07-06; CLAUDE.md's own recipe had this backwards once,
+#    (found live 2026-07-06; the project notes' own recipe had this backwards once,
 #    already corrected there — this file states the corrected order explicitly).
 #    Per scripts/manifest.d/practice/*.txt entry in scope, compile the pack and
 #    POST it to /admin/courses/{course_id}/practice/import (get course_id
@@ -322,7 +322,7 @@ delete-course endpoint**. The one-off cleanup is
 `backend/scripts/remove_demo_courses.sql`.
 
 **This is a destructive live-DB operation — it requires the owner present
-(root `CLAUDE.md`, "Deploy authority"). Do not run it unattended.**
+(the project notes, "Deploy authority"). Do not run it unattended.**
 
 The script is idempotent and ships **wrapped in a rolled-back
 transaction by default**: as written it prints before/after counts and
@@ -473,7 +473,7 @@ phone-testing, not a bug).
 **What this worker verified vs. did not:**
 - Verified: `npm run build -- --mode production.lan` succeeds in an
   isolated worktree (after `npm install` at the worktree root — the
-  npm-workspace footgun in `CLAUDE.md`); `dist/index.html` references
+  npm-workspace footgun in the project notes); `dist/index.html` references
   hashed assets; the built JS bundle contains the expected
   `192.168.4.4:8010` API origin (confirms the env file is actually
   picked up by this mode, not silently ignored); `nginx -t` syntax-checks
@@ -603,14 +603,14 @@ compose section below.)*
    deploy is an open product decision, not something this runbook
    picks.** `scripts/manifest.d/content/*.txt` originally had 9 entries (now one file per entry) (the
    6 publish-gate directions plus `en-es`/`en-fr`, both explicitly
-   "park until nl is done" per `CLAUDE.md`, plus an `en-nl-a2`
+   "park until nl is done" per the project notes, plus an `en-nl-a2`
    extension). Decide with the owner whether the first live deploy imports
    only the 6 publish-gate directions or everything currently compiled
    — importing extra non-launch-gate content doesn't functionally
    break anything, but it does mean es/fr becomes visible/reachable on
    the live server before it's meant to be beta-facing.
 6. **Real gap found while writing this runbook, not previously
-   documented anywhere**: `CLAUDE.md`'s prior "Deploying a backend
+   documented anywhere**: the project notes' prior "Deploying a backend
    change" skeleton (and an earlier draft of this file) treated `python
    -m app.content.seed` as if it were the content-seeding step. Reading
    `backend/app/content/seed.py` directly shows it only creates

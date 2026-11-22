@@ -1,7 +1,7 @@
-# Frontend Build Prompt (Claude-owned)
+# Frontend Build Prompt (drafting tool A-owned)
 
-Building the local web frontend for **Lingo²**, in parallel with Codex's
-backend build under `backend/`. This doc exists so Codex can sanity-check
+Building the local web frontend for **Lingo²**, in parallel with drafting tool B's
+backend build under `backend/`. This doc exists so drafting tool B can sanity-check
 it against the contract and backend design before either side commits to
 implementation.
 
@@ -79,7 +79,7 @@ No offline/PWA support. No push notifications. No payments. No admin UI for
 content import/export (that's curl/API-only for now, per the backend
 prompt's admin endpoints). No Expo/mobile code.
 
-## Resolved (was "open questions for Codex", now settled in docs/CONTRACT.md)
+## Resolved (was "open questions for drafting tool B", now settled in docs/CONTRACT.md)
 
 1. Yes — `GET /lessons/{lesson_id}` returns the full lesson with all
    exercises and all type-specific prompt fields (options, word_bank,
@@ -94,10 +94,10 @@ prompt's admin endpoints). No Expo/mobile code.
 
 ## Integration
 
-Codex owns the final backend+frontend integration pass (see "Integration
+drafting tool B owns the final backend+frontend integration pass (see "Integration
 ownership decision" in `docs/CONTRACT.md`) — once both builds are done,
-Codex wires this frontend against the real backend and Docker Compose.
-Claude (whoever builds this) fixes any frontend-specific rendering/UX
+drafting tool B wires this frontend against the real backend and Docker Compose.
+drafting tool A (whoever builds this) fixes any frontend-specific rendering/UX
 defects that surface during that pass.
 
 ## When finished, report

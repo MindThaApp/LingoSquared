@@ -41,6 +41,6 @@ SENTRY_AUTH_TOKEN=... npm run build -- --mode production.lan
 
 ## Triage agent
 
-`.claude/agents/sentry-triage.md` is a Claude Code subagent. It needs the Sentry MCP server (tools named `mcp__sentry__*`) and an authenticated `gh`. It reads new or unresolved issues and feedback from both projects, groups them, writes `.local/reports/sentry-triage-<date>.md`, and opens GitHub issues on `MindThaApp/LingoSquared` with the label `sentry` for new actionable ones, skipping any whose Sentry issue id already appears in an existing issue body. It never edits code.
+The sentry-triage agent definition is a subagent. It needs the Sentry MCP server (tools named `mcp__sentry__*`) and an authenticated `gh`. It reads new or unresolved issues and feedback from both projects, groups them, writes `.local/reports/sentry-triage-<date>.md`, and opens GitHub issues on `MindThaApp/LingoSquared` with the label `sentry` for new actionable ones, skipping any whose Sentry issue id already appears in an existing issue body. It never edits code.
 
-Run it from the repo root in Claude Code: ask "Use the sentry-triage agent to triage the last 7 days", or `claude --agent sentry-triage` for a dedicated session. Review the report, then decide which issues to fix.
+Run it from the repo root in the drafting tool: ask "Use the sentry-triage agent to triage the last 7 days", or start a dedicated session with that agent. Review the report, then decide which issues to fix.

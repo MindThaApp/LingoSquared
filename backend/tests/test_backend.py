@@ -848,7 +848,7 @@ def test_speaking_lock_cannot_be_bypassed_via_answer_or_complete(client, auth):
         # complete() independently checking the lock (not just relying on
         # "no LessonProgress row exists yet") is the other half of H1 --
         # simulate a LessonProgress row existing by whatever means (this
-        # is exactly the scenario Fable's audit described: "complete()
+        # is exactly the scenario external reviewer's audit described: "complete()
         # only requires that a LessonProgress row exists") and confirm
         # complete() itself still blocks on the lock, not just on row
         # presence.

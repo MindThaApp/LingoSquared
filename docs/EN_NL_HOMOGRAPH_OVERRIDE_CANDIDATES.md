@@ -77,7 +77,7 @@ updates the row IN PLACE (no new row, no orphan, FK-safe — verified `0 created
 
 **Deferred:** the grammatical POS still lags the sense (order=verb, correct=adj) —
 the fully-correct fix (order→noun, correct→verb) needs the same migrate-in-place
-upsert as the en_nl caveat above; deferred to that Codex-lane change. `turn`
+upsert as the en_nl caveat above; deferred to that drafting tool B-lane change. `turn`
 (a2_unit37) left excluded — bare "turn" is genuinely ambiguous (turn on=aanzetten
 vs turn off=sla af), the author's exclusion stands.
 

@@ -14,7 +14,7 @@ import { installStaleChunkReload } from './lib/staleChunkReload'
 import { queryClient } from './queryClient'
 
 // @lingo/shared's api/client.ts and lib/answerInputMode.ts moved out of
-// frontend/src (Phase 0 of the mobile plan, see CLAUDE.md) and can no
+// frontend/src (Phase 0 of the mobile plan, see the project notes) and can no
 // longer reach import.meta.env/localStorage themselves -- both MUST be
 // configured here, synchronously, before anything below can render and
 // possibly fire an API call or read the answer-input-mode preference.
@@ -38,7 +38,7 @@ configureApi({
   // Mirrors the original client.ts's FEEDBACK_BASE_URL fallback chain
   // exactly: VITE_FEEDBACK_API_URL, else the same base URL as everything
   // else. See docs/CONTRACT.md's "General app/page feedback" section and
-  // CLAUDE.md's "Feedback/issue-report collection strategy" entry.
+  // the project notes' "Feedback/issue-report collection strategy" entry.
   feedbackBaseUrl:
     import.meta.env.VITE_FEEDBACK_API_URL ??
     (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'),

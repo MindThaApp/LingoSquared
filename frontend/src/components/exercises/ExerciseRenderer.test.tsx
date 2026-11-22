@@ -18,7 +18,7 @@ vi.mock("../VoiceCaptureControls", () => ({
 // SIX exercise types once shipped in content without a case in this
 // renderer's switch — the compiler and tsc were both green, and every one
 // only crashed (or fell through to the unsupported-type message) in a real
-// lesson in the browser (see CLAUDE.md's exercise-type-registration
+// lesson in the browser (see the project notes' exercise-type-registration
 // footgun). This Record is deliberately keyed on the ExerciseType union
 // itself, so adding a new type to @lingo/shared/api/types makes this file
 // FAIL TO COMPILE until a prompt is added here — and the test then fails

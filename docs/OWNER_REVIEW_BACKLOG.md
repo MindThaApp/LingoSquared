@@ -1,11 +1,11 @@
 # The owner's review backlog
 
-Things the autonomous coordinator (Claude) decided or deferred that the owner may
+Things the autonomous coordinator (drafting tool A) decided or deferred that the owner may
 want to review when he has a moment. **Nothing here is blocking** — it is a
 queue, not a set of questions. Newest at top. The coordinator appends; the owner
 prunes.
 
-Standing mandate (2026-07-23): Claude runs the build autonomously as
+Standing mandate (2026-07-23): drafting tool A runs the build autonomously as
 coordinator/architect/engineer with a subagent team; only genuinely blocking
 or owner-reserved decisions interrupt the owner. Everything else lands here.
 
@@ -16,19 +16,19 @@ or owner-reserved decisions interrupt the owner. Everything else lands here.
 **Where we are:** full native-review sweep done — **297/529 practice packs flipped to `review.status: reviewed`**
 (all validate 0/0; DEAD/floor gate at baseline, no regressions). The **reverse dirs (en-fa + en-prs) a1/a2/b1 are
 complete** this session. **ZERO packs remain genuinely-unreviewed** — the ~232 unflipped packs are all
-reviewed-and-HELD, waiting on a decision below. Claude's autonomous content lane is **exhausted**; the items
+reviewed-and-HELD, waiting on a decision below. drafting tool A's autonomous content lane is **exhausted**; the items
 below are owner-reserved (deploy / native / product) and each unblocks a chunk of the held packs.
 
 **Decide in this order (highest leverage first):**
 1. **RE-BACKFILL WAVE** (deploy, needs dev-DB) — THE #1 lever; unblocks the bulk of held X-en + en-nl + some
-   reverse-dir packs at once. First choose the APPROACH (Claude did NOT pre-empt this): (A) sanitize glosses at
+   reverse-dir packs at once. First choose the APPROACH (drafting tool A did NOT pre-empt this): (A) sanitize glosses at
    point-of-use, (B) exclusion-set, or (C) `interchangeable` multi-answer — see the RE-BACKFILL WAVE section +
    `docs/LEAKED_GLOSS_INVENTORY.md` (376 X-en items, 3 classes) + the batch-24/27 reverse-dir gloss finds
    (backfill_lexemes.py/_en_prs.py: لازمه/آقای/قهوه‌یی/اینجا/پُسته/شرکت/می‌دید + "(spoken)" class). Mechanical
    metalanguage-strips are ready to script once you pick the approach; wrong-sense ones need #2.
 2. **NATIVE-Farsi/Dari confirms** (native) — battery=بطری/jar=بوتل, fee=معاش→کارمزد, dinner=شب‌چاشت→نان‌شب,
    پنجصد/دوصد numerals, میله, رستوران/رستورانت, اما→و acceptability, en-fa b1_07 کاش phrasing, etc. + the **a2
-   forward-ref pre-teach cards** (بکنم/مشکل/مشکلی/می‌کنی — need native example sentences; Claude did NOT author).
+   forward-ref pre-teach cards** (بکنم/مشکل/مشکلی/می‌کنی — need native example sentences; drafting tool A did NOT author).
 3. **PUNCTUATION** (product/backend) — fa/prs `.`/`!` answers are untypeable on the in-app keyboard; pick: (A)
    grading strips terminal punctuation [recommended, 1 change], (B) add a period key, or (C) content dual-variant
    pass. See the keyboard/punctuation SYSTEMIC section.
@@ -36,12 +36,12 @@ below are owner-reserved (deploy / native / product) and each unblocks a chunk o
 5. **grammar-note `target.text` English-metalanguage** (systemic #5) — en-fa a2 done; en-prs b1 = full English
    paragraphs, needs native judgment for the pure-target form.
 
-Say the word (e.g. "do the re-backfill wave, approach A") and Claude executes whatever is in-lane. Per-batch
+Say the word (e.g. "do the re-backfill wave, approach A") and drafting tool A executes whatever is in-lane. Per-batch
 detail follows below.
 
 ### 🔬 QA RE-VERIFICATION PASS (2026-07-31, budget-spend directive) — ~30 adversarial verifiers over flipped packs
 
-Ran a large adversarial re-verification fan-out (sonnet) over the reverse-dir + nl-en flipped packs to catch
+Ran a large adversarial re-verification fan-out (drafting tool A) over the reverse-dir + nl-en flipped packs to catch
 false-flips before ship. **Real defects caught + FIXED (all committed, 0-err):** (1) 8 in my own session edits
 (instruction↔Farsi/Dari desyncs after متاسفانه/متأسفم drops, an incomplete آن drop, missed de-name/attribution
 sibling exercises, a surfaced untaught token); (2) the **این X → "this, X"** comma-mistranslation template artifact
@@ -108,7 +108,7 @@ fix-pass queue. Everything else re-verified **CONFIRM** (en-fa a1_10-56 + a2/b1,
 
 ### 🔬 en-nl a2/b1 FIRST-PASS REVIEW WAVE (2026-07-31) — 17 unreviewed packs (a2 25/26/27/73/75/76/77 + b1 01/02/03/05/06/07/08/09/10/11)
 
-7 sonnet read-only reviewers; I applied fixes centrally. **NONE flipped** — the whole en-nl corpus is
+7 drafting tool A read-only reviewers; I applied fixes centrally. **NONE flipped** — the whole en-nl corpus is
 held on the systemic "(with ik)"/homograph leaked-gloss class (re-backfill wave, the owner's dev-DB), so
 these join the held pile even when otherwise clean. Value = the real defects surfaced + fixed.
 
@@ -137,7 +137,7 @@ these join the held pile even when otherwise clean. Value = the real defects sur
 
 ### 🔬 fa-en + prs-en 2nd-PASS RE-VERIFY WAVE (2026-07-31) — 61 flipped packs (fa-en a1×25/a2×6/b1×5, prs-en a1×19/a2×6)
 
-5 sonnet reviewers. The shared realizations/en was already 2nd-pass-verified via nl-en, so scrutiny focused on the Farsi/Dari overlays + shared-realization behavior per direction. **No HARD blockers survived** beyond the ones fixed below — the flipped fa-en/prs-en corpus is essentially clean modulo known systemic classes. `check_dari_register.py` = 0 Iranian-leakage across all prs-en packs.
+5 drafting tool A reviewers. The shared realizations/en was already 2nd-pass-verified via nl-en, so scrutiny focused on the Farsi/Dari overlays + shared-realization behavior per direction. **No HARD blockers survived** beyond the ones fixed below — the flipped fa-en/prs-en corpus is essentially clean modulo known systemic classes. `check_dari_register.py` = 0 Iranian-leakage across all prs-en packs.
 
 **FIXED (committed 0-err):**
 - §12 join under-leniency I'd MISSED earlier (truncated grep): fa-en + prs-en a1_45 (emergency) & a1_46 (lost-item) overlays kept only 6 period-joined answers — added the 6 comma/"and"-joined variants to all 4; also fa-en a1_02 (reply_as_leila + speak_exchange) + prs-en a1_02 (speak_exchange).
@@ -176,7 +176,7 @@ Investigated the three queued delicate cleanups with per-change verification. On
 
 ### 🔬 REVERSE-DIR EARLY-a1 2nd-PASS WAVE (2026-07-31) — en-fa a1_01-09 + en-prs a1_01-09 + a2_09/16 (highest-traffic units)
 
-2 sonnet reviewers. These flipped packs were never 2nd-passed (the earlier sweep started at a1_10). Every learner starts here, so scrutinized hard. Gates all clean (0 err, 0 DEAD).
+2 drafting tool A reviewers. These flipped packs were never 2nd-passed (the earlier sweep started at a1_10). Every learner starts here, so scrutinized hard. Gates all clean (0 err, 0 DEAD).
 
 **en-fa a1_01-09 — FIXED in-content (committed 22dabc0d):** authored English metalanguage in graded answers — a1_05 برید "go (polite)"→"go", a1_09 chande/half MC "is what/half (colloquial contraction of …)"→"is what/half", a1_06 match_register verbose "(polite, waiter or stranger)"→"(polite)". **KEY DISTINCTION: these were AUTHORED content** (realization matching_pairs.right + overlay accepted_answers/correct_option), NOT backfill glosses rendered via slot_gloss — so content-fixable NOW, unlike the deploy-gated gloss class. ⇒ **a chunk of the "leaked-gloss" backlog previously filed as re-backfill/deploy may actually be authored-content that's fixable in-lane — worth a re-triage sweep** (grep matching_pairs `right:` / MC `correct_option` for `(…)` parentheticals). Rest of en-fa a1_01-09 CONFIRM.
 
@@ -188,7 +188,7 @@ Investigated the three queued delicate cleanups with per-change verification. On
 - **a2_16 FALSE-FLIP** (realization+overlay `review.status: unreviewed` but pack flipped — same class as fa-en b1_16). Re-review before trusting.
 - **FALSE ALARMS (NOT defects): a2_09/16 چرا/کی.** The reviewers' untaught-token check is FILE-LOCAL, but the taught set is CUMULATIVE — چرا is taught in a1_unit25, کی in a1_07/10/16 (all before the a2 units), so they're already known. ⇒ **methodological note for future waves: file-local untaught-token findings on a2/b1 units over-flag anything taught in a prior a1 unit; verify cumulatively before queuing.**
 
-### 🔥 MAX-CONCURRENCY BURN-WAVE (2026-07-31) — ~30 sonnet reviewers (the owner: "use up all the budget")
+### 🔥 MAX-CONCURRENCY BURN-WAVE (2026-07-31) — ~30 drafting tool A reviewers (the owner: "use up all the budget")
 
 Fanned out 20-concurrent reviewers (2nd-lens re-verify of the whole flipped a1 corpus in all 6 dirs + first-review of the never-reviewed b1 packs + deep single-class hunts). Overwhelmingly CONFIRM. **FIXED in-lane (committed):** a1_62 speaker attribution (line3 → Leila across shared realization + nl-en distractor + all 3 overlay glosses/titles); en-nl a1_67/68/69 15 English lesson-titles → Dutch; prs-en a1_35 battery بطری→بتری, a1_49 jar بوتل شیشه‌ای→شیشهٔ ظرف; en-fr a1_03 instruction five→six.
 
@@ -218,7 +218,7 @@ Fanned out 20-concurrent reviewers (2nd-lens re-verify of the whole flipped a1 c
 
 ### 🔬 b2 FIRST-PASS REVIEW WAVE (2026-07-31) — nl-en + fa-en + prs-en b2_01-08 (24 packs, the last un-QA'd content surface)
 
-3 sonnet reviewers (one per X-en dir; shared en/b2_* realizations). **ALL 24 packs CONFIRM** — b2 content is clean across the board (argumentation → synthesis; sophisticated grammar verified: modal deduction, cleft/emphatic-does, past-perfect narrative, register tiers, hedging). The Farsi + Dari overlays were specifically PRAISED for sharp native-informed pedagogy (taarof blurring refusals, تو/شما vs. English syntactic register, flattened-past-tense traps, "به گفتهٔ X" chaining vs. synthesis; prs-en 0 Iranian-register hits, §12 well-handled with 2-6 accepted variants). 0 DEAD / 0 below-floor beyond the known baseline. NOTE: b2 practice packs are pure vocab-drill (no word_order/fill_in_blank) so the incoherent-combo class is structurally absent.
+3 drafting tool A reviewers (one per X-en dir; shared en/b2_* realizations). **ALL 24 packs CONFIRM** — b2 content is clean across the board (argumentation → synthesis; sophisticated grammar verified: modal deduction, cleft/emphatic-does, past-perfect narrative, register tiers, hedging). The Farsi + Dari overlays were specifically PRAISED for sharp native-informed pedagogy (taarof blurring refusals, تو/شما vs. English syntactic register, flattened-past-tense traps, "به گفتهٔ X" chaining vs. synthesis; prs-en 0 Iranian-register hits, §12 well-handled with 2-6 accepted variants). 0 DEAD / 0 below-floor beyond the known baseline. NOTE: b2 practice packs are pure vocab-drill (no word_order/fill_in_blank) so the incoherent-combo class is structurally absent.
 - **✅ FIXED (committed d0fc80b6):** b2_08 `by_contrast` media asset text ("by contrast") ≠ the card's full sentence — set the asset text to the sentence (all 3 reviewers flagged it; media-mismatch WARN cleared; shared realization → all 3 b2 dirs).
 - **QUEUED — b2 media-asset hygiene (all inert until b2 audio is generated, itself a distant product decision; best done as one coherent pass then):** (a) 4 orphaned "phrase" media-asset declarations never attached to any card (unit02 must_have, unit04 by_the_time, unit06 in_principle, unit07 on_condition_that) — the b2 phrase-vs-sentence-asset design is half-finished (cards want sentence assets; phrase assets sit unused); (b) unit05 `to_whom_it_may_concern.01` key label vs its text "Dear scheduling team," — cosmetic key-naming only; (c) introduced_tokens bookkeeping — a few cards (unit04 chronology/"write", unit05 institution/"if,write", unit06 respond_opposing/"response", unit08 source_b/"caused") list a token not in their own example text (inert; some are load-bearing for a later matching pair's untaught-check, so don't blindly strip); (d) §16 below-aim matching_pairs on unit01/02/03 (part of the 116 baseline). None learner-facing today.
 - **Methodological note reaffirmed:** all 3 reviewers hit the isolated-pair `validate` false-positive (running one b2 pair alone flags basic the/that/agree as "untaught" because taught_tokens seeds empty per-invocation) — the authoritative gate is the chained `content_manifest.txt` per-CEFR run; the 34 content pytest suite uses it. Don't act on single-pair "untaught" errors.
@@ -278,7 +278,7 @@ lands, I'm HOLDING en-prs a1_23/30/31/32/33 (their only/main blocker is this cla
 
 ## ⭐ Native review — BATCH 1 (2026-07-27): 20 wave-4 packs reviewed + fixed + flipped
 
-Fresh-context native review (4 sonnet reviewers, AUTHORING_PREFLIGHT.md + realization/overlay +
+Fresh-context native review (4 drafting tool A reviewers, AUTHORING_PREFLIGHT.md + realization/overlay +
 live backfill-pool cross-check) of the 20 packs edited in wave 4: en-fa a1_31-36, a2_12/13/14/16,
 b1_01/02/03/04/06/11 + en-prs a1_06/25/26/36. All 20 now `review.status: reviewed`. This is
 batch 1 of the full 509-pack native-review ship-gate (489 remain — see the note at the end).
@@ -324,7 +324,7 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
 
 **DONE (clean LIVE pack-only fixes committed):**
 - u34 listen_dialogue_favorite distractors (fa-en/prs-en/nl-en, commit 0965a73c): swimming/yoga/soccer
-  are all said by Daniel → replaced with tennis/basketball (CLAUDE.md "full stop" rule; overrode the
+  are all said by Daniel → replaced with tennis/basketball (the project notes "full stop" rule; overrode the
   nl-en author's rationalizing note for cross-direction consistency).
 - en-nl u35 fill.003 Sander→Fenna wrong-fact + u34 order.003 'mijn' determiner (c64c0513).
 
@@ -561,7 +561,7 @@ u42 (after floor fix) → flip. All 6 English-target speak_response fixes clear 
   pools are **leaked-gloss-free + dup-free** (verified), it ELIMINATES the leaked-gloss block for those two
   packs. **Insight: the fa-en leaked-gloss block is PER-UNIT, not monolithic — any fa-en pack whose own unit
   pool has no leaked gloss can be re-anchored to full clean.** u46 → flipped. u47 → HELD (see `changes`).
-- fa-en u50 checkout distractor: "ten o'clock" violated the CLAUDE.md full-stop rule (Receptionist says
+- fa-en u50 checkout distractor: "ten o'clock" violated the project notes full-stop rule (Receptionist says
   "seven to ten") → swapped to "eight o'clock" (never spoken) in both checkout exercises. fa-en-only —
   prs-en already used "eight o'clock", nl-en used just nine/noon.
 
@@ -1300,10 +1300,10 @@ en-fa u09 write_meeting_time_summary uses formal است in a colloquial unit (re
 است is grammatical + graded-correct); en-fa u12 آرش/سارا character-pairing breaks the settled سارا/نیما duo
 (advisory); en-fa u04/u06 tested_text-vs-audio register cosmetic (non-graded).
 
-**DOC-HYGIENE (found by 3 reverse-dir reviewers):** CLAUDE.md "Per-lane register pins" only defines fa-en/
+**DOC-HYGIENE (found by 3 reverse-dir reviewers):** the project notes "Per-lane register pins" only defines fa-en/
 prs-en (the X-en dirs); it has NO explicit en-fa/en-prs pin. The operative pin for the reverse dirs lives in
 each realization's own `course.register_policy`/`dialect` (en-fa = Iranian fa_IR standard-colloquial; en-prs =
-Afghan prs_AF kabuli استم/استین/می‌تانین). Add explicit en-fa/en-prs entries to CLAUDE.md so future dispatchers
+Afghan prs_AF kabuli استم/استین/می‌تانین). Add explicit en-fa/en-prs entries to the project notes so future dispatchers
 don't mis-cite the X-en pin.
 
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
@@ -1583,7 +1583,7 @@ remove for cleanliness when next editing those packs.
 
 ## ⭐ Native review — BATCH 3 (2026-07-27, ALL 4 REPORTED): next pre-recipe a1 band
 
-fa-en a1_02/03/04/06/08, prs-en a1_06-10, nl-en a1_04/06/07/08/09, en-nl a1_06-10 (4 sonnet
+fa-en a1_02/03/04/06/08, prs-en a1_06-10, nl-en a1_04/06/07/08/09, en-nl a1_06-10 (4 drafting tool A
 reviewers, all completed & coordinator-reviewed). **FIXED + committed this batch:**
 - **nl-en a1_07 menu_meaning.001** hard-coded "{item} - $3" for every item → bare "{item}" (wrong
   price for tea/soup/sandwich). Commit 76d519de.
@@ -1678,9 +1678,9 @@ needed — mixed POS (adv/adj/noun), so no clean POS-narrow.
 
 **fa-en PACK feedback_frame register — OWNER POLICY DECISION (2026-07-28: downgraded from the
 reviewer's "MAJOR violation"; do NOT autonomously sweep).** The batch-3 reviewer flagged fa-en pack
-feedback_frames as formal (کنید/می‌کند/می‌شود) vs the colloquial overlays, citing the CLAUDE.md
+feedback_frames as formal (کنید/می‌کند/می‌شود) vs the colloquial overlays, citing the project notes
 register pin. BUT I verified: (a) the pin is explicitly the **fa-en OVERLAY lane** ("fa-en overlay
-lane: colloquial spoken Persian", CLAUDE.md §"Per-lane register pins") — it does NOT mention practice
+lane: colloquial spoken Persian", the project notes §"Per-lane register pins") — it does NOT mention practice
 packs; a sibling pin even keeps **fa.json UI chrome FORMAL**, showing formal learner-facing text is a
 deliberate surface elsewhere. (b) fa-en pack feedback is **uniformly formal across ALL 31 fa-en a1
 packs: 116 formal-marker feedback lines, 0 colloquial** — a consistent authored convention, not
@@ -1689,7 +1689,7 @@ be wrong if formal instructional feedback is intended (mirroring the fa.json chr
 NEEDED:** should fa-en practice-pack feedback_frames converge to the colloquial overlay lane (for
 learner-experience consistency) or stay formal (distinct instructional surface)? If "converge":
 then a focused native sweep (W5-style, feedback_frame text only, graded values byte-identical) + a
-NEW register pin in CLAUDE.md. If "stay formal": add a pin saying so, to stop future reviewers
+NEW register pin in the project notes. If "stay formal": add a pin saying so, to stop future reviewers
 re-flagging it. NOTE prs-en packs are already colloquial (matching their colloquial-Dari overlay
 pin) — so this split is fa-en-specific.
 
@@ -1724,7 +1724,7 @@ overrides, deploy-effect, no runtime effect today. (prs-en a1_09 CLEAN.)
 
 ## ⭐ Native review — BATCH 2 (2026-07-27): 4 dirs' pre-recipe a1 reviewed; 1 CRITICAL fixed, rest = waves
 
-Batch 2 = 4 fresh-context sonnet reviewers over the pre-recipe a1 band of the 4 launch directions not
+Batch 2 = 4 fresh-context drafting tool A reviewers over the pre-recipe a1 band of the 4 launch directions not
 in batch 1: fa-en a1_01/05/07/14/17, prs-en a1_01-05, nl-en a1_01/02/03/05/16, en-nl a1_01-05 (20
 packs). Reviewers cross-checked against the English/Dutch realizations + L1 overlays + live backfill
 pools + the real grading code. **FIXED this session (commit for nl-en/prs-en a1_03):**
@@ -1886,7 +1886,7 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   (per distinct-relation group), MC/matching floors, AND ≥3-live-templates-per-tier (§8).
 - `scripts/_phantom_introduced_tokens_check.py` — untaught-in-production tokens.
 - `scripts/_practice_self_reference_check.py` — "ten past {ten}" / invariant-answer frames.
-- `scripts/backfill_lexemes*.py` — Codex fixed the cross-unit homograph GLOSS collisions
+- `scripts/backfill_lexemes*.py` — drafting tool B fixed the cross-unit homograph GLOSS collisions
   (Family-2): unambiguous ones corrected in-place, polysemous ones given per-(unit,token)
   overrides; verified functionally (small→klein, manager→leidinggevende, must→باید, …).
 
@@ -1992,7 +1992,7 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   Scanner now reports 0 hits; en-fa + nl-en practice-validate clean; scope check still 0 DEAD.
 - **Backfill bugs the agents logged (route to a backfill pass):** tokens with trailing
   punctuation baked in (nl-en/prs-en/fa-en unit33: `work?`,`office.`) — DONE 2026-07-24 (earlier
-  session); `hand`→idiom-fragment gloss (nl-en) + `گوش` gloss — DONE 2026-07-24 (Codex gloss2,
+  session); `hand`→idiom-fragment gloss (nl-en) + `گوش` gloss — DONE 2026-07-24 (drafting tool B gloss2,
   commit 1bbe5f11); ~~`هستم` off-theme in some prs pools still open.~~ **DONE 2026-07-27:**
   هستم ("I am") is a register variant re-taught only in en-prs a1_unit36's cooking lesson, so the
   wave-4 generated tag pulled it into that unit's cooking_pair matcher. Held out at the source via
@@ -2053,7 +2053,7 @@ beheerder" (should be boss), `express`→"spoedpost" (should be the verb "uiten"
 narrative unit), `texts`→"appt; schrijft" (garbled). This is a `backfill_lexemes_<dir>.py`
 classifier bug (recipe §0.1 / defect 1.29), invisible to the compiler AND every validator,
 and it very likely also affects fa-en/prs-en b1/b2 (same classifier approach). Fix = add
-homograph sense-disambiguation to the classifier (Codex lane) or narrow the affected packs'
+homograph sense-disambiguation to the classifier (drafting tool B lane) or narrow the affected packs'
 pools by POS/tag. These are actual wrong-answer mis-teaches in packs we'd otherwise ship.
 **Confirmed in prs-en (Dari) too** (short→"قد کوتاه", sound→"آواز", position→"پُست", run→
 "دویدن", past→a malformed placeholder shown as the answer), plus a related **confusable-
@@ -2076,7 +2076,7 @@ realization/overlay content is fixed + committed, which matters more):**
   a careful per-unit capacity pass, so I did NOT blast it autonomously — greenlight the scale.
 - **(b) Highest-leverage tooling fix:** add a validator that checks **unit-scope**
   satisfiability (the one missing check) so this class can't ship again, and fix
-  `_practice_slot_check.py` to report unit scope. (validator/Codex lane.)
+  `_practice_slot_check.py` to report unit scope. (validator/drafting tool B lane.)
 - **(c)** I fixed one urgent blocker tonight (below).
 
 **Fixed tonight (committing separately):** `scripts/backfill_lexemes.py` was missing a
@@ -2087,7 +2087,7 @@ downgraded the fill_in_blank ambiguity HARD-gate to a soft warning, and would bl
 fa lexeme backfill run. Added the gloss (sibling of خونه‌ی/خونه‌ت); verified the checker
 now runs to completion (iter_specs loads 3838 fa specs) instead of crashing.
 
-**Codex** is re-doing the phantom-introduced_tokens validator (first cut = 597 findings,
+**drafting tool B** is re-doing the phantom-introduced_tokens validator (first cut = 597 findings,
 ~all false positives — 'the'/'with'/names — REJECTED per the zero-FP bar; not committed).
 
 Full per-pack findings: coordinator scratchpad `pack_findings.md`.
@@ -2149,7 +2149,7 @@ Real defects (most are systemic classes, not one-offs):
 7. Minor/native-pass: char-name دانیل vs دانیال split; a few gloss typos; stale
    `review.status: reviewed` on files whose own notes say review still pending.
 
-**3 validator candidates** (automate per the tiered-review policy, Codex lane):
+**3 validator candidates** (automate per the tiered-review policy, drafting tool B lane):
 (a) matching_pairs no forward-reference; (b) introduced_tokens declared-but-
 untaught-then-produced; (c) §12 2-clause answers must include comma/and variants.
 
@@ -2181,7 +2181,7 @@ the whole gate re-measured. Pipeline was proven on a 5-pack pilot first.
 2. **The remaining X->en gap (~15 units/direction, all at 86%) is lexeme-thin
    recombination units** (3-14 new tokens — a1_unit60, 62-68, etc.), which
    cannot fill a 12-item checkpoint regardless of pack quality. This is a
-   `backfill_lexemes_{nl,fa,prs}_en.py` extension = **Codex lane**, not
+   `backfill_lexemes_{nl,fa,prs}_en.py` extension = **drafting tool B lane**, not
    authoring. Each affected pack's review.notes names its thin lessons. Also
    the X->en backfills emit polluting English `source_gloss` pseudo-lexemes
    (known handover bug) — worth cleaning in the same backfill pass.
@@ -2189,7 +2189,7 @@ the whole gate re-measured. Pipeline was proven on a 5-pack pilot first.
 ## Checkpoint gate is effectively MAXED at ~92% — needs a PRODUCT decision to go higher
 
 Final measured gate: **526/571 = 92.1%** (en-fa 83/83, en-nl 88/88, en-prs 81/82;
-fa-en 92/106, nl-en 91/106, prs-en 91/106). The Codex lexeme-backfill attempt to
+fa-en 92/106, nl-en 91/106, prs-en 91/106). The drafting tool B lexeme-backfill attempt to
 unblock the thin X→en units **failed to move the number** (created 0 new lexemes,
 only updated existing). Root cause, now definitive: the ~45 still-unavailable
 units are late-A1 **recombination units** that by design introduce FEWER THAN 12
@@ -2203,7 +2203,7 @@ need one of these PRODUCT/PEDAGOGY decisions (your call):
   vocabulary instead of only its own new tokens;
 - (b) exempt recombination units from the checkpoint requirement;
 - (c) lower the 12-item floor for units with <12 new tokens.
-The Codex backfill (`scripts/backfill_lexemes_*.py`) is uncommitted in the tree —
+The drafting tool B backfill (`scripts/backfill_lexemes_*.py`) is uncommitted in the tree —
 it did usefully remove the known nl-en English-`source_gloss` pollution and caused
 no regression, so it's worth keeping, but it did NOT achieve the thin-unit unblock.
 
@@ -2267,7 +2267,7 @@ Pack-fix sweep found the duplicate-gloss mis-grading has two layers:
 
 ---
 
-## BURN-WAVE EXECUTION SESSION — 2026-07-31 (Opus, autonomous)
+## BURN-WAVE EXECUTION SESSION — 2026-07-31 (drafting tool A, autonomous)
 
 **FIXED & committed (branch fix/launch-gate-content-review-wave1, NOT pushed):**
 - `304896b4` — stripped the `Second review translation prompt for this unit.` debug
@@ -2333,11 +2333,11 @@ to convey "produce the full turn" (native authoring — NOT done here). Note: re
 
 ---
 
-## OVERLAY ANSWER/GLOSS REVIEW SWEEP — 2026-08-01 (Opus, autonomous; all 420 overlay packs)
+## OVERLAY ANSWER/GLOSS REVIEW SWEEP — 2026-08-01 (drafting tool A, autonomous; all 420 overlay packs)
 
 First full agent-review of the target-language overlay ANSWER + GLOSS layer:
 **all 7 directions, all 420 packs** (en-nl 88, en-fa 83, en-prs 82, en-de 54,
-en-it 53, en-fr 43, de-en 17). Report-only fan-out (Claude fresh agents + Codex);
+en-it 53, en-fr 43, de-en 17). Report-only fan-out (drafting tool A fresh agents + drafting tool B);
 shared rubric in `docs/content/OVERLAY_REVIEW_INSTRUCTIONS_2026-08-01.md`. The
 corpus is overwhelmingly clean — most packs 0 defects.
 
@@ -2452,7 +2452,7 @@ accepted_answers dropped it, and the choice grader is punctuation-sensitive.
 - en.a1.unit14.lesson02.exercise01.listen_repeat_request ("Sorry, can you repeat that?")
 Fixed by aligning accepted_answers to the displayed option (kept bare form too).
 
-### ROOT CAUSE — validator/grader gap (CODEX lane; recommend fixing)
+### ROOT CAUSE — validator/grader gap (DRAFTING TOOL B lane; recommend fixing)
 `compile_content.py:validate_option_accepted_answers_are_displayed` (~line 1159) uses
 `normalize_dialogue_option()` (~812) which strips terminal punctuation (`[^\w‌]+`
 → space), so it is punctuation-BLIND — while the runtime choice grader is
@@ -2477,7 +2477,7 @@ the inventory is a phantom — no such teachable unit; ignore.)
 Chain to close these 18 checkpoints (6 units × 3 X→en directions):
 1. Extend the 3 backfill scripts for a2_unit35..40 (add source paths + a lexeme spec dict
    per unit). The lexeme GLOSS is the learner's L1 word.
-   - **nl-en = Dutch glosses** → being drafted autonomously via Codex (reference lane,
+   - **nl-en = Dutch glosses** → being drafted autonomously via drafting tool B (reference lane,
      owner-verifiable). Draft; needs your native Dutch confirm.
    - **fa-en = Farsi glosses, prs-en = Dari glosses → NATIVE-RESERVED, BLOCKED ON YOU.**
      A wrong gloss ships as the shown correct answer (§0.1), so these must be authored/
@@ -2493,7 +2493,7 @@ checkpoints wait on native fa/prs lexeme glosses for a2_unit35..40.
 
 ## nl-en a2_unit35-40 PRACTICE PACKS — authored, reviewed, shipped (2026-08-01)
 
-Closed the nl-en half of the X→en checkpoint gap. Codex extended the nl-en lexeme
+Closed the nl-en half of the X→en checkpoint gap. drafting tool B extended the nl-en lexeme
 backfill for a2_unit35-40 (committed 304c029e); 6 packs authored by fresh agents,
 each independently fresh-context reviewed (full review tier, launch-gate).
 
@@ -2523,7 +2523,7 @@ pedagogical display-quality issue, same class as the 5 known-shipped en-nl B1 mi
   the unit37 overlay itself glosses vergadering. Defensible near-sense.
 - Minor (excluded from pools, no harm): by, food, taking, course, once, fixed, under, turn(37).
 
-**The real fix is an architecture decision (the owner/Codex):** add per-unit / per-sense gloss
+**The real fix is an architecture decision (the owner/drafting tool B):** add per-unit / per-sense gloss
 disambiguation to the backfill (or a pack-level slot_gloss override), which would resolve
 this class corpus-wide (including the B1 five). Until then, the shipped packs carry the
 same flag-and-ship status as existing content.

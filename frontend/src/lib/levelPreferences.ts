@@ -36,7 +36,7 @@ const CEFR_ORDER = ["A1", "A2", "B1", "B2", "C1", "C2"];
 // parlor-style additions, none of which are harder than unit 20). Without
 // this cap, "conversational" would recommend the literal last unit of a
 // level just because it has the highest index, which is exactly the bug
-// this file was rewritten to fix -- see CLAUDE.md's description of the
+// this file was rewritten to fix -- see the project notes' description of the
 // nl-72-unit incident for the full story.
 const MAX_LEVEL_PROGRESSION_UNITS = 20;
 
@@ -61,7 +61,7 @@ export function parseCefrLevel(contentKey: string | null | undefined): string | 
 // same order as the unit list this index will be applied to).
 //
 // Levels within a course are CEFR-clustered by construction: content
-// import only ever APPENDS new units to a course (see CLAUDE.md's
+// import only ever APPENDS new units to a course (see the project notes'
 // "content_key-based update-in-place" note), it never interleaves a
 // higher-level unit in among lower-level ones -- so a course's units, read
 // in order, walk through complete CEFR levels one at a time (all of A1,

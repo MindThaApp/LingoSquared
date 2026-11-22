@@ -2,7 +2,7 @@
 
 Research pass for the newly-approved MSA learning path (MSA-first,
 spoken-dialect track possibly later). Follows the standing sourcing
-policy in `CLAUDE.md` ("Sourcing policy widened...") and
+policy in the project notes ("Sourcing policy widened...") and
 `docs/content/AUTHORING_GUIDE.md` §10 — public-domain FSI/DLI/Peace
 Corps material tried first, CC-BY/CC0 treated as reference-only
 (no attribution surface built yet), CC BY-SA and DLI GLOSS/Headstart2
@@ -94,7 +94,7 @@ tool reads them.
 - **License/provenance**: DLI (Defense Language Institute Foreign
   Language Center) is a DoD component; its own-authored basic-course
   textbooks are the same category of federal work already accepted for
-  the DLI Dari Basic Course precedent in `CLAUDE.md`. **Distinct from
+  the DLI Dari Basic Course precedent in the project notes. **Distinct from
   the categorically-excluded "DLI GLOSS/Headstart2"** (dliflc.edu-
   hosted lesson products with embedded third-party copyrighted news
   media, per AUTHORING_GUIDE §10) — this is the plain Basic

@@ -3,7 +3,7 @@
 docs/NEXT_PHASE_ARCHITECTURE_SPEC.md section 3).
 
 The publish-gate bar is >=10hr teaching + >=10hr practice per launch
-pair, but neither number has ever actually been measured -- CLAUDE.md
+pair, but neither number has ever actually been measured -- the project notes
 and the spec both say so in as many words. This is the ruler.
 
 Two halves, deliberately different data sources:

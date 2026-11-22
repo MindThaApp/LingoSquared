@@ -1,14 +1,14 @@
-# Session Handoff — 2026-08-31 (DeepSeek Harness session, continued the Italian C1 rollout)
+# Session Handoff — 2026-08-31 (drafting tool C Harness session, continued the Italian C1 rollout)
 
-Read root `CLAUDE.md` + `docs/content/CLAUDE.md` + `docs/SESSION_HANDOFF_2026-08-31.md` (the
-prior Claude/Codex handoff) first. This file records what THIS session (the DeepSeek Harness /
-deepseek-worker session) did after Claude paused.
+Read the project notes + the content-lane notes + `docs/SESSION_HANDOFF_2026-08-31.md` (the
+prior drafting tool A/drafting tool B handoff) first. This file records what THIS session (the drafting tool C Harness /
+drafting tool C-worker session) did after drafting tool A paused.
 
 ## What this session did
-Continued the Italian C1 rollout from where the Claude session paused (units 01-04 done,
+Continued the Italian C1 rollout from where the drafting tool A session paused (units 01-04 done,
 committed locally, unpushed). Built the remaining **Italian C1 units 05-08** via the
-`~/bin/deepseek --pro --yolo` worker (DeepSeek balance had been restored after the `402
-Insufficient Balance` Claude hit):
+`~/bin/drafting tool C --pro --yolo` worker (drafting tool C balance had been restored after the `402
+Insufficient Balance` drafting tool A hit):
 
 | unit | slug | outcome | file(s) | status |
 |---|---|---|---|---|
@@ -52,12 +52,12 @@ All 8 realizations in `docs/content/realizations/it/c1_unitNN_*.yaml`; all 8 ove
    this rollout.
 
 ## Worker mechanics (this session)
-- **DeepSeek is back online** (balance restored). Command: pipe prompt via stdin:
-  `eval "$(grep -E '^export DEEPSEEK_API_KEY' ~/.zshrc)" && ~/bin/deepseek --pro --yolo < prompt.md`
+- **drafting tool C is back online** (balance restored). Command: pipe prompt via stdin:
+  `eval "$(grep -E '^export DRAFTER_C_API_KEY' ~/.zshrc)" && ~/bin/drafting tool C --pro --yolo < prompt.md`
   (run in background; do NOT embed the key in the command line). Workers are stateless and
   reliable; ~0 failure rate this session.
-- If DeepSeek hits `402` again, use **Codex** instead (see `docs/SESSION_HANDOFF_2026-08-31.md`
-  §3a): `node ".../codex-companion.mjs" task --cwd <repo> --background --write --fresh
+- If drafting tool C hits `402` again, use **drafting tool B** instead (see `docs/SESSION_HANDOFF_2026-08-31.md`
+  §3a): `node ".../the drafting-tool companion script" task --cwd <repo> --background --write --fresh
   --prompt-file <file>` (first dispatch in a session uses `--fresh`; later ones `--resume`).
 - **Dispatch prompts** were written to /tmp/it_c1_unitNN_prompt.md and must include: AUTHORING_
   PREFLIGHT.md verbatim; structural template pointer; exact spine-outcome text (grep fresh from
@@ -66,7 +66,7 @@ All 8 realizations in `docs/content/realizations/it/c1_unitNN_*.yaml`; all 8 ove
   verbatim; and a self-compile requirement. Prompt files for the next languages' unit01 can be
   modelled on these (recreate them; they're ephemeral in /tmp).
 - Serialize authoring: one worker dispatch at a time (verify files exist after each; the
-  previous Claude/Codex session's note says ~1-in-4-5 deepseek dispatches produced nothing and
+  previous drafting tool A/drafting tool B session's note says ~1-in-4-5 drafting tool C dispatches produced nothing and
   needed a retry — that did NOT recur this session).
 
 ## Character canon (verified for all 8 it C1 units)
@@ -77,7 +77,7 @@ Elena = Italian teacher (insegnante) from Milan, feminine forms. Established col
 ## Open decisions / reserved for the owner
 - **Push** the it-C1 commits (c9e2c753, c910793a, + the new units 05-08 commit once made) —
   owner-reserved, ask before pushing.
-- **DeepSeek balance** — appeared restored this session (pro worked for units 05-08). Confirm
+- **drafting tool C balance** — appeared restored this session (pro worked for units 05-08). Confirm
   before relying on it long-term.
 - App name, friend-beta loop, live deploy — unchanged/reserved per the prior handoff.
 
@@ -88,7 +88,7 @@ Elena = Italian teacher (insegnante) from Milan, feminine forms. Established col
 - Branch: `fix/launch-gate-content-review-wave1`. Use explicit pathspecs when committing.
 
 ## UPDATE (same session, later) — review + fixes completed
-- **Fresh-context review of the complete it C1 tier ran** (independent reviewer, zero authoring context, all 16 files). Result: **2 blockers, 8 should-fix**, plus nits and 2 native-judgment items. Units 05/07/08 were fully clean; defects concentrated in units 01-03 (authored by the prior Claude/Codex session) + one each in 04 and 06.
+- **Fresh-context review of the complete it C1 tier ran** (independent reviewer, zero authoring context, all 16 files). Result: **2 blockers, 8 should-fix**, plus nits and 2 native-judgment items. Units 05/07/08 were fully clean; defects concentrated in units 01-03 (authored by the prior drafting tool A/drafting tool B session) + one each in 04 and 06.
 - **Blockers:** B1 = unit03 lesson05.speak_two_tones vs lesson06 model contradiction (emphatic-vs-ironic to Elena, grading one of the two correct answers wrong); B2 = unit02 lesson06.comprehend_full had untaught vocabulary in reading `prompt.target_blocks` (compiler-invisible gap).
 - **Should-fixes:** S1 = unit01 three declared-but-absent `introduced_tokens` (proponi, e, rischi); S2 = unit02 two untaught-vocab accepted answers; S3 = unit02 speaking act missing the "explain the unstated judgement" half; S4 = unit03 diplomatic register label blur + production; S5 = unit04 confusable matching_pairs lefts (match_oral_moves, match_concessione); S6 = unit06 underdetermined translate_toro prompt.
 - **All blockers + should-fixes fixed in one consolidated worker dispatch.** Independently re-verified course-scoped: `en-it-c1` = **0 errors, content: pass** (single pre-existing §16 warning on unit06 L01 ex03, untouched). Blockers B1/B2 spot-checked applied.
@@ -98,12 +98,12 @@ Elena = Italian teacher (insegnante) from Milan, feminine forms. Established col
 ## UPDATE 2 (same session, later) — it C1 pushed; French C1 rollout started
 - **Pushed** the 5 it-C1 commits to `origin/fix/launch-gate-content-review-wave1` (owner-authorized). Italian C1 fully shipped: 8 units, reviewed, fixed, verified, pushed.
 - **Started French (fr) C1 rollout** — new course `en-fr-c1` (new manifest line after en-fr-b2). Same 8 universal C1 outcomes in the fixed order. Canon: **Inès** (pâtisserie apprentice in Lyon under Monsieur Lefebvre, young woman), **Mathieu** (her peer/friend); informal `tu`, never `vous`. `realization_key: fr.c1`, units `c1_unitNN_<slug>.yaml` in realizations/fr/ + overlays/en-fr/c1_unitNN.yaml, content keys `fr.c1.unitNN.<slug>`.
-- **fr C1 unit01 (discourse) DONE + verified** (0 errors, wired into manifest line 70 area). Units 02-08 dispatched in parallel to the deepseek worker (jobs bash-17..bash-23), not yet collected.
+- **fr C1 unit01 (discourse) DONE + verified** (0 errors, wired into manifest line 70 area). Units 02-08 dispatched in parallel to the drafting tool C worker (jobs bash-17..bash-23), not yet collected.
 - **Next:** collect units 02-08, verify each (2 files, content_key match), append to the en-fr-c1 manifest line, course-scoped verify, then fresh-context review of the whole fr C1 tier, fix, commit, ask before push. Then ru/ar/ro/pl/hi.
 - Prompt templates: /tmp/fr_c1_unit0*.md (hand-written unit01-02; units 03-08 generated by /tmp/gen_fr_prompts.py). Recreate via the generator if /tmp is cleared.
 
 ## UPDATE 3 (same session, later) — French C1 all 8 units authored + verified
-- **All 8 fr C1 units authored** (units 02-08 in parallel via deepseek worker; unit01 done earlier). All self-validated 0 errors (unit08 has one intentional §16 5-pair matching warning; unit06 similar).
+- **All 8 fr C1 units authored** (units 02-08 in parallel via drafting tool C worker; unit01 done earlier). All self-validated 0 errors (unit08 has one intentional §16 5-pair matching warning; unit06 similar).
 - Wired all 8 into the `en-fr-c1` manifest line. **Course-scoped verify: en-fr-c1 = 0 errors, content: pass** (2 §16 soft-warnings only).
 - Content keys verified matching (fr.c1.unitNN.<slug> ↔ en-fr.c1.unitNN); no stray duplicate realization files.
 - **Fresh-context review of the complete fr C1 tier DISPATCHED** (independent subagent) — pending results.

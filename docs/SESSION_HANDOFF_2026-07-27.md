@@ -8,7 +8,7 @@ This doc is the *operational* snapshot for immediate continuation.
 - Repo `/Users/owner/dev/LingoSquared` (NOT the iCloud CWD). Branch
   `fix/launch-gate-content-review-wave1`, **UNPUSHED**. HEAD **359d85be**.
 - ~22 commits this session (7522844a..HEAD). Working tree clean apart from the
-  long-standing untracked noise (.claude/settings.json, a stale .pyc,
+  long-standing untracked noise (`<local tool dir>` a stale .pyc,
   .firecrawl/, .playwright-mcp/, docker-compose.*.yml, .env.faqa, this file).
 - Content gate ledger: **0 DEAD / 2 tier-short / 116 below-floor** (unchanged
   baseline). Run `bash -c '.content-venv/bin/python scripts/_practice_unit_scope_check.py'`.
@@ -78,7 +78,7 @@ deploy-effect / native-confirm.
 2. **Fix the CLEAN pack-side ones** (see patterns below), gate
    (`practice-validate` 0 err; unit-scope no new DEAD; self-reference 0; Dari 0
    for prs/en-prs), commit per direction with the wave-style message + the
-   `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>` line.
+   the usual attribution trailer line.
 3. **Queue the non-clean ones** as fix-waves in `docs/OWNER_REVIEW_BACKLOG.md`
    (see "Native review BATCH 2" for the format).
 4. **Flip fully-clean packs** to `review.status: reviewed` + `fresh_context: 'true'`
@@ -101,7 +101,7 @@ deploy-effect / native-confirm.
   unit07 $6→$9 in fa-en/prs-en/nl-en (de-en already fixed).
 - **Mis-glossed homograph shown as answer** → lesson-scoped `english_gloss` override
   in the backfill (deploy-effect). Ex: باشید, خراب.
-- **Register (fa-en formal→colloquial)** → focused native sonnet agent, calibrated to
+- **Register (fa-en formal→colloquial)** → focused native drafting tool A agent, calibrated to
   the compliant exemplar (a1_17); verify graded values byte-identical.
 
 ## Fix-waves QUEUED (NOT clean pack-side — backfill/deploy/native), see backlog
@@ -127,12 +127,12 @@ Reviewed so far: batch 1 = en-fa/en-prs wave-4 packs (20); batch 2 = fa-en/prs-e
 a1_01–05 band (20); batch 3 = fa-en a1_02/03/04/06/08 + prs-en a1_06–10 + nl-en a1_04/06/07/08/09 +
 en-nl a1_06–10 (20). ~470 packs remain. Batch 4 = continue the pre-recipe a1 band UPWARD on the four
 X-en/en-X launch dirs (next untouched a1 units per dir, e.g. the a1_10–15 range, filling gaps), 4
-sonnet reviewers, ~5 packs each, one direction per agent. Reviewer-prompt shape: read
-AUTHORING_PREFLIGHT.md + docs/content/CLAUDE.md, read every template + its realization + overlay,
+drafting tool A reviewers, ~5 packs each, one direction per agent. Reviewer-prompt shape: read
+AUTHORING_PREFLIGHT.md + the content-lane notes, read every template + its realization + overlay,
 independently run the direction's `backfill_lexemes_*.py::iter_specs()` for ground-truth pools, cross
 -check against `backend/app/practice/service.py` (lexeme_matches / _distractor_values / build_prompt)
 + `backend/app/review/grading.py`, return structured findings (never trust the pack's own notes).
-Dispatch on model `"sonnet"` per [[feedback_2026-07-26_limit-fable-subagent-usage]].
+Dispatch on model `"drafting tool A"` per [[feedback_2026-07-26_limit-external-subagent-usage]].
 
 ## Scratchpad tools (session-specific → RECREATE if needed; logic in git history)
 `pool_check.py` (list a tag's unit-scoped pool via iter_specs + the ported

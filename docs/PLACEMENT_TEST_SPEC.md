@@ -29,8 +29,8 @@ The app already ships a **self-report** level picker (`LevelCheckPage`, 3 button
 - **Frontend reuse:** `ExerciseRenderer` (`components/exercises/ExerciseRenderer.tsx`) renders any type from `{id, type, order, prompt}` + `onAnswer(AnswerResponse)` + `gradedResult`. `CheckpointPage.tsx` is a near-perfect template for the runner UI (progress bar, per-item feedback, quit confirm). Shared API layer: `packages/shared/src/api/{client,endpoints,types}.ts` with `get<T>`/`post<T>` helpers and the `CatalogApi`-style object pattern.
 
 ### 1.3 CONTRACT / architecture-why (relevant)
-- Per root `CLAUDE.md`: **`docs/CONTRACT.md` must be updated BEFORE implementing any contract change** (new endpoints), and it is Claude's lane.
-- `docs/APP_SPEC_FOR_FABLE_REVIEW.md` onboarding/course rationale: English-anchored directed paths; course = one CEFR-anchored path; content only ever *appends* higher levels (so a course's units walk complete CEFR levels in order — the basis for level-block sampling).
+- Per the project notes: **`docs/CONTRACT.md` must be updated BEFORE implementing any contract change** (new endpoints), and it is drafting tool A's lane.
+- `docs/APP_SPEC_FOR_REVIEW.md` onboarding/course rationale: English-anchored directed paths; course = one CEFR-anchored path; content only ever *appends* higher levels (so a course's units walk complete CEFR levels in order — the basis for level-block sampling).
 - **Historical note:** `CONTRACT.md`'s checkpoint section (line ~1274) records that a *placement-quiz enrollment system* was previously **rejected** in favor of the unit checkpoint. This MVP is materially different from what was rejected — it is recognition-only, side-effect-free (no enrollment/progress mutation in MVP), and reuses existing reviewed exercises — and it is now explicitly approved (CEO sign-off, 2026-08-05).
 
 ---
@@ -136,7 +136,7 @@ setPlacementRecommendation(courseId, rec): void
 
 **Goal:** persist the recommendation server-side and *actually advance* the learner instead of only highlighting.
 
-- **Migration `00NN_placement_result.py`** (Codex's lane; must be fresh-migrate-safe + existence-guarded per `backend/CLAUDE.md`): table `placement_results(id, user_id FK, course_id FK, recommended_level, recommended_unit_id FK, per_level JSON, created_at)`, unique-ish on `(user_id, course_id)` latest-wins.
+- **Migration `00NN_placement_result.py`** (drafting tool B's lane; must be fresh-migrate-safe + existence-guarded per the backend notes): table `placement_results(id, user_id FK, course_id FK, recommended_level, recommended_unit_id FK, per_level JSON, created_at)`, unique-ish on `(user_id, course_id)` latest-wins.
 - `POST /courses/{id}/placement/result` gains a side effect: upsert the row; optionally, on an advanced recommendation, **seed `UserLexemeSRS` for all lexemes of units below the recommended level** and mark those units' checkpoints passed — reusing the *exact* SRS-seeding block already in `checkpoint_result()` (`router.py:1684-1753`), so the learner's home "continue", progress %, and review queue reflect the placement (mid-course entry becomes real, not cosmetic). **Must obey the standing invariant: never corrupt SRS — seed only, idempotent, `orthography_strict` unaffected.**
 - Frontend reads server recommendation via a new `GET /me/placement/{course_id}` so it syncs across devices (localStorage becomes a cache). `CourseUnitsPage` prefers the server value when present.
 
@@ -152,7 +152,7 @@ Placement users **have not learned anything**, so probes must be **recognition-b
 - **`matching_pairs`** ✅ — pairs displayed; recognition; choice-graded via `canonical_pairs`; no production/typing. (Heed the frontend footgun: index-keyed tiles — already fixed in `MatchingPairs.tsx`.)
 
 **Excluded and why:**
-- **All `listen_*` (`listen_select`, `listen_type`, `listen_order`, `dictation`)** — audio-gated (`media_asset_key`); **`prs` has zero TTS coverage** (`backend/CLAUDE.md`), so audio probes would be unfair/broken for a launch-gate language. Excluded universally to keep one code path.
+- **All `listen_*` (`listen_select`, `listen_type`, `listen_order`, `dictation`)** — audio-gated (`media_asset_key`); **`prs` has zero TTS coverage** (`backend/DRAFTING TOOL A.md`), so audio probes would be unfair/broken for a launch-gate language. Excluded universally to keep one code path.
 - **Production types (`translation`, `reverse_translation`, `writing_prompt`, `dialogue_response`, `speak_*`, free-text `fill_in_blank`)** — require *recall*, not recognition; a genuinely knowledgeable placement user would still fail on unfamiliar exact orthography (**fa/prs graded script-strict** per `grading.py`), inverting the measurement. Excluded from MVP; a later tier could add `word_order` (self-contained word bank) as a "harder" discriminator.
 
 **Deterministic selection** (reproducible + unit-testable): for each level, collect all `multiple_choice`/`matching_pairs` exercises whose owning `Unit.content_key` parses to that level, sort by `(unit.order, lesson.order, exercise.order, exercise.id)`, and take the first `block_size` (4). Stable, no per-user RNG needed (placement isn't SRS). If a level yields < 4, either take what exists or drop the level from the ladder (drop A-tier only if A1 itself can't fill one block → 409 `placement_unavailable`). **Self-contained guarantee:** MC/matching prompts carry their own options/pairs and never reference prior lesson context, so "untaught-dependence traps" cannot occur.
@@ -161,14 +161,14 @@ Placement users **have not learned anything**, so probes must be **recognition-b
 
 ## 5. Effort / build plan
 
-**CONTRACT.md FIRST (before any code, Claude's lane):** document endpoints A/B/C — paths, request/response schemas, error codes (`course_not_found`, `placement_unavailable`, `exercise_not_in_placement`), auth (`current_user`), rate limit (`ANSWER_RATE_LIMIT`), and the **explicit statement that `/placement/answer` and `/placement/result` have no side effects** (no XP/SRS/LessonProgress) in the MVP.
+**CONTRACT.md FIRST (before any code, drafting tool A's lane):** document endpoints A/B/C — paths, request/response schemas, error codes (`course_not_found`, `placement_unavailable`, `exercise_not_in_placement`), auth (`current_user`), rate limit (`ANSWER_RATE_LIMIT`), and the **explicit statement that `/placement/answer` and `/placement/result` have no side effects** (no XP/SRS/LessonProgress) in the MVP.
 
-**Backend (Codex's lane; dispatch + Claude-verify):**
+**Backend (drafting tool B's lane; dispatch + drafting tool A-verify):**
 1. `backend/app/schemas/api.py` — `PlacementProbeOut`, `PlacementSetOut`, `PlacementAnswerIn` (reuse `AnswerIn.response` union + `_bounded_payload_size`), `PlacementAnswerOut`, `PlacementResultIn`, `PlacementResultOut`.
 2. `backend/app/api/router.py` — 3 endpoints. New helper `build_placement_set(db, course)` (level-grouped deterministic sampling); reuse `grade()` + `resolve_script()` + `decode_feedback()`; a `recommend_from_answers(...)` pure helper (the §2.1 table) — put it in `app/review/` so it's unit-testable without HTTP.
 3. No migration (MVP).
 
-**Frontend (Claude's lane):**
+**Frontend (drafting tool A's lane):**
 4. `frontend/src/lib/placementPreferences.ts` (new).
 5. `frontend/src/pages/PlacementTestPage.tsx` (new; fork `CheckpointPage`).
 6. `frontend/src/App.tsx` — add `/courses/:courseId/placement` route (static import).

@@ -6,7 +6,7 @@ Paths are relative to the repo root; `f/` is short for `frontend/src/`, `sh/` fo
 Companion files: `01-core-spec.md` (the target app) and `02-platforms.md` (where to ship it).
 
 Related earlier work, which this review builds on and does not repeat:
-- `docs/APP_SPEC_FOR_FABLE_REVIEW.md` §9 "Delight / polish" on branch `origin/docs/delight-spec` (not merged). Its ranked gap list (§9.11) is accurate; where I agree I cite it as "D-n".
+- `docs/APP_SPEC_FOR_REVIEW.md` §9 "Delight / polish" on branch `origin/docs/delight-spec` (not merged). Its ranked gap list (§9.11) is accurate; where I agree I cite it as "D-n".
 - `.local/logs/msstore-pwa-readiness.md`, `.local/logs/offline-windows-feasibility.md`, `.local/logs/a11y-2026-11-07.md`.
 
 ## 1. Summary
@@ -153,7 +153,7 @@ A solo developer cannot carry a React Native rewrite of fourteen exercise types,
 Lessons are fetched one at a time with answers stripped. Compiled course JSON for the launch set is small (39.7 MB raw, 3.0 MB gzip per `offline-windows-feasibility.md` §2), so versioned downloadable course packs are practical. Audio is the heavy part (est. 100–450 MB for nl/fa/prs) and is not rendered yet (`docs/PROJECT_STATE.md`, open gaps) — without audio, listening exercises fall back to browser TTS, which has no Persian or Dari voice on Windows.
 
 **R24. No performance budget is measured. (M) — D-13**
-No Lighthouse/INP/CLS check in `.github/workflows/ci.yml` or `scripts/verify.sh`. The Whisper model is about 150 MB on first voice use (`frontend/CLAUDE.md`, STT section) with no size warning or Wi-Fi check in the UI.
+No Lighthouse/INP/CLS check in `.github/workflows/ci.yml` or `scripts/verify.sh`. The Whisper model is about 150 MB on first voice use (`frontend/the project notes, STT section) with no size warning or Wi-Fi check in the UI.
 
 **R25. Gamification tone. (product decision)**
 Hearts, gems and leaderboard shipped flag-gated and default-off after being listed as rejected scope (`docs/PROJECT_STATE.md:242+`; `origin/docs/delight-spec` §9 note). The spec keeps them off: hearts punish mistakes, which works against a product whose differentiator is careful feedback. Streak, daily goal and quests are enough.

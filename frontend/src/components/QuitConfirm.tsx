@@ -9,7 +9,7 @@ interface QuitConfirmProps {
 
 // Shared in-app confirm overlay used by LessonRunnerPage/CheckpointPage/
 // ReviewPage's exit affordance. Plain conditional div, no modal library --
-// see CLAUDE.md's standing "no new dependency" instruction for this task.
+// see the project notes' standing "no new dependency" instruction for this task.
 // Accessible modal: initial focus on the safe "keep going" action, Tab
 // trapped inside, Escape cancels, focus restored to the opener on close.
 export function QuitConfirm({ message, onKeepGoing, onQuit }: QuitConfirmProps) {

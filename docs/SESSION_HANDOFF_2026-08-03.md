@@ -28,15 +28,15 @@ Verified per feature: real grading code (dictation: exact→correct, 1-char typo
 ## Immediate next steps / open decisions
 1. **the owner's calls:** (a) pick a name from `docs/APP_NAME_SHORTLIST.md`; (b) **live deploy** — still blocked (no authorized SSH key on 192.168.4.4; app-admin 401). The dev DB has all this session's work; live does not.
 2. **Keep scaling (low value):** nl **A1** for either modality — A1 sentences are trivial (dictation) and passages simple (glossing), so marginal value is low; skipped deliberately.
-3. **Other languages:** dictation/reading-audio need TTS. **fa** works once `AZURE_SPEECH_KEY` is provisioned; **prs** has zero TTS (do NOT author audio-prompt content for prs — silent/unanswerable). See `backend/CLAUDE.md`.
+3. **Other languages:** dictation/reading-audio need TTS. **fa** works once `AZURE_SPEECH_KEY` is provisioned; **prs** has zero TTS (do NOT author audio-prompt content for prs — silent/unanswerable). See `backend/DRAFTING TOOL A.md`.
 4. **Next feature:** skill-targeted practice (3rd lingua.com finding) — spec it like the other two if pursued.
 5. **Browser verify** the two new features live (see caveat above).
 
 ---
 
 ## Known follow-ups (minor, non-blocking)
-- **Reading-track tokenizer mismatch:** the compiler's gloss-key validator (`validate_reading_glosses`, `[\w‌]+`) SPLITS the possessive apostrophe (`collega's`→`collega`+`s`) while the frontend `GlossableText` tokenizer KEEPS it. Effect: a `collega's` gloss key WARNs at compile but still taps in-app. B2 unit01 kept it (warns, taps); B1 unit03 skipped it. **Fix = align the validator to allow internal apostrophes** (Codex, `scripts/compile_content.py`).
-- **Dictation backfill homograph mis-glosses** (excluded-from-pool but wrong in DB): was/stellen/eten/begin/waar/best/Met/tot/over/se/Beste — needs the homograph-override mechanism (Codex). List in `docs/CONTENT_DEFECT_REGISTRY.md`-adjacent notes / prior handoffs.
+- **Reading-track tokenizer mismatch:** the compiler's gloss-key validator (`validate_reading_glosses`, `[\w‌]+`) SPLITS the possessive apostrophe (`collega's`→`collega`+`s`) while the frontend `GlossableText` tokenizer KEEPS it. Effect: a `collega's` gloss key WARNs at compile but still taps in-app. B2 unit01 kept it (warns, taps); B1 unit03 skipped it. **Fix = align the validator to allow internal apostrophes** (drafting tool B, `scripts/compile_content.py`).
+- **Dictation backfill homograph mis-glosses** (excluded-from-pool but wrong in DB): was/stellen/eten/begin/waar/best/Met/tot/over/se/Beste — needs the homograph-override mechanism (drafting tool B). List in `docs/CONTENT_DEFECT_REGISTRY.md`-adjacent notes / prior handoffs.
 - **`ADMIN_EMAILS`:** local dev now `admin@example.com,[admin email]` (recreated api). **LIVE still needs the same env change + the owner registering that account** (deploy-time). See `project-admin-credentials` memory.
 - 2 B2 units have a SECOND reading card that's un-glossed (I glossed the primary passage per unit).
 
@@ -47,16 +47,16 @@ Verified per feature: real grading code (dictation: exact→correct, 1-char typo
 - **Reading glosses** (READING_TRACK_SPEC §4-5, brief at `scratchpad/reading_gloss_brief.md`): overlay-only `glosses:` map; keys = **exact surface tokens** (case-sensitive — the frontend matches exactly; the validator casefold-matches, so use exact case to satisfy both); gloss content/hard words (~40-70%), skip function words + proper names + apostrophe tokens; homograph-in-one-gloss → write a gloss covering both senses.
 - **Import order / serve:** content import is additive (updates by unit order). Dictation content needs the `ck_exercises_type` constraint widened first (migration 0027 applied to dev DB via `alembic stamp 0026 && alembic upgrade head` — the dev DB is create_all/unversioned). Reading glosses ride in the existing `ContentItem.content` JSON (no migration).
 - **Gotchas hit:** (a) `docker compose run` pytest exceeds the 120s Bash timeout — run `run_in_background: true`; and a stale isolated test DB with open connections blocks recreate → use a fresh unique DB name + `pg_terminate_backend`. (b) `UID` is a **readonly** bash var — don't use it as a loop var (use `UNIT_ID`). (c) This shell is **zsh** — unquoted `$VAR` does NOT word-split (write bash scripts to a file and run with `bash`, or use `${=VAR}`). (d) macOS `sed` has no `\b`. (e) recreate the running api container (`docker compose up -d --force-recreate api`) after backend code changes — `.env`/code changes need it; and rsync `frontend/dist/ → backend/web_dist/` + `nginx -s reload` to serve a new frontend build locally.
-- **Codex dispatch:** `node <companion 1.0.6> task --cwd $REPO --background --write --fresh --prompt-file <file>`; poll `status <job> --json`, get `result <job>`. Always diff Codex's output before applying. Both Codex tasks this session were clean.
+- **drafting tool B dispatch:** `node <companion 1.0.6> task --cwd $REPO --background --write --fresh --prompt-file <file>`; poll `status <job> --json`, get `result <job>`. Always diff drafting tool B's output before applying. Both drafting tool B tasks this session were clean.
 
 ---
 
 ## Key file map
 - **Specs (buildable, with build prompts):** `docs/DICTATION_EXERCISE_SPEC.md`, `docs/READING_TRACK_SPEC.md`.
-- **Roadmap:** `docs/SONNET_BUILD_PROMPT_UPGRADES.md` (Phase H = dictation, Phase I = reading track).
+- **Roadmap:** `docs/BUILD_PLAN_UPGRADES.md` (Phase H = dictation, Phase I = reading track).
 - **State:** `docs/PROJECT_STATE.md` (Phases A–I shipped; dictation + reading track entries).
 - **Authoring rules:** `docs/content/AUTHORING_GUIDE.md` §14a (dictation).
 - **Name shortlist:** `docs/APP_NAME_SHORTLIST.md`.
 - **Content:** dictation in `docs/content/realizations/nl/{a2,b1,b2}_unit*.yaml` + `overlays/en-nl/…`; reading `glosses:` maps in `docs/content/overlays/en-nl/{a2,b1,b2}_unit*.yaml`.
-- **Ship runbook (the owner's, from a prior session):** claude.ai artifact "Ship Lingo² — store, sign-in & feedback runbook" (Phase 1 = public HTTPS backend, the gating blocker).
+- **Ship runbook (the owner's, from a prior session):** drafting tool A.ai artifact "Ship Lingo² — store, sign-in & feedback runbook" (Phase 1 = public HTTPS backend, the gating blocker).
 - Memory: `project_2026-08-03_dictation-reading-modalities.md` (this session) + `project-admin-credentials` (updated).

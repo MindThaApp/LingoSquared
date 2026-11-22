@@ -42,7 +42,7 @@
 -- passing the wrong flag.
 --
 -- Running it against the LIVE database is a destructive live-DB
--- operation and requires the owner present (root CLAUDE.md, "Deploy
+-- operation and requires the owner present (the project notes, "Deploy
 -- authority"). See docs/PRE_DEPLOY_RUNBOOK.md → "Removing the
 -- already-seeded demo courses".
 --

@@ -3,7 +3,7 @@
 
 Research pass extending the sourcing work already done for Arabic MSA
 (`SOURCES_ARABIC_MSA.md`) to every other language this project has
-scoped or might scope. Follows the standing policy in `CLAUDE.md`
+scoped or might scope. Follows the standing policy in the project notes
 ("Sourcing policy widened...") and `docs/content/AUTHORING_GUIDE.md`
 §10: public-domain FSI/DLI/Peace Corps material is immediately usable
 (never verbatim — modernize per §10); CC-BY needs a not-yet-built
@@ -26,7 +26,7 @@ quality was the priority per the task's depth-over-breadth framing.
 
 ---
 
-## Spanish (es) — lane parked per CLAUDE.md, mapped for when it resumes
+## Spanish (es) — lane parked per the project notes, mapped for when it resumes
 
 Already investigated and decided in `AUTHORING_GUIDE.md` §10
 (2026-07-07): **FSI Spanish Basic Course** (PD, 4 volumes, 55 units,
@@ -41,7 +41,7 @@ resumes). **No new work needed here — defer to §10 until es resumes.**
 
 ---
 
-## French (fr) — lane parked per CLAUDE.md, mapped for when it resumes
+## French (fr) — lane parked per the project notes, mapped for when it resumes
 
 Already investigated and decided in `AUTHORING_GUIDE.md` §10: **FSI
 French Basic Course** (PD, 2 volumes ~476+577pp, with audio) is
@@ -274,7 +274,7 @@ the very first A0/A1 vocabulary, then move to candidate #2's
 page-image reading for real depth — same "thin clean-text + deep
 scanned" pattern seen in Egyptian/Levantine Arabic and Hindi below.
 Note ro is **not currently one of the project's 18 scoped launch
-paths** per root `CLAUDE.md` — this mapping is exploratory, for if/when
+paths** per the project notes — this mapping is exploratory, for if/when
 it's added.
 
 ---
@@ -342,7 +342,7 @@ is not currently a scoped launch path** — mapped exploratorily.
 
 ## Hindi (hi)
 
-Already an active but small course per root `CLAUDE.md`'s "Seeded
+Already an active but small course per the project notes's "Seeded
 courses" note (hi has real content authored, `AUTHORING_GUIDE.md`
 already documents a Devanagari tokenizer footgun). This section maps
 PD source depth specifically, which hadn't been done yet.
@@ -523,7 +523,7 @@ Per the task's instruction to check for "better fa/prs/nl supplements"
 ### fa/prs: no new supplement found
 
 Re-checked per the task's instructions but found nothing beyond what
-`AUTHORING_GUIDE.md` §10 and root `CLAUDE.md`'s Secrets section already
+`AUTHORING_GUIDE.md` §10 and the project notes's Secrets section already
 document and have explicitly closed (FSI Persian Basic Course, Peace
 Corps Dari, the DLI Dari Basic Course, and Intermediate Dari
 ED131692 already covers the intermediate step). **Consistent with the

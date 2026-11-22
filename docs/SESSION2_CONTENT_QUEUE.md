@@ -1,17 +1,17 @@
-# Session 2 (CONTENT) — queued notes for BUILD_LOG.md / CLAUDE.md
+# Session 2 (CONTENT) — queued notes for BUILD_LOG.md / the project notes
 
-Per the parallel-session ownership map in `docs/SONNET_BUILD_PROMPT_UPGRADES.md`:
+Per the parallel-session ownership map in `docs/BUILD_PLAN_UPGRADES.md`:
 Session 1 is the default editor for the build log. This file queues
 Session 2's entries for Session 1 to fold in — not edited directly into
-`CLAUDE.md`/`docs/BUILD_LOG.md` to avoid a concurrent-write collision.
+the project notes/`docs/BUILD_LOG.md` to avoid a concurrent-write collision.
 
 ## 2026-07-05 overnight — es/fr unit01 review finished, nl unit01 authored + reviewed (both directions)
 
 Self-identified as Session 2 (CONTENT) this session, per the ownership
-map. All work below: authored/reviewed via Codex (`--background --write`,
+map. All work below: authored/reviewed via drafting tool B (`--background --write`,
 fresh context per review pass), independently verified by the driving
-Claude session (real compiler validation re-run, not just trusting
-Codex's self-report; actual file reads to spot-check claimed fixes).
+drafting tool A session (real compiler validation re-run, not just trusting
+drafting tool B's self-report; actual file reads to spot-check claimed fixes).
 
 **es/fr unit01 review cycle finished** (both were drafted,
 `status: unreviewed`, per the content-program instruction to finish
@@ -30,7 +30,7 @@ in-flight units before starting nl):
   violations.
 - Both now `review: {status: reviewed, required_next_reviewer: null}`
   (verified against the file directly), 0 errors/0 warnings on
-  `compile_content.py compile` (re-run independently, not just Codex's
+  `compile_content.py compile` (re-run independently, not just drafting tool B's
   claim).
 - Per the plan of record: es/fr are now parked until nl is done — do
   not resume es/fr work without checking whether nl still needs
@@ -43,7 +43,7 @@ first real content for the reference language:
   established "Latin cohort" unit01 scope (6 lessons, covers both
   `universal.a1.greetings.open_close_exchange` and
   `universal.a1.introductions.exchange_identity` in one unit, same
-  shape as es/fr) — deliberately NOT templated off es/fr (Codex was
+  shape as es/fr) — deliberately NOT templated off es/fr (drafting tool B was
   explicitly told not to open those files at all). Core teaching point
   is the jij/je vs u register distinction with correct matching verb
   forms (Ben jij / Bent u, kom je / komt u). Full audio-ready: nl has
@@ -97,7 +97,7 @@ order makes sense to them. I did not touch Docker, migrations, or any
 code file this session, per the CONTENT lane boundary.
 
 **New context absorbed mid-session** (found by reading the
-Session-1/3-updated CLAUDE.md, not told directly): publish-gate scope
+Session-1/3-updated the project notes, not told directly): publish-gate scope
 narrowed to en↔nl and en↔fa/prs only (6 paths) — es/fr and the rest
 are post-launch drip content. This retroactively confirms tonight's
 prioritization (finish es/fr's in-flight review, then focus on nl) was
@@ -161,7 +161,7 @@ warnings solo and combined with unit01+02.
 **Content-depth tally**: 3 of ~22 estimated nl units done (en→nl
 direction). Continuing.
 
-## 2026-07-05 overnight, continued — nl unit04 (time) authored + reviewed; Codex rate-limited
+## 2026-07-05 overnight, continued — nl unit04 (time) authored + reviewed; drafting tool B rate-limited
 
 `docs/content/realizations/nl/a1_unit04_time.yaml` +
 `docs/content/overlays/en-nl/a1_unit04.yaml` — covers
@@ -172,7 +172,7 @@ vier=3:30 — verified consistent throughout, e.g. "half drie, dus om
 harder voor-half/over-half five/ten-minute interval system for A1
 (confirmed absent via grep).
 
-The review task technically reported `status: "failed"` — Codex hit a
+The review task technically reported `status: "failed"` — drafting tool B hit a
 usage/rate limit ("try again at 5:16 AM", timezone unconfirmed) while
 composing its final report, AFTER its actual edits were already
 applied. Verified this myself rather than assuming the work was lost:
@@ -181,25 +181,25 @@ block shows `status: reviewed` with specific real notes, no
 voor-half/over-half drift, all media_asset_key references resolve to
 declared assets except one legitimately unused declared-but-unreferenced
 asset (`nl.a1.audio.time.two_oclock.01`) — minor, non-breaking, left
-for the next Codex task to clean up rather than editing content myself
+for the next drafting tool B task to clean up rather than editing content myself
 (not my lane). Net: unit04 is genuinely done despite the wrapper
 task's "failed" status — don't assume "failed" always means lost work,
 but don't skip re-verifying either.
 
-**Codex is rate-limited as of ~04:06 BST.** Pausing new Codex
+**drafting tool B is rate-limited as of ~04:06 BST.** Pausing new drafting tool B
 dispatches until a retry succeeds. If you're reading this and it's
 now well past 5:16 AM your time and nothing further has happened,
-Codex may still be limited or something else stalled — check
-`codex login status` and try a small task manually before assuming
+drafting tool B may still be limited or something else stalled — check
+`drafting tool B login status` and try a small task manually before assuming
 the pipeline is just idle-by-design.
 
 **Content-depth tally**: 4 of ~22 estimated nl units done (en→nl
 direction).
 
-## 2026-07-05 overnight, continued — Codex still rate-limited; authored nl unit05 myself as a stopgap
+## 2026-07-05 overnight, continued — drafting tool B still rate-limited; authored nl unit05 myself as a stopgap
 
-Per the owner's explicit direction ("continue whatever codex was working
-on before it got interrupted... check codex later to hand over"), I
+Per the owner's explicit direction ("continue whatever drafting tool B was working
+on before it got interrupted... check drafting tool B later to hand over"), I
 authored `docs/content/realizations/nl/a1_unit05_family.yaml` +
 `docs/content/overlays/en-nl/a1_unit05.yaml` directly myself (covers
 `universal.a1.family.describe_relationships`) rather than idling.
@@ -227,21 +227,21 @@ Validated: unit05 solo = 0 errors/0 warnings; combined with units
 
 **IMPORTANT — this is authored-but-UNREVIEWED, explicitly.** Both
 files' review blocks are `status: unreviewed`,
-`required_next_reviewer: claude`, and say so honestly in their notes.
+`required_next_reviewer: review_tool_a`, and say so honestly in their notes.
 I did NOT mark this reviewed myself — a same-session author cannot
 also be the fresh-context reviewer, that defeats the entire point of
 the review step this project has relied on all night to catch real
 bugs (see: the Belgium-language ambiguity, the wrong calendar weekday,
 the unconstrained-distractor bugs, etc. — all caught by review, not
-by the author's own check). **Next Codex session/task: run the same
+by the author's own check). **Next drafting tool B session/task: run the same
 fresh-context review cycle on unit05 that every other unit has
 gotten, before it's considered done.**
 
-Codex hit a usage/rate limit at ~04:06 BST tonight ("try again at
+drafting tool B hit a usage/rate limit at ~04:06 BST tonight ("try again at
 5:16 AM", timezone unconfirmed). Checked again at 04:19 BST — likely
 still too early to retry meaningfully. Continuing to author further
 units myself in the meantime per the owner's direction, accumulating a
-review backlog for whenever Codex is back, rather than idling.
+review backlog for whenever drafting tool B is back, rather than idling.
 
 **Content-depth tally**: 5 of ~22 estimated nl units exist (en→nl
 direction), but unit05 specifically needs its review before it counts
@@ -271,19 +271,19 @@ reworded to only reference already-introduced tokens.
 
 Validated: unit06 solo = 0/0; combined with units 01-05 = 0/0.
 
-**Also authored-but-UNREVIEWED**, same as unit05 — both need Codex's
+**Also authored-but-UNREVIEWED**, same as unit05 — both need drafting tool B's
 fresh-context review before being considered done.
 
 **Content-depth tally**: 6 of ~22 estimated nl units exist (en→nl
 direction); units 05-06 specifically are pending review.
 
-Codex still showing rate-limited as of ~04:25 BST (haven't wasted a
+drafting tool B still showing rate-limited as of ~04:25 BST (haven't wasted a
 real attempt testing since too little time has passed since the
 04:06 failure — will test again after a longer gap).
 
-## 2026-07-05 overnight, continued — Codex back online, nl unit05 reviewed
+## 2026-07-05 overnight, continued — drafting tool B back online, nl unit05 reviewed
 
-Codex usage limit reset (confirmed working again ~04:35 BST, roughly
+drafting tool B usage limit reset (confirmed working again ~04:35 BST, roughly
 30 min after the failure, closer to the local-time interpretation of
 "5:16 AM" than I'd assumed — though still not fully clear which
 timezone that was).
@@ -323,7 +323,7 @@ Confirmed the wilt-u/wil-je t-drop grammar claim against Onze Taal
 token. `status: reviewed`, `required_next_reviewer: null`, 0/0 solo
 and combined with units 1-5 (independently re-verified).
 
-**Review backlog from the Codex outage is now fully cleared** — all 6
+**Review backlog from the drafting tool B outage is now fully cleared** — all 6
 nl units (en→nl direction) are authored AND reviewed:
 1. Greetings (jij/je vs u)
 2. Numbers
@@ -338,16 +338,16 @@ short exercise instead of a dedicated clip" issue — I should watch for
 this myself before handing off, not just rely on review to catch it
 every time.
 
-Codex is confirmed fully back online. Resuming normal Codex-authored
+drafting tool B is confirmed fully back online. Resuming normal drafting tool B-authored
 content from here (next: nl unit07, or whatever the owner/the next session
 prioritizes).
 
-## 2026-07-05 overnight, continued — nl unit07 (shopping/market) authored + reviewed, fully Codex
+## 2026-07-05 overnight, continued — nl unit07 (shopping/market) authored + reviewed, fully drafting tool B
 
 `docs/content/realizations/nl/a1_unit07_shopping.yaml` +
 `docs/content/overlays/en-nl/a1_unit07.yaml` — covers
 `universal.a1.shopping.ask_prices_quantities`, first unit authored
-entirely by Codex since the rate-limit recovery. 6 lessons (market
+entirely by drafting tool B since the rate-limit recovery. 6 lessons (market
 vocabulary, asking/stating prices per kilo, kilo/gram/pond/stuk
 quantities, reading price labels, paying, closing market dialogue).
 Deliberately distinct from unit06 (café ordering) — general produce
@@ -369,7 +369,7 @@ null`, 0/0 solo and combined with units 1-6 (independently
 re-verified).
 
 **Content-depth tally**: 7 of ~22 estimated nl units done (en→nl
-direction), all authored and reviewed. Codex fully operational again.
+direction), all authored and reviewed. drafting tool B fully operational again.
 
 ## 2026-07-05 overnight, continued — nl unit08 (places) authored + reviewed
 
@@ -385,7 +385,7 @@ reserved for the next spine outcome. All compounds
 (supermarkt/ziekenhuis/postkantoor/bushalte/buurtkaart) explicitly
 taught, all 11 listen_* exercises confirmed using distinct dedicated
 audio clips (the two-unit pattern of reusing full-dialogue audio for
-short exercises has now been avoided cleanly by Codex three units in a
+short exercises has now been avoided cleanly by drafting tool B three units in a
 row). Review found only minor issues (jargon simplification, one weak
 distractor). `status: reviewed`, `required_next_reviewer: null`, 0/0
 solo and combined with units 1-7.
@@ -436,9 +436,9 @@ taken on faith from the paste)**: `docs/content/AUTHORING_GUIDE.md`
 nl/fa/prs is genuine US-government public domain — usable as a real
 scaffold (vocabulary progression, grammar sequencing, dialogue
 scenarios) with a MANDATORY modernization pass, never verbatim.
-CLAUDE.md's division-of-labor section confirms Claude (not just Codex)
+the project notes' division-of-labor section confirms drafting tool A (not just drafting tool B)
 can now author content directly via this adaptation lane specifically
-— a different task shape from Codex's from-scratch generation, same
+— a different task shape from drafting tool B's from-scratch generation, same
 identical review/validation bar, no shortcut. Priority: push this at
 the ≥10hr content target for en-nl/en-fa/prs. Investigating actual FSI
 source material availability next (Live Lingua / archive.org).
@@ -473,12 +473,12 @@ Dutch per the new AUTHORING_GUIDE.md §10 directive. Findings:
 
 **Decision**: not sinking further overnight time into sourcing the
 right document. Continuing nl unit11 onward via the proven
-from-scratch Codex authoring + fresh-context review cycle, which has
+from-scratch drafting tool B authoring + fresh-context review cycle, which has
 produced 10/10 solid, independently-verified units so far. Flagging
 for whoever picks up the FSI-adaptation lane next: the right starting
 point is probably checking Live Lingua's fa/prs (Persian/Dari) FSI
 listings instead, since those were the languages explicitly named in
-the original Fable planning conversation as having confirmed FSI
+the original external reviewer planning conversation as having confirmed FSI
 courses — Dutch's public-domain scaffold may need a different source
 entirely (e.g. archive.org directly, or a different DLI/FSI Dutch
 title than the one found tonight).
@@ -488,7 +488,7 @@ title than the one found tonight).
 Session 3 (INFRA) is picking up Endless Practice template-pack
 extension (docs/content/practice/**) per the publish-gate's "≥10hrs
 practice via Endless Practice, not hand-authored drills" requirement.
-To avoid duplicate/colliding Codex dispatches:
+To avoid duplicate/colliding drafting tool B dispatches:
 
 - **My (Session 2) exclusive scope**: core teaching units —
   `docs/content/realizations/nl/**` and
@@ -504,7 +504,7 @@ To avoid duplicate/colliding Codex dispatches:
   languages) or nl once enough nl teaching units exist to give the
   lexeme pool real depth — either works from my side, just pick one
   and note it here or in its own log so we don't both dispatch a
-  "nl practice pack" Codex task at the same time.
+  "nl practice pack" drafting tool B task at the same time.
 
 Continuing nl core units (unit12 next) and the native-review loop
 with the owner on completed units in the meantime.
@@ -526,7 +526,7 @@ Also verified 17/18 April 2026 genuinely fall on Friday/Saturday
 **Content-depth tally**: 11 of ~22 estimated nl units done (en→nl
 direction), all authored and reviewed.
 
-## 2026-07-05 — nl unit12 (past events) authored+reviewed; first Claude-direct-authored content (fa unit05)
+## 2026-07-05 — nl unit12 (past events) authored+reviewed; first drafting tool A-direct-authored content (fa unit05)
 
 **nl unit12 (past events)**: `docs/content/realizations/nl/a1_unit12_past_events.yaml` +
 `docs/content/overlays/en-nl/a1_unit12.yaml` — covers
@@ -539,7 +539,7 @@ correct. 0/0 solo and combined with units 1-11. **12 of ~22 estimated
 nl units now done.**
 
 **IMPORTANT — real cross-session collision found and resolved**: while
-starting the first Claude-direct-authored content (per the repeated
+starting the first drafting tool A-direct-authored content (per the repeated
 FSI-adaptation directive), I initially wrote `fa/a1_unit03_places.yaml`
 + `en-fa/a1_unit03.yaml` before checking — another session had ALREADY
 authored a DIFFERENT fa unit03 (Numbers) and fa unit04 (Family), both
@@ -566,7 +566,7 @@ course can compile end-to-end again.** I did not attempt to fix this
 myself (out of scope, and restructuring already-reviewed dialogue
 content risks introducing new errors without careful review).
 
-**First Claude-direct-authored unit (fa unit05, places/directions)**:
+**First drafting tool A-direct-authored unit (fa unit05, places/directions)**:
 adapted vocabulary scope (not sentences) from the confirmed
 public-domain 1963 FSI "Persian Basic Course" (verified directly by
 reading the actual PDF — Foreign Service Institute/Dept. of State,
@@ -578,7 +578,7 @@ fixed my own dialogue-format mistake before even sending for review
 (split a combined two-speaker card into two single-speaker cards,
 matching unit04's established correct pattern). Sent for a
 fresh-context review with EXPLICIT instructions to scrutinize it at
-least as rigorously as Codex output, since Claude (unlike Codex) has
+least as rigorously as drafting tool B output, since drafting tool A (unlike drafting tool B) has
 no proven track record on Persian this session — review in progress,
 will report the honest verdict once it lands, including if it turns
 out NOT to be native-quality.

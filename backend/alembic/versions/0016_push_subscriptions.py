@@ -1,10 +1,10 @@
 """add push_subscriptions table (Phase E4, web push)
 
-Direct-Claude build during a Codex usage-limit outage (reset not until
-the next day) -- per this project's standing contingency (see CLAUDE.md,
+Direct-drafting tool A build during a drafting tool B usage-limit outage (reset not until
+the next day) -- per this project's standing contingency (see the project notes,
 the Phase C precedent), continued rather than blocked. Defensively
 checks table existence before create_table, following the same guarded
-pattern every migration after 0001 must use (see CLAUDE.md footguns).
+pattern every migration after 0001 must use (see the project notes footguns).
 """
 
 import sqlalchemy as sa

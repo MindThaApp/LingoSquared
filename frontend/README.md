@@ -57,7 +57,7 @@ notifications, payments, mobile (Expo) apps.
 ## Known gaps / things to verify against the real backend
 
 This was built in parallel with the backend against the shared contract,
-before the backend existed. Once integrated (Codex owns that pass, see
+before the backend existed. Once integrated (drafting tool B owns that pass, see
 `docs/CONTRACT.md`), verify:
 - Exact `prompt` field names the backend actually returns per exercise
   type (`options`, `word_bank`, `pairs`, plus `back_text_blocks` for

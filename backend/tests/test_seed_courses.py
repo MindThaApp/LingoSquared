@@ -19,7 +19,7 @@ with a real, gradeable `speak_repeat`.
 
 Runs against whatever DB `conftest.py` set up; every assertion here is
 read-only or idempotent (bootstrap is create-missing-only). Per
-backend/CLAUDE.md, run it against a UNIQUELY NAMED isolated test DB, never
+the backend notes, run it against a UNIQUELY NAMED isolated test DB, never
 the shared dev DB:
 
     docker compose exec -T db createdb -U lingosquared lingosquared_test_seedsplit

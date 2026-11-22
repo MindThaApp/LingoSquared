@@ -193,11 +193,11 @@ especially for fa/prs where the project currently has zero TTS coverage.
 
 **Update 2026-07-10: The owner approved CC-licensed sourcing in principle**
 (public-domain government works are no longer the only permitted
-source type — see CLAUDE.md's "Sourcing policy widened" entry). That
+source type — see the project notes' "Sourcing policy widened" entry). That
 doesn't change anything below: the practical blockers here (empty CC0
 pool for launch languages, no attribution-credit surface built yet)
 are still real and still apply. This section remains the authoritative
-detail; CLAUDE.md's entry now points back here rather than duplicating
+detail; the project notes' entry now points back here rather than duplicating
 policy that could drift out of sync with it.
 
 **Tatoeba: still reference-only — now a settled decision with data, not
@@ -277,7 +277,7 @@ accessible they look:**
   §3/§10 modernization bar at A1/A2.
 - **Mozilla Common Voice** (CC0 audio): unmatched crowd-read clips
   can't be spliced to authored content — same shape as the closed FSI
-  audio investigation (see CLAUDE.md Secrets section); don't reopen.
+  audio investigation (see the project notes Secrets section); don't reopen.
 
 ## 11. Cross-check facts within a lesson, not just each item in isolation
 
@@ -704,22 +704,22 @@ micro-quiz onto teaching cards without new evidence it's needed — it
 would duplicate the exercise phase immediately following and worsen
 the documented click-density complaint.
 
-## 20. Fresh-context review methodology (how to replicate a Fable-grade
+## 20. Fresh-context review methodology (how to replicate a external reviewer-grade
 review without language-specific priors)
 
-Distilled 2026-07-11 from a real Fable review of nl B1 units 01-05
+Distilled 2026-07-11 from a real external reviewer review of nl B1 units 01-05
 (`docs/content/realizations/nl/b1_unit0{1..5}_*.yaml` +
 `docs/content/overlays/en-nl/b1_unit0{1..5}.yaml`, commit `2535730`)
-that found and fixed 8 real bugs a Sonnet authoring pass had missed,
+that found and fixed 8 real bugs a drafting tool A authoring pass had missed,
 including one shape the compiler cannot catch at all. Written so any
-model (Sonnet, Opus, a future reviewer) can reproduce this quality bar
+model (drafting tool A, drafting tool A, a future reviewer) can reproduce this quality bar
 on any language, including ones the reviewer has no fluency in — every
 check below is either mechanical (grep/script) or a nameable grammar
 pattern, not "does this sound right."
 
 **Order of operations — each stage feeds the next, don't skip ahead:**
 
-1. **Read this file and CLAUDE.md in full before touching content.**
+1. **Read this file and the project notes in full before touching content.**
    The numbered rules above (§3 register, §5 instruction↔answer
    coherence, §11 cross-fact consistency, §12 multi-clause answer
    variants, §16 matching-pairs scale, §19 vocabulary examples) are the
@@ -746,7 +746,7 @@ bugs and need zero fluency in the target language:**
 
 - **Boolean coercion (the highest-value single check — the compiler's
   own validator does NOT catch every field this can happen on, a
-  documented gap in CLAUDE.md's footguns).** `yaml.safe_load` each
+  documented gap in the project notes' footguns).** `yaml.safe_load` each
   file and recursively walk the parsed structure for
   `isinstance(x, bool)` anywhere outside a genuinely boolean field. A
   matching-pair `{left: waar, right: true}` (meant as the *word*
@@ -758,7 +758,7 @@ bugs and need zero fluency in the target language:**
   content_keys, template names).
 - **Title length**: grep for any `title:` field over ~200 chars (the
   `content_items.title VARCHAR(200)` DB crash, §-referenced in
-  CLAUDE.md's footguns — passes `validate` clean, crashes on real
+  the project notes' footguns — passes `validate` clean, crashes on real
   import).
 - **Spine outcome existence**: verify every `spine_outcome_id` the unit
   references exists verbatim in `universal_spine.yaml`
@@ -803,7 +803,7 @@ fluency, using a dictionary/reference grammar:**
   stiff → note in the review report for a native pass; actually wrong
   → fix directly.
 - **Listening-distractor rule, meaning-level, not just verbatim** (the
-  CLAUDE.md `listen_select` footgun, extended): for every
+  the project notes `listen_select` footgun, extended): for every
   `listen_select`/`dialogue_comprehension`/similar, read the FULL audio
   text and confirm no distractor is something the tested speaker says
   OR *defensibly implies* anywhere in that clip — apply this at the

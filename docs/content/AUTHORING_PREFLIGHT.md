@@ -72,7 +72,7 @@ this block into the dispatch prompt itself — do not link to it.
   asked for the whole. Matters most at B1+ where outcomes are compound.
 
 ### 8. Register
-- Quote the lane's register pin (docs/content/CLAUDE.md) and follow it exactly.
+- Quote the lane's register pin (the content-lane notes) and follow it exactly.
 - Keep register internally consistent within a unit, and correctly conjugated.
 
 ---

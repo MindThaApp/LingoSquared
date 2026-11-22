@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Aggregate recorded-audio needs across all realization files.
 
-Phase D1 scaffolding per docs/SONNET_BUILD_PROMPT_UPGRADES.md, built by
+Phase D1 scaffolding per docs/BUILD_PLAN_UPGRADES.md, built by
 Session 3 (INFRA). NOT a from-scratch text extractor: every realization
 file already declares its own `media_assets:` block (content_key,
-language, text, voice_hint, status) -- Codex has been populating this
+language, text, voice_hint, status) -- drafting tool B has been populating this
 consistently since before this script existed (confirmed across every
 file in docs/content/realizations/). This script's job is purely to
 aggregate those declarations project-wide, catch collisions, and

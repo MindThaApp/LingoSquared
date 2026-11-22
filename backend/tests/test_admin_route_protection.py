@@ -28,7 +28,7 @@ from app.main import app
 def _iter_api_routes(routes, prefix=""):
     """Yield (full_path, APIRoute) for every route reachable from `routes`.
 
-    fastapi==0.139.0 (this project's pinned version, see CLAUDE.md's
+    fastapi==0.139.0 (this project's pinned version, see the project notes'
     Starlette CVE bump entry) does NOT flatten include_router() into plain
     APIRoute objects on app.routes -- each app.include_router() call shows
     up as an opaque `fastapi.routing._IncludedRouter` wrapper instead,

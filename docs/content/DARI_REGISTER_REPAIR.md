@@ -59,7 +59,7 @@ vocabulary usually is not.
 
 ⚠️ **Scope note:** `است` is *correct* in `realizations/prs/` (3,601
 uses — formal written Dari). The pin applies to the **`prs-en` overlay
-lane**, which `docs/content/CLAUDE.md` fixes as *colloquial* Dari.
+lane**, which the content-lane notes fixes as *colloquial* Dari.
 
 ### توانستن — full form is canonical (owner decision 2026-09-29)
 Owner decision 2026-09-29: full form; contracted forms accepted as variants only.
@@ -131,7 +131,7 @@ vocabulary — a blind replace breaks dozens of exercises) ·
    a correct learner answer fail. The coordinator runs
    `backend/tests/test_content_answer_shapes.py` centrally.
 4. A separate fresh-context review per batch — this is launch-gate
-   content, full review, no sampling (root `CLAUDE.md` tiered-review
+   content, full review, no sampling (the project notes tiered-review
    policy).
 
 ## Dari grammar rulings (2026-11-15, from the A2 rebuild Q3 decision)

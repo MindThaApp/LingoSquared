@@ -40,7 +40,7 @@ test_backend + e2e fixtures — a separate, test-lane change.)
 
 Everything here stays **create-missing-only**: it never updates or deletes
 existing rows (an early version delete-and-recreated content and
-cascade-wiped user progress every deploy — see `backend/CLAUDE.md`).
+cascade-wiped user progress every deploy — see the backend notes).
 """
 from __future__ import annotations
 
