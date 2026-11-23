@@ -9,7 +9,7 @@ Fixed constraints taken from the repo rules:
 - Every course is English-anchored (en→X, X→en). This spec proposes no new pair types.
 - Dutch is the polish reference; fa and prs are the mandatory RTL, virtual-keyboard and strict-script check for every phase.
 - `docs/CONTRACT.md` is updated before any API change. Backend and compiler work is drafting tool B's lane; frontend and shared TypeScript is drafting tool A's.
-- Hearts, gems and leaderboard stay off by default (R25). **⏸ Pending decision (see DECISIONS.md): D7 gamification amounts and defaults**
+- Hearts and gems stay off; leaderboards may be added later as opt-in only (R25). **Decided (see DECISIONS.md D7)**
 
 ---
 
@@ -297,7 +297,7 @@ Each screen lists its states. "Offline" always means: content shown from the loc
 Flow: **Language of the interface** (auto-detected from `navigator.languages`, shown as one line "Auvel is in Dari · Change") → **"I want to learn …"** (course cards for the detected native language first; beta badge where it applies) → **first lesson starts immediately** as a guest on this device.
 
 - No account, no username, no goal, no placement, no permissions before the first lesson. A local guest profile is created silently; the server guest account is created in the background when online.
-- On that first completion screen, in this order and each skippable: daily goal (three choices, default 10 minutes' worth), "Know some already? Find your level" (placement), "Save your progress" (account or social sign-in), then the reminder offer. **⏸ Pending decision (see DECISIONS.md): D7 default daily goal amount**
+- On that first completion screen, in this order and each skippable: daily goal (5/10/15 minutes, default 10), "Know some already? Find your level" (placement), "Save your progress" (account or social sign-in), then the reminder offer. **Decided (see DECISIONS.md D7)**
 - Returning users on a new device: "I already have an account" link on the first screen.
 
 States:
@@ -592,11 +592,11 @@ Schema migrations are numbered and forward-only, with a test that upgrades a fix
 
 ### 8.3 Local grading and scheduling
 
-> **⏸ Pending decision (see DECISIONS.md): D6 client grading depends on shipping accepted answers**
+> **Decided (see DECISIONS.md D6)**
 
 - `core/grading` is a line-for-line port of `backend/app/review/grading.py` and `translit_nudge.py` (about 1,700 lines plus tables). The Python implementation remains the oracle: a script exports golden vectors from the existing pytest cases plus every compiled exercise's accepted answers and a mutation fuzz; a Vitest suite asserts identical verdicts. CI runs it on any change to either side. (Approach already proposed in `.local/logs/offline-windows-feasibility.md` §3A.)
 - Each verdict records `grader_version`. On sync the server re-grades with its own implementation. If they disagree, the server's verdict is stored, the difference is logged as a parity defect, and the learner is never retroactively told a past answer was wrong; XP differences are reconciled silently in the ledger.
-- Shipping answers to the client is a deliberate change (today answers are stripped: `router.py:1367`). It is acceptable: there is nothing to win by cheating except one's own XP, and leaderboards stay off. If leaderboards are ever enabled, only server-verified XP counts. **⏸ Pending decision (see DECISIONS.md): D6 shipping accepted answers to the client**
+- Shipping answers to the client is a deliberate change (today answers are stripped: `router.py:1367`). It is acceptable: there is nothing to win by cheating except one's own XP. If opt-in leaderboards are ever enabled, only server-verified XP counts. **Decided (see DECISIONS.md D6)**
 - Translit tables (2.7 MB) load lazily per language.
 - `core/srs` ports `fsrs.py`/`scheduler.py` with the same parameters and fuzz seed derivation so client and server produce the same next-due date; `test_fsrs.py` cases become vectors. Do not swap in a different FSRS library without parity (same caution as the feasibility report).
 
@@ -725,7 +725,7 @@ Exit: with a previously opened lesson cached, the app is usable offline except f
 - Golden-vector harness first, then the TypeScript grading port, then FSRS and progress rules.
 - Pack endpoints and compiler packaging (drafting tool B lane); pack manager and Downloads settings; audio packs once audio is rendered.
 
-> **⏸ Pending decision (see DECISIONS.md): D6 (answers to client); D4 affects the later Tauri v2 build**
+> **Decided (see DECISIONS.md D6, D4)**
 - Server re-grade and parity reporting.
 Exit: §10 items 1–3. This is the point at which the app is honestly "offline-first", and the Tauri v2 build becomes a packaging task rather than a port.
 
@@ -735,11 +735,11 @@ Exit: §10 items 1–3. This is the point at which the app is honestly "offline-
 - iOS/iPadOS: Capacitor shell with SQLite store after Phase 4.
 
 
-> **⏸ Pending decision (see DECISIONS.md): D1 one codebase, D2 Play account, D3 domain+TLS, D5 iOS route**
+> **Decided (see DECISIONS.md D1, D2, D3, D5)**
 ### Phase 6 — Platform delight (ongoing)
-Widgets (Android, iOS), app shortcuts, command bar, window-controls overlay on Windows, local notifications in shells, streak awards shelf, illustrations, designed sound set if not already done in Phase 1. **⏸ Pending decision (see DECISIONS.md): D11 illustrations and sound set sourcing; D7 awards**
+Widgets (Android, iOS), app shortcuts, command bar, window-controls overlay on Windows, local notifications in shells, streak awards shelf, illustrations, designed sound set if not already done in Phase 1. **Decided (see DECISIONS.md D11, D7)**
 
-Dependencies that are not code and gate real releases: public domain + TLS; rendered audio for nl/fa/prs; native review status for store claims; a privacy contact; store accounts (Microsoft; Play still to be decided). **⏸ Pending decision (see DECISIONS.md): D2, D3, D5, D8, D9, D10, D12**
+Dependencies that are not code and gate real releases: public domain + TLS; rendered audio; native review status for store claims; a privacy contact; Play, Apple and Microsoft store accounts. **Decided (see DECISIONS.md D2, D3, D5, D8, D9, D10, D12)**
 
 ### What not to do
 - Do not rewrite in React Native or a native toolkit (see `02-platforms.md` §1).
