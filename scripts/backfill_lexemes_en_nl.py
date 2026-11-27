@@ -5484,6 +5484,16 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit09_eens_en_oneens", "rust"): "rest; calm",
     # a2_unit25 teaches "true" ("Dat is waar"); global adverb gloss is "where".
     ("a2_unit25_meningen", "waar"): "true",
+    # --- B1 waar (2026-11-27). The single B1 `waar` lexeme is created by its
+    #     first B1 introducer, b1_unit02 ("Dat is waar." -- the unit's own pair
+    #     is waar -> "true"), and b1_unit09 re-teaches that sense; b1_unit04
+    #     teaches the relative "where" ("De stad waar ik woon"). The global
+    #     gloss "where" therefore mis-glossed the unit that owns the lexeme.
+    #     Both B1 senses are named; POS is deliberately left `adverb` so every
+    #     B1 template pool (all of which exclude adverb for this token's tags)
+    #     is unchanged and only the displayed gloss moves. B1-only key. ---
+    ("b1_unit02_mening_en_nuance", "waar"): "true; where",
+    # --- end B1 waar block ---
     # b1 introduces `werk` only as the NOUN (b1_unit01 "Anouk is blij met haar
     # werk", b1_unit06 "druk met werk"); global says verb "work (with ik)". The
     # verb "ik werk" in b1_unit04 is embedded in a relative-clause example, NOT
