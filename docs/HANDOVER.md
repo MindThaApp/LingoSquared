@@ -1,3 +1,77 @@
+# HANDOVER — current state (2026-11-27)
+
+Read the root project notes first; they override this file wherever they disagree.
+The older handover further down (Mac and iCloud setup, July–September 2026) is historical; for
+the environment use `docs/WSL_SETUP.md`.
+
+## Repository
+
+- **Trunk:** `fix/wsl-handover-followups` (tip `0cd0c378c`, PR #386). Work branches start from
+  it and merge back through a PR, only once every CI job is green.
+- **`master`** (`b89506cfb`) is behind the trunk. Never push or merge to `master` without the
+  owner's approval.
+- **Commit identity:** `MindThaApp <253346805+MindThaApp@users.noreply.github.com>`, set
+  repo-locally. No other name or email.
+- **Merging:** merge locally with `git merge --no-ff` and push. Do not merge on the GitHub
+  website (`gh pr merge`) until the owner's GitHub profile display name is `MindThaApp`;
+  website merges carry the profile name.
+- **History was rewritten twice** (2026-11-21 and 2026-11-22). A clone or branch from before
+  2026-11-22 has old SHAs; never push one, re-clone instead. GitHub Support ticket #5042302 asks
+  GitHub to purge the old pull-request refs.
+- **CI:** four jobs (backend pytest, content tooling, frontend, E2E). The content job takes
+  40–65 minutes and is not hung before about 75 minutes. `test_ordinary_short_answer_still_works`
+  is flaky (409); rerun once.
+
+## Recovery check (2026-11-27)
+
+Every local branch not on GitHub was compared with the trunk. Nothing needed recovering:
+
+- `content/prs-a1-06`, `content/prs-a1-08`: changes already in the trunk.
+- `content/a2-it-blockA`, `content/fa-b1-05`, `content/reverse-a1-depth-es`: older versions of
+  files the trunk has since revised; applying them would revert newer content.
+- `ws5/ops-security`: superseded; the trunk enforces CSP in `backend/nginx.web.conf`.
+- `ws5/ci-actions`: superseded by the trunk's current `.github/workflows/ci.yml`.
+- `feat/cross-pl-it`: already contained in branches on GitHub; non-English pairs are deferred.
+- Uncommitted edits in the local `scratch/it-b2`..`it-b5` worktrees
+  (`scripts/backfill_lexemes_en_it.py`, `scripts/manifest.d/content/en-it-a1.txt`) stay local
+  until the owner decides; they are not on GitHub.
+
+## Product decisions
+
+All twelve open decisions were decided on 2026-11-23; see `docs/design/DECISIONS.md`. In short:
+one web codebase with Capacitor (Android, iOS) and Tauri (Windows) shells; `mobile/` frozen;
+Play personal account; the owner is buying a domain (TLS in front of the server); iOS built
+locally on the owner's Mac; gamification with streaks, freezes, XP, goals, quests and awards,
+no hearts; rendered audio per D8; sign-in with Google, Apple, passkeys, email link and Microsoft.
+
+## Open work
+
+1. Plan and build what the decisions unlock (`docs/design/ROADMAP-STATUS.md`,
+   `docs/BUILD_PLAN_UPGRADES.md`): gamification, sign-in, audio rendering for fa and prs
+   (native-speaker sample check for Dari first; fix missing Arabic diacritics before rendering).
+2. Needs a data-safety review before building (marked in `ROADMAP-STATUS.md`): local
+   lesson-progress save and restore, the IndexedDB store and offline eviction, the outbox and
+   `POST /sync/batch`, pack download and caching.
+3. Remaining quick wins listed in `ROADMAP-STATUS.md`.
+
+## Server
+
+- The live server `192.168.4.4` still runs a build from before the history rewrite; the next
+  deploy uses the new SHAs. Follow `docs/PRE_DEPLOY_RUNBOOK.md`.
+- No deploy, live-database change or cron change without the owner's approval.
+- The owner runs the pending content import before the next deploy.
+
+## Waiting on the owner
+
+- Rename the GitHub profile display name to `MindThaApp`.
+- Buy the domain (D3).
+- Run the content import, then approve a backup and deploy.
+- Decide on the `codex/*` and `content/codex-*` remote branch names and the `scratch/it-b*` work.
+
+---
+
+# Historical handover (2026-07 to 2026-09)
+
 > Superseded for environment setup by docs/WSL_SETUP.md (2026-09-30); iCloud/brew instructions below are historical.
 
 # HANDOVER — read this first, then act
