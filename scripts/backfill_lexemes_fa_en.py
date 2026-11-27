@@ -1498,7 +1498,7 @@ FA_EN_EXTRA_LEXEMES: dict[str, tuple[str, str]] = {
     "refill": ("noun", "تکرار نسخه"),
     "refills": ("noun", "تکرار نسخه"),
     "side": ("noun", "جانبی (مثلاً «عوارض جانبی»)"),
-    "effects": ("noun", "عوارض جانبی"),
+    "effects": ("noun", "عوارض"),
     "shouldn't": ("verb", "نباید (شکل کوتاه‌شده)"),
     # --- a2 unit36: correcting a document ---------------------------------
     "certificate": ("noun", "گواهی؛ مدرک رسمی"),
@@ -2470,7 +2470,8 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     # a2_unit36: "How long will the correction take?" = duration, not physical length (بلند).
     ("a2_unit36_document_correction", "long"): ("adjective", "طولانی (مدت)"),
     # a2_unit37: remove English from glosses (face to face / speak); meeting = a (video) meeting, not a "قرار ملاقات" appointment.
-    ("a2_unit37_video_calls", "face"): ("noun", "چهره"),
+    # face is taught only inside "face to face" (= in person), so the gloss names the رو of رو در رو, not the body part چهره.
+    ("a2_unit37_video_calls", "face"): ("noun", "رو (در «رو در رو»)"),
     ("a2_unit37_video_calls", "speaking"): ("verb", "صحبت کردن"),
     ("a2_unit37_video_calls", "meeting"): ("noun", "جلسه؛ دیدار"),
     # a2_unit38: under = "under my kitchen sink" (زیر), not "under the name"; by = "by message"; drop English from can't/won't/by/under glosses.

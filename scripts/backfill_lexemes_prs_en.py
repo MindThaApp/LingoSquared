@@ -1326,8 +1326,8 @@ EN_TARGET_TO_PRS_GLOSS.update({
     # -- a2 unit35 (at the pharmacy: a prescription) --- DRAFT Dari glosses
     # (2026-08-05), Kabuli register, pending the owner's native audit.
     "dose": "دوز؛ اندازهٔ هر بار خوردن دوا", "refill": "تکرار نسخه",
-    "refills": "تکرار نسخه", "side": "جانبی",
-    "effects": "عوارض جانبی", "shouldn't": "نباید (مخفف)",
+    "refills": "تکرارهای نسخه", "side": "جانبی",
+    "effects": "عوارض", "shouldn't": "نباید (مخفف)",
     # -- a2 unit36 (correcting a document)
     "certificate": "تصدیق؛ سند رسمی", "spelled": "هجی کرد؛ حرف‌حرف گفت",
     "copy": "کاپی؛ نقل", "passport": "پاسپورت", "mistakes": "غلطی‌ها",
@@ -1336,7 +1336,7 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "3092": "۳۰۹۲",
     # -- a2 unit37 (video calls)
     "microphone": "مایکروفون", "connection": "اتصال؛ کنکشن انترنت",
-    "mute": "بی‌آواز کردن", "face": "چهره (روبه‌رو)",
+    "mute": "خاموش کردن آواز", "face": "چهره (روبه‌رو)",
     "calls": "تماس‌ها؛ کال‌ها", "headphones": "هدفون", "asks": "می‌پرسه",
     "question": "سوال", "classmates": "هم‌صنفی‌ها",
     "speaking": "گپ زدن (شکل استمراری)",
