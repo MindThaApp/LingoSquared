@@ -4,9 +4,10 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a2.unit28.predictions_promises
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-11-15 for en-fa A2 unit 28 (predictions and promises). Mirrors PR #242 (units 22-26): the backfill emits only unit and lesson tags (en_fa_a2_unit28_words, en_fa_a2_unit28_lessonNN_words), so pools are those tags narrowed by part_of_speech; sentence templates (word_order, fill_in_blank, sentence translation) hang on POS-narrowed single-candidate anchors, and word_order-only templates are used where a pool of two both fit the frame. Matching_pairs split nouns and verbs. No listen_select (no fa TTS). English source_gloss lexemes and phrase lexemes (word lists and dialogue lines) are not drilled. Spoken Tehrani register; no native review yet (the owner approved unreviewed). NATIVE QUESTIONS: (1) Is فردا بارون نمی‌باره natural, or is فردا بارون نمیاد more common? Recommended: keep نمی‌باره as taught, accept both in lessons. (2) Is احتمالا فردا بارون میاد natural word order? Recommended: yes.'
+  status: reviewed
+  fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
+  notes: 'Fresh-context review 2026-11-27 (en-fa A2 units 27-31 pass): 1 fix - lesson02 fill.004 and sentence.005 rendered احتمالا فردا بارون میاد, but the unit teaches only احتمالا ... بارون می‌باره, so a learner typing the taught form was marked wrong on the translation; both frames now use می‌باره, the prompt reads "It will probably rain tomorrow.", and the translation accepts فردا احتمالا بارون می‌باره (taught as correct in lesson03) and the میاد form. Dumped every slot pool at unit and course scope and read every gloss: all fit the taught sense (گرم carries "hot" where the unit says "warm"; acceptable). Sentence anchors (احتمالا, نمی‌باره) have one course-wide candidate; فردا هوا {item} می‌شه fits all three course-wide adjectives (آفتابی, سرد, گرم); no self-reference. The phrase lexemes with wrong glosses (promise, message and bulletin word lists) are fixed at the source in the overlay teaching glosses. Capacity: 19 live templates, no dead or under-floor template, every tier hosts 25/34 lexemes (74%) and 5/5 lessons with lexemes. NATIVE FLAGS: none new. Authored 2026-11-15 for en-fa A2 unit 28 (predictions and promises). Mirrors PR #242 (units 22-26): the backfill emits only unit and lesson tags (en_fa_a2_unit28_words, en_fa_a2_unit28_lessonNN_words), so pools are those tags narrowed by part_of_speech; sentence templates (word_order, fill_in_blank, sentence translation) hang on POS-narrowed single-candidate anchors, and word_order-only templates are used where a pool of two both fit the frame. Matching_pairs split nouns and verbs. No listen_select (no fa TTS). English source_gloss lexemes and phrase lexemes (word lists and dialogue lines) are not drilled. Spoken Tehrani register; no native review yet (the owner approved unreviewed). NATIVE QUESTIONS: (1) Is فردا بارون نمی‌باره natural, or is فردا بارون نمیاد more common? Recommended: keep نمی‌باره as taught, accept both in lessons. (2) Is احتمالا فردا بارون میاد natural word order? Recommended: yes.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -538,7 +539,7 @@ templates:
   lesson_content_key: fa.a2.unit28.lesson02.maybe_and_probably
   type: fill_in_blank
   frame:
-    text: '{item} فردا بارون میاد.'
+    text: '{item} فردا بارون می‌باره.'
     language_code: fa
     direction: rtl
   slots:
@@ -559,7 +560,7 @@ templates:
   lesson_content_key: fa.a2.unit28.lesson02.maybe_and_probably
   type: translation
   frame:
-    text: Probably it will rain tomorrow.
+    text: It will probably rain tomorrow.
     language_code: en
     direction: ltr
   slots:
@@ -572,9 +573,12 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{item} فردا بارون میاد.'
+      text: '{item} فردا بارون می‌باره.'
       language_code: fa
       direction: rtl
+    accepted_variants:
+    - فردا {item} بارون می‌باره.
+    - '{item} فردا بارون میاد.'
   feedback_frame:
     text: احتمالا means probably.
     language_code: en
