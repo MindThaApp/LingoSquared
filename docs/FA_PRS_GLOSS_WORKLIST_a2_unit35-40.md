@@ -1,5 +1,11 @@
 # Native-gloss worklist — en.a2.unit35–unit40 (fa-en + prs-en)
 
+> **Status 2026-11-27:** draft glosses for all 39 tokens are now wired into both
+> backfill scripts (the "currently stops at unit34" lines below are historical). The
+> wired values, a second-opinion pass and the rows still open are listed in
+> `docs/FA_PRS_GLOSS_DRAFTS_a2_unit35-40.md` ("Second-opinion pass 2026-11-27"). All 78
+> glosses still need the owner's native audit before launch.
+
 ## What this is
 
 To publish the **X→en practice checkpoints** for English A2 units 35–40, each
