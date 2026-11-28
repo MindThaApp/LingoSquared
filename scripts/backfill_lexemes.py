@@ -5322,6 +5322,36 @@ FA_C1_GLOSS_OVERRIDES = {
     "عکس": "photo; the opposite",
     "طرف": "side",
     "دست": "hand (in 'to join forces')",
+    # 2026-11-27 review: C1 unit02 teaches زمینه as "context" and ساده as plain "simple".
+    "زمینه": "context; background",
+    "ساده": "simple",
+    # C1 unit03: مهلت in یک روز مهلت اضافه is time allowed, not only a deadline.
+    "مهلت": "time allowed (extension); deadline",
+    # C1 unit04: حال is taught only inside با این حال; همچنان means "still", not "nevertheless".
+    "حال": "state; condition (in با این حال 'nevertheless')",
+    "همچنان": "still; as before",
+    # C1 unit05 (counterfactuals): the senses these past-conditional lines use.
+    "افتاده": "fallen (past participle; in اتفاق افتادن 'to happen')",
+    "خطر": "risk; danger",
+    "کنیم": "(that) we do (subjunctive)",
+    # C1 unit06 (idiom): سبک is "style" in اثر سبک; نه is "not" in X نه Y;
+    # می‌گیریم is the گرفتن of تصمیم گرفتن.
+    "سبک": "style",
+    "نه": "not (as in 'X, not Y')",
+    "می‌گیریم": "we take (in تصمیم گرفتن 'to decide')",
+    # C1 unit07: سر only appears in بر سر ('over, about').
+    "سر": "head; top (in بر سر 'over, about')",
+    # C1 unit08: تا is "until" (منتظر بمانیم تا ...); سخنرانی kept apart from خطاب "address";
+    # می‌برد is the light verb of پی بردن (unit02) and بالا بردن (unit08).
+    "تا": "until; so that",
+    "سخنرانی": "speech; talk",
+    "می‌برد": "takes; carries (in پی بردن 'realize', بالا بردن 'raise')",
+}
+# C1 part-of-speech fixes for the sense C1 teaches (level-scoped like the glosses above).
+FA_C1_PART_OF_SPEECH = {
+    "نه": "particle",
+    "می‌برد": "verb",
+    "می‌دهد": "verb",
 }
 
 
@@ -5496,6 +5526,7 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         english_gloss = FA_A2_GLOSS_OVERRIDES.get(token, english_gloss)
                     if level == "c1":
                         english_gloss = FA_C1_GLOSS_OVERRIDES.get(token, english_gloss)
+                        part_of_speech = FA_C1_PART_OF_SPEECH.get(token, part_of_speech)
                     if level == "b2":
                         part_of_speech = FA_B2_PART_OF_SPEECH.get(token, part_of_speech)
                         english_gloss = FA_B2_GLOSS_OVERRIDES.get(token, english_gloss)
