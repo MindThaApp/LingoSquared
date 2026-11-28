@@ -2394,6 +2394,11 @@ PRS_C1_NEW = _json.loads(_C1_JSON.read_text(encoding="utf-8")) if _C1_JSON.exist
 for _tok, _d in PRS_C1_NEW.items():
     PRS_GLOSSES.setdefault(_tok, _d["gloss"])
     PRS_POS.setdefault(_tok, _d["pos"])
+# C1 unit06 lesson04 lists its collocation tokens without the guillemets now;
+# this is the one bare form no earlier level or the C1 data file glosses.
+for _tok, (_gl, _pos) in {"می‌گیریم": ("we take (in 'take a decision')", "verb")}.items():
+    PRS_GLOSSES.setdefault(_tok, _gl)
+    PRS_POS.setdefault(_tok, _pos)
 
 # B1 units 12-19 (debate, workplace, narrative, advice, complaint, regrets,
 # future plans, summarize), added 2026-11-06. Only tokens no earlier level
@@ -5153,7 +5158,18 @@ PRS_C1_GLOSS_OVERRIDES = {
     "ساده": "simple",
     "مستقیم": "direct",
     "دعوت": "call; appeal",
+    # C1 review 2026-11-27: senses the C1 sentences actually use.
+    "روشن": "clear",
+    "مخالف": "opposing; contrary",
+    "نه": "not (as in 'X, not Y')",
+    "تا": "until",
+    "نمی‌کند": "does not (do)",
+    "دیگر": "other; another",
+    "می‌دهد": "he/she/it gives",
 }
+# C1 POS / tag fixes for the same senses (نه is the negator, not the number).
+PRS_C1_POS_OVERRIDES = {"نه": "particle"}
+PRS_C1_DROP_TAGS = {"نه": {"ones_number"}, "تا": {"counting_word"}}
 
 
 def _classify(files, level, specs, derive_phrases=False):
@@ -5411,6 +5427,13 @@ def _classify(files, level, specs, derive_phrases=False):
                     # Gated on level so no A1-B1 lexeme can change.
                     if level == "c1":
                         english_gloss = PRS_C1_GLOSS_OVERRIDES.get(token, english_gloss)
+                        part_of_speech = PRS_C1_POS_OVERRIDES.get(token, part_of_speech)
+                        if token in PRS_C1_DROP_TAGS and "semantic" in tags:
+                            tags["semantic"] = [
+                                t for t in tags["semantic"] if t not in PRS_C1_DROP_TAGS[token]
+                            ]
+                            if not tags["semantic"]:
+                                del tags["semantic"]
                     if level == "b2":
                         english_gloss = PRS_B2_GLOSS_OVERRIDES.get(token, english_gloss)
                         part_of_speech = PRS_B2_POS_OVERRIDES.get(token, part_of_speech)
