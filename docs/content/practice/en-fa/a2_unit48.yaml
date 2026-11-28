@@ -4,9 +4,10 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a2.unit48.message_to_friend
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-11-15 for en-fa A2 unit 48 (a message to a friend). Mirrors PR #250 (units 27-39): the backfill emits only unit and lesson tags (en_fa_a2_unit48_words, en_fa_a2_unit48_lessonNN_words), so pools are those tags narrowed by part_of_speech; sentence templates (word_order, fill_in_blank, sentence translation) hang on POS-narrowed single-candidate anchors, and word_order-only templates are used where a pool of two or more all fit the frame. Matching_pairs split nouns and verbs. No listen_select (no fa TTS). Phrase lexemes (word lists and dialogue lines) are not drilled, and tokens first introduced in earlier units belong to those units'' pools. Spoken Tehrani register; no native review yet. NOTE: very thin unit (2 content lexemes: فعلا, کادو): most Block G tokens were introduced in earlier units, so the 12-item checkpoint bar cannot be met from this unit alone; it needs new vocabulary introduced in the unit. NATIVE QUESTIONS: (1) Is باشه. فعلا! natural for okay, bye for now? Recommended: yes. (2) Is جمعه رفتم تولد دوستم و کادو خریدم natural? Recommended: yes.'
+  status: reviewed
+  fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
+  notes: 'Fresh-context review 2026-11-27 (en-fa A2 units 47-51 pass): 9 fixes - the pack had 5 templates, no template for lesson03 (5 lexemes), one recognition template and one production template, so the unit could not reach a balanced checkpoint; the backfill now gives the unit 14 content lexemes. Added (1) lesson01 choose.004 and (2) translate.005 over the unit-wide tag (14 candidates), (3) lesson02 translate.010 over the lesson02 tag (9), (4) lesson02 order.011 and (5) sentence.012 on the single-candidate adjective anchor مبارک (تولد مبارک!, the unit''s own phrase), (6) lesson03 choose.001 and (7) translate.002 over the lesson03 tag (4), (8) lesson03 match.003 over the unit-wide tag; (9) match.009 feedback named the because-and-so lesson, which has no lexemes; now names news, celebrations and feelings. Dumped every slot pool at unit and course scope (the tags are unit-only, so both scopes match) and read every gloss: no wrong glosses (ناراحت carries sad while the unit teaches upset; close enough to show as the answer). Capacity: 13 templates, R3/S5/P5, 14/18 lexemes hosted (78%), all 3 lessons with lexemes in every tier; the 4 unhosted lexemes are card-target phrase lists. Authored 2026-11-15 for en-fa A2 unit 48 (a message to a friend). Mirrors PR #250 (units 27-39): the backfill emits only unit and lesson tags (en_fa_a2_unit48_words, en_fa_a2_unit48_lessonNN_words), so pools are those tags narrowed by part_of_speech; sentence templates (word_order, fill_in_blank, sentence translation) hang on POS-narrowed single-candidate anchors, and word_order-only templates are used where a pool of two or more all fit the frame. Matching_pairs split nouns and verbs. No listen_select (no fa TTS). Phrase lexemes (word lists and dialogue lines) are not drilled, and tokens first introduced in earlier units belong to those units'' pools. Spoken Tehrani register; no native review yet. NOTE: very thin unit (2 content lexemes: فعلا, کادو): most Block G tokens were introduced in earlier units, so the 12-item checkpoint bar cannot be met from this unit alone; it needs new vocabulary introduced in the unit. NATIVE QUESTIONS: (1) Is باشه. فعلا! natural for okay, bye for now? Recommended: yes. (2) Is جمعه رفتم تولد دوستم و کادو خریدم natural? Recommended: yes.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -23,6 +24,7 @@ tag_schema:
     semantic:
     - en_fa_a2_unit48_lesson01_words
     - en_fa_a2_unit48_lesson02_words
+    - en_fa_a2_unit48_lesson03_words
     - en_fa_a2_unit48_words
 templates:
 - content_key: practice.en-fa.fa.a2.unit48.lesson01.order.001
@@ -92,6 +94,58 @@ templates:
       direction: rtl
   feedback_frame:
     text: فعلا means bye for now.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson01.choose.004
+  lesson_content_key: fa.a2.unit48.lesson01.start_and_end
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of this unit''s words for a message to a friend.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson01.translate.005
+  lesson_content_key: fa.a2.unit48.lesson01.start_and_end
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a2.unit48.lesson02.choose.009
@@ -204,6 +258,218 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These are words from this unit's because and so lessons.
+    text: These are words from this unit's lessons on news, celebrations and feelings.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson02.translate.010
+  lesson_content_key: fa.a2.unit48.lesson02.what_happened
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_lesson02_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson03.choose.001
+  lesson_content_key: fa.a2.unit48.lesson03.whats_next
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_lesson03_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of this unit''s words, from the lesson on feelings and plans.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson03.translate.002
+  lesson_content_key: fa.a2.unit48.lesson03.whats_next
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_lesson03_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson02.order.011
+  lesson_content_key: fa.a2.unit48.lesson02.what_happened
+  type: word_order
+  frame:
+    text: تولد {item}!
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_lesson02_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: تولد {item}!
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: مبارک means happy (for an occasion); تولد مبارک is happy birthday.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson02.sentence.012
+  lesson_content_key: fa.a2.unit48.lesson02.what_happened
+  type: translation
+  frame:
+    text: Happy birthday!
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_lesson02_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: تولد {item}!
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: مبارک means happy (for an occasion); تولد مبارک is happy birthday.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a2.unit48.lesson03.match.003
+  lesson_content_key: fa.a2.unit48.lesson03.whats_next
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit48_words
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: These are words from this unit's lessons on news, celebrations and feelings.
     language_code: en
     direction: ltr
