@@ -4,9 +4,12 @@ source_language: en
 target_language: prs
 unit_content_key: prs.b1.unit17.regrets
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Fresh-context review 2026-11-27 (en-prs B1 units 16-19 pass): Lexeme dump (.b1.unit17. filter) read against the realization and its overlay; every slot's pool dumped at unit and course scope and every gloss read (the lesson tags are unit-specific, so course scope equals unit scope); sentence frames rendered with their course-wide candidates, no self-reference; MC pools >=3 distinct glosses, matching pools >=6 tokens; Dari frames checked for register (Afghan -ین 2pl, no Iranian copula); boolean, direction, codepoint and jargon sweeps clean; no listen_select. The runtime shows no English cue for fill_in_blank, so each blank was also checked for other words this course teaches that fit it. 5 fixes - (1) recognition did not cover lesson05; new lesson05 choose.001 pools the unit's nouns and adverbs (درس, متأسفانه, دفعهٔ, افسوس), so افسوس is recognised while the mis-glossed verb می‌خورد stays out; (2) bare-word translation pooled دفعهٔ 'time (of)', which reads as وقت and needs the combining hamza; the broad production pool is now lessons 01-03 and lesson04 translate.001 is a fixed sentence (Next time I will come earlier. -> دفعهٔ بعد زودتر می‌آیم.) that also accepts دفعه / دفعه‌ی and the pronoun-led form; (3) lesson04 fill (___ بعد زودتر می‌آیم) also accepts دفعه and دفعه‌ی; (4) lesson03 fill (___ امتحان را نگذراندم) also accepts من and the hamza-less متاسفانه, lesson01 fill (من هر روز ___ می‌خوانم) also accepts کتاب; (5) lesson05 fill used زرمینه ___ می‌خورد, where any food fits; it now uses the reading's own sentence او ___ می‌خورد، چون بیشتر درس نخواند. Capacity after fixes: ALL 11/14 (79%), recognition 11/14 (79%), structured 11/14 (79%), production 11/14 (79%), 5/5 lessons in every tier. ROUTE (B1 backfill): می‌خورد 'eats; takes' (taught: افسوس می‌خورد 'regrets'); می‌گذراندم 'I would pass' (taught: 'I would have passed'); دفعهٔ 'time (of)' (taught: دفعهٔ بعد 'next time'); the prs grader does not fold أ/ا, so متاسفانه typed for 'unfortunately' in the bare-word pool is marked wrong.
+
     en-prs B1 practice pack (unit17 regrets), authored 2026-11-06. THIN: 13 lexemes over 5 of 6 lessons (lesson06 wrapup has none). Pool for MC/matching/translation = UNION of lesson01-04 tags (10 content tokens: درس، می‌خواندم، می‌خواند، خوانده، آمده، می‌گذراندم، نگذراندم، نگذراند، متأسفانه، دفعهٔ). Untagged کاش (particle) is outside every pool.
         MIS-GLOSS EXCLUSION (recipe 0.1): می‌خورد is glossed "eats; takes" but the unit teaches the collocation افسوس می‌خورد = "feels regret"; it is kept out by omitting the lesson05 tag from the broad pool. Same omission drops افسوس and می‌گذراند from MC/matching pools; lesson05 is hosted only by the single-candidate fill (افسوس, lesson05 tag + pos noun) and a single-candidate bare-word translation, so recognition covers lessons 1-4 only (below the all-lesson recognition coverage bar, deliberate). Coordinator: route a backfill gloss fix for می‌خورد.
         Anchors: درس (lesson01 noun), متأسفانه (lesson03 adverb), دفعهٔ (lesson04 noun), افسوس (lesson05 noun), word_order خوانده/آمده in 'کاش زودتر {item} بودم' (lesson02 verbs, both grammatical). Unit-specific lesson tags so unit = course scope.
@@ -40,6 +43,15 @@ slot_presets:
     part_of_speech: [noun, verb, adjective, adverb]
     agreement_tags:
       semantic: [en_prs_b1_unit17_lesson01_words, en_prs_b1_unit17_lesson02_words, en_prs_b1_unit17_lesson03_words, en_prs_b1_unit17_lesson04_words]
+  # Bare-word production pool: lesson04's only lexeme دفعهٔ ("time (of)") is
+  # left out (the prompt reads as وقت, and the grader keeps the combining
+  # hamza, so دفعه is marked wrong); lesson04 is produced through the
+  # fixed sentence below instead.
+  prod_word: &pw
+    language_code: prs
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: [en_prs_b1_unit17_lesson01_words, en_prs_b1_unit17_lesson02_words, en_prs_b1_unit17_lesson03_words]
 templates:
 # ---- recognition ----
 - content_key: practice.en-prs.prs.b1.unit17.lesson01.choose.001
@@ -86,6 +98,23 @@ templates:
     text: '{item} is from this unit''s vocabulary.'
     language_code: en
     direction: ltr
+# lesson05 recognition: nouns and adverbs of the whole unit (درس, متأسفانه,
+# دفعهٔ, افسوس), so افسوس is recognised without the mis-glossed verb می‌خورد.
+- content_key: practice.en-prs.prs.b1.unit17.lesson05.choose.001
+  lesson_content_key: prs.b1.unit17.lesson05.reading_regret
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: [en_prs_b1_unit17_lesson01_words, en_prs_b1_unit17_lesson02_words, en_prs_b1_unit17_lesson03_words, en_prs_b1_unit17_lesson04_words, en_prs_b1_unit17_lesson05_words]
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is from this unit''s vocabulary.'
+    language_code: en
+    direction: ltr
 # ---- structured ----
 - content_key: practice.en-prs.prs.b1.unit17.lesson01.fill.001
   lesson_content_key: prs.b1.unit17.lesson01.should_have
@@ -97,7 +126,7 @@ templates:
       part_of_speech: noun
       agreement_tags:
         semantic: en_prs_b1_unit17_lesson01_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['کتاب']}
   feedback_frame:
     text: 'من هر روز درس می‌خوانم. = I study every day.'
     language_code: en
@@ -112,7 +141,7 @@ templates:
       part_of_speech: adverb
       agreement_tags:
         semantic: en_prs_b1_unit17_lesson03_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['متاسفانه', 'من']}
   feedback_frame:
     text: 'متأسفانه امتحان را نگذراندم. = Unfortunately I did not pass the exam.'
     language_code: en
@@ -127,7 +156,7 @@ templates:
       part_of_speech: noun
       agreement_tags:
         semantic: en_prs_b1_unit17_lesson04_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['دفعه', 'دفعه‌ی']}
   feedback_frame:
     text: 'دفعهٔ بعد زودتر می‌آیم. = Next time I will come earlier.'
     language_code: en
@@ -135,7 +164,7 @@ templates:
 - content_key: practice.en-prs.prs.b1.unit17.lesson05.fill.001
   lesson_content_key: prs.b1.unit17.lesson05.reading_regret
   type: fill_in_blank
-  frame: {text: 'زرمینه {item} می‌خورد.', language_code: prs, direction: rtl}
+  frame: {text: 'او {item} می‌خورد، چون بیشتر درس نخواند.', language_code: prs, direction: rtl}
   slots:
     item:
       language_code: prs
@@ -144,7 +173,7 @@ templates:
         semantic: en_prs_b1_unit17_lesson05_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: 'زرمینه افسوس می‌خورد. = Zarmina regrets (it).'
+    text: 'او افسوس می‌خورد، چون بیشتر درس نخواند. = She regrets it, because she did not study more.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit17.lesson02.order.001
@@ -189,7 +218,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -200,7 +229,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -211,7 +240,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -220,12 +249,22 @@ templates:
 - content_key: practice.en-prs.prs.b1.unit17.lesson04.translate.001
   lesson_content_key: prs.b1.unit17.lesson04.dialogue_exam
   type: translation
-  frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+  frame: {text: 'Next time I will come earlier.', language_code: en, direction: ltr}
   slots:
-    item: *uw
-  answer_derivation: {kind: slot_text, slot: item}
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_b1_unit17_lesson04_words
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} بعد زودتر می‌آیم.', language_code: prs, direction: rtl}
+    accepted_variants:
+    - 'دفعه بعد زودتر می‌آیم.'
+    - 'دفعه‌ی بعد زودتر می‌آیم.'
+    - 'من {item} بعد زودتر می‌آیم.'
   feedback_frame:
-    text: 'Type the Dari word.'
+    text: 'Dari: دفعهٔ بعد زودتر می‌آیم.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit17.lesson05.translate.001

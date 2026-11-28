@@ -4,9 +4,12 @@ source_language: en
 target_language: prs
 unit_content_key: prs.b1.unit16.complaint
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Fresh-context review 2026-11-27 (en-prs B1 units 16-19 pass): Lexeme dump (.b1.unit16. filter) read against the realization and its overlay; every slot's pool dumped at unit and course scope and every gloss read (the lesson tags are unit-specific, so course scope equals unit scope); sentence frames rendered with their course-wide candidates, no self-reference; MC pools >=3 distinct glosses, matching pools >=6 tokens; Dari frames checked for register (Afghan -ین 2pl, no Iranian copula); boolean, direction, codepoint and jargon sweeps clean; no listen_select. The runtime shows no English cue for fill_in_blank, so each blank was also checked for other words this course teaches that fit it. 3 fixes - (1) every bare-word translation pooled هفتهٔ 'week of (construct form)', which a learner cannot answer: the grader keeps the combining hamza, so هفته and هفته‌ی are marked wrong. The production pool is now lessons 01/03/04/05 plus lesson02's verb and adjective (نداد, گذشته), so lesson02's nouns (هفتهٔ, کس, جواب) are recognition/matching only; (2) lesson01 fill (صفحه‌ی تیلفون ___ است) also accepts خراب; (3) lesson02 fill (هیچ کس جواب ___) also accepts نمی‌دهد. Capacity after fixes: ALL 15/18 (83%), recognition 15/18 (83%), structured 15/18 (83%), production 12/18 (67%), 5/5 lessons in every tier, no dead template. ROUTE (B1 backfill): تیلفونی 'a phone (that)' is a bound form and awkward as a typed answer; هفتهٔ needs a gloss without 'construct form'. NATIVE FLAGS: the lesson05 fill ___ جواب نداد. is open to any person noun; only دوکاندار is accepted.
+
     en-prs B1 practice pack (unit16 complaint), authored 2026-11-06. GRAMMAR/DIALOGUE UNIT, THIN: 15 usable lexemes over 5 of 6 lessons (lesson06 wrapup has none and cannot be represented in the checkpoint). Recognition/production/matching pool = unit-wide tag en_prs_b1_unit16_words, pos noun/verb/adjective/adverb (15 tokens). Untagged/foreign-tag unit lexemes excluded by the tag choice: هیچ (pronoun, no semantic), پس (particle, none), یا (choice_word only).
         Glosses read: no mis-gloss found; note تیلفونی "a phone (that)" is a bound relative-head form and awkward as a standalone answer (kept, flagged for a backfill gloss polish).
         fill_in_blank / word_order anchors are lesson-tag + part_of_speech single-candidate slots: شکسته (lesson01 adjective), نداد (lesson02 verb), دوکاندار (lesson05 noun), گذشته (lesson02 adjective, word_order). Tags en_prs_b1_unit16_lessonNN_words exist only in this unit so unit scope = course scope. lesson03 and lesson04 have no single-candidate anchor (two verbs/nouns each), so their structured coverage is matching_pairs only.
@@ -40,6 +43,20 @@ slot_presets:
     part_of_speech: [noun, verb, adjective, adverb]
     agreement_tags:
       semantic: [en_prs_b1_unit16_words]
+  # Production pool: lesson02's nouns (هفتهٔ "week of (construct form)", کس, جواب)
+  # are left out because هفتهٔ is not answerable as a typed bare word (the
+  # grader keeps the combining hamza, so هفته / هفته‌ی are marked wrong).
+  # lesson02 stays in the production tier through its verb and adjective.
+  prod_word: &pw
+    language_code: prs
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: [en_prs_b1_unit16_lesson01_words, en_prs_b1_unit16_lesson03_words, en_prs_b1_unit16_lesson04_words, en_prs_b1_unit16_lesson05_words]
+  prod_word_l02: &pw2
+    language_code: prs
+    part_of_speech: [verb, adjective]
+    agreement_tags:
+      semantic: [en_prs_b1_unit16_lesson02_words]
 templates:
 # ---- recognition ----
 - content_key: practice.en-prs.prs.b1.unit16.lesson01.choose.001
@@ -108,7 +125,7 @@ templates:
       part_of_speech: adjective
       agreement_tags:
         semantic: en_prs_b1_unit16_lesson01_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['خراب']}
   feedback_frame:
     text: 'صفحه‌ی تیلفون شکسته است. = The phone screen is broken.'
     language_code: en
@@ -123,7 +140,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic: en_prs_b1_unit16_lesson02_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['نمی‌دهد']}
   feedback_frame:
     text: 'هیچ کس جواب نداد. = Nobody answered.'
     language_code: en
@@ -204,7 +221,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -215,7 +232,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw2
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -226,7 +243,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -237,7 +254,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -248,7 +265,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'

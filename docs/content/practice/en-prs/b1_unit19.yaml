@@ -4,9 +4,12 @@ source_language: en
 target_language: prs
 unit_content_key: prs.b1.unit19.summarize
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Fresh-context review 2026-11-27 (en-prs B1 units 16-19 pass): Lexeme dump (.b1.unit19. filter) read against the realization and its overlay; every slot's pool dumped at unit and course scope and every gloss read (the lesson tags are unit-specific, so course scope equals unit scope); sentence frames rendered with their course-wide candidates, no self-reference; MC pools >=3 distinct glosses, matching pools >=6 tokens; Dari frames checked for register (Afghan -ین 2pl, no Iranian copula); boolean, direction, codepoint and jargon sweeps clean; no listen_select. The runtime shows no English cue for fill_in_blank, so each blank was also checked for other words this course teaches that fit it. 2 fixes - (1) every bare-word translation pooled نکتهٔ 'point (of)', not answerable as typed (the grader keeps the combining hamza); the production pool is now lessons 02/03/05 plus lesson01's verbs (خواندم, خواندن), so مقاله and نکتهٔ are recognition/matching only; (2) three fills also accept other answers this course teaches for the blank: نویسنده ___ که ... (گفت, from the lesson02 grammar note), بچه‌ها لغت جدید یاد ___ (گرفتند), زرمینه یک مقاله ___ (می‌خواند). Capacity after fixes: ALL 13/15 (87%), recognition 13/15, structured 13/15, production 11/15 (73%), 4/4 lessons in every tier. ROUTE (B1 backfill): اصلی 'original' (taught: نکتهٔ اصلی 'main point'; still excluded); نکتهٔ needs a plain gloss. NATIVE FLAGS: لغت 'word' is a typed answer while کلمه is not accepted; the fills ___ می‌گوید که ... and ___ بچه‌ها لغت جدید یاد می‌گیرند are open to other subjects/adverbs.
+
     en-prs B1 practice pack (unit19 summarize), authored 2026-11-06. THIN: 15 lexemes over 4 of 6 lessons (lesson04 dialogue and lesson06 wrapup have none and cannot be represented). Pool = unit tag en_prs_b1_unit19_words with pos noun/verb/adverb = 13 tokens.
         MIS-GLOSS EXCLUSION (recipe 0.1): اصلی is glossed "original" but the unit teaches نکتهٔ اصلی = "main point" (and carries the stray tag return_policy_word). It is excluded via part_of_speech (adjective left out of the broad pool); this also drops the correctly glossed adjective جدید ("new") from MC/matching/translation pools. Coordinator: route a backfill gloss fix for اصلی ("main").
         Fill anchors are single-candidate lesson-tag + pos slots: نویسنده (lesson02 noun), می‌گوید (lesson02 verb), می‌گیرند (lesson03 verb), مثلاً (lesson03 adverb), خواند (lesson05 verb). lesson01 (nouns مقاله/نکتهٔ, verbs خواندم/خواندن) has no single-candidate anchor, so lesson01 structured coverage is matching_pairs only. Lesson tags are unit-specific so unit = course scope.
@@ -40,6 +43,20 @@ slot_presets:
     part_of_speech: [noun, verb, adverb]
     agreement_tags:
       semantic: [en_prs_b1_unit19_words]
+  # Bare-word production pools: lesson01's nouns are left out because نکتهٔ
+  # ("point (of)") is not answerable as a typed bare word (the grader keeps
+  # the combining hamza, so نکته / نکته‌ی are marked wrong); lesson01 is
+  # produced through its verbs.
+  prod_word: &pw
+    language_code: prs
+    part_of_speech: [noun, verb, adverb]
+    agreement_tags:
+      semantic: [en_prs_b1_unit19_lesson02_words, en_prs_b1_unit19_lesson03_words, en_prs_b1_unit19_lesson05_words]
+  prod_word_l01: &pw1
+    language_code: prs
+    part_of_speech: [verb]
+    agreement_tags:
+      semantic: [en_prs_b1_unit19_lesson01_words]
 templates:
 # ---- recognition ----
 - content_key: practice.en-prs.prs.b1.unit19.lesson01.choose.001
@@ -112,7 +129,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic: en_prs_b1_unit19_lesson02_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['گفت']}
   feedback_frame:
     text: 'نویسنده می‌گوید که کتاب خواندن مهم است. = The author says that reading books is important.'
     language_code: en
@@ -127,7 +144,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic: en_prs_b1_unit19_lesson03_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['گرفتند']}
   feedback_frame:
     text: 'بچه‌ها لغت جدید یاد می‌گیرند. = The children learn new words.'
     language_code: en
@@ -157,7 +174,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic: en_prs_b1_unit19_lesson05_words
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation: {kind: slot_text, slot: item, accepted_variants: ['می‌خواند']}
   feedback_frame:
     text: 'زرمینه یک مقاله خواند. = Zarmina read an article.'
     language_code: en
@@ -206,7 +223,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw1
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -217,7 +234,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -228,7 +245,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -239,7 +256,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *pw
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
