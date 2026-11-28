@@ -5668,6 +5668,18 @@ def _classify_fa(files, level, fa_specs, seen_en):
                 # dilute the unit pool the checkpoint/coverage gate measures.
                 if re.match(r"fa\.a2\.unit(2[2-9]|[3-9]\d)\.", lesson_key):
                     continue
+                # --- B1 block (2026-11-27): same rule for every B1 unit. No
+                #     en-fa practice slot accepts language_code "en" (checked
+                #     across all en-fa packs), so these rows were never
+                #     hostable; they only padded each B1 unit's lexeme pool and
+                #     the learner's review queue. Every B1 template pool is
+                #     unchanged (fa specs untouched). No cross-pair lexicon has
+                #     a b1 level for fa, so derived pairs are unaffected. Rows
+                #     already written to a database are NOT removed by this
+                #     script (it only creates/updates). ---
+                if lesson_key.startswith("fa.b1."):
+                    continue
+                # --- end B1 block ---
                 for match in EN_TOKEN_RE.findall(gloss):
                     token = match.casefold().replace("’", "'")
                     seen_key = (level, token)
