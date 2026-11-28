@@ -4,10 +4,12 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit83.wat_gebeurde_er
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   required_next_reviewer: native_speaker_review
   notes: >-
+    Fresh-context review 2026-11-27 (en-nl A2 units 79-86 pass): dumped every slot's unit-scope and course-scope pool (a2 + unit83 filter) and read every gloss; band, zin and vooropgezette stay excluded as the authoring note says; the lekke anchor has one course-wide candidate, so Ik kreeg een {item} band. is deterministic. 2 fixes - (1) the three multiple-choice feedback frames claimed every word described an incident ({item} is used to describe an incident ...) although the pool includes grammar words such as noemt and verbindt; they now render the English gloss (This Dutch word means {item}.); (2) lesson05 (twintig is its only lexeme) had no hosting template; lesson05 translate.003 now drills the number nouns (unit scope twintig, course scope the A2 number words), so every lexeme-bearing lesson is covered. Capacity after fixes: 15 templates, ALL 72%, recognition 68%, structured 70%, production 70%; lessons 5/5 overall and in production, 4/5 in recognition and structured (lesson05 has a single lexeme, below the multiple-choice floor).
+
     Authored for the five lessons in A2 unit 83 that have backfilled lexemes. The
     broad imperfectum and incident-story tag union supports recognition, six-pair
     matching and bare-word production across all five lessons; a one-member
@@ -36,6 +38,7 @@ tag_schema:
     - toen_terwijl_clauses
     - small_incident_story
     - busy_morning_reading
+    - number
 
 templates:
 # lesson01 -- Onregelmatige vormen
@@ -53,7 +56,8 @@ templates:
                    busy_morning_reading]
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used to describe an incident or a past situation.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -167,7 +171,8 @@ templates:
     item: *broad_item
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} helps describe a past event or its context.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -273,7 +278,8 @@ templates:
     item: *broad_item
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} appears in the unit''s incident language.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -301,7 +307,10 @@ templates:
     direction: ltr
     slot_rendering: {item: english_gloss}
   slots:
-    item: *broad_item
+    item:
+      language_code: nl
+      part_of_speech: noun
+      agreement_tags: {semantic: number}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Dutch word is {item}.
