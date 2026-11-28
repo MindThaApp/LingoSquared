@@ -4,10 +4,12 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit84.ben_je_ooit_geweest
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   required_next_reviewer: native_speaker_review
   notes: >-
+    Fresh-context review 2026-11-27 (en-nl A2 units 79-86 pass): dumped every slot's unit-scope and course-scope pool (a2 + unit84 filter; the unit has only 13 lexemes) and read every gloss. 4 fixes - (1) lesson01 choose.001 (2 unit candidates) and lesson02 listen.001 (1) were below the three-option floor and could never render in the checkpoint; both now use a noun/adverb union of experience_ooit_nooit, experience_al_nog_niet, experience_questionnaire and travel_profile_reading (4 unit candidates; adjectives stay out because eens carries the stale gloss agreed; in agreement in those tags); (2) lesson01 match.002 had 4 unit tokens for 6 slots and pulled both Gisteren and gisteren through recent_time; it now pools nouns/adjectives of perfectum_vs_imperfectum, language_or_nationality and experience_al_nog_niet (6 unit tokens, no case duplicates); (3) lesson03 choose.001 drops adverbs so Gisteren/gisteren (Yesterday/yesterday, equal under casefolding) cannot appear as correct answer and distractor; (4) lesson05 choose.001 and translate.003 used experience_questionnaire adjectives, which admit eens with its stale gloss at course scope; they now use the same safe noun/adjective union, and the three multiple-choice feedback frames render the English gloss instead of claims that did not fit every pool member. Egyptisch is no longer hosted (it only carries tags shared with eens). Left as is: lesson03 order.002 {item} at ik sushi. has no unit-scope candidate because gisteren is backfilled under a later unit; it still works in Endless Practice. Capacity after fixes: 15 templates, ALL 69%, recognition 62%, structured 54%, production 62%; lessons 5/5 except structured 4/5.
+
     Fifteen templates cover all five lessons with classified lexemes in recognition,
     structured and production tiers; lesson06 currently has no classified lexemes.
     Broad pools deliberately avoid perfectum_vs_imperfectum verbs because the
@@ -36,6 +38,7 @@ tag_schema:
     - perfectum_vs_imperfectum
     - recent_time
     - language_or_nationality
+    - travel_profile_reading
 
 templates:
 - content_key: practice.en-nl.nl.a2.unit84.lesson01.choose.001
@@ -46,10 +49,13 @@ templates:
     item:
       language_code: nl
       part_of_speech: [noun, adverb]
-      agreement_tags: {semantic: experience_ooit_nooit}
+      agreement_tags:
+        semantic: [experience_ooit_nooit, experience_al_nog_niet,
+                   experience_questionnaire, travel_profile_reading]
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used to talk about life experiences.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -63,10 +69,10 @@ templates:
   slots:
     first: &experience_word
       language_code: nl
-      part_of_speech: [noun, adverb]
+      part_of_speech: [noun, adjective]
       agreement_tags:
-        semantic: [experience_ooit_nooit, experience_al_nog_niet,
-                   experience_questionnaire, recent_time]
+        semantic: [perfectum_vs_imperfectum, language_or_nationality,
+                   experience_al_nog_niet]
     second: *experience_word
     third: *experience_word
     fourth: *experience_word
@@ -109,8 +115,10 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech: [noun, verb]
-      agreement_tags: {semantic: experience_al_nog_niet}
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: [experience_ooit_nooit, experience_al_nog_niet,
+                   experience_questionnaire, travel_profile_reading]
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is the Dutch word you heard.'
@@ -166,11 +174,12 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech: [noun, adjective, adverb]
+      part_of_speech: [noun, adjective]
       agreement_tags: {semantic: perfectum_vs_imperfectum}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} helps distinguish an experience from a dated story.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -277,10 +286,12 @@ templates:
       language_code: nl
       part_of_speech: [noun, adjective]
       agreement_tags:
-        semantic: [experience_questionnaire, language_or_nationality]
+        semantic: [perfectum_vs_imperfectum, language_or_nationality,
+                   experience_al_nog_niet]
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is useful when discussing travel experiences.'
+    text: 'This Dutch word means {item}.'
+    slot_rendering: {item: english_gloss}
     language_code: en
     direction: ltr
 
@@ -320,7 +331,8 @@ templates:
       language_code: nl
       part_of_speech: [noun, adjective]
       agreement_tags:
-        semantic: [experience_questionnaire, language_or_nationality]
+        semantic: [perfectum_vs_imperfectum, language_or_nationality,
+                   experience_al_nog_niet]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Dutch answer is {item}.
