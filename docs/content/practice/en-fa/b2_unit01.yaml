@@ -4,10 +4,10 @@ source_language: en
 target_language: fa
 unit_content_key: fa.b2.unit01.argumentation
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   required_next_reviewer: native_speaker_review
-  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit01 checkpoint
+  notes: 'Fresh-context review 2026-11-28 (en-fa B2 units 01-08 pack pass): 6 fixes - (1) backfill: kard was glossed ''he/she did'', the unit uses it as the short infinitive in mishavad rahhal peyda kard -> ''did; do (short infinitive ...)''; (2) ba''d ''after that; then'' -> ''after (in after work); then''; (3) darad ''he/she has'' -> ''has (he/she/it, formal)'' (subjects are a claim and a result); (4) porestefadeh (the realization review merged por + estefadeh) had POS noun and no unit tag while the stale por entry never landed -> adjective in b2u01_core (kept out of typed translation: a spaced spelling would grade wrong); (5) khandan carried b2u08_core although its first B2 lesson is unit01 lesson03 -> b2u01_core, gloss names ''studying'' (dars khandan); (6) estefadeh (first taught in lesson02 since the same merge) sat in the lesson01 translation pool under ''taught in this lesson'' -> b2u01_vert_l2. Added lesson03.translate.006: typed production of 9 unambiguous verb forms (darim, mo''taghedam, nadarim, mitavanim, nemitavanim, movafegham, balast, bayad, nist; subjunctives and light-verb fragments left out). Checked: every unit-scope and course-scope slot pool dumped (filter .b2.unitNN.) and every gloss read against the realization cards; MC pools >=3 distinct glosses, matching pools >=6, no dead template, no duplicate gloss inside any pool, no B2 gloss shared by two tokens in any typed-translation pool; word_order frames are the realization''s own sentences with one single-member anchor (1 course-wide candidate, not a literal of its own frame; the integrity script skips b2_ packs, so checked by hand); feedback text matches each pool; RTL on every fa block, no Arabic Yeh/Kaf, no bare booleans, no snake_case leaks. 15 templates (R3/S8/P4). Recipe 9 step 4: ALL 94/172 55%, recognition 55%, structured 55%, production 69/172 40%, lessons 3/3 in every tier; against the 123 fa lexemes ALL 76%, production 56%. Offline checkpoint port: 15/15 items on 5 seeds. Coverage note: the raw recipe 9 step 4 denominator also counts this unit''s English source_gloss pseudo-lexemes, which no en->fa slot can host, so ALL stays below 60% on the raw count; that needs the backfill to stop emitting those rows for fa.b2 (as it already does for A2 units 22+), outside this pack. NATIVE FLAGS: bare-word MC can show tarh ''plan; scheme'' with pishnahad ''proposal; suggestion'' as a distractor (tarh can also mean a proposal; the keyed option is the closer one). Earlier notes follow. Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit01 checkpoint
     can generate (before this, en-fa B2 had no lexemes and no packs). Lexemes come from the B2 extension
     of scripts/backfill_lexemes.py (same branch). Grammar/discourse unit, so the 8.1 pattern is used:
     unit-wide curated pools, every template anchored to one lesson. 14 templates over all 3 lessons: multiple_choice
@@ -43,6 +43,7 @@ tag_schema:
     - b2u01_vert_l1
     - b2u01_vert_l2
     - b2u01_vert_l3
+    - b2u01_vert_verb
     - b2u01_shavahed_single
     - b2u01_amniyat_single
     - b2u01_zarar_single
@@ -472,5 +473,28 @@ templates:
     slot: item
   feedback_frame:
     text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.translate.006
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: b2u01_vert_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian verb form taught in this unit for this meaning.
     language_code: en
     direction: ltr

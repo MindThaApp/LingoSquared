@@ -4,10 +4,10 @@ source_language: en
 target_language: fa
 unit_content_key: fa.b2.unit02.speculation
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   required_next_reviewer: native_speaker_review
-  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit02 checkpoint
+  notes: 'Fresh-context review 2026-11-28 (en-fa B2 units 01-08 pack pass): 3 fixes - (1) backfill: zad ''struck (he/she, past)'' -> short infinitive in hads zad ''one can guess''; (2) bashim ''(if) we be'' -> ''(that) we be (subjunctive)'' (behtar ast amadeh bashim); (3) added lesson03.translate.006 over 5 unambiguous verb forms (nistam, mitavanad, nemitavanad, narazi-and, miayad). Checked: every unit-scope and course-scope slot pool dumped (filter .b2.unitNN.) and every gloss read against the realization cards; MC pools >=3 distinct glosses, matching pools >=6, no dead template, no duplicate gloss inside any pool, no B2 gloss shared by two tokens in any typed-translation pool; word_order frames are the realization''s own sentences with one single-member anchor (1 course-wide candidate, not a literal of its own frame; the integrity script skips b2_ packs, so checked by hand); feedback text matches each pool; RTL on every fa block, no Arabic Yeh/Kaf, no bare booleans, no snake_case leaks. 15 templates (R3/S8/P4). Recipe 9 step 4: ALL 72/126 57%, recognition/structured 57%, production 61/126 48%, lessons 3/3 in every tier; fa denominator ALL 89%, production 75%. Offline checkpoint port: 15/15 on 5 seeds. Coverage note: the raw recipe 9 step 4 denominator also counts this unit''s English source_gloss pseudo-lexemes, which no en->fa slot can host, so ALL stays below 60% on the raw count; that needs the backfill to stop emitting those rows for fa.b2 (as it already does for A2 units 22+), outside this pack. NATIVE FLAGS: none new. Earlier notes follow. Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit02 checkpoint
     can generate (before this, en-fa B2 had no lexemes and no packs). Lexemes come from the B2 extension
     of scripts/backfill_lexemes.py (same branch). Grammar/discourse unit, so the 8.1 pattern is used:
     unit-wide curated pools, every template anchored to one lesson. 14 templates over all 3 lessons: multiple_choice
@@ -44,6 +44,7 @@ tag_schema:
     - b2u02_vert_l1
     - b2u02_vert_l2
     - b2u02_vert_l3
+    - b2u02_vert_verb
     - b2u02_feshar_single
     - b2u02_ellat_single
     - b2u02_asib_single
@@ -474,5 +475,28 @@ templates:
     slot: item
   feedback_frame:
     text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit02.lesson03.translate.006
+  lesson_content_key: fa.b2.unit02.speculation.lesson03.consequence
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: b2u02_vert_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian verb form taught in this unit for this meaning.
     language_code: en
     direction: ltr
